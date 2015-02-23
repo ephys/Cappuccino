@@ -1,0 +1,42 @@
+/**********************
+	MATHIAS
+***********************/
+
+IHM (sorry bro)
+Correction rapport
+Diagramme de séquence
+
+Abstract factory ?
+
+/**********************
+	GEORLAS
+***********************/
+
+Mocks
+Biz + JUnits
+
+/**********************
+	GUYLIAN
+***********************/
+
+Dependency injection
+UCC + JUnits
+
+/**********************
+	LAURENT
+***********************/
+
+properties (tout ça tout ça)
+Diagramme de classes
+
+/**********************
+	KEVIN
+***********************/
+
+init.sql + DAL/O
+
+/**********************
+	JUNIOR
+***********************/
+
+Show yourself at one of our damn bloody fucking meetings
