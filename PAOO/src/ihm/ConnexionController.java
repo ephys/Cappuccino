@@ -3,6 +3,7 @@ package ihm;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -19,12 +20,12 @@ public class ConnexionController extends JPanel {
 
     JButton inscrire = new JButton("S'inscrire");
     inscrire.addActionListener(e -> {
-      // appel a l'ihm insciption
-      });
+      JOptionPane.showMessageDialog(this, "not yet implemented.");
+    });
     JButton connecter = new JButton("Se connecter");
     connecter.addActionListener(e -> {
-      // appel a l'ucc se connecter
-      });
+      JOptionPane.showMessageDialog(this, "not yet implemented.");
+    });
     this.add(inscrire);
     this.add(connecter);
 

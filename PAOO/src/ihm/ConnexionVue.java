@@ -2,6 +2,8 @@ package ihm;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
@@ -15,6 +17,8 @@ import javax.swing.JPasswordField;
  *
  */
 public class ConnexionVue extends JFrame {
+  private Font arial = new Font("Arial", Font.PLAIN, 16);
+
   public ConnexionVue() {
     this.setTitle("connexion");
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -24,8 +28,14 @@ public class ConnexionVue extends JFrame {
     JPanel texts = new JPanel(new GridLayout(0, 1));
     JPanel labels = new JPanel(new GridLayout(0, 1));
 
-    labels.add(new JLabel("Nom d'utilisateur : "));
-    labels.add(new JLabel("Mot de passe : "));
+    JLabel user = new JLabel("Nom d'utilisateur : ", JLabel.RIGHT);
+    user.setPreferredSize(new Dimension(150, 0));
+    labels.add(user);
+    user.setFont(arial);
+    JLabel pwd = new JLabel("Mot de passe : ", JLabel.RIGHT);
+    pwd.setPreferredSize(new Dimension(150, 0));
+    pwd.setFont(arial);
+    labels.add(pwd);
 
     JPanelTextError username = new JPanelTextError("jojo", 10);
     username.setError("example erreure");
@@ -63,6 +73,7 @@ public class ConnexionVue extends JFrame {
       error.setForeground(Color.RED);
       this.add(password);
       this.add(error);
+
     }
 
     public char[] getPassword() {
