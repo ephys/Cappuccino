@@ -12,10 +12,10 @@ import javax.swing.JPanel;
  *
  */
 public class ConnexionController extends JPanel {
-  private ConnexionVue vue;
+  private ConnexionVue parent;
 
-  public ConnexionController(ConnexionVue vue) {
-    this.vue = vue;
+  public ConnexionController(ConnexionVue connexionVue) {
+    this.parent = connexionVue;
     this.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
     JButton inscrire = new JButton("S'inscrire");
@@ -33,24 +33,36 @@ public class ConnexionController extends JPanel {
 
   /**
    * méthode pour gérer l'action du bouton connexion
-   * 
-   * @author Opsomer Mathias
    *
    */
   private void connexion() {
-    vue.removePasswordError();
-    vue.removeTextError();
+    boolean complet = true;
+    if (parent.getUsername().equals("")) {
+      parent.setTextError("ce champ est obligatoire");
+      complet = false;
+    }
+
+    if (parent.getPassword().length == 0) {
+      parent.setPasswordError("ce champ est obligatoire");
+      complet = false;
+    }
+
+    // if(ucc.getUtilisateur(vue.getUsername(),vue.getPassword()){
+    if (complet && true) {
+
+      new MenuVue();
+      parent.dispose();
+    }
+    // gestion et affichage erreure possible rendu par l'ucc.
   }
 
   /**
    * méthode pour gérer l'action du bouon s'inscire
    * 
-   * @author Opsomer Mathias
-   *
    */
   private void inscription() {
-    vue.setTextError("invalide");
-    vue.setPasswordError("invalide");
+    parent.dispose();
+    new InscriptionVue();
   }
 
 

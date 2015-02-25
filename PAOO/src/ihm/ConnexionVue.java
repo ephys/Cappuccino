@@ -1,7 +1,6 @@
 package ihm;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -9,7 +8,6 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 
 /**
  * classe vue de la connection
@@ -21,6 +19,8 @@ public class ConnexionVue extends JFrame {
   private Font arial = new Font("Arial", Font.PLAIN, 16);
   private JPanelTextError username;
   private JPanelPasswordError password;
+
+
 
   /**
    * constructeur
@@ -45,13 +45,13 @@ public class ConnexionVue extends JFrame {
     pwd.setFont(arial);
     labels.add(pwd);
 
-    username = new JPanelTextError("jojo");
+    username = new JPanelTextError(13);
     JPanel userNamePanel = new JPanel(new BorderLayout());
-    userNamePanel.add(username, BorderLayout.SOUTH);
+    userNamePanel.add(username);
 
-    password = new JPanelPasswordError("jojo");
+    password = new JPanelPasswordError(13);
     JPanel passwordPanel = new JPanel(new BorderLayout());
-    passwordPanel.add(password, BorderLayout.SOUTH);
+    passwordPanel.add(password);
 
 
     texts.add(userNamePanel);
@@ -101,51 +101,28 @@ public class ConnexionVue extends JFrame {
   }
 
   /**
+   * get username
+   *
+   * @return String le contenu du JTextField
+   */
+  public String getUsername() {
+    return username.getText();
+  }
+
+  /**
+   * get password
+   *
+   * @return char[] le password
+   */
+  public char[] getPassword() {
+    return password.getPassword();
+  }
+
+  /**
    * classe interne pour le password field + erreure
    * 
    * @author Opsomer Mathias
    *
    */
-  class JPanelPasswordError extends JPanel {
-    private JPasswordField password;
-    private JLabel error;
-
-    public JPanelPasswordError(String string) {
-      this.setLayout(new GridLayout(0, 1));
-      password = new JPasswordField(string);
-      error = new JLabel();
-      error.setForeground(Color.RED);
-      this.add(password);
-      this.add(error);
-
-    }
-
-    /**
-     * get le mot de passe du JPasswordField
-     *
-     * @return char[] le password
-     */
-    public char[] getPassword() {
-      return password.getPassword();
-    }
-
-    /**
-     * get l'erreure liée au JPasswordField
-     *
-     * @return String l'erreure
-     */
-    public String getError() {
-      return error.getText();
-    }
-
-    /**
-     * set l'erreure liée au JpasswordField
-     *
-     * @param error l'erreure remplacente
-     */
-    public void setError(String error) {
-      this.error.setText(error);
-    }
-  }
 
 }

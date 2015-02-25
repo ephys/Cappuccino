@@ -21,14 +21,24 @@ public class JPanelTextError extends JPanel {
    * constructeur pour un JPanelTextError
    * 
    * @param string le string d'exemple
+   * @param int la taille du Jpaneltext
    */
-  public JPanelTextError(String string) {
+  public JPanelTextError(String string, int taille) {
     this.setLayout(new GridLayout(0, 1));
-    text = new JTextField(string);
+    text = new JTextField(string, taille);
     error = new JLabel();
     error.setForeground(Color.RED);
     this.add(text);
     this.add(error);
+  }
+
+  /**
+   * constructeur avec uniquement la taille
+   * 
+   * @param taille la taille du JPanelText
+   */
+  public JPanelTextError(int taille) {
+    this("", taille);
   }
 
   /**
