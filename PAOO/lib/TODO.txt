@@ -33,7 +33,7 @@ Diagramme de classes
 	KEVIN
 ***********************/
 
-init.sql + DAL/O
+DAL/O
 
 /**********************
 	JUNIOR
