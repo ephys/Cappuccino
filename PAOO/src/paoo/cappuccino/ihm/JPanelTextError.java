@@ -1,4 +1,4 @@
-package ihm;
+package paoo.cappuccino.ihm;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -9,7 +9,7 @@ import javax.swing.JTextField;
 
 /**
  * classe d'un label + erreure possible en dessous
- * 
+ *
  * @author mopsome
  *
  */
@@ -19,7 +19,7 @@ public class JPanelTextError extends JPanel {
 
   /**
    * constructeur pour un JPanelTextError
-   * 
+   *
    * @param string le string d'exemple
    * @param int la taille du Jpaneltext
    */
@@ -34,7 +34,7 @@ public class JPanelTextError extends JPanel {
 
   /**
    * constructeur avec uniquement la taille
-   * 
+   *
    * @param taille la taille du JPanelText
    */
   public JPanelTextError(int taille) {
@@ -43,7 +43,7 @@ public class JPanelTextError extends JPanel {
 
   /**
    * get texte
-   * 
+   *
    * @return String le text contenu dans le label
    */
   public String getText() {

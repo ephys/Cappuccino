@@ -1,7 +1,7 @@
 /**
- * 
+ *
  */
-package ihm;
+package paoo.cappuccino.ihm;
 
 import java.awt.BorderLayout;
 

@@ -1,7 +1,7 @@
 /**
- * 
+ *
  */
-package ihm;
+package paoo.cappuccino.ihm;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -21,7 +21,7 @@ public class JPanelPasswordError extends JPanel {
 
   /**
    * constructeur d'un JpanelPassword Error
-   * 
+   *
    * @param string le string d'initialisation
    * @param taille la taille du Passwordfield
    */
@@ -37,7 +37,7 @@ public class JPanelPasswordError extends JPanel {
 
   /**
    * constructeur avec rien que la taille
-   * 
+   *
    * @param taille la taille du Passwordfield
    */
   public JPanelPasswordError(int taille) {

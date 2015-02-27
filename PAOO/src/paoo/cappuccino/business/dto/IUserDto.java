@@ -1,4 +1,4 @@
-package business.dto;
+package paoo.cappuccino.business.dto;
 
 /**
  * Data transfer object for the User entity

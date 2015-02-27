@@ -6,20 +6,16 @@ IHM (sorry bro)
 Correction rapport
 Diagramme de séquence
 
-Abstract factory ?
-
 /**********************
 	GEORLAS
 ***********************/
 
-Mocks
 Biz + JUnits
 
 /**********************
 	GUYLIAN
 ***********************/
 
-Dependency injection
 UCC + JUnits
 
 /**********************

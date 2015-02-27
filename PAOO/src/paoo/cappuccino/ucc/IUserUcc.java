@@ -1,7 +1,7 @@
-package ucc;
+package paoo.cappuccino.ucc;
 
-import business.dto.IUserDto;
-import config.DependencyInjector;
+import paoo.cappuccino.business.dto.IUserDto;
+import paoo.cappuccino.config.DependencyInjector;
 
 /**
  * Use case controller containing methods relative to an user (as en entity, not as an actor)
@@ -9,19 +9,22 @@ import config.DependencyInjector;
  * @author Guylian Cox
  */
 public interface IUserUcc {
-  public static final IUserUcc INSTANCE = (IUserUcc) DependencyInjector.fetchDependency(IUserUcc.class);
+
+  public static final IUserUcc INSTANCE =
+      (IUserUcc) DependencyInjector.fetchDependency(IUserUcc.class);
 
   /**
    * Registers an user in the system
    *
-   * @param username  The user's username. Used for logging in, must be unique.
+   * @param username  The user's username. Used for logging in, must be unique and is case-insensitive.
    * @param password  The user's password.
    * @param firstName The user's first name.
    * @param lastName  The user's last name.
    * @param email     A valid email.
    * @return The registered user's DTO
-   * @throws java.lang.IllegalArgumentException The username isn't unique or the email is not
-   *                                            invalid.
+   *
+   * @throws java.lang.IllegalArgumentException The username isn't unique or the email
+   *                                            is not invalid.
    */
   public IUserDto register(String username, String password, String firstName, String lastName,
                            String email);
@@ -29,7 +32,7 @@ public interface IUserUcc {
   /**
    * Logs an user into the system.
    *
-   * @param username The user's username.
+   * @param username The user's username. The input is case-insensitive.
    * @param password The user's password.
    * @return The logged user's DTO or null if the username/password combination is incorrect.
    */

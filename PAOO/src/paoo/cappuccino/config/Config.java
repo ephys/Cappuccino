@@ -1,4 +1,4 @@
-package config;
+package paoo.cappuccino.config;
 
 /**
  * @author Laurent Batslé

@@ -1,7 +1,7 @@
 /**
- * 
+ *
  */
-package ihm;
+package paoo.cappuccino.ihm;
 
 import java.awt.FlowLayout;
 
@@ -19,7 +19,7 @@ public class InscriptionController extends JPanel {
 
   /**
    * constructeur du controller
-   * 
+   *
    * @param inscriptionVue la vue sur laquelle il s'affiche
    */
   public InscriptionController(InscriptionVue inscriptionVue) {

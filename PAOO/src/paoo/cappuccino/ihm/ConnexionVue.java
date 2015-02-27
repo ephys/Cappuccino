@@ -1,4 +1,4 @@
-package ihm;
+package paoo.cappuccino.ihm;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 /**
  * classe vue de la connection
- * 
+ *
  * @author Opsomer Mathias
  *
  */
@@ -74,7 +74,7 @@ public class ConnexionVue extends JFrame {
   }
 
   /**
-   * 
+   *
    * @author Opsomer Mathias
    *
    */
@@ -92,7 +92,7 @@ public class ConnexionVue extends JFrame {
   }
 
   /**
-   * 
+   *
    * @author Opsomer Mathias
    *
    */
@@ -120,7 +120,7 @@ public class ConnexionVue extends JFrame {
 
   /**
    * classe interne pour le password field + erreure
-   * 
+   *
    * @author Opsomer Mathias
    *
    */

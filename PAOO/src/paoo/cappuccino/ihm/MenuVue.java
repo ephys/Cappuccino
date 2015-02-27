@@ -1,7 +1,7 @@
 /**
- * 
+ *
  */
-package ihm;
+package paoo.cappuccino.ihm;
 
 import javax.swing.JFrame;
 
@@ -12,7 +12,7 @@ import javax.swing.JFrame;
  */
 public class MenuVue extends JFrame {
   /**
-   * 
+   *
    */
   public MenuVue() {
 

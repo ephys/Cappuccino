@@ -1,4 +1,4 @@
-package ihm;
+package paoo.cappuccino.ihm;
 
 import java.awt.FlowLayout;
 
@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 
 /**
  * classe controller de l'ihm connexion
- * 
+ *
  * @author mopsome
  *
  */
@@ -58,7 +58,7 @@ public class ConnexionController extends JPanel {
 
   /**
    * méthode pour gérer l'action du bouon s'inscire
-   * 
+   *
    */
   private void inscription() {
     parent.dispose();

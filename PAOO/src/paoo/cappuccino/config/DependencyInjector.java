@@ -1,9 +1,9 @@
-package config;
+package paoo.cappuccino.config;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import util.exception.FatalException;
+import paoo.cappuccino.util.exception.FatalException;
 
 /**
  * @author Guylian Cox
@@ -14,7 +14,7 @@ public class DependencyInjector {
    * @return An instance of a class implementing the interface
    *
    * @throws java.lang.IllegalArgumentException the interface is not found in the application's config file
-   * @throws util.exception.FatalException the associated implementation was not found
+   * @throws paoo.cappuccino.util.exception.FatalException the associated implementation was not found
    */
   public static Object fetchDependency(Class<?> interfaze) { /* The cappuccino team is now german */
     String className = Config.getString(interfaze.getCanonicalName());
