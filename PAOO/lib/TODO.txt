@@ -30,9 +30,10 @@ Diagramme de classes
 ***********************/
 
 DAL/O
+IDalsProvider Singleton (un attribut SqlService)
+IDalsProviderImpl
 
 /**********************
 	JUNIOR
 ***********************/
-
-Show yourself at one of our damn bloody fucking meetings
+IHM inscription
