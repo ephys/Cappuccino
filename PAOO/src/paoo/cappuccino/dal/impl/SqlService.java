@@ -16,20 +16,24 @@ import paoo.cappuccino.dal.IDalService;
 public class SqlService implements IDalService, IDalBackend {
 
 	private boolean transactionPending;
-	private int connectionAvailable = 0;
-	// @Inject IConnectionProvider
 	private IConnectionProvider connectionProvider = new ConnectionProvider();
 
 	private Connection conn;
 
+	/**
+	 * Create a new Connection
+	 * 
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public SqlService() throws ClassNotFoundException, SQLException {
+		conn = connectionProvider.connectDB();
+	}
+
 	@Override
-	public boolean startTransaction() throws ClassNotFoundException, SQLException {
+	public synchronized boolean startTransaction() throws ClassNotFoundException, SQLException {
 		if (transactionPending) {
 			return false;
-		}
-		if (connectionAvailable == 0) {
-			conn = connectionProvider.connectDB();
-			connectionAvailable++;
 		}
 		conn.setAutoCommit(false);
 		transactionPending = true;
@@ -58,7 +62,7 @@ public class SqlService implements IDalService, IDalBackend {
 
 	@Override
 	public PreparedStatement getPrepardedStatement(String query) throws SQLException {
-		if (transactionPending) {
+		if (!transactionPending) {
 			return null;
 		}
 		return conn.prepareStatement(query);

@@ -23,15 +23,15 @@ public class ConnectionProvider implements IConnectionProvider {
 	private String login = "postgres", password = "1234";
 
 	@Override
-	public void disconnectDB(Connection con) throws SQLException {
-		con.close();
-	}
-
-	@Override
 	public Connection connectDB() throws ClassNotFoundException, SQLException {
 		Class.forName("org.postgresql.Driver");
 		String url = this.url + "?user=" + this.login + "&password=" + this.password;
 		return DriverManager.getConnection(url);
+	}
+
+	@Override
+	public void disconnectDB(Connection con) throws SQLException {
+		con.close();
 	}
 
 }
