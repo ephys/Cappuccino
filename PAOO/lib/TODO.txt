@@ -7,7 +7,7 @@ Correction rapport
 Diagramme de séquence
 
 /**********************
-	GEORLAS
+	GEORGES
 ***********************/
 
 Biz + JUnits
@@ -16,7 +16,7 @@ Biz + JUnits
 	GUYLIAN
 ***********************/
 
-UCC + JUnits
+UCC
 
 /**********************
 	LAURENT
@@ -30,10 +30,9 @@ Diagramme de classes
 ***********************/
 
 DAL/O
-IDalsProvider Singleton (un attribut SqlService)
-IDalsProviderImpl
+
 
 /**********************
 	JUNIOR
 ***********************/
-IHM inscription
+JUnits Biz
