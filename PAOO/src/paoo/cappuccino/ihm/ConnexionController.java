@@ -49,8 +49,8 @@ public class ConnexionController extends JPanel {
 
     // if(ucc.getUtilisateur(vue.getUsername(),vue.getPassword()){
     if (complet && true) {
-
-      new MenuVue();
+      // new MenuVue(user);
+      new MenuVue("george");
       parent.dispose();
     }
     // gestion et affichage erreure possible rendu par l'ucc.
