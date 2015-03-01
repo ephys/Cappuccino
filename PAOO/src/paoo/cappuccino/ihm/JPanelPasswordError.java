@@ -28,11 +28,7 @@ public class JPanelPasswordError extends JPanel {
   public JPanelPasswordError(String string, int taille) {
     this.setLayout(new GridLayout(0, 1));
     password = new JPasswordField(string, taille);
-    error = new JLabel();
-    error.setForeground(Color.RED);
     this.add(password);
-    this.add(error);
-
   }
 
   /**
@@ -69,5 +65,11 @@ public class JPanelPasswordError extends JPanel {
    */
   public void setError(String error) {
     this.error.setText(error);
+  }
+  
+ public void setErrorLabel(JLabel error){
+	  
+	  this.error = error;
+	  this.error.setForeground(Color.RED);
   }
 }
