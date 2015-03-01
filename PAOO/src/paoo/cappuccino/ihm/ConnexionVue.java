@@ -1,13 +1,13 @@
 package paoo.cappuccino.ihm;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 /**
  * classe vue de la connection
@@ -32,35 +32,47 @@ public class ConnexionVue extends JFrame {
     this.setResizable(false);
     this.setLocationRelativeTo(null);
     this.setLayout(new BorderLayout());
-    JPanel texts = new JPanel(new GridLayout(0, 1));
-    JPanel labels = new JPanel(new GridLayout(0, 1));
-
-    JLabel user = new JLabel("Nom d'utilisateur : ", JLabel.RIGHT);
-    user.setPreferredSize(new Dimension(150, 0));
+    JLabel errorUserMessage = new JLabel();
+    JLabel errorPasswordMessage = new JLabel();
+    JPanel fields = new JPanel(new GridLayout(0,1));
+    JPanel withinUserField = new JPanel(new GridLayout());
+    JPanel withinPasswordField = new JPanel(new GridLayout());
+    JPanel userField = new JPanel();
+    JPanel passwordField = new JPanel();
+    
+    JLabel user = new JLabel("Nom d'utilisateur : ");
     user.setFont(arial);
-    labels.add(user);
+   
 
-    JLabel pwd = new JLabel("mot de passe : ", JLabel.RIGHT);
-    pwd.setPreferredSize(new Dimension(150, 0));
+    JLabel pwd = new JLabel("mot de passe : ");
     pwd.setFont(arial);
-    labels.add(pwd);
 
-    username = new JPanelTextError(13);
-    JPanel userNamePanel = new JPanel(new BorderLayout());
-    userNamePanel.add(username);
+     username = new JPanelTextError(13);
+     userField.add(user);
+     userField.add(username);
+     withinUserField.add(new JLabel());
+     withinUserField.add(errorUserMessage);
+     userField.add(withinUserField);
+     username.setErrorLabel(errorUserMessage);
+     
+     password = new JPanelPasswordError(13);
+     passwordField.add(pwd);
+     passwordField.add(password);
+     withinPasswordField.add(new JLabel());
+     withinPasswordField.add(errorPasswordMessage);
+     passwordField.add(withinPasswordField);
+     password.setErrorLabel(errorPasswordMessage);
+     
+     fields.add(new JPanel());
+     fields.add(userField);
+     fields.add(passwordField);
 
-    password = new JPanelPasswordError(13);
-    JPanel passwordPanel = new JPanel(new BorderLayout());
-    passwordPanel.add(password);
-
-
-    texts.add(userNamePanel);
-    texts.add(passwordPanel);
-
-    this.add(texts);
-    this.add(labels, BorderLayout.WEST);
-
-    this.add(new ConnexionController(this), BorderLayout.SOUTH);
+     
+    this.add(fields);
+    JPanel centreBoutons = new JPanel();
+    centreBoutons.add(new ConnexionController(this));
+    centreBoutons.setAlignmentX(CENTER_ALIGNMENT);
+    this.add(centreBoutons, BorderLayout.SOUTH);
     this.setVisible(true);
   }
 
