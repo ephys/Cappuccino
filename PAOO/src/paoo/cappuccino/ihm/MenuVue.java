@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,15 +42,16 @@ public class MenuVue extends JFrame implements ChangeListener {
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setSize(1100, 700);
     this.setLayout(new BorderLayout());
+    principale = new JPanel(new BorderLayout());
 
     JPanel banniere = new JPanel(new BorderLayout());
     JLabel bienvenu = new JLabel("Bienvenue " + modele.getUser());
     bienvenu.setHorizontalAlignment(JLabel.CENTER);
     bienvenu.setFont(arial);
     banniere.add(bienvenu);
-    banniere.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Color.BLACK));
+    banniere.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Color.BLACK));
 
-    // to move
+    // TODO to move
     JButton deconnexion = new JButton("Déconnexion");
     deconnexion.addActionListener(e -> {
       this.dispose();
@@ -57,11 +59,22 @@ public class MenuVue extends JFrame implements ChangeListener {
     });
     banniere.add(deconnexion, BorderLayout.EAST);
 
-    titre.setBackground(Color.BLUE);
-    titre.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Color.BLACK));
+    // icone
+    // TODO changer le path
+    JLabel icon =
+        new JLabel(new ImageIcon("D:\\HAUTE_ECOLE\\workspace\\workspace2bis\\PAOO\\lib\\icon.png"));
+    banniere.add(icon, BorderLayout.WEST);
 
-    principale.add(titre, BorderLayout.NORTH);
+    titre.setFont(arial);
+    JPanel titrePanel = new JPanel();
+    titrePanel.setBackground(Color.BLUE);
+    titrePanel.setAlignmentX(CENTER_ALIGNMENT);
+    titrePanel.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Color.BLACK));
+    titrePanel.add(titre);
 
+    principale.add(titrePanel, BorderLayout.NORTH);
+
+    this.add(principale, BorderLayout.CENTER);
     this.setLocationRelativeTo(null);
     this.add(new MenuController(modele), BorderLayout.WEST);
     this.add(banniere, BorderLayout.NORTH);
@@ -75,7 +88,7 @@ public class MenuVue extends JFrame implements ChangeListener {
    */
   @Override
   public void stateChanged(ChangeEvent arg0) {
-
+    // TODO
 
   }
 }

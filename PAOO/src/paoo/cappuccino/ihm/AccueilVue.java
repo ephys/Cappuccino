@@ -10,6 +10,6 @@ import javax.swing.JPanel;
  *
  *
  */
-public class VueAccueil extends JPanel {
+public class AccueilVue extends JPanel {
 
 }

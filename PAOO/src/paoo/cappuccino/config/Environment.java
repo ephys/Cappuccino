@@ -16,7 +16,9 @@ import paoo.cappuccino.util.exception.FatalException;
 
 public class Environment {
 
-  public static enum PROFILE {PROD, TEST, DEV}
+  public static enum PROFILE {
+    PROD, TEST, DEV
+  }
 
   private static final File REPORTS_FOLDER = new File("crash-reports");
 
@@ -40,7 +42,7 @@ public class Environment {
           break;
         default:
           throw new FatalException("Could not set the application environment, " + profileFlag
-                                   + " isn't a valid profile.");
+              + " isn't a valid profile.");
       }
     }
 
@@ -70,20 +72,21 @@ public class Environment {
     Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
       // TODO: warn the IHM, via event handler ?
 
-      String reportFile = writeCrashReport(e);
-      appLogger.severe("A fatal exception has occurred");
-      if (reportFile != null) {
-        appLogger.severe("the details have been saved to " + reportFile);
-      } else {
-        appLogger.severe(
-            "the details could not be saved, the crash-reports folder " +
-            REPORTS_FOLDER.getAbsolutePath() + " cannot be created");
-      }
-    });
+        String reportFile = writeCrashReport(e);
+        appLogger.severe("A fatal exception has occurred");
+        if (reportFile != null) {
+          appLogger.severe("the details have been saved to " + reportFile);
+        } else {
+          appLogger.severe("the details could not be saved, the crash-reports folder "
+              + REPORTS_FOLDER.getAbsolutePath() + " cannot be created");
+        }
+      });
   }
 
 
   private static String writeCrashReport(Throwable exception) {
+    exception.printStackTrace();
+
     if (!REPORTS_FOLDER.exists() && !REPORTS_FOLDER.mkdirs()) {
       return null;
     }
@@ -109,6 +112,7 @@ public class Environment {
     }
 
     return file.getAbsolutePath();
+
   }
 
   /**
