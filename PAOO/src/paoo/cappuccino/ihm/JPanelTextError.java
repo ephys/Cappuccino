@@ -26,10 +26,8 @@ public class JPanelTextError extends JPanel {
   public JPanelTextError(String string, int taille) {
     this.setLayout(new GridLayout(0, 1));
     text = new JTextField(string, taille);
-    error = new JLabel();
-    error.setForeground(Color.RED);
     this.add(text);
-    this.add(error);
+   
   }
 
   /**
@@ -66,6 +64,13 @@ public class JPanelTextError extends JPanel {
    */
   public void setError(String error) {
     this.error.setText(error);
+  }
+  
+  
+  public void setErrorLabel(JLabel error){
+	  
+	  this.error = error;
+	  this.error.setForeground(Color.RED);
   }
 
 }
