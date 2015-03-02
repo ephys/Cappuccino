@@ -2,27 +2,27 @@ package paoo.cappuccino.config;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.Properties;
 
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
+ * Class used by the DependencyInjector to implement the interface with the class needed
+ * 
  * @author Laurent Batslé
  */
 public class Config {
   private static final File PROPS_FOLDER = new File("lib");
-  
+
   private static File configFile;
   private static Properties properties = new Properties();
 
   static {
-    if (!PROPS_FOLDER.exists() && !PROPS_FOLDER.mkdirs())
+    if (!PROPS_FOLDER.exists() && !PROPS_FOLDER.mkdirs()) {
       throw new FatalException("Could not make config directory " + PROPS_FOLDER.getAbsolutePath());
-
+    }
     configFile = new File(PROPS_FOLDER, AppContext.INSTANCE.getProfile() + ".properties");
 
     FileInputStream input = null;
@@ -61,10 +61,11 @@ public class Config {
           e.printStackTrace();
         }
       }
-      
-      throw new IllegalArgumentException("Could not find " + key + " in " + configFile.getAbsolutePath());
+
+      throw new IllegalArgumentException("Could not find " + key + " in "
+          + configFile.getAbsolutePath());
     }
-    
+
     return returnValue;
   }
 
