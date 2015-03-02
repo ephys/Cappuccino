@@ -1,7 +1,7 @@
 /**
  * 
  */
-package paoo.cappuccino.ihm;
+package paoo.cappuccino.ihm.utils;
 
 /**
  * enumérer pour l'état dans lequel la frame principale ce trouve
