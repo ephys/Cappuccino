@@ -1,10 +1,10 @@
 package paoo.cappuccino.config;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
@@ -23,19 +23,20 @@ public class AppContext {
   public static enum Profile {
     PROD, TEST, DEV
   }
-  
-  private static final File REPORTS_FOLDER = new File("crash-reports");
-  
+
   public static final AppContext INSTANCE = new AppContext();
+  private List<CrashListener> crashListeners = new ArrayList<>();
   private Logger appLogger;
-  
+
   private Profile profileType;
   private String profile;
   private String appName;
   private String version;
 
-  private AppContext() {};
-  
+  private AppContext() {
+    addCrashListener(new CrashWriter());
+  };
+
   public void setup(String appName, String version, String profile) {
     this.profile = profile == null ? "prod" : profile;
     this.appName = appName;
@@ -44,8 +45,8 @@ public class AppContext {
     initLogger();
     fetchProfile();
     initGlobalCatcher();
-    
-    appLogger.info(appName + " " + version + " launched using profile \"" + profile + "\"");
+
+    appLogger.info(appName + " " + version + " launched using profile \"" + this.profile + "\"");
   }
 
   public void setup(String appName, String version) {
@@ -65,6 +66,14 @@ public class AppContext {
         profileType = Profile.TEST;
         break;
     }
+  }
+  
+  private void initGlobalCatcher() {
+    Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+      for (CrashListener listener : crashListeners) {
+        listener.onCrash(e);
+      }
+    });
   }
 
   private void initLogger() {
@@ -119,54 +128,6 @@ public class AppContext {
     }
   }
 
-  private void initGlobalCatcher() {
-    Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-      // TODO: warn the IHM, via event handler ?
-
-        String reportFile = writeCrashReport(e);
-        appLogger.severe("A fatal exception has occurred");
-        if (reportFile != null) {
-          appLogger.severe("the details have been saved to " + reportFile);
-        } else {
-          appLogger.severe("the details could not be saved, the crash-reports folder "
-              + REPORTS_FOLDER.getAbsolutePath() + " cannot be created");
-        }
-      });
-  }
-
-
-  private static String writeCrashReport(Throwable exception) {
-    exception.printStackTrace();
-
-    if (!REPORTS_FOLDER.exists() && !REPORTS_FOLDER.mkdirs()) {
-      return null;
-    }
-
-    LocalDateTime crashtime = LocalDateTime.now();
-    File file =
-        new File(REPORTS_FOLDER, crashtime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ".log");
-
-    try {
-      file.createNewFile();
-      PrintWriter writer = new PrintWriter(file);
-
-      writer.write("/// Cappuccino ///\n");
-      writer.write("Date: " + crashtime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "\n\n");
-
-      writer.write("Exception message: " + exception.getMessage() + "\n");
-
-      writer.write("Exception stacktrace:\n");
-      exception.printStackTrace(writer);
-
-      writer.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-    return file.getAbsolutePath();
-
-  }
-
   /**
    * Creates a logger for a part of the application.
    *
@@ -178,6 +139,10 @@ public class AppContext {
     layerLogger.setParent(appLogger);
 
     return layerLogger;
+  }
+  
+  public Logger getAppLogger() {
+    return appLogger;
   }
 
   /**
@@ -197,12 +162,20 @@ public class AppContext {
   public String getProfile() {
     return profile;
   }
-  
+
   public String getVersion() {
     return version;
   }
-  
+
   public String getAppName() {
     return appName;
+  }
+  
+  public boolean addCrashListener(CrashListener l) {
+    return this.crashListeners.add(l);
+  }
+  
+  public boolean removeCrashListener(CrashListener l) {
+    return this.crashListeners.remove(l);
   }
 }
