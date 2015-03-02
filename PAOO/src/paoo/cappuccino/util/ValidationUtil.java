@@ -7,6 +7,8 @@ package paoo.cappuccino.util;
  */
 public class ValidationUtil {
   public void ensureNotNull(Object o, String parameterName) {
-    if (o == null) throw new NullPointerException("'" + parameterName + "' parameter received an invalid value, it cannot be null");
+    if (o == null)
+      throw new NullPointerException("'" + parameterName
+          + "' parameter received an invalid value, it cannot be null");
   }
 }
