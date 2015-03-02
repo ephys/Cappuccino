@@ -18,7 +18,7 @@ public class Config {
     if (!PROPS_FOLDER.exists() && !PROPS_FOLDER.mkdirs())
       throw new FatalException("Could not make config directory " + PROPS_FOLDER.getAbsolutePath());
 
-    File configFile = new File(PROPS_FOLDER, Environment.getInstance().getProfile() + ".properties");
+    File configFile = new File(PROPS_FOLDER, AppContext.INSTANCE.getProfile() + ".properties");
 
     FileInputStream input = null;
     try {

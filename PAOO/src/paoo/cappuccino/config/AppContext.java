@@ -18,7 +18,7 @@ import paoo.cappuccino.util.exception.FatalException;
 /**
  * @author Guylian Cox
  */
-public class Environment {
+public class AppContext {
 
   public static enum Profile {
     PROD, TEST, DEV
@@ -26,46 +26,44 @@ public class Environment {
   
   private static final File REPORTS_FOLDER = new File("crash-reports");
   
-  private static final Environment instance = new Environment();
+  public static final AppContext INSTANCE = new AppContext();
   private Logger appLogger;
-  private Profile profileType = Profile.PROD;
-  private String profile = "prod";
   
+  private Profile profileType;
+  private String profile;
   private String appName;
   private String version;
 
-  private Environment() {};
+  private AppContext() {};
   
-  public void setup(String appName, String version) {
+  public void setup(String appName, String version, String profile) {
+    this.profile = profile == null ? "prod" : profile;
     this.appName = appName;
     this.version = version;
-    
+
     initLogger();
     fetchProfile();
     initGlobalCatcher();
     
     appLogger.info(appName + " " + version + " launched using profile \"" + profile + "\"");
   }
-  
-  private void fetchProfile() {
-    String flag = System.getProperty("profile");
-    if (flag != null) {
-      switch (flag) {
-        case "prod":
-          profileType = Profile.PROD;
-          break;
-        case "dev":
-          profileType = Profile.DEV;
-          break;
-        case "test":
-        default:
-          profileType = Profile.TEST;
-          break;
-      }
 
-      this.profile = flag;
-    } else {
-      
+  public void setup(String appName, String version) {
+    setup(appName, version, System.getProperty("profile"));
+  }
+
+  private void fetchProfile() {
+    switch (profile) {
+      case "prod":
+        profileType = Profile.PROD;
+        break;
+      case "dev":
+        profileType = Profile.DEV;
+        break;
+      case "test":
+      default:
+        profileType = Profile.TEST;
+        break;
     }
   }
 
@@ -200,7 +198,11 @@ public class Environment {
     return profile;
   }
   
-  public static Environment getInstance() {
-    return instance;
+  public String getVersion() {
+    return version;
+  }
+  
+  public String getAppName() {
+    return appName;
   }
 }
