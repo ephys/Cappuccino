@@ -29,7 +29,7 @@ public class DependencyInjector {
     }
   }
 
-  private static void populate(Object obj) {
+  public static void populate(Object obj) {
     Class<?> clazz = obj.getClass();
 
     Field[] fields = clazz.getDeclaredFields();
