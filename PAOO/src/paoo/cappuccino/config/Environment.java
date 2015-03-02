@@ -5,70 +5,123 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 import paoo.cappuccino.util.exception.FatalException;
 
+/**
+ * @author Guylian Cox
+ */
 public class Environment {
 
-  public static enum PROFILE {
+  public static enum Profile {
     PROD, TEST, DEV
   }
-
+  
   private static final File REPORTS_FOLDER = new File("crash-reports");
+  
+  private static final Environment instance = new Environment();
+  private Logger appLogger;
+  private Profile profileType = Profile.PROD;
+  private String profile = "prod";
+  
+  private String appName;
+  private String version;
 
-  private static PROFILE profile = PROFILE.PROD;
-  private static final Logger appLogger = Logger.getLogger("Cappuccino-global");
-
-  public static void setup() {
+  private Environment() {};
+  
+  public void setup(String appName, String version) {
+    this.appName = appName;
+    this.version = version;
+    
     initLogger();
-
-    String profileFlag = System.getProperty("profile");
-    if (profileFlag != null) {
-      switch (profileFlag) {
+    fetchProfile();
+    initGlobalCatcher();
+    
+    appLogger.info(appName + " " + version + " launched using profile \"" + profile + "\"");
+  }
+  
+  private void fetchProfile() {
+    String flag = System.getProperty("profile");
+    if (flag != null) {
+      switch (flag) {
         case "prod":
-          profile = PROFILE.PROD;
-          break;
-        case "test":
-          profile = PROFILE.TEST;
+          profileType = Profile.PROD;
           break;
         case "dev":
-          profile = PROFILE.DEV;
+          profileType = Profile.DEV;
           break;
+        case "test":
         default:
-          throw new FatalException("Could not set the application environment, " + profileFlag
-              + " isn't a valid profile.");
+          profileType = Profile.TEST;
+          break;
       }
+
+      this.profile = flag;
+    } else {
+      
     }
-
-    appLogger.info("Cappuccino 0.0.1 launched using profile " + profileFlag);
-
-    initGlobalCatcher();
   }
 
-  private static void initLogger() {
+  private void initLogger() {
+    appLogger = Logger.getLogger(appName);
+
     try {
-      Formatter formatter = new SimpleFormatter();
+      Formatter formatter = new Formatter() {
+        @Override
+        public String format(LogRecord record) {
+          StringBuilder builder = new StringBuilder();
 
-      appLogger.addHandler(new FileHandler("app.log"));
+          builder
+              .append('[')
+              .append(
+                  LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
+              .append(']');
+          builder.append('[').append(record.getLoggerName()).append(']');
+          builder.append('[').append(record.getLevel().getLocalizedName()).append(']');
+          builder.append(' ').append(record.getMessage());
+
+          return builder.toString();
+        }
+      };
+
+      Handler logFile = new FileHandler("app.log");
+      logFile.setFormatter(formatter);
+      logFile.setLevel(Level.ALL);
+
+      Handler logConsole = new ConsoleHandler() {
+        public void publish(LogRecord record) {
+          try {
+            String message = getFormatter().format(record);
+            if (record.getLevel().intValue() >= Level.WARNING.intValue()) {
+              System.err.write(message.getBytes());
+            } else {
+              System.out.write(message.getBytes());
+            }
+          } catch (Exception e) {
+            throw new FatalException("Logger error", e);
+          }
+        }
+      };
+      logConsole.setFormatter(formatter);
+
+      appLogger.addHandler(logConsole);
+      appLogger.addHandler(logFile);
+
       appLogger.setParent(Logger.getGlobal());
-
-      Handler[] handlers = appLogger.getHandlers();
-      for (Handler h : handlers) {
-        h.setLevel(Level.ALL);
-        h.setFormatter(formatter);
-      }
+      appLogger.setUseParentHandlers(false);
     } catch (IOException e) {
       throw new FatalException("Could not setup the application logger", e);
     }
   }
 
-  private static void initGlobalCatcher() {
+  private void initGlobalCatcher() {
     Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
       // TODO: warn the IHM, via event handler ?
 
@@ -92,14 +145,15 @@ public class Environment {
     }
 
     LocalDateTime crashtime = LocalDateTime.now();
-    File file = new File(REPORTS_FOLDER, crashtime.toString() + ".log");
+    File file =
+        new File(REPORTS_FOLDER, crashtime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ".log");
 
     try {
       file.createNewFile();
       PrintWriter writer = new PrintWriter(file);
 
       writer.write("/// Cappuccino ///\n");
-      writer.write("Date: " + crashtime.format(DateTimeFormatter.BASIC_ISO_DATE) + "\n\n");
+      writer.write("Date: " + crashtime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "\n\n");
 
       writer.write("Exception message: " + exception.getMessage() + "\n");
 
@@ -121,8 +175,8 @@ public class Environment {
    * @param appLayer The part of the application requesting a logger (IHM, DAL, DALSQL, UCC, ...)
    * @return a logger.
    */
-  public static Logger getLogger(String appLayer) {
-    Logger layerLogger = Logger.getLogger("Cappuccino-" + appLayer);
+  public Logger getLogger(String appLayer) {
+    Logger layerLogger = Logger.getLogger("Capp-" + appLayer);
     layerLogger.setParent(appLogger);
 
     return layerLogger;
@@ -138,7 +192,15 @@ public class Environment {
    *
    * @return the current profile type.
    */
-  public static PROFILE getProfile() {
+  public Profile getProfileType() {
+    return profileType;
+  }
+
+  public String getProfile() {
     return profile;
+  }
+  
+  public static Environment getInstance() {
+    return instance;
   }
 }

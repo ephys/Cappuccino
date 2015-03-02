@@ -1,48 +1,38 @@
 package paoo.cappuccino.config;
 
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-import paoo.cappuccino.config.Environment.PROFILE;
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
  * @author Laurent Batslé
  */
 public class Config {
-
+  private static final File PROPS_FOLDER = new File("lib");
   private static Properties properties = new Properties();
-  private static FileInputStream input = null;
 
   static {
-    PROFILE p = Environment.getProfile();
+    if (!PROPS_FOLDER.exists() && !PROPS_FOLDER.mkdirs())
+      throw new FatalException("Could not make config directory " + PROPS_FOLDER.getAbsolutePath());
+
+    File configFile = new File(PROPS_FOLDER, Environment.getInstance().getProfile() + ".properties");
+
+    FileInputStream input = null;
     try {
-      switch (p) {
-        case TEST:
-          input = new FileInputStream("lib/test.properties");
-          break;
-        case DEV:
-          input = new FileInputStream("lib/dev.properties");
-          break;
-        case PROD:
-          input = new FileInputStream("lib/prod.properties");
-          break;
-        default:
-          new FatalException("Environment error!");
-          break;
-      }
+      input = new FileInputStream(configFile);
       properties.load(input);
-    } catch (FileNotFoundException e) {
-      throw new FatalException("Fichier properties manquant!");
     } catch (IOException e) {
-      throw new FatalException("Erreur dans les I/O");
+      throw new FatalException("Could not load the configuration file "
+          + configFile.getAbsolutePath(), e);
     } finally {
       if (input != null) {
         try {
           input.close();
-        } catch (IOException ignore) {
+        } catch (IOException e) {
+          e.printStackTrace();
         }
       }
     }

@@ -1,7 +1,7 @@
 package paoo.cappuccino.ucc;
 
 import paoo.cappuccino.business.dto.IUserDto;
-import paoo.cappuccino.config.DependencyInjector;
+import paoo.cappuccino.config.injector.DependencyInjector;
 
 /**
  * Use case controller containing methods relative to an user (as en entity, not as an actor)
@@ -9,10 +9,6 @@ import paoo.cappuccino.config.DependencyInjector;
  * @author Guylian Cox
  */
 public interface IUserUcc {
-
-  public static final IUserUcc INSTANCE =
-      (IUserUcc) DependencyInjector.fetchDependency(IUserUcc.class);
-
   /**
    * Registers an user in the system
    *

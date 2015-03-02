@@ -11,8 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import paoo.cappuccino.util.MenuState;
-
 /**
  * @author Opsomer Mathias
  *

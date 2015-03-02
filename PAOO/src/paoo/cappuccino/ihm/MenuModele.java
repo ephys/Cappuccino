@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import paoo.cappuccino.util.MenuState;
-
 /**
  * la classe du modele de l'ihm menu
  * 
