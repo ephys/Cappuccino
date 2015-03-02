@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
+ * Configuration specific to the application environment
+ * 
  * @author Guylian Cox
  */
 public class AppContext {
@@ -83,7 +85,7 @@ public class AppContext {
         break;
     }
   }
-  
+
   /**
    * Creates the application global catcher
    */
@@ -162,7 +164,7 @@ public class AppContext {
 
     return layerLogger;
   }
-  
+
   /**
    * Returns the application parent/global logger
    */
@@ -204,17 +206,24 @@ public class AppContext {
   public String getAppName() {
     return appName;
   }
-  
+
   /**
+   * Adds a listener that will be called just before the application crashes
    * 
-   * @param l
+   * @param listener the listener to call
    * @return true: the listener has been added
    */
-  public boolean addCrashListener(CrashListener l) {
-    return this.crashListeners.add(l);
+  public boolean addCrashListener(CrashListener listener) {
+    return this.crashListeners.add(listener);
   }
-  
-  public boolean removeCrashListener(CrashListener l) {
-    return this.crashListeners.remove(l);
+
+  /**
+   * Removes a crash listener
+   * 
+   * @param listener the listener to remove
+   * @return true: the listener has been removed
+   */
+  public boolean removeCrashListener(CrashListener listener) {
+    return this.crashListeners.remove(listener);
   }
 }

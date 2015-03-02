@@ -15,7 +15,7 @@ import paoo.cappuccino.util.exception.FatalException;
 public class DependencyInjector {
   private static Map<Class<?>, Object> singletonCache = new HashMap<>();
 
-  private static Object fetchDependency(Class<?> dependency) { /* The cappuccino team is now german */
+  private static Object fetchDependency(Class<?> dependency) {
     try {
       Constructor<?> constructor = dependency.getDeclaredConstructor();
       constructor.setAccessible(true);
