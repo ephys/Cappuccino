@@ -9,8 +9,6 @@ import java.util.Properties;
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
- * Class used by the DependencyInjector to implement the interface with the class needed
- * 
  * @author Laurent Batslé
  */
 public class Config {
