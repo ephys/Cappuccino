@@ -37,6 +37,13 @@ public class AppContext {
     addCrashListener(new CrashWriter());
   };
 
+  /**
+   * Configures the environment
+   * 
+   * @param appName The application name
+   * @param version The application version
+   * @param profile The profile to load
+   */
   public void setup(String appName, String version, String profile) {
     this.profile = profile == null ? "prod" : profile;
     this.appName = appName;
@@ -49,10 +56,19 @@ public class AppContext {
     appLogger.info(appName + " " + version + " launched using profile \"" + this.profile + "\"");
   }
 
+  /**
+   * Configures the environment. The profile to load is set from the jvm arguments
+   * 
+   * @param appName The application name
+   * @param version The application version
+   */
   public void setup(String appName, String version) {
     setup(appName, version, System.getProperty("profile"));
   }
 
+  /**
+   * Parses the profile name and extrapolates the profile type from it.
+   */
   private void fetchProfile() {
     switch (profile) {
       case "prod":
@@ -68,6 +84,9 @@ public class AppContext {
     }
   }
   
+  /**
+   * Creates the application global catcher
+   */
   private void initGlobalCatcher() {
     Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
       for (CrashListener listener : crashListeners) {
@@ -76,6 +95,9 @@ public class AppContext {
     });
   }
 
+  /**
+   * Setups the application main logger
+   */
   private void initLogger() {
     appLogger = Logger.getLogger(appName);
 
@@ -141,7 +163,10 @@ public class AppContext {
     return layerLogger;
   }
   
-  public Logger getAppLogger() {
+  /**
+   * Returns the application parent/global logger
+   */
+  Logger getAppLogger() {
     return appLogger;
   }
 
@@ -159,18 +184,32 @@ public class AppContext {
     return profileType;
   }
 
+  /**
+   * Gets the application profile name
+   */
   public String getProfile() {
     return profile;
   }
 
+  /**
+   * Gets the application version
+   */
   public String getVersion() {
     return version;
   }
 
+  /**
+   * Gets the application name
+   */
   public String getAppName() {
     return appName;
   }
   
+  /**
+   * 
+   * @param l
+   * @return true: the listener has been added
+   */
   public boolean addCrashListener(CrashListener l) {
     return this.crashListeners.add(l);
   }

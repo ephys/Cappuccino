@@ -8,6 +8,6 @@ public class Main {
   public static void main(String[] args) {
     AppContext.INSTANCE.setup("Cappuccino", "0.0.1");
 
-    ConnectionView vue = (ConnectionView) DependencyInjector.buildDependency(ConnectionView.class);
+    DependencyInjector.buildDependency(ConnectionView.class);
   }
 }
