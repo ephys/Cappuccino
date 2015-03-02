@@ -22,7 +22,7 @@ import javax.swing.event.ChangeListener;
  * @author Opsomer Mathias
  *
  */
-public class MenuVue extends JFrame implements ChangeListener {
+public class MenuView extends JFrame implements ChangeListener {
   // private User utilisateur;
   private Font arial = new Font("Arial", Font.PLAIN, 28);
   private MenuModele modele;
@@ -36,7 +36,7 @@ public class MenuVue extends JFrame implements ChangeListener {
    *
    */
   // public MenuVue(User user){
-  public MenuVue(String user) {
+  public MenuView(String user) {
     this.modele = new MenuModele(user);
     this.setTitle("Cappuccino");
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -55,7 +55,7 @@ public class MenuVue extends JFrame implements ChangeListener {
     JButton deconnexion = new JButton("Déconnexion");
     deconnexion.addActionListener(e -> {
       this.dispose();
-      new ConnexionVue();
+      new ConnectionView();
     });
     banniere.add(deconnexion, BorderLayout.EAST);
 

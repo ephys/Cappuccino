@@ -15,14 +15,14 @@ import javax.swing.JPanel;
  */
 public class InscriptionController extends JPanel {
 
-  private InscriptionVue parent;
+  private InscriptionView parent;
 
   /**
    * constructeur du controller
    *
    * @param inscriptionVue la vue sur laquelle il s'affiche
    */
-  public InscriptionController(InscriptionVue inscriptionVue) {
+  public InscriptionController(InscriptionView inscriptionVue) {
     this.parent = inscriptionVue;
     this.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
@@ -33,7 +33,7 @@ public class InscriptionController extends JPanel {
     JButton connecter = new JButton("Annuler");
     connecter.addActionListener(e -> {
       parent.dispose();
-      new ConnexionVue();
+      new ConnectionView();
     });
     this.add(inscrire);
     this.add(connecter);
@@ -47,6 +47,6 @@ public class InscriptionController extends JPanel {
     // valider input
     parent.dispose();
     // new MenuVue(new User);
-    new MenuVue("daniel");
+    new MenuView("daniel");
   }
 }

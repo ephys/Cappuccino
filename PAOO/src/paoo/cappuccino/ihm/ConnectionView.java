@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
  * @author Opsomer Mathias
  *
  */
-public class ConnexionVue extends JFrame {
+public class ConnectionView extends JFrame {
   private Font arial = new Font("Arial", Font.PLAIN, 16);
   private JPanelTextError username;
   private JPanelPasswordError password;
@@ -25,7 +25,7 @@ public class ConnexionVue extends JFrame {
   /**
    * constructeur
    */
-  public ConnexionVue() {
+  public ConnectionView() {
     this.setTitle("connexion");
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setSize(400, 240);
@@ -70,7 +70,7 @@ public class ConnexionVue extends JFrame {
      
     this.add(fields);
     JPanel centreBoutons = new JPanel();
-    centreBoutons.add(new ConnexionController(this));
+    centreBoutons.add(new ConnectionController(this));
     centreBoutons.setAlignmentX(CENTER_ALIGNMENT);
     this.add(centreBoutons, BorderLayout.SOUTH);
     this.setVisible(true);

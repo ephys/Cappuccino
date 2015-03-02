@@ -11,10 +11,10 @@ import javax.swing.JPanel;
  * @author mopsome
  *
  */
-public class ConnexionController extends JPanel {
-  private ConnexionVue parent;
+public class ConnectionController extends JPanel {
+  private ConnectionView parent;
 
-  public ConnexionController(ConnexionVue connexionVue) {
+  public ConnectionController(ConnectionView connexionVue) {
     this.parent = connexionVue;
     this.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
@@ -50,7 +50,7 @@ public class ConnexionController extends JPanel {
     // if(ucc.getUtilisateur(vue.getUsername(),vue.getPassword()){
     if (complet && true) {
       // new MenuVue(user);
-      new MenuVue("george");
+      new MenuView("george");
       parent.dispose();
     }
     // gestion et affichage erreure possible rendu par l'ucc.
@@ -62,7 +62,7 @@ public class ConnexionController extends JPanel {
    */
   private void inscription() {
     parent.dispose();
-    new InscriptionVue();
+    new InscriptionView();
   }
 
 

@@ -17,7 +17,7 @@ import javax.swing.JPanel;
  *
  *         vue de l'ihm de l'inscription
  */
-public class InscriptionVue extends JFrame {
+public class InscriptionView extends JFrame {
   private Font arial = new Font("Arial", Font.PLAIN, 16);
   private JPanelTextError username, textNom, textPrenom, textEmail;
   private JPanelPasswordError password1, password2;
@@ -26,7 +26,7 @@ public class InscriptionVue extends JFrame {
   /**
    * constructeur
    */
-  InscriptionVue() {
+  InscriptionView() {
     this.setTitle("Inscription");
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setSize(450, 600);
