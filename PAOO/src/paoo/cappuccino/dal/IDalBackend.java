@@ -10,13 +10,13 @@ import java.sql.SQLException;
  */
 public interface IDalBackend {
 
-	/**
-	 * Create a PrepardedStatement with the query in param.
-	 * 
-	 * @param query
-	 * @return PreparedStatement
-	 * @throws SQLException
-	 */
-	public PreparedStatement getPrepardedStatement(String query) throws SQLException;
+  /**
+   * Create a PrepardedStatement with the query in param.
+   * 
+   * @param query
+   * @return PreparedStatement
+   * @throws SQLException
+   */
+  public PreparedStatement getPrepardedStatement(String query) throws SQLException;
 
 }
