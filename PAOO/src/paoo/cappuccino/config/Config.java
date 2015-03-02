@@ -58,7 +58,7 @@ public class Config {
   public static String getString(String key) {
     String returnValue = properties.getProperty(key);
     if (returnValue == null)
-      throw new FatalException("Classe d'implémentation non trouvée!");
+      throw new IllegalArgumentException("Classe d'implémentation non trouvée!");
     return returnValue;
   }
 
