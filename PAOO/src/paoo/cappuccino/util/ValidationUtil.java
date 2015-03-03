@@ -6,9 +6,50 @@ package paoo.cappuccino.util;
  * @author Guylian Cox
  */
 public class ValidationUtil {
-  public void ensureNotNull(Object o, String parameterName) {
-    if (o == null)
+
+  /**
+   * Ensures an object is not null
+   *
+   * @param obj           The object to check.
+   * @param parameterName The name of the variable / parameter checked.
+   * @throws java.lang.NullPointerException The object is null
+   */
+  public static void ensureNotNull(Object obj, String parameterName) {
+    if (obj == null) {
       throw new NullPointerException("'" + parameterName
-          + "' parameter received an invalid value, it cannot be null");
+                                     + "' parameter received an invalid value, it cannot be null");
+    }
+  }
+
+  /**
+   * Ensure the given string matches password requirements
+   *
+   * @param password      The password to check
+   * @param parameterName The name of the variable / parameter checked.
+   * @throws java.lang.IllegalArgumentException The password does not match the requirements
+   */
+  public static void validatePassword(String password, String parameterName) {
+    ensureNotNull(password, parameterName);
+
+    if (password.length() < 6) {
+      throw new IllegalArgumentException(
+          "Invalid parameter '" + parameterName + "', must be at least 6 characters long");
+    }
+  }
+
+  /**
+   * Ensure the given string is not empty (whitespaces do no count)
+   *
+   * @param str           The string to check
+   * @param parameterName The name of the variable / parameter checked.
+   * @throws java.lang.IllegalArgumentException The string is considered empty
+   */
+  public static void ensureFilled(String str, String parameterName) {
+    ensureNotNull(str, parameterName);
+
+    if (StringUtils.isEmpty(str)) {
+      throw new IllegalArgumentException(
+          "Invalid parameter '" + parameterName + "', must not be empty");
+    }
   }
 }

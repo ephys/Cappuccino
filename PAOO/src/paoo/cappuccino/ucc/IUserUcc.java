@@ -21,7 +21,7 @@ public interface IUserUcc {
    * @return The registered user's DTO
    *
    * @throws java.lang.IllegalArgumentException The username isn't unique or the email
-   *                                            is not invalid.
+   *                                            is not valid.
    */
   public IUserDto register(String username, String password, String firstName, String lastName,
                            String email);

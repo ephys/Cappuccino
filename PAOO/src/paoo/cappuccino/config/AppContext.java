@@ -17,7 +17,7 @@ import paoo.cappuccino.util.exception.FatalException;
 
 /**
  * Configuration specific to the application environment
- * 
+ *
  * @author Guylian Cox
  */
 public class AppContext {
@@ -41,7 +41,7 @@ public class AppContext {
 
   /**
    * Configures the environment
-   * 
+   *
    * @param appName The application name
    * @param version The application version
    * @param profile The profile to load
@@ -60,7 +60,7 @@ public class AppContext {
 
   /**
    * Configures the environment. The profile to load is set from the jvm arguments
-   * 
+   *
    * @param appName The application name
    * @param version The application version
    */
@@ -209,7 +209,7 @@ public class AppContext {
 
   /**
    * Adds a listener that will be called just before the application crashes
-   * 
+   *
    * @param listener the listener to call
    * @return true: the listener has been added
    */
@@ -219,7 +219,7 @@ public class AppContext {
 
   /**
    * Removes a crash listener
-   * 
+   *
    * @param listener the listener to remove
    * @return true: the listener has been removed
    */
