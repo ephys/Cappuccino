@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 public class JLabelFont extends JLabel {
 
   private static final long serialVersionUID = 5620229542204605508L;
+  private final String font = "Arial";
 
   /**
    * Constructor JLabelFont
@@ -22,13 +23,13 @@ public class JLabelFont extends JLabel {
    */
   public JLabelFont(String texte, int size) {
     super(texte);
-    Font arial = new Font("Arial", Font.PLAIN, size);
+    Font arial = new Font(font, Font.PLAIN, size);
     this.setFont(arial);
   }
 
   /**
    * Constructor JLabelFont with Default size = 16
-   * 
+   *
    * @param texte the texte to display
    */
   public JLabelFont(String texte) {
