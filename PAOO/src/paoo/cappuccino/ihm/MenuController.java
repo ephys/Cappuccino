@@ -18,19 +18,14 @@ import paoo.cappuccino.ihm.utils.MenuState;
  *
  */
 public class MenuController extends JPanel {
-  /**
-   * Version
-   */
+
   private static final long serialVersionUID = -8247656394104598549L;
-  /**
-   * the modele he's working with
-   */
   private MenuModele modele;
 
   /**
-   * le controller menu
+   * Constructor
    *
-   * @param menuVue le parent
+   * @param MenuModele the modele the view is working with
    */
   public MenuController(MenuModele modele) {
     this.modele = modele;

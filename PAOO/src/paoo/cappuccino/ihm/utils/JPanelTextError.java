@@ -8,31 +8,20 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- * description + input + (error)
+ * Description + input + (error)
  *
  * @author mopsome
  *
  */
 public class JPanelTextError extends JPanel {
-  /**
-   * version
-   */
+
   private static final long serialVersionUID = -714442590193004703L;
-  /**
-   * the input
-   */
   private JTextField input;
-  /**
-   * the optional erro linked to the input
-   */
   private JLabelFont error;
-  /**
-   * the description of the input
-   */
   private JLabelFont label;
 
   /**
-   * constructor
+   * Constructor
    *
    * @param String the textarea's template
    * @param String description textarea
@@ -50,7 +39,7 @@ public class JPanelTextError extends JPanel {
   }
 
   /**
-   * constructor only with label
+   * Constructor only with label
    *
    * @param label description textarea
    */
@@ -68,7 +57,7 @@ public class JPanelTextError extends JPanel {
   }
 
   /**
-   * setError
+   * SetError
    *
    * @param String new error
    */

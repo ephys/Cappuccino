@@ -1,10 +1,9 @@
 package paoo.cappuccino.ihm.utils;
 
 /**
- * state of the menu ihm
+ * State of the menu ihm
  *
  * @author Opsomer Mathias
- *
  *
  */
 public enum MenuState {
@@ -17,26 +16,21 @@ public enum MenuState {
   private String titre;
 
   /**
-   * construit l'état sur base d'un integer
+   * Constructor
+   * 
+   * @param state the state
+   * @param titre the title linked tot this state
    */
   private MenuState(Integer state, String titre) {
     this.state = state;
     this.titre = titre;
   }
 
-  /**
-   * getState l'état courrant
-   *
-   * @return int state l'état courrant
-   */
-  public int getState() {
-    return state;
-  }
 
   /**
-   * getTitre le titre correspondant à l'état courrant
+   * Get title linked to a state
    *
-   * @return String le titre
+   * @return String title
    */
   public String getTitre() {
     return titre;

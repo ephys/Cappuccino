@@ -10,13 +10,11 @@ import javax.swing.JFrame;
  */
 public class InscriptionView extends JFrame {
 
-  /**
-   * Version
-   */
+
   private static final long serialVersionUID = -7334876606967058112L;
 
   /**
-   * constructeur
+   * Constructeur
    */
   InscriptionView() {
     this.setTitle("Inscription");

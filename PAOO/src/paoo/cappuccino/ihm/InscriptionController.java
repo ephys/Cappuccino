@@ -6,22 +6,19 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
+ * Controller for the inscription ihm
+ * 
  * @author Opsomer Mathias
  *
  *
  */
 public class InscriptionController extends JPanel {
-  /**
-   * Version
-   */
+
   private static final long serialVersionUID = 8967022645980426577L;
-  /**
-   * the parent (the view that has call the controller)
-   */
   private InscriptionView parent;
 
   /**
-   * constructeur du controller
+   * Constructor
    *
    * @param inscriptionVue la vue sur laquelle il s'affiche
    */
@@ -44,7 +41,7 @@ public class InscriptionController extends JPanel {
   }
 
   /**
-   * methode qui valide l'inscription
+   * Call UCC.register and go to the menu
    */
   private void valider() {
     // valider input

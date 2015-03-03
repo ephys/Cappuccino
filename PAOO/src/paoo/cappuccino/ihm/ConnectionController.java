@@ -9,23 +9,18 @@ import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.ihm.utils.Constantes;
 
 /**
- * classe controller de l'ihm connexion
+ * Controller for the connection ihm
  *
  * @author mopsome
  *
  */
 public class ConnectionController extends JPanel {
-  /**
-   * Version
-   */
+
   private static final long serialVersionUID = -1367769157419064413L;
-  /**
-   * the parent
-   */
   private ConnectionView parent;
 
   /**
-   * the constructeur
+   * Constructeur
    * 
    * @param ConnectionView the parent
    */
@@ -47,7 +42,7 @@ public class ConnectionController extends JPanel {
   }
 
   /**
-   * méthode pour gérer l'action du bouton connexion
+   * Methode to call UCC.login and go to the menu
    *
    */
   private void connexion() {
@@ -76,7 +71,7 @@ public class ConnectionController extends JPanel {
   }
 
   /**
-   * méthode pour gérer l'action du bouon s'inscire
+   * Method to go to the inscription
    *
    */
   private void inscription() {

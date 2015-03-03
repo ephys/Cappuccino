@@ -8,30 +8,20 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
 /**
+ * description of a JPasswordField and this linked error
+ * 
  * @author Opsomer Mathias
- *
  *
  */
 public class JPanelPasswordError extends JPanel {
-  /**
-   * version
-   */
+
   private static final long serialVersionUID = -6170242877236427872L;
-  /**
-   * the input
-   */
   private JPasswordField input;
-  /**
-   * the optionnal error linked to the input
-   */
   private JLabelFont error;
-  /**
-   * the description of the input
-   */
   private JLabelFont label;
 
   /**
-   * constructor
+   * Constructor
    *
    * @param String the textarea's template
    * @param String description textarea
@@ -50,7 +40,7 @@ public class JPanelPasswordError extends JPanel {
   }
 
   /**
-   * constructor only with label
+   * Constructor only with label
    *
    * @param label description textarea
    */
@@ -68,7 +58,7 @@ public class JPanelPasswordError extends JPanel {
   }
 
   /**
-   * setError
+   * SetError
    *
    * @param String new error
    */

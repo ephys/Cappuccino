@@ -12,27 +12,19 @@ import paoo.cappuccino.ihm.utils.JPanelPasswordError;
 import paoo.cappuccino.ihm.utils.JPanelTextError;
 
 /**
- * classe vue de la connection
+ * View for the connection ihm
  *
  * @author Opsomer Mathias
  *
  */
 public class ConnectionView extends JFrame {
-  /**
-   * version
-   */
+
   private static final long serialVersionUID = -5349463202389478061L;
-  /**
-   * JPanelPasswordError to enter password
-   */
   private JPanelPasswordError panelPassword;
-  /**
-   * JpanelTextError to enter the username
-   */
   private JPanelTextError panelUsername;
 
   /**
-   * constructeur
+   * Constructeur
    */
   public ConnectionView() {
     this.setTitle("Connexion");
@@ -58,14 +50,14 @@ public class ConnectionView extends JFrame {
   }
 
   /**
-   * get the input from the JPanelTextError
+   * Get the input from the JPanelTextError
    */
   public String getUsername() {
     return panelUsername.getInput();
   }
 
   /**
-   * get the input from the JPanelPasswordError
+   * Get the input from the JPanelPasswordError
    */
   public char[] getPassword() {
     return panelPassword.getInput();// gerer le password ici

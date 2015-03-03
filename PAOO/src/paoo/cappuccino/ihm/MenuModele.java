@@ -9,54 +9,48 @@ import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.ihm.utils.MenuState;
 
 /**
- * la classe du modele de l'ihm menu
+ * Modele for the main application
  *
  * @author Opsomer Mathias
  *
  */
 public class MenuModele {
-  /**
-   * the user connected
-   */
+
   private IUserDto user;
-  /**
-   * the sate of the ihm
-   */
   private MenuState state;
-  /**
-   * collection to keep all the view abonned to the model
-   */
   private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
 
   /**
-   * constructeur avec l'utilisateur connecter (le rend donc immuable)
+   * Constructor
+   * 
+   * @param user the user connected
    */
-  public MenuModele(IUserDto user2) {
-    user = user2;
+  public MenuModele(IUserDto user) {
+    this.user = user;
   }
 
   /**
-   * abonne un change listener à la collection
+   * Add a changeListener to the modele's collection of listeners
    *
-   * @param l le changelistener à ajouter
+   * @param l the changeListener to add
    */
   public void addChangeListener(ChangeListener l) {
     listeners.add(l);
   }
 
   /**
-   * retire un change listener à la collection
+   * Remove a changeListener to the modele's collection of listeners
    *
-   * @param l le changelistener à retirer
+   * @param l the changeListener to Remove
    */
   public void removeChangeListener(ChangeListener l) {
     listeners.remove(l);
   }
 
   /**
-   * méthode pour appeler toute les methode stateChanged sur les changelistener abonné
+   * Methode to call all the listeners registred
    *
-   * @param e la source du changement
+   * @param e origin of the event
    */
   private void trigger(ChangeEvent e) {
     for (ChangeListener changeListener : listeners) {
@@ -66,9 +60,9 @@ public class MenuModele {
 
 
   /**
-   * change l'état dans lequel le menu se trouve
+   * Change menu state
    *
-   * @param state le nouvel état
+   * @param MenuState the new State
    */
   public void changeState(MenuState state) {
     this.state = state;
@@ -77,18 +71,18 @@ public class MenuModele {
 
 
   /**
-   * getUser l'utilisateur connecté
+   * Get the connected user
    *
-   * @return IUserDto l'utilisateur connecté
+   * @return IUserDto the connected user
    */
   public IUserDto getUser() {
     return user;
   }
 
   /**
-   * getState l'etat courrant
+   * Get current menu state
    *
-   * @return MenuState l'état courrant
+   * @return MenuState the current menu state
    */
   public MenuState getState() {
     return state;

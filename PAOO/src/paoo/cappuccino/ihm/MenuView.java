@@ -16,32 +16,21 @@ import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.ihm.utils.JLabelFont;
 
 /**
- * view of the menu ihm
+ * View of the menu ihm
  *
  * @author Opsomer Mathias
  *
  */
 public class MenuView extends JFrame implements ChangeListener {
-  /**
-   * version
-   */
+
   private static final long serialVersionUID = -8074586111584676162L;
   // private User utilisateur;
-  /**
-   * the modele
-   */
   private MenuModele modele;
-  /**
-   * the title of the state
-   */
   private JLabelFont titre = new JLabelFont("test", 22);
-  /**
-   * the panel that will change with the sate
-   */
   private JPanel principale;
 
   /**
-   * constructor
+   * Constructor
    *
    * @param user the connected user
    *

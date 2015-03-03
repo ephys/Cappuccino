@@ -2,7 +2,7 @@ package paoo.cappuccino.ihm.utils;
 
 
 /**
- * simple constante for the ihm
+ * Constante for the ihm
  *
  * @author Opsomer Mathias
  */
