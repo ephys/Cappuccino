@@ -1,7 +1,5 @@
 package paoo.cappuccino.util.hasher;
 
-import sun.plugin.dom.exception.InvalidStateException;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -15,6 +13,7 @@ import paoo.cappuccino.util.exception.FatalException;
  * application and being backwards-compatible with previous algorithms
  */
 public class StringHasher {
+
   public static final int SALT_SIZE = 16;
   public static final StringHasher INSTANCE = new StringHasher();
 
@@ -76,11 +75,11 @@ public class StringHasher {
    */
   public IHashHolderDto hash(final String toHash) {
     if (hashAlgorithms.size() == 0) {
-      throw new InvalidStateException(
+      throw new IllegalStateException(
           "This StringHasher does not have any algorithm implemented. Use addHashAlgorithm() to add one.");
     }
-    final IHashAlgorithm hasher = hashAlgorithms.get(hashAlgorithms.size() - 1);
 
+    final IHashAlgorithm hasher = hashAlgorithms.get(hashAlgorithms.size() - 1);
     return hasher.hash(toHash, null);
   }
 

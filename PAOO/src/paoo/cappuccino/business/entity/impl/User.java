@@ -26,6 +26,7 @@ final class User extends BaseEntity implements IUser {
 
     this(-1, 0, username, lastName, firstName, email, role);
     setPassword(password);
+    this.registerDate = LocalDateTime.now();
   }
 
   public User(int id, int version, String username, IHashHolderDto password, String lastName,
