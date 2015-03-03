@@ -13,6 +13,7 @@ import java.util.logging.Logger;
  * @author Guylian Cox
  */
 class CrashWriter implements CrashListener {
+  private static final DateTimeFormatter FILENAME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
   private static final File REPORTS_FOLDER = new File("crash-reports");
 
   /**
@@ -28,7 +29,7 @@ class CrashWriter implements CrashListener {
 
     LocalDateTime crashTime = LocalDateTime.now();
     File file =
-        new File(REPORTS_FOLDER, crashTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ".log");
+        new File(REPORTS_FOLDER, crashTime.format(FILENAME_FORMATTER) + ".log");
 
     try {
       file.createNewFile();

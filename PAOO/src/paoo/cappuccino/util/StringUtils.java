@@ -29,4 +29,44 @@ public class StringUtils {
   public static boolean isEmpty(String str) {
     return str == null || str.trim().length() == 0;
   }
+
+  /**
+   * Converts a string containing hexadecimal numbers to a byte array
+   *
+   * @param hexStr The string to convert
+   * @return the byte array version
+   */
+  public static byte[] strToBytes(String hexStr) {
+    byte[] table = new byte[hexStr.length() >> 1];
+
+    for (int i = hexStr.length() - 1; i > 0; i -= 2) {
+      int b = Integer.parseInt(hexStr.substring(i - 1, i + 1), 16);
+
+      table[i >> 1] = (byte) b;
+    }
+
+    return table;
+  }
+
+  /**
+   * Converts an array of bytes to an string of hexadecimal numbers
+   *
+   * @param hexTab The table to stringify
+   * @return A string representation of the table
+   */
+  public static String bytesToString(byte[] hexTab) {
+    StringBuilder str = new StringBuilder(hexTab.length * 2);
+
+    for (byte b : hexTab) {
+      String i = Integer.toHexString(b & 0xFF);
+
+      if (i.length() == 1) {
+        str.append('0');
+      }
+
+      str.append(i);
+    }
+
+    return str.toString();
+  }
 }

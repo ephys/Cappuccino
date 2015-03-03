@@ -12,6 +12,7 @@ import paoo.cappuccino.util.exception.FatalException;
  * @author Laurent Batslé
  */
 public class Config {
+
   private static final File PROPS_FOLDER = new File("lib");
 
   private static File configFile;
@@ -29,7 +30,7 @@ public class Config {
       properties.load(input);
     } catch (IOException e) {
       throw new FatalException("Could not load the configuration file "
-          + configFile.getAbsolutePath(), e);
+                               + configFile.getAbsolutePath(), e);
     } finally {
       if (input != null) {
         try {
@@ -61,7 +62,7 @@ public class Config {
       }
 
       throw new IllegalArgumentException("Could not find " + key + " in "
-          + configFile.getAbsolutePath());
+                                         + configFile.getAbsolutePath());
     }
 
     return returnValue;
@@ -75,6 +76,12 @@ public class Config {
    * @throws java.lang.IllegalArgumentException The provided key was not found in the configuration
    */
   public static int getInt(String key) {
-    throw new UnsupportedOperationException("Not yet implemented");
+    String val = getString(key);
+
+    try {
+      return Integer.valueOf(val);
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("There is no integer matching the key " + key + " in " + configFile.getAbsolutePath(), e);
+    }
   }
 }

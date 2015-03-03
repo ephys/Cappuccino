@@ -94,6 +94,8 @@ public class AppContext {
       for (CrashListener listener : crashListeners) {
         listener.onCrash(e);
       }
+
+      e.printStackTrace();
     });
   }
 
@@ -117,6 +119,7 @@ public class AppContext {
           builder.append('[').append(record.getLoggerName()).append(']');
           builder.append('[').append(record.getLevel().getLocalizedName()).append(']');
           builder.append(' ').append(record.getMessage());
+          builder.append("\r\n");
 
           return builder.toString();
         }
