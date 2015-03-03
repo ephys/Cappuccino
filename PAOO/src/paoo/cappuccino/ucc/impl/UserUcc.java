@@ -1,8 +1,11 @@
 package paoo.cappuccino.ucc.impl;
 
 import paoo.cappuccino.business.dto.IUserDto;
+import paoo.cappuccino.business.entity.IUser;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.config.injector.Inject;
+import paoo.cappuccino.dal.IDalService;
+import paoo.cappuccino.dal.dao.IUserDao;
 import paoo.cappuccino.ucc.IUserUcc;
 import paoo.cappuccino.util.StringUtils;
 import paoo.cappuccino.util.ValidationUtil;
@@ -14,6 +17,10 @@ class UserUcc implements IUserUcc {
 
   @Inject
   private IEntityFactory entityFactory;
+  @Inject
+  private IDalService dalService;
+  @Inject
+  private IUserDao userDao;
 
   @Override
   public IUserDto register(String username, String password, String firstName, String lastName,
@@ -33,10 +40,14 @@ class UserUcc implements IUserUcc {
       throw new IllegalArgumentException("Invalid email format");
     }
 
-    // TODO: DAL
+    IUser registeredUser = entityFactory.createUser(username, password, firstName, lastName, email,
+                                                    IUserDto.Role.USER);
 
-    return entityFactory.createUser(username, password, firstName, lastName, email,
-                                    IUserDto.Role.USER);
+    dalService.startTransaction();
+    registeredUser = userDao.createUser(registeredUser);
+    dalService.commit();
+
+    return registeredUser;
   }
 
   @Override
@@ -44,11 +55,10 @@ class UserUcc implements IUserUcc {
     username = username.trim();
     ValidationUtil.ensureFilled(username, "username");
     ValidationUtil.ensureFilled(password, "password");
-    /*
-     * TODO 1. Get user entity matching username from the Data Access Layer 2. validate password on
-     * that entity. 3. return the entity;
-     */
 
-    return null;
+    IUser user = userDao.fetchUserByUsername(username);
+    if (!user.isPassword(password)) return null;
+
+    return user;
   }
 }

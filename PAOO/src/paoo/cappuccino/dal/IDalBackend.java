@@ -3,20 +3,18 @@ package paoo.cappuccino.dal;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import paoo.cappuccino.config.injector.Singleton;
+
 /**
- * 
- * @author Bavay Kevin
- *
+ * @author Kevin Bavay
  */
+@Singleton
 public interface IDalBackend {
 
   /**
-   * Create a PrepardedStatement with the query in param.
-   * 
-   * @param query
-   * @return PreparedStatement
-   * @throws SQLException
+   * Creates a new PrepardedStatement for a query.
+   *
+   * @param query the query to prepare.
    */
-  public PreparedStatement getPrepardedStatement(String query) throws SQLException;
-
+  public PreparedStatement fetchPrepardedStatement(String query);
 }

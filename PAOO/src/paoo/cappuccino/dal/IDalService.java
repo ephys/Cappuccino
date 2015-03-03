@@ -1,38 +1,34 @@
 package paoo.cappuccino.dal;
 
-import java.sql.SQLException;
-
+import paoo.cappuccino.config.injector.Singleton;
 
 /**
- * 
- * @author Bavay Kevin Je vais sans doute changer les boolean par des exceptions
+ * Interface responsible for handling transactions.
  *
+ * @author Kevin Bavay
  */
+@Singleton
 public interface IDalService {
+  /**
+   * Starts a transaction.
+   *
+   * @throws java.lang.IllegalStateException This thread already has a transaction is already in
+   *                                         progress.
+   */
+  public void startTransaction();
 
   /**
-   * Start a transaction
-   * 
-   * @return boolean
-   * @throws ClassNotFoundException
-   * @throws SQLException
+   * Closes the transaction by committing the changes.
+   *
+   * @throws java.lang.IllegalStateException This thread doesn't have a transaction running.
    */
-  public boolean startTransaction() throws ClassNotFoundException, SQLException;
+  public void commit();
 
   /**
-   * Start a commit
-   * 
-   * @return boolean
-   * @throws SQLException
+   * Closes the transaction by rollbacking the changes.
+   *
+   * @throws java.lang.IllegalStateException This thread doesn't have a transaction running.
    */
-  public boolean commit() throws SQLException;
-
-  /**
-   * Execute a roolback
-   * 
-   * @return boolean
-   * @throws SQLException
-   */
-  public boolean rollBack() throws SQLException;
+  public void rollback();
 
 }

@@ -3,7 +3,7 @@ package paoo.cappuccino.business.exception;
 import paoo.cappuccino.util.exception.CappuccinoException;
 
 /**
- * Base exception for problems occurring at the business layer of the application
+ * Base exception for problems occurring on the business layer of the application
  *
  * @author Nicolas Fischer
  */
