@@ -1,38 +1,39 @@
 package biz;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.lang.String;
-import java.time.LocalDateTime;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+
+import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.IUser;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.config.AppContext;
 import paoo.cappuccino.config.injector.DependencyInjector;
 import paoo.cappuccino.config.injector.Inject;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 /**
- *
  * Classe de test junit pour le bizuser
- *
  */
 public class TestBizUser {
-  private @Inject IEntityFactory entityFactory;
+
+  private
+  @Inject
+  IEntityFactory entityFactory;
 
   private int id;
   private String username;
-  private byte[] password;
+  private String password;
   private String lastName;
   private String firstName;
   private String email;
   private LocalDateTime registerDate;
-  private String role;
+  private IUserDto.Role role;
   private IUser user1;
   private IUser user2;
 
@@ -54,16 +55,15 @@ public class TestBizUser {
 
     this.id = 1;
     this.username = "Nicolas";
-    this.password = new byte[] {'m', 'd', 'p'};
-    this.lastName = new String("Fischer");
-    this.firstName = new String("Benoit");
-    this.email = new String("nicolas@gmail.com");
+    this.password = "pomme";
+    this.lastName = "Fischer";
+    this.firstName = "Benoit";
+    this.email = "nicolas@gmail.com";
     this.registerDate = LocalDateTime.now();
-    this.role = "prof";
+    this.role = IUserDto.Role.USER;
 
-    user1 =
-        entityFactory.createUser(username, password, lastName, firstName, email, registerDate,
-            role, id);
+    user1 = entityFactory.createUser(username, password, lastName, firstName, email,
+                                     role);
   }
 
   /**
@@ -101,7 +101,8 @@ public class TestBizUser {
   }
 
   /**
-   * verifie que le prenom en attribut est la meme que le prenom de l'utilisateur renvoye par getter
+   * verifie que le prenom en attribut est la meme que le prenom de l'utilisateur renvoye par
+   * getter
    */
   @Test
   public void testFirstName() {
@@ -109,7 +110,8 @@ public class TestBizUser {
   }
 
   /**
-   * verifie que le mot de passe est la meme que le mot de passe de l'utilisateur renvoye par getter
+   * verifie que le mot de passe est la meme que le mot de passe de l'utilisateur renvoye par
+   * getter
    */
   @Test
   public void testPassword() {
@@ -125,7 +127,8 @@ public class TestBizUser {
   }
 
   /**
-   * verifie que le pseudo en attribut est la meme que le pseudo de l'utilisateur renvoye par getter
+   * verifie que le pseudo en attribut est la meme que le pseudo de l'utilisateur renvoye par
+   * getter
    */
   @Test
   public void testUsername() {
@@ -146,7 +149,6 @@ public class TestBizUser {
    */
   @Test
   public void testAuthentifierFaux() {
-    byte[] faux = new byte[] {'m', 'c', 'p'};
-    assertFalse(this.user1.isPassword(faux));
+    assertFalse(this.user1.isPassword("mcp"));
   }
 }
