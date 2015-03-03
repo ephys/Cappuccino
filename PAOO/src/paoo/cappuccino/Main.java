@@ -14,7 +14,6 @@ public class Main {
 
     StringHasher.INSTANCE.addHashAlgorithm(new Pbkdf2Hasher(Config.getInt("pbkdf2_iterations")));
 
-    ConnectionView connectionView = new ConnectionView();
-    DependencyInjector.populate(connectionView);
+    ConnectionView connectionView = (ConnectionView) DependencyInjector.buildDependency(ConnectionView.class);
   }
 }

@@ -3,6 +3,8 @@ package paoo.cappuccino.business.entity.impl;
 import java.time.LocalDateTime;
 
 import paoo.cappuccino.business.entity.IUser;
+import paoo.cappuccino.util.hasher.IHashHolderDto;
+import paoo.cappuccino.util.hasher.StringHasher;
 
 /**
  * Class implementing the IUser entity
@@ -12,8 +14,7 @@ import paoo.cappuccino.business.entity.IUser;
 final class User extends BaseEntity implements IUser {
 
   private final String username;
-  private byte[] passwordHash;
-  private byte[] passwordSalt;
+  private IHashHolderDto password;
   private String lastName;
   private String firstName;
   private String email;
@@ -27,14 +28,12 @@ final class User extends BaseEntity implements IUser {
     setPassword(password);
   }
 
-  public User(int id, int version, String username, byte[] passwordHash, byte[] salt,
-              String lastName,
+  public User(int id, int version, String username, IHashHolderDto password, String lastName,
               String firstName, String email, LocalDateTime registerDate, Role role) {
 
     this(id, version, username, lastName, firstName, email, role);
 
-    this.passwordHash = passwordHash;
-    this.passwordSalt = salt;
+    this.password = password;
     this.registerDate = registerDate;
   }
 
@@ -51,43 +50,23 @@ final class User extends BaseEntity implements IUser {
   }
 
   @Override
-  public void setPassword(String password) {
-    // TODO: if no salt is defined generate one. Then hash the password
-  }
-
-  @Override
   public String getUsername() {
     return username;
   }
 
   @Override
-  public byte[] getPasswordHash() {
-    return passwordHash;
+  public IHashHolderDto getPassword() {
+    return password;
   }
 
   @Override
-  public byte[] getPasswordSalt() {
-    return passwordSalt;
+  public void setPassword(String password) {
+    this.password = StringHasher.INSTANCE.hash(password);
   }
 
   @Override
-  public boolean isPassword(final String password) {
-    // TODO: hash that password using this user's salt, check the resulting byte array
-
-    /*
-    if (otherPassword.length != this.passwordHash.length) {
-      return false;
-    }
-
-    for (int i = 0; i < otherPassword.length; i++) {
-      if (otherPassword[i] != this.passwordHash[i]) {
-        return false;
-      }
-    }
-
-    return true;*/
-
-    throw new UnsupportedOperationException("nyi");
+  public boolean isPassword(final String passwordAttempt) {
+    return StringHasher.INSTANCE.matchHash(passwordAttempt, this.password);
   }
 
   @Override

@@ -9,6 +9,7 @@ import paoo.cappuccino.util.hasher.IHashHolderDto;
  * @author Guylian Cox
  */
 final class Pbkdf2HashHolder extends BaseHashHolder {
+
   private final int nbIterations;
 
   /**

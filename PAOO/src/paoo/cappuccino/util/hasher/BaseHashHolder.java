@@ -6,11 +6,13 @@ package paoo.cappuccino.util.hasher;
  * @author Guylian Cox
  */
 public abstract class BaseHashHolder implements IHashHolder {
+
   private int algorithmVersion;
   private byte[] salt;
   private byte[] hash;
 
-  public BaseHashHolder() {}
+  public BaseHashHolder() {
+  }
 
   /**
    * Clones an already existing hash data holder.

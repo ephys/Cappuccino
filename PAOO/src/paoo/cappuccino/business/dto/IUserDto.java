@@ -2,6 +2,8 @@ package paoo.cappuccino.business.dto;
 
 import java.time.LocalDateTime;
 
+import paoo.cappuccino.util.hasher.IHashHolderDto;
+
 /**
  * Data transfer object for the User entity
  *
@@ -17,12 +19,7 @@ public interface IUserDto extends IBaseDto {
   /**
    * Gets the user's password
    */
-  byte[] getPasswordHash();
-
-  /**
-   * Gets the user's password hash
-   */
-  byte[] getPasswordSalt();
+  IHashHolderDto getPassword();
 
   /**
    * Checks the given password matches the user's current password

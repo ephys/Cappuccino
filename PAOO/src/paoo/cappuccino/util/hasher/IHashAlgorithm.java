@@ -6,6 +6,7 @@ package paoo.cappuccino.util.hasher;
  * @author Guylian Cox
  */
 public interface IHashAlgorithm {
+
   /**
    * Hashes a string using a given salt.
    *

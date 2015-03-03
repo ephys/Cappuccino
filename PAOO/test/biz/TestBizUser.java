@@ -115,7 +115,7 @@ public class TestBizUser {
    */
   @Test
   public void testPassword() {
-    assertEquals(this.password, this.user1.getPasswordHash());
+    assertEquals(this.password, this.user1.getPassword());
   }
 
   /**

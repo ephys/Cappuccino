@@ -51,7 +51,7 @@ public class StringHasher {
    *                        Obtained via {@link paoo.cappuccino.util.hasher.StringHasher#hash(String)
    *                        hash()}
    */
-  public boolean hashMatches(final String toHash, final IHashHolderDto currentHashData) {
+  public boolean matchHash(final String toHash, final IHashHolderDto currentHashData) {
     byte[] newHash = hash(toHash, (IHashHolder) currentHashData).getHash();
     byte[] currentHash = currentHashData.getHash();
 
