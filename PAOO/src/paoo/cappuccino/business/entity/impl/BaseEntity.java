@@ -3,15 +3,15 @@ package paoo.cappuccino.business.entity.impl;
 import paoo.cappuccino.business.entity.IBaseEntity;
 
 /**
- * Classe qui implemente les methodes communes a chaque entité
+ * Class implementing methods shared by every other entity.
+ *
+ * @author Nicolas Fischer
  */
 class BaseEntity implements IBaseEntity {
+
   private final int id;
   private int version;
 
-  /**
-   * Constructeur de la classe BizObject
-   */
   public BaseEntity(int id) {
     this.id = id;
   }
@@ -32,7 +32,7 @@ class BaseEntity implements IBaseEntity {
   }
 
   @Override
-  public void setVersion(int version) {
-    this.version = version;
+  public void incrementVersion() {
+    this.version++;
   }
 }

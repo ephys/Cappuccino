@@ -1,14 +1,19 @@
 package paoo.cappuccino.business.dto;
 
+/**
+ * Interface containing getter methods shared by every DTO
+ *
+ * @author Nicolas Fischer
+ */
 public interface IBaseDto {
 
   /**
-   * Recupere l'identifiant de l'entite
+   * Gets the entity identifier.
    */
   int getId();
 
   /**
-   * recupere le numero de version dans la base de donnée
+   * Gets the entity version.
    */
   int getVersion();
 }

@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 /**
  * Crash listener used to write uncaught exceptions to file.
- * 
+ *
  * @author Guylian Cox
  */
 class CrashWriter implements CrashListener {
@@ -17,7 +17,7 @@ class CrashWriter implements CrashListener {
 
   /**
    * Logs an exception to a file.
-   * 
+   *
    * @param exception The exception to log.
    * @return The name of the file the exception has been written to.
    */
@@ -26,16 +26,16 @@ class CrashWriter implements CrashListener {
       return null;
     }
 
-    LocalDateTime crashtime = LocalDateTime.now();
+    LocalDateTime crashTime = LocalDateTime.now();
     File file =
-        new File(REPORTS_FOLDER, crashtime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ".log");
+        new File(REPORTS_FOLDER, crashTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ".log");
 
     try {
       file.createNewFile();
       PrintWriter writer = new PrintWriter(file);
 
       writer.write("/// Cappuccino ///\n");
-      writer.write("Date: " + crashtime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "\n\n");
+      writer.write("Date: " + crashTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "\n\n");
 
       writer.write("Exception message: " + exception.getMessage() + "\n");
 
@@ -55,7 +55,7 @@ class CrashWriter implements CrashListener {
   @Override
   public void onCrash(Throwable e) {
     String reportFile = writeCrashReport(e);
-    
+
     Logger logger = AppContext.INSTANCE.getAppLogger();
 
     logger.severe("A fatal exception has occurred");

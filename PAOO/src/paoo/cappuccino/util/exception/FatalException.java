@@ -6,12 +6,12 @@ package paoo.cappuccino.util.exception;
  *
  * @author Guylian Cox
  */
-public class FatalException extends RuntimeException {
-  public FatalException(String message) {
+public class FatalException extends CappuccinoException {
+  public FatalException(final String message) {
     super(message);
   }
 
-  public FatalException(String message, Throwable cause) {
+  public FatalException(final String message, final Throwable cause) {
     super(message, cause);
   }
 }

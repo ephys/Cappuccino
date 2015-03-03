@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.String;
 import java.time.LocalDateTime;
 
 import org.junit.Before;
@@ -17,9 +18,9 @@ import paoo.cappuccino.config.injector.DependencyInjector;
 import paoo.cappuccino.config.injector.Inject;
 
 /**
- * 
+ *
  * Classe de test junit pour le bizuser
- * 
+ *
  */
 public class TestBizUser {
   private @Inject IEntityFactory entityFactory;
@@ -112,7 +113,7 @@ public class TestBizUser {
    */
   @Test
   public void testPassword() {
-    assertEquals(this.password, this.user1.getPassword());
+    assertEquals(this.password, this.user1.getPasswordHash());
   }
 
   /**
@@ -137,7 +138,7 @@ public class TestBizUser {
    */
   @Test
   public void testAuthentifierVrai() {
-    assertTrue(this.user1.authenticatePassword(this.password));
+    assertTrue(this.user1.isPassword(this.password));
   }
 
   /**
@@ -146,6 +147,6 @@ public class TestBizUser {
   @Test
   public void testAuthentifierFaux() {
     byte[] faux = new byte[] {'m', 'c', 'p'};
-    assertFalse(this.user1.authenticatePassword(faux));
+    assertFalse(this.user1.isPassword(faux));
   }
 }
