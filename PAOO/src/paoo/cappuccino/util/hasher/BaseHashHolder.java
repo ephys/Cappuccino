@@ -20,13 +20,13 @@ public abstract class BaseHashHolder implements IHashHolder {
    * @param hashData the holder to clone.
    */
   public BaseHashHolder(IHashHolderDto hashData) {
-    this.setSalt(hashData.getSalt());
-    this.setHash(hashData.getHash());
+    salt = hashData.getSalt();
+    hash = hashData.getHash();
   }
 
   @Override
   public byte[] getHash() {
-    return hash;
+    return hash.clone();
   }
 
   @Override
@@ -36,7 +36,7 @@ public abstract class BaseHashHolder implements IHashHolder {
 
   @Override
   public byte[] getSalt() {
-    return salt;
+    return salt.clone();
   }
 
   @Override

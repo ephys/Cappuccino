@@ -79,9 +79,10 @@ public class Config {
     String val = getString(key);
 
     try {
-      return Integer.valueOf(val);
+      return Integer.parseInt(val);
     } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("There is no integer matching the key " + key + " in " + configFile.getAbsolutePath(), e);
+      throw new IllegalArgumentException(
+          "There is no integer matching the key " + key + " in " + configFile.getAbsolutePath(), e);
     }
   }
 }

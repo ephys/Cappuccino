@@ -125,9 +125,9 @@ public class AppContext {
           try {
             String message = getFormatter().format(record);
             if (record.getLevel().intValue() >= Level.WARNING.intValue()) {
-              System.err.write(message.getBytes());
+              System.err.print(message);
             } else {
-              System.out.write(message.getBytes());
+              System.out.print(message);
             }
           } catch (Exception e) {
             throw new FatalException("Logger error", e);

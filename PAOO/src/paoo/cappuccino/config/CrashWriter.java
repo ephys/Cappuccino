@@ -3,6 +3,7 @@ package paoo.cappuccino.config;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Logger;
@@ -32,8 +33,12 @@ class CrashWriter implements CrashListener {
         new File(REPORTS_FOLDER, crashTime.format(FILENAME_FORMATTER) + ".log");
 
     try {
-      file.createNewFile();
-      PrintWriter writer = new PrintWriter(file);
+      if (!file.createNewFile()) {
+        AppContext.INSTANCE.getAppLogger().severe("Could not create file " + file.getAbsolutePath());
+        return null;
+      }
+
+      PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8.name());
 
       writer.write("/// Cappuccino ///\n");
       writer.write("Date: " + crashTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "\n\n");
@@ -54,8 +59,8 @@ class CrashWriter implements CrashListener {
   }
 
   @Override
-  public void onCrash(Throwable e) {
-    String reportFile = writeCrashReport(e);
+  public void onCrash(Throwable crashSource) {
+    String reportFile = writeCrashReport(crashSource);
 
     Logger logger = AppContext.INSTANCE.getAppLogger();
 
@@ -65,7 +70,7 @@ class CrashWriter implements CrashListener {
     } else {
       logger.severe("The details could not be saved, the crash-reports folder "
           + REPORTS_FOLDER.getAbsolutePath() + " cannot be created");
-      e.printStackTrace();
+      crashSource.printStackTrace();
     }
   }
 }
