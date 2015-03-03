@@ -14,6 +14,8 @@ import javax.swing.JTextField;
  *
  */
 public class JPanelTextError extends JPanel {
+
+  private static final long serialVersionUID = -714442590193004703L;
   private JTextField input;
   private JLabel error;
   private JLabel label;
@@ -26,11 +28,11 @@ public class JPanelTextError extends JPanel {
    */
   public JPanelTextError(String description, String exemple) {
     this.setLayout(new GridLayout(2, 0, Constantes.MGap, 0));
-    this.input = new JTextField(13);
-    this.label = new JLabel(description + " : ");
-    this.label.setFont(Constantes.arial16);
-    this.error = new JLabel(exemple);
-    this.error.setForeground(Color.RED);
+    input = new JTextField(13);
+    label = new JLabel(description + " : ");
+    label.setFont(Constantes.arial16);
+    error = new JLabel(exemple);
+    error.setForeground(Color.RED);
     this.add(label);
     this.add(input);
     this.add(new JLabel());
@@ -48,7 +50,7 @@ public class JPanelTextError extends JPanel {
 
   /**
    * Get Input textarea
-   * 
+   *
    * @return String input
    */
   public String getInput() {
@@ -57,7 +59,7 @@ public class JPanelTextError extends JPanel {
 
   /**
    * setError
-   * 
+   *
    * @param String new error
    */
   public void setError(String error) {

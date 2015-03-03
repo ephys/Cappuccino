@@ -14,10 +14,12 @@ import paoo.cappuccino.ihm.utils.Constantes;
  *
  */
 public class ConnectionController extends JPanel {
+
+  private static final long serialVersionUID = -1367769157419064413L;
   private ConnectionView parent;
 
   public ConnectionController(ConnectionView ConnectionView) {
-    this.parent = ConnectionView;
+    parent = ConnectionView;
     this.setLayout(new FlowLayout(FlowLayout.RIGHT, Constantes.MGap, Constantes.MGap));
 
     JButton inscrire = new JButton("S'inscrire");
@@ -38,24 +40,7 @@ public class ConnectionController extends JPanel {
    *
    */
   private void connexion() {
-    // boolean complet = true;
-    // if (parent.getUsername().equals("")) {
-    // parent.setTextError("ce champ est obligatoire");
-    // complet = false;
-    // }
-    //
-    // if (parent.getPassword().length == 0) {
-    // parent.setPasswordError("ce champ est obligatoire");
-    // complet = false;
-    // }
-    //
-    // // if(ucc.getUtilisateur(vue.getUsername(),vue.getPassword()){
-    // if (complet && true) {
-    // // new MenuVue(user);
-    // new MenuView("george");
-    // parent.dispose();
-    // }
-    // // gestion et affichage erreure possible rendu par l'ucc.
+
   }
 
   /**

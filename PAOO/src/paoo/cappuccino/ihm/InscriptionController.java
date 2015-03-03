@@ -1,6 +1,3 @@
-/**
- *
- */
 package paoo.cappuccino.ihm;
 
 import java.awt.FlowLayout;
@@ -15,6 +12,7 @@ import javax.swing.JPanel;
  */
 public class InscriptionController extends JPanel {
 
+  private static final long serialVersionUID = 8967022645980426577L;
   private InscriptionView parent;
 
   /**
@@ -23,7 +21,7 @@ public class InscriptionController extends JPanel {
    * @param inscriptionVue la vue sur laquelle il s'affiche
    */
   public InscriptionController(InscriptionView inscriptionVue) {
-    this.parent = inscriptionVue;
+    parent = inscriptionVue;
     this.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
     JButton inscrire = new JButton("Valider");

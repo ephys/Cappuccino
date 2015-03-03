@@ -1,6 +1,3 @@
-/**
- *
- */
 package paoo.cappuccino.ihm;
 
 import java.awt.Color;
@@ -19,11 +16,13 @@ import paoo.cappuccino.ihm.utils.MenuState;
  *
  */
 public class MenuController extends JPanel {
+
+  private static final long serialVersionUID = -8247656394104598549L;
   private MenuModele modele;
 
   /**
    * le controller menu
-   * 
+   *
    * @param menuVue le parent
    */
   public MenuController(MenuModele modele) {

@@ -7,7 +7,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.ihm.utils.Constantes;
 import paoo.cappuccino.ihm.utils.JPanelPasswordError;
 import paoo.cappuccino.ihm.utils.JPanelTextError;
@@ -19,8 +18,9 @@ import paoo.cappuccino.ihm.utils.JPanelTextError;
  *
  */
 public class ConnectionView extends JFrame {
-  JPanelPasswordError panelPassword;
-  JPanelTextError panelUsername;
+  private static final long serialVersionUID = -5349463202389478061L;
+  private JPanelPasswordError panelPassword;
+  private JPanelTextError panelUsername;
 
   /**
    * constructeur
@@ -49,13 +49,13 @@ public class ConnectionView extends JFrame {
   }
 
   /**
-   * returns the identification into a new userDto
+   * returns the identification into a String[] (String[0] = username && String[1]==password)
    *
-   * @return IUserDto the user created with the login keyed in
+   * @return String[] the informations keyed in by the quidam
    */
-  public IUserDto getIdentifiants() {
-    return null;
-
+  public String[] getIdentifiants() {
+    String[] tab = {panelUsername.getInput(),};
+    return tab;
   }
 
   /**
@@ -64,7 +64,7 @@ public class ConnectionView extends JFrame {
    * @param error the error to display
    */
   public void SetErrorUsername(String error) {
-
+    panelUsername.setError(error);
   }
 
   /**
@@ -73,6 +73,6 @@ public class ConnectionView extends JFrame {
    * @param error the error to display
    */
   public void SetErrorPassword(String error) {
-
+    panelPassword.setError(error);
   }
 }

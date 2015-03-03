@@ -1,6 +1,3 @@
-/**
- * 
- */
 package paoo.cappuccino.ihm;
 
 import java.util.ArrayList;
@@ -12,7 +9,7 @@ import paoo.cappuccino.ihm.utils.MenuState;
 
 /**
  * la classe du modele de l'ihm menu
- * 
+ *
  * @author Opsomer Mathias
  *
  *

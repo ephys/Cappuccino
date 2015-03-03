@@ -1,6 +1,3 @@
-/**
- *
- */
 package paoo.cappuccino.ihm.utils;
 
 import java.awt.Color;
@@ -16,6 +13,8 @@ import javax.swing.JPasswordField;
  *
  */
 public class JPanelPasswordError extends JPanel {
+
+  private static final long serialVersionUID = -6170242877236427872L;
   private JPasswordField input;
   private JLabel error;
   private JLabel label;
@@ -28,11 +27,11 @@ public class JPanelPasswordError extends JPanel {
    */
   public JPanelPasswordError(String description, String exemple) {
     this.setLayout(new GridLayout(2, 0, Constantes.MGap, 0));
-    this.input = new JPasswordField(13);
-    this.label = new JLabel(description + " : ");
-    this.label.setFont(Constantes.arial16);
-    this.error = new JLabel(exemple);
-    this.error.setForeground(Color.RED);
+    input = new JPasswordField(13);
+    label = new JLabel(description + " : ");
+    label.setFont(Constantes.arial16);
+    error = new JLabel(exemple);
+    error.setForeground(Color.RED);
 
     this.add(label);
     this.add(input);
@@ -51,7 +50,7 @@ public class JPanelPasswordError extends JPanel {
 
   /**
    * Get Input passwordField
-   * 
+   *
    * @return char[] input
    */
   public char[] getInput() {
@@ -60,7 +59,7 @@ public class JPanelPasswordError extends JPanel {
 
   /**
    * setError
-   * 
+   *
    * @param String new error
    */
   public void setError(String error) {

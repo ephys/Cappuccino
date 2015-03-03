@@ -1,6 +1,3 @@
-/**
- *
- */
 package paoo.cappuccino.ihm;
 
 import java.awt.BorderLayout;
@@ -18,11 +15,13 @@ import javax.swing.event.ChangeListener;
 
 /**
  * classe vue de l'ihm Menu
- * 
+ *
  * @author Opsomer Mathias
  *
  */
 public class MenuView extends JFrame implements ChangeListener {
+
+  private static final long serialVersionUID = -8074586111584676162L;
   // private User utilisateur;
   private Font arial = new Font("Arial", Font.PLAIN, 28);
   private MenuModele modele;
@@ -31,13 +30,13 @@ public class MenuView extends JFrame implements ChangeListener {
 
   /**
    * le constructeur prend en paramètre l'utilisateur connecter
-   * 
+   *
    * @param user l'utilisateur connecter
    *
    */
   // public MenuVue(User user){
   public MenuView(String user) {
-    this.modele = new MenuModele(user);
+    modele = new MenuModele(user);
     this.setTitle("Cappuccino");
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setSize(1100, 700);
@@ -83,7 +82,7 @@ public class MenuView extends JFrame implements ChangeListener {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
    */
   @Override
