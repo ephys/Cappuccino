@@ -15,7 +15,7 @@ import paoo.cappuccino.util.exception.FatalException;
  * application and being backwards-compatible with previous algorithms
  */
 public class StringHasher {
-
+  public static final int SALT_SIZE = 16;
   public static final StringHasher INSTANCE = new StringHasher();
 
   private ArrayList<IHashAlgorithm> hashAlgorithms = new ArrayList<>(1);
@@ -134,10 +134,10 @@ public class StringHasher {
   }
 
   /**
-   * Generates a 16 bytes array containing random numbers.
+   * Generates a byte array containing random numbers.
    */
   public byte[] genSalt() {
-    byte[] salt = new byte[16];
+    byte[] salt = new byte[SALT_SIZE];
     saltGenerator.nextBytes(salt);
 
     return salt;

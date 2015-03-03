@@ -22,22 +22,17 @@ import paoo.cappuccino.util.exception.FatalException;
  */
 public class AppContext {
 
-  public static enum Profile {
-    PROD, TEST, DEV
-  }
-
   public static final AppContext INSTANCE = new AppContext();
   private List<CrashListener> crashListeners = new ArrayList<>();
   private Logger appLogger;
-
-  private Profile profileType;
-  private String profile;
+  private Profile profileType = Profile.PROD;
+  private String profile = "prod";
   private String appName;
   private String version;
 
   private AppContext() {
     addCrashListener(new CrashWriter());
-  };
+  }
 
   /**
    * Configures the environment
@@ -47,7 +42,10 @@ public class AppContext {
    * @param profile The profile to load
    */
   public void setup(String appName, String version, String profile) {
-    this.profile = profile == null ? "prod" : profile;
+    if (profile != null) {
+      this.profile = profile;
+    }
+
     this.appName = appName;
     this.version = version;
 
@@ -109,19 +107,12 @@ public class AppContext {
       Formatter formatter = new Formatter() {
         @Override
         public String format(LogRecord record) {
-          StringBuilder builder = new StringBuilder();
 
-          builder
-              .append('[')
-              .append(
-                  LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
-              .append(']');
-          builder.append('[').append(record.getLoggerName()).append(']');
-          builder.append('[').append(record.getLevel().getLocalizedName()).append(']');
-          builder.append(' ').append(record.getMessage());
-          builder.append("\r\n");
-
-          return builder.toString();
+          return "["
+                 + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
+                 + "][" + record.getLoggerName()
+                 + "][" + record.getLevel().getLocalizedName()
+                 + "] " + record.getMessage() + "\r\n";
         }
       };
 
@@ -228,5 +219,9 @@ public class AppContext {
    */
   public boolean removeCrashListener(CrashListener listener) {
     return this.crashListeners.remove(listener);
+  }
+
+  public static enum Profile {
+    PROD, TEST, DEV
   }
 }

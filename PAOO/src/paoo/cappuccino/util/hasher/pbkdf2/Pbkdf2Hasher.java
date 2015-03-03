@@ -16,9 +16,9 @@ import paoo.cappuccino.util.hasher.StringHasher;
  *
  * @author Guylian Cox
  */
-final public class Pbkdf2Hasher implements IHashAlgorithm {
+public final class Pbkdf2Hasher implements IHashAlgorithm {
 
-  private static final int HASH_SIZE = 512;
+  public static final int HASH_SIZE = 8 * 64;
   private final int nbIterations;
 
   private SecretKeyFactory hashAlgorithm;
