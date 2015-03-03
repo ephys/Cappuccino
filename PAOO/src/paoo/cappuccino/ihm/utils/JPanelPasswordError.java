@@ -16,8 +16,8 @@ public class JPanelPasswordError extends JPanel {
 
   private static final long serialVersionUID = -6170242877236427872L;
   private JPasswordField input;
-  private JLabel error;
-  private JLabel label;
+  private JLabelFont error;
+  private JLabelFont label;
 
   /**
    * constructor
@@ -27,10 +27,9 @@ public class JPanelPasswordError extends JPanel {
    */
   public JPanelPasswordError(String description, String exemple) {
     this.setLayout(new GridLayout(2, 0, Constantes.MGap, 0));
-    input = new JPasswordField(13);
-    label = new JLabel(description + " : ");
-    label.setFont(Constantes.arial16);
-    error = new JLabel(exemple);
+    input = new JPasswordField();
+    label = new JLabelFont(description + " : ");
+    error = new JLabelFont(exemple, 12);
     error.setForeground(Color.RED);
 
     this.add(label);

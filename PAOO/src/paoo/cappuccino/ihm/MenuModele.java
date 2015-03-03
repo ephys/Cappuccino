@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.ihm.utils.MenuState;
 
 /**
@@ -15,16 +16,15 @@ import paoo.cappuccino.ihm.utils.MenuState;
  *
  */
 public class MenuModele {
-  // private User user;
-  private String user;
+  private IUserDto user;
   private MenuState state;
   private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
 
   /**
    * constructeur avec l'utilisateur connecter (le rend donc immuable)
    */
-  public MenuModele(String user) {
-    this.user = user;
+  public MenuModele(IUserDto user2) {
+    user = user2;
   }
 
   /**
@@ -71,9 +71,9 @@ public class MenuModele {
   /**
    * getUser l'utilisateur connecté
    *
-   * @return String l'utilisateur connecté
+   * @return IUserDto l'utilisateur connecté
    */
-  public String getUser() {
+  public IUserDto getUser() {
     return user;
   }
 

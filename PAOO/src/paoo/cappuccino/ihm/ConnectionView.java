@@ -26,7 +26,7 @@ public class ConnectionView extends JFrame {
    * constructeur
    */
   public ConnectionView() {
-    this.setTitle("connexion");
+    this.setTitle("Connexion");
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setSize(400, 240);
     this.setResizable(false);
@@ -49,13 +49,17 @@ public class ConnectionView extends JFrame {
   }
 
   /**
-   * returns the identification into a String[] (String[0] = username && String[1]==password)
-   *
-   * @return String[] the informations keyed in by the quidam
+   * get the input from the JPanelTextError
    */
-  public String[] getIdentifiants() {
-    String[] tab = {panelUsername.getInput(),};
-    return tab;
+  public String getUsername() {
+    return panelUsername.getInput();
+  }
+
+  /**
+   * get the input from the JPanelPasswordError
+   */
+  public char[] getPassword() {
+    return panelPassword.getInput();// gerer le password ici
   }
 
   /**

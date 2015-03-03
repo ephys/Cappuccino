@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import paoo.cappuccino.business.dto.IUserDto;
+
 /**
  * classe vue de l'ihm Menu
  *
@@ -34,8 +36,7 @@ public class MenuView extends JFrame implements ChangeListener {
    * @param user l'utilisateur connecter
    *
    */
-  // public MenuVue(User user){
-  public MenuView(String user) {
+  public MenuView(IUserDto user) {
     modele = new MenuModele(user);
     this.setTitle("Cappuccino");
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -82,7 +83,7 @@ public class MenuView extends JFrame implements ChangeListener {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
    */
   @Override

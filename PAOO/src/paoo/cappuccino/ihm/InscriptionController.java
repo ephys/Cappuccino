@@ -45,6 +45,6 @@ public class InscriptionController extends JPanel {
     // valider input
     parent.dispose();
     // new MenuVue(new User);
-    new MenuView("daniel");
+    new MenuView(null);
   }
 }

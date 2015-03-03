@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.ihm.utils.Constantes;
 
 /**
@@ -40,7 +41,28 @@ public class ConnectionController extends JPanel {
    *
    */
   private void connexion() {
-
+    char[] password = parent.getPassword();
+    String pseudo = parent.getUsername();
+    if (password.length == 0 || pseudo.length() == 0) {
+      if (password.length == 0)
+        parent.SetErrorPassword(Constantes.ERROR_FIELD_EMPTY);
+      else
+        parent.SetErrorPassword("");
+      if (pseudo.length() == 0)
+        parent.SetErrorUsername(Constantes.ERROR_FIELD_EMPTY);
+      else
+        parent.SetErrorUsername("");
+    } else {
+      IUserDto user = null;
+      // TODO user = IUserUcc.logIn(pseudo, password);
+      if (user != null) {
+        parent.SetErrorPassword(Constantes.ERROR_WRONG_LOGIN);
+        parent.SetErrorUsername(Constantes.ERROR_WRONG_LOGIN);
+      } else {
+        parent.dispose();
+        new MenuView(user);
+      }
+    }
   }
 
   /**
