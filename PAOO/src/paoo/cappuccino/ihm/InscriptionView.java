@@ -3,13 +3,16 @@ package paoo.cappuccino.ihm;
 import javax.swing.JFrame;
 
 /**
+ * View for the inscription ihm
+ * 
  * @author Opsomer Mathias
  *
- *         vue de l'ihm de l'inscription
  */
 public class InscriptionView extends JFrame {
 
-
+  /**
+   * Version
+   */
   private static final long serialVersionUID = -7334876606967058112L;
 
   /**

@@ -11,8 +11,13 @@ import javax.swing.JPanel;
  *
  */
 public class InscriptionController extends JPanel {
-
+  /**
+   * Version
+   */
   private static final long serialVersionUID = 8967022645980426577L;
+  /**
+   * the parent (the view that has call the controller)
+   */
   private InscriptionView parent;
 
   /**

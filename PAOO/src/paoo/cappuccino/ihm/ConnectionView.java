@@ -18,8 +18,17 @@ import paoo.cappuccino.ihm.utils.JPanelTextError;
  *
  */
 public class ConnectionView extends JFrame {
+  /**
+   * version
+   */
   private static final long serialVersionUID = -5349463202389478061L;
+  /**
+   * JPanelPasswordError to enter password
+   */
   private JPanelPasswordError panelPassword;
+  /**
+   * JpanelTextError to enter the username
+   */
   private JPanelTextError panelUsername;
 
   /**

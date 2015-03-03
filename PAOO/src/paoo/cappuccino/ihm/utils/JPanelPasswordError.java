@@ -13,10 +13,21 @@ import javax.swing.JPasswordField;
  *
  */
 public class JPanelPasswordError extends JPanel {
-
+  /**
+   * version
+   */
   private static final long serialVersionUID = -6170242877236427872L;
+  /**
+   * the input
+   */
   private JPasswordField input;
+  /**
+   * the optionnal error linked to the input
+   */
   private JLabelFont error;
+  /**
+   * the description of the input
+   */
   private JLabelFont label;
 
   /**

@@ -1,7 +1,7 @@
 package paoo.cappuccino.ihm.utils;
 
 /**
- * enumérer pour l'état dans lequel la frame principale ce trouve
+ * state of the menu ihm
  *
  * @author Opsomer Mathias
  *
@@ -10,8 +10,8 @@ package paoo.cappuccino.ihm.utils;
 public enum MenuState {
   ACCUEIL(1, "Accueil"), RECH_PARTICIPATION(2, "Recherche - Participation"), RECH_PERS_CONTACT(3,
       "Recherche - Personne de contact"), RECH_ENTREPRISE(4, "Recherche - Entreprise"), SELEC_ENTREPRISES(
-          5, "Sélèctionner des entreprises"), CREER_JOURNEE(6, "Créer une journée des entreprises"), CREER_ENTREPRISE(
-              7, "créer une entreprise"), CREER_PERS_CONTACT(7, "Créer une personne de contact");
+      5, "Sélèctionner des entreprises"), CREER_JOURNEE(6, "Créer une journée des entreprises"), CREER_ENTREPRISE(
+      7, "créer une entreprise"), CREER_PERS_CONTACT(7, "Créer une personne de contact");
 
   private Integer state;
   private String titre;

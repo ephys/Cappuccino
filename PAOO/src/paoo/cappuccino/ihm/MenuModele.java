@@ -13,11 +13,19 @@ import paoo.cappuccino.ihm.utils.MenuState;
  *
  * @author Opsomer Mathias
  *
- *
  */
 public class MenuModele {
+  /**
+   * the user connected
+   */
   private IUserDto user;
+  /**
+   * the sate of the ihm
+   */
   private MenuState state;
+  /**
+   * collection to keep all the view abonned to the model
+   */
   private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
 
   /**

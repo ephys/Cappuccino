@@ -15,10 +15,20 @@ import paoo.cappuccino.ihm.utils.Constantes;
  *
  */
 public class ConnectionController extends JPanel {
-
+  /**
+   * Version
+   */
   private static final long serialVersionUID = -1367769157419064413L;
+  /**
+   * the parent
+   */
   private ConnectionView parent;
 
+  /**
+   * the constructeur
+   * 
+   * @param ConnectionView the parent
+   */
   public ConnectionController(ConnectionView ConnectionView) {
     parent = ConnectionView;
     this.setLayout(new FlowLayout(FlowLayout.RIGHT, Constantes.MGap, Constantes.MGap));

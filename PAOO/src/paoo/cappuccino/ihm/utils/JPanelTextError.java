@@ -8,16 +8,27 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- * classe d'un label + erreure possible en dessous
+ * description + input + (error)
  *
  * @author mopsome
  *
  */
 public class JPanelTextError extends JPanel {
-
+  /**
+   * version
+   */
   private static final long serialVersionUID = -714442590193004703L;
+  /**
+   * the input
+   */
   private JTextField input;
+  /**
+   * the optional erro linked to the input
+   */
   private JLabelFont error;
+  /**
+   * the description of the input
+   */
   private JLabelFont label;
 
   /**

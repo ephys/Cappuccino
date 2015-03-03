@@ -11,13 +11,20 @@ import javax.swing.JPanel;
 import paoo.cappuccino.ihm.utils.MenuState;
 
 /**
+ * The Controller for the menu ( all the button to the left )
+ *
  * @author Opsomer Mathias
  *
  *
  */
 public class MenuController extends JPanel {
-
+  /**
+   * Version
+   */
   private static final long serialVersionUID = -8247656394104598549L;
+  /**
+   * the modele he's working with
+   */
   private MenuModele modele;
 
   /**
