@@ -10,21 +10,23 @@ import java.sql.SQLException;
  */
 public interface IConnectionProvider {
 
-  /**
-   * Close the Connection
-   * 
-   * @param con
-   * @throws SQLException
-   */
-  public void disconnectDB(Connection con) throws SQLException;
+	/**
+	 * Close the Connection
+	 * 
+	 * @param con
+	 * @throws SQLException
+	 */
+	public void disconnectDB(Connection con) throws SQLException;
 
-  /**
-   * Create un new Connection
-   * 
-   * @return Connection
-   * @throws ClassNotFoundException If could not find the JDBC Driver
-   * @throws SQLException If could not create a new Connection
-   */
-  public Connection connectDB() throws ClassNotFoundException, SQLException;
+	/**
+	 * Create un new Connection
+	 * 
+	 * @return Connection
+	 * @throws ClassNotFoundException
+	 *             If could not find the JDBC Driver
+	 * @throws SQLException
+	 *             If could not create a new Connection
+	 */
+	public Connection connectDB() throws ClassNotFoundException, SQLException;
 
 }
