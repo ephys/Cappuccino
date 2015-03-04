@@ -12,7 +12,7 @@ import paoo.cappuccino.util.exception.FatalException;
  * algorithms, in case the older ones are not secure enough, without changing anything else in the
  * application and being backwards-compatible with previous algorithms
  */
-public class StringHasher {
+public class StringHasher { // a.k.a. The Mighty Abstract Hash Layer
 
   public static final int SALT_SIZE = 16;
   public static final StringHasher INSTANCE = new StringHasher();
@@ -49,6 +49,7 @@ public class StringHasher {
    * @param currentHashData The hash to match. Its data follows the pattern "hash:algorithm_id:salt:algorithm_data".
    *                        Obtained via {@link paoo.cappuccino.util.hasher.StringHasher#hash(String)
    *                        hash()}
+   * @return true: the given hash is the given string's hash
    */
   public boolean matchHash(final String toHash, final IHashHolderDto currentHashData) {
     byte[] newHash = hash(toHash, (IHashHolder) currentHashData).getHash();
@@ -65,6 +66,24 @@ public class StringHasher {
     }
 
     return true;
+  }
+
+  /**
+   * Upgrades an hash to the latest algorithm. The given string will not be checked, please use
+   * {@link paoo.cappuccino.util.hasher.StringHasher#matchHash(String, IHashHolderDto)} to ensure it
+   * matches the hash.
+   *
+   * @param toHash          The string to hash again.
+   * @param currentHashData The previous hash.
+   * @return A new hash holder if it did rehash or null if the hash is already using the latest
+   * algorithm
+   */
+  public IHashHolderDto reHash(final String toHash, final IHashHolderDto currentHashData) {
+    if (currentHashData.getAlgorithmVersion() == hashAlgorithms.size() - 1) {
+      return null;
+    }
+
+    return hash(toHash);
   }
 
   /**

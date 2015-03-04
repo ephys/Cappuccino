@@ -66,6 +66,18 @@ final class User extends BaseEntity implements IUser {
   }
 
   @Override
+  public boolean upgradePassword(String password) {
+    IHashHolderDto hashHolder = StringHasher.INSTANCE.reHash(password, this.password);
+
+    if (hashHolder != null) {
+      this.password = hashHolder;
+      return true;
+    }
+
+    return false;
+  }
+
+  @Override
   public boolean isPassword(final String passwordAttempt) {
     return StringHasher.INSTANCE.matchHash(passwordAttempt, this.password);
   }

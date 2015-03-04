@@ -29,4 +29,18 @@ public interface IUserDao {
    * @throws paoo.cappuccino.dal.exception.ConnectionException a connection error occurred.
    */
   IUser fetchUserByUsername(String username);
+
+  /**
+   * Updates an user in the database.
+   *
+   * @param user A user entity.
+   * @throws java.util.ConcurrentModificationException             the entity version did not match
+   *                                                               or the entity has been deleted.
+   * @throws java.lang.IllegalArgumentException                    the entity hasn't been inserted
+   *                                                               in the database yet. Or one of
+   *                                                               the fields failed to insert to to
+   *                                                               constraint violations.
+   * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The username is not unique.
+   */
+  void updateUser(IUser user);
 }

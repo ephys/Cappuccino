@@ -54,10 +54,16 @@ class UserUcc implements IUserUcc {
   public IUserDto logIn(String username, String password) {
     username = username.trim();
     ValidationUtil.ensureFilled(username, "username");
+
+    password = password.trim();
     ValidationUtil.ensureFilled(password, "password");
 
     IUser user = userDao.fetchUserByUsername(username);
     if (!user.isPassword(password)) return null;
+
+    if (user.upgradePassword(password)) {
+      userDao.updateUser(user);
+    }
 
     return user;
   }

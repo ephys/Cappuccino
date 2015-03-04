@@ -15,4 +15,12 @@ public interface IUser extends IUserDto, IBaseEntity {
    * @param password A valid password
    */
   void setPassword(String password);
+
+  /**
+   * Upgrades the password hash algorithm.
+   *
+   * @return true: the password has been upgraded and the entity altered.
+   * @param password The unhashed password.
+   */
+  boolean upgradePassword(String password);
 }

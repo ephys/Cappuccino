@@ -11,6 +11,8 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -46,6 +48,13 @@ public class TestStringHasher {
   public void testHashValidation() {
     IHashHolderDto hashA = StringHasher.INSTANCE.hash("pomme");
     assertTrue(StringHasher.INSTANCE.matchHash("pomme", hashA));
+  }
+
+  @Test
+  public void testRehashNoChanges() {
+    IHashHolderDto hashA = StringHasher.INSTANCE.hash("pomme");
+    IHashHolderDto hashB = StringHasher.INSTANCE.reHash("pomme", hashA);
+    assertNull(hashB);
   }
 
   @Test
