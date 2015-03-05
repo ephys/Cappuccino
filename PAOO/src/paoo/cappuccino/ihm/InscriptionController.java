@@ -1,13 +1,12 @@
 package paoo.cappuccino.ihm;
 
-import java.awt.FlowLayout;
+import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  * Controller for the inscription ihm
- * 
+ *
  * @author Opsomer Mathias
  *
  *

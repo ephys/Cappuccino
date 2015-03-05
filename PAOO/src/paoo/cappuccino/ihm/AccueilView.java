@@ -1,6 +1,6 @@
 package paoo.cappuccino.ihm;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  * View for the accueil ihm

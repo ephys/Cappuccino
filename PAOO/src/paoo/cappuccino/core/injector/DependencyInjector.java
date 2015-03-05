@@ -1,4 +1,4 @@
-package paoo.cappuccino.config.injector;
+package paoo.cappuccino.core.injector;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -6,7 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import paoo.cappuccino.config.Config;
+import paoo.cappuccino.core.Config;
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
@@ -15,8 +15,13 @@ import paoo.cappuccino.util.exception.FatalException;
  * @author Guylian Cox
  */
 public class DependencyInjector {
+  public static final DependencyInjector INSTANCE = new DependencyInjector();
 
-  private static Map<Class<?>, Object> singletonCache = new HashMap<>();
+  private Map<Class<?>, Object> singletonCache = new HashMap<>();
+
+  private DependencyInjector() {
+    singletonCache.put(DependencyInjector.class, this);
+  }
 
   /**
    * Creates a new instance for a given class using the default constructor.
@@ -25,7 +30,7 @@ public class DependencyInjector {
    * @return The new instance.
    * @throws paoo.cappuccino.util.exception.FatalException The instance could not be created.
    */
-  private static Object instantiateDependency(Class<?> dependency) {
+  private Object instantiateDependency(Class<?> dependency) {
     try {
       Constructor<?> constructor = dependency.getDeclaredConstructor();
       constructor.setAccessible(true);
@@ -40,13 +45,13 @@ public class DependencyInjector {
   }
 
   /**
-   * Scans an instance for {@link paoo.cappuccino.config.injector.Inject @Inject} annotated fields
+   * Scans an instance for {@link paoo.cappuccino.core.injector.Inject @Inject} annotated fields
    * ands injects a matching dependency there.
    *
    * @param obj The instance to populate.
    * @throws paoo.cappuccino.util.exception.FatalException Populating the instance failed.
    */
-  public static void populate(Object obj) {
+  public void populate(Object obj) {
     Class<?> clazz = obj.getClass();
 
     Field[] fields = clazz.getDeclaredFields();
@@ -67,7 +72,7 @@ public class DependencyInjector {
   /**
    * Creates a new instance of a class and populates it. If the class is an interface, it will
    * create an instance maching the application configuration. If the class or interface is
-   * annotated by {@link paoo.cappuccino.config.injector.Singleton @Singleton}, it will not create
+   * annotated by {@link paoo.cappuccino.core.injector.Singleton @Singleton}, it will not create
    * more than one instance and will always give out the same one.
    *
    * @param dependency The class or interface to instantiate.
@@ -75,7 +80,7 @@ public class DependencyInjector {
    * @throws paoo.cappuccino.util.exception.FatalException The instance could not be created or
    *                                                       populated.
    */
-  public static Object buildDependency(Class<?> dependency) {
+  public Object buildDependency(Class<?> dependency) {
     if (dependency.isInterface()) {
       try {
         String depClassName = Config.getString(dependency.getCanonicalName());

@@ -1,4 +1,4 @@
-package paoo.cappuccino.config;
+package paoo.cappuccino.core;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

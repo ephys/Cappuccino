@@ -1,6 +1,6 @@
 package paoo.cappuccino.dal;
 
-import paoo.cappuccino.config.injector.Singleton;
+import paoo.cappuccino.core.injector.Singleton;
 
 /**
  * Interface responsible for handling transactions.

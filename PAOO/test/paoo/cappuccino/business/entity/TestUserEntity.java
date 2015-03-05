@@ -6,10 +6,10 @@ import org.junit.Test;
 
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
-import paoo.cappuccino.config.AppContext;
-import paoo.cappuccino.config.Config;
-import paoo.cappuccino.config.injector.DependencyInjector;
-import paoo.cappuccino.config.injector.Inject;
+import paoo.cappuccino.core.AppContext;
+import paoo.cappuccino.core.Config;
+import paoo.cappuccino.core.injector.DependencyInjector;
+import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.util.hasher.StringHasher;
 import paoo.cappuccino.util.hasher.pbkdf2.Pbkdf2Hasher;
 
@@ -38,12 +38,13 @@ public class TestUserEntity {
   @BeforeClass
   public static void systemInit() {
     AppContext.INSTANCE.setup("UserEntityTest", "0.1.0", "test");
-    StringHasher.INSTANCE.addHashAlgorithm(new Pbkdf2Hasher(Config.getInt("pbkdf2_iterations")));
+    StringHasher.INSTANCE.addHashAlgorithm(new Pbkdf2Hasher(
+        Config.getInt("pbkdf2_iterations")));
   }
 
   @Before
   public void createUser() throws Exception {
-    DependencyInjector.populate(this);
+    DependencyInjector.INSTANCE.populate(this);
 
     this.username = "Nicolas";
     this.password = "pomme";

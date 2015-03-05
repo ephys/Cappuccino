@@ -2,7 +2,7 @@ package paoo.cappuccino.dal.dao;
 
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.IUser;
-import paoo.cappuccino.config.injector.Singleton;
+import paoo.cappuccino.core.injector.Singleton;
 
 @Singleton
 public interface IUserDao {

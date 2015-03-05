@@ -1,4 +1,4 @@
-package paoo.cappuccino.config;
+package paoo.cappuccino.core;
 
 /**
  * Listener interface for a crash event. That event will be dispatched when the application is about

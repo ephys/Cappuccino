@@ -1,4 +1,4 @@
-package paoo.cappuccino.config;
+package paoo.cappuccino.core;
 
 import java.io.File;
 import java.io.FileInputStream;

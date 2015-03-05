@@ -1,9 +1,8 @@
 package paoo.cappuccino.dal;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
-import paoo.cappuccino.config.injector.Singleton;
+import paoo.cappuccino.core.injector.Singleton;
 
 /**
  * @author Kevin Bavay

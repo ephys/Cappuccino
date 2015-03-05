@@ -1,11 +1,8 @@
 package paoo.cappuccino.ihm;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import paoo.cappuccino.ihm.utils.Constantes;
 import paoo.cappuccino.ihm.utils.JPanelPasswordError;

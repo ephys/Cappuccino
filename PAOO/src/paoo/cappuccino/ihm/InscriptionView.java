@@ -1,10 +1,10 @@
 package paoo.cappuccino.ihm;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 /**
  * View for the inscription ihm
- * 
+ *
  * @author Opsomer Mathias
  *
  */

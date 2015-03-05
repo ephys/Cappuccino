@@ -1,8 +1,8 @@
 package paoo.cappuccino.ihm.utils;
 
-import java.awt.Font;
+import java.awt.*;
 
-import javax.swing.JLabel;
+import javax.swing.*;
 
 /**
  * Specialiation of a JLabel with a different Font

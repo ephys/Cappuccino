@@ -1,15 +1,12 @@
 package paoo.cappuccino.ihm.utils;
 
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.*;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
+import javax.swing.*;
 
 /**
  * description of a JPasswordField and this linked error
- * 
+ *
  * @author Opsomer Mathias
  *
  */

@@ -1,9 +1,8 @@
 package paoo.cappuccino.ihm;
 
-import java.awt.FlowLayout;
+import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.ihm.utils.Constantes;
@@ -21,7 +20,7 @@ public class ConnectionController extends JPanel {
 
   /**
    * Constructeur
-   * 
+   *
    * @param ConnectionView the parent
    */
   public ConnectionController(ConnectionView ConnectionView) {

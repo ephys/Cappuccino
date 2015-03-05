@@ -3,15 +3,14 @@ package paoo.cappuccino.util.hasher;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import paoo.cappuccino.config.AppContext;
-import paoo.cappuccino.config.Config;
+import paoo.cappuccino.core.AppContext;
+import paoo.cappuccino.core.Config;
 import paoo.cappuccino.util.hasher.pbkdf2.Pbkdf2Hasher;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -26,7 +25,8 @@ public class TestStringHasher {
   @BeforeClass
   public static void init() {
     AppContext.INSTANCE.setup("HasherTest", "0.0.1", "test");
-    StringHasher.INSTANCE.addHashAlgorithm(new Pbkdf2Hasher(Config.getInt("pbkdf2_iterations")));
+    StringHasher.INSTANCE.addHashAlgorithm(new Pbkdf2Hasher(
+        Config.getInt("pbkdf2_iterations")));
   }
 
   @Test

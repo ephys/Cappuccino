@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import paoo.cappuccino.config.Config;
+import paoo.cappuccino.core.Config;
 import paoo.cappuccino.dal.IDalBackend;
 import paoo.cappuccino.dal.IDalService;
 import paoo.cappuccino.dal.exception.ConnectionException;

@@ -1,12 +1,8 @@
 package paoo.cappuccino.ihm;
 
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import paoo.cappuccino.ihm.utils.MenuState;
 

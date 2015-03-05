@@ -3,7 +3,7 @@ package paoo.cappuccino.ucc.impl;
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.IUser;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
-import paoo.cappuccino.config.injector.Inject;
+import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalService;
 import paoo.cappuccino.dal.dao.IUserDao;
 import paoo.cappuccino.ucc.IUserUcc;

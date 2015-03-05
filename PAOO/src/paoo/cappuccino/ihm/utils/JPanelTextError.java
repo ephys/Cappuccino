@@ -1,11 +1,8 @@
 package paoo.cappuccino.ihm.utils;
 
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.*;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 /**
  * Description + input + (error)
