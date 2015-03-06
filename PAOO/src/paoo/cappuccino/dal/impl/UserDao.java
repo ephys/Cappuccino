@@ -21,7 +21,7 @@ import paoo.cappuccino.util.hasher.StringHasher;
  *
  * @author Kevin Bavay
  */
-public class UserDao implements IUserDao {
+class UserDao implements IUserDao {
 
   @Inject
   private IEntityFactory entityFactory;

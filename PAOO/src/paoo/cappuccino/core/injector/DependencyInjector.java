@@ -26,6 +26,32 @@ public class DependencyInjector {
   }
 
   /**
+   * Fetches an injectable constructor if one is defined or the default constructor otherwise.
+   *
+   * @param clazz The class to fetch the constructor from.
+   * @return the class' constructor.
+   * @throws NoSuchMethodException there is no default nor injectable constructor.
+   */
+  private static Constructor<?> fetchConstructor(Class<?> clazz) throws NoSuchMethodException {
+    Constructor<?>[] constructors = clazz.getConstructors();
+    Constructor<?> needle = null;
+
+    for (Constructor<?> c : constructors) {
+      if (c.getAnnotation(Inject.class) != null) {
+        needle = c;
+        break;
+      }
+    }
+
+    if (needle == null) {
+      needle = clazz.getConstructor();
+    }
+
+    needle.setAccessible(true);
+    return needle;
+  }
+
+  /**
    * Hardcodes dependencies for dependencies impossible to fetch dynamically.
    *
    * @param depClass    The dependency's class/interface
@@ -43,21 +69,28 @@ public class DependencyInjector {
   }
 
   /**
-   * Creates a new instance for a given class using the default constructor.
+   * Creates a new instance for a given class using the constructor annotated by {@link Inject
    *
    * @param dependency The class to instantiate.
    * @return The new instance.
    * @throws paoo.cappuccino.util.exception.FatalException The instance could not be created.
+   * @Inject} or the default constructor if none are annotated.
    */
   private Object instantiateDependency(Class<?> dependency) {
     try {
-      Constructor<?> constructor = dependency.getDeclaredConstructor();
-      constructor.setAccessible(true);
+      Constructor<?> constructor = fetchConstructor(dependency);
 
-      return constructor.newInstance();
+      Class<?>[] paramTypes = constructor.getParameterTypes();
+      Object[] paramValues = new Object[paramTypes.length];
+      for (int i = 0; i < paramTypes.length; i++) {
+        paramValues[i] = buildDependency(paramTypes[i]);
+      }
+
+      return constructor.newInstance(paramValues);
     } catch (NoSuchMethodException e) {
       throw new FatalException("Could not instantiate " + dependency.getCanonicalName()
-                               + ", it does not have a default constructor.", e);
+                               + ", it does not have a default constructor and no constructor has an @Inject annotation.",
+                               e);
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
       throw new FatalException("Could not instantiate " + dependency.getCanonicalName(), e);
     }
