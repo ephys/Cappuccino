@@ -22,6 +22,7 @@ class SqlDalService implements IDalService, IDalBackend {
   private final String USER;
   private final String PASSWORD;
 
+
   @Inject
   public SqlDalService(IAppConfig config) {
     HOST = config.getString("db_host");
@@ -43,8 +44,7 @@ class SqlDalService implements IDalService, IDalBackend {
     try {
       Connection connection = connections.get(threadId);
       if (connection == null || connection.isClosed()) {
-        connection = DriverManager.getConnection(
-            HOST + "?user=" + USER + "&password=" + PASSWORD);
+        connection = DriverManager.getConnection(HOST + "?user=" + USER + "&password=" + PASSWORD);
 
         connections.put(threadId, connection);
         return connection;

@@ -21,26 +21,26 @@ public class Main {
     DependencyInjector injector = configureApp(appContext);
 
     // TODO: change this by GuiManager once it has been pulled
-    ConnectionView view =
-        (ConnectionView) injector.buildDependency(ConnectionView.class);
+    ConnectionView view = (ConnectionView) injector.buildDependency(ConnectionView.class);
   }
 
   public static DependencyInjector configureApp(AppContext appContext) {
-    IAppConfig appConfig = makeConfig(appContext.getProfile() + ".properties", appContext.getProfileType() == AppContext.Profile.DEV);
+    IAppConfig appConfig =
+        makeConfig(appContext.getProfile() + ".properties",
+            appContext.getProfileType() == AppContext.Profile.DEV);
 
     DependencyInjector injector = new DependencyInjector(appConfig);
     injector.setDependency(AppContext.class, appContext);
     injector.setDependency(IAppConfig.class, appConfig);
 
     StringHasher.INSTANCE.addHashAlgorithm(new Pbkdf2Hasher(appConfig.getInt("pbkdf2_iterations")));
-
     return injector;
   }
 
   private static IAppConfig makeConfig(final String filename, final boolean debug) {
     if (!RESOURCES_FOLDER.exists() && !RESOURCES_FOLDER.mkdirs()) {
-      throw new FatalException(
-          "Could not make config directory " + RESOURCES_FOLDER.getAbsolutePath());
+      throw new FatalException("Could not make config directory "
+          + RESOURCES_FOLDER.getAbsolutePath());
     }
 
     final File configFile = new File(RESOURCES_FOLDER, filename);
