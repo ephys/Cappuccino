@@ -7,7 +7,7 @@ import paoo.cappuccino.business.entity.IBaseEntity;
  *
  * @author Nicolas Fischer
  */
-class BaseEntity implements IBaseEntity {
+abstract class BaseEntity implements IBaseEntity {
 
   private final int id;
   private int version;

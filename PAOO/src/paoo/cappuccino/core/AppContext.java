@@ -22,7 +22,6 @@ import paoo.cappuccino.util.exception.FatalException;
  */
 public class AppContext {
 
-  public static final AppContext INSTANCE = new AppContext();
   private List<CrashListener> crashListeners = new ArrayList<>();
   private Logger appLogger;
   private Profile profileType = Profile.PROD;
@@ -30,18 +29,9 @@ public class AppContext {
   private String appName;
   private String version;
 
-  private AppContext() {
-    addCrashListener(new CrashWriter());
-  }
+  public AppContext(String appName, String version, String profile) {
+    addCrashListener(new CrashWriter(this));
 
-  /**
-   * Configures the environment
-   *
-   * @param appName The application name
-   * @param version The application version
-   * @param profile The profile to load
-   */
-  public void setup(String appName, String version, String profile) {
     if (profile != null) {
       this.profile = profile;
     }
@@ -62,8 +52,8 @@ public class AppContext {
    * @param appName The application name
    * @param version The application version
    */
-  public void setup(String appName, String version) {
-    setup(appName, version, System.getProperty("profile"));
+  public AppContext(String appName, String version) {
+    this(appName, version, System.getProperty("profile"));
   }
 
   /**

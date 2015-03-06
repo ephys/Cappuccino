@@ -3,8 +3,8 @@ package paoo.cappuccino.util.hasher;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import paoo.cappuccino.Main;
 import paoo.cappuccino.core.AppContext;
-import paoo.cappuccino.core.Config;
 import paoo.cappuccino.util.hasher.pbkdf2.Pbkdf2Hasher;
 
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -24,9 +24,7 @@ public class TestStringHasher {
 
   @BeforeClass
   public static void init() {
-    AppContext.INSTANCE.setup("HasherTest", "0.0.1", "test");
-    StringHasher.INSTANCE.addHashAlgorithm(new Pbkdf2Hasher(
-        Config.getInt("pbkdf2_iterations")));
+    Main.configureApp(new AppContext("HasherTest", "0.0.1", "test"));
   }
 
   @Test

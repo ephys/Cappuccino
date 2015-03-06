@@ -6,7 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import paoo.cappuccino.core.Config;
+import paoo.cappuccino.core.config.IAppConfig;
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
@@ -15,12 +15,31 @@ import paoo.cappuccino.util.exception.FatalException;
  * @author Guylian Cox
  */
 public class DependencyInjector {
-  public static final DependencyInjector INSTANCE = new DependencyInjector();
 
+  private final IAppConfig config;
   private Map<Class<?>, Object> singletonCache = new HashMap<>();
 
-  private DependencyInjector() {
+  public DependencyInjector(IAppConfig config) {
+    this.config = config;
+
     singletonCache.put(DependencyInjector.class, this);
+  }
+
+  /**
+   * Hardcodes dependencies for dependencies impossible to fetch dynamically.
+   *
+   * @param depClass    The dependency's class/interface
+   * @param depInstance An instance of an implementation of the dependency.
+   * @return true: the dependency has been set. false: the dependency was already set.
+   */
+  public boolean setDependency(Class<?> depClass, Object depInstance) {
+    if (singletonCache.containsKey(depClass)) {
+      return false;
+    }
+
+    singletonCache.put(depClass, depInstance);
+
+    return true;
   }
 
   /**
@@ -83,7 +102,7 @@ public class DependencyInjector {
   public Object buildDependency(Class<?> dependency) {
     if (dependency.isInterface()) {
       try {
-        String depClassName = Config.getString(dependency.getCanonicalName());
+        String depClassName = config.getString(dependency.getCanonicalName());
         dependency = Class.forName(depClassName);
       } catch (IllegalArgumentException | ClassNotFoundException e) {
         throw new FatalException("Could not fetch interface " + dependency.getCanonicalName()

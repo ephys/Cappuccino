@@ -6,7 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import paoo.cappuccino.core.Config;
+import paoo.cappuccino.core.config.IAppConfig;
+import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalBackend;
 import paoo.cappuccino.dal.IDalService;
 import paoo.cappuccino.dal.exception.ConnectionException;
@@ -17,13 +18,18 @@ import paoo.cappuccino.util.exception.FatalException;
  */
 class SqlDalService implements IDalService, IDalBackend {
 
-  private static final String HOST = Config.getString("db_host");
-  private static final String USER = Config.getString("db_username");
-  private static final String PASSWORD = Config.getString("db_password");
+  private final String HOST;
+  private final String USER;
+  private final String PASSWORD;
 
-  static {
+  @Inject
+  public SqlDalService(IAppConfig config) {
+    HOST = config.getString("db_host");
+    USER = config.getString("db_username");
+    PASSWORD = config.getString("db_password");
+
     try {
-      Class.forName(Config.getString("jdbc.driver"));
+      Class.forName(config.getString("jdbc.driver"));
     } catch (Exception e) {
       throw new FatalException("Could not fetch the JDBC driver.", e);
     }

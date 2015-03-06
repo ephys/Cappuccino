@@ -1,4 +1,4 @@
-package paoo.cappuccino.core;
+package paoo.cappuccino.core.config;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,39 +6,43 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import paoo.cappuccino.util.exception.FatalException;
-
 /**
  * @author Laurent Batslé
  */
-public class Config {
+public final class PropertiesConfig implements IAppConfig {
 
-  private static final File PROPS_FOLDER = new File("lib");
+  private final File configFile;
+  private final Properties properties = new Properties();
+  private final boolean bDebug;
 
-  private static File configFile;
-  private static Properties properties = new Properties();
+  /**
+   * Creates a application config handler using java properties files.
+   *
+   * @param configFile The properties config file.
+   * @param debug whether or not the handler should debug when a problem occurs
+   *              (like add the missing entry to the config file).
+   * @throws IOException the file could not be read.
+   */
+  public PropertiesConfig(File configFile, boolean debug) throws IOException {
+    this.configFile = configFile;
+    this.bDebug = debug;
 
-  static {
-    if (!PROPS_FOLDER.exists() && !PROPS_FOLDER.mkdirs()) {
-      throw new FatalException("Could not make config directory " + PROPS_FOLDER.getAbsolutePath());
-    }
-    configFile = new File(PROPS_FOLDER, AppContext.INSTANCE.getProfile() + ".properties");
+    loadProperties();
+  }
 
-    FileInputStream input = null;
+  /**
+   * Loads the config file from the filesystem
+   *
+   * @throws paoo.cappuccino.util.exception.FatalException Could not load the config file
+   */
+  private void loadProperties() throws IOException {
+    FileInputStream input = new FileInputStream(configFile);
+    properties.load(input);
+
     try {
-      input = new FileInputStream(configFile);
-      properties.load(input);
+      input.close();
     } catch (IOException e) {
-      throw new FatalException("Could not load the configuration file "
-                               + configFile.getAbsolutePath(), e);
-    } finally {
-      if (input != null) {
-        try {
-          input.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
+      e.printStackTrace();
     }
   }
 
@@ -49,11 +53,12 @@ public class Config {
    * @return the value of the property
    * @throws java.lang.IllegalArgumentException The provided key was not found in the configuration
    */
-  public static String getString(String key) {
+  public String getString(String key) {
     String returnValue = properties.getProperty(key);
     if (returnValue == null) {
-      if (AppContext.INSTANCE.getProfileType() == AppContext.Profile.DEV) {
+      if (bDebug) {
         properties.setProperty(key, "TODO: set me.");
+
         try {
           properties.store(new FileOutputStream(configFile), "hello !");
         } catch (Exception e) {
@@ -75,7 +80,7 @@ public class Config {
    * @return the value of the property
    * @throws java.lang.IllegalArgumentException The provided key was not found in the configuration
    */
-  public static int getInt(String key) {
+  public int getInt(String key) {
     String val = getString(key);
 
     try {

@@ -4,14 +4,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import paoo.cappuccino.Main;
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
-import paoo.cappuccino.core.Config;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
-import paoo.cappuccino.util.hasher.StringHasher;
-import paoo.cappuccino.util.hasher.pbkdf2.Pbkdf2Hasher;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -23,6 +21,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestUserEntity {
   //TODO: do the same for the second factory method
+
+  private static DependencyInjector injector;
 
   @Inject
   private IEntityFactory entityFactory;
@@ -37,14 +37,12 @@ public class TestUserEntity {
 
   @BeforeClass
   public static void systemInit() {
-    AppContext.INSTANCE.setup("UserEntityTest", "0.1.0", "test");
-    StringHasher.INSTANCE.addHashAlgorithm(new Pbkdf2Hasher(
-        Config.getInt("pbkdf2_iterations")));
+    injector = Main.configureApp(new AppContext("UserEntityTest", "0.0.1", "test"));
   }
 
   @Before
   public void createUser() throws Exception {
-    DependencyInjector.INSTANCE.populate(this);
+    injector.populate(this);
 
     this.username = "Nicolas";
     this.password = "pomme";

@@ -17,6 +17,12 @@ class CrashWriter implements CrashListener {
   private static final DateTimeFormatter FILENAME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
   private static final File REPORTS_FOLDER = new File("crash-reports");
 
+  private final AppContext appContext;
+
+  public CrashWriter(AppContext appContext) {
+    this.appContext = appContext;
+  }
+
   /**
    * Logs an exception to a file.
    *
@@ -34,7 +40,7 @@ class CrashWriter implements CrashListener {
 
     try {
       if (!file.createNewFile()) {
-        AppContext.INSTANCE.getAppLogger().severe("Could not create file " + file.getAbsolutePath());
+        appContext.getAppLogger().severe("Could not create file " + file.getAbsolutePath());
         return null;
       }
 
@@ -62,7 +68,7 @@ class CrashWriter implements CrashListener {
   public void onCrash(Throwable crashSource) {
     String reportFile = writeCrashReport(crashSource);
 
-    Logger logger = AppContext.INSTANCE.getAppLogger();
+    Logger logger = appContext.getAppLogger();
 
     logger.severe("A fatal exception has occurred");
     if (reportFile != null) {
