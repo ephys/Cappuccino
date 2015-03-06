@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ConcurrentModificationException;
 
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.IUser;
@@ -13,7 +14,7 @@ import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalBackend;
 import paoo.cappuccino.dal.dao.IUserDao;
 import paoo.cappuccino.dal.exception.ConnectionException;
-import paoo.cappuccino.dal.exception.DaoException;
+import paoo.cappuccino.dal.exception.NonUniqueFieldException;
 import paoo.cappuccino.util.hasher.StringHasher;
 
 /**
@@ -21,13 +22,12 @@ import paoo.cappuccino.util.hasher.StringHasher;
  *
  * @author Kevin Bavay
  */
-class UserDao implements IUserDao {
+public class UserDao implements IUserDao {
 
   @Inject
   private IEntityFactory entityFactory;
   @Inject
   private IDalBackend iDalBackend;
-
 
   @Override
   public IUser createUser(IUserDto user) {
@@ -41,10 +41,14 @@ class UserDao implements IUserDao {
       ps = iDalBackend.fetchPrepardedStatement(query);
       ps.execute();
       ps.close();
-    } catch (ConnectionException e) {
-      throw new DaoException("Could not create the user", e);
     } catch (SQLException e) {
-      throw new DaoException("Database Error", e);
+      if (e.getMessage().contains("users_username_key")) {
+        throw new NonUniqueFieldException("Le username existe déjà");
+      }
+      if (e.getMessage().contains("violates")) {
+        throw new IllegalArgumentException(
+            "One of the fields failed to insert due to constraint violations.");
+      }
     }
     return fetchUserByUsername(user.getUsername());
   }
@@ -66,32 +70,49 @@ class UserDao implements IUserDao {
             LocalDateTime.parse(rs.getString("register_date")));
         // TODO fermer les ps et rs
       } else {
-        throw new DaoException("No user return");
+        throw new ConnectionException("No user return");
       }
     } catch (ConnectionException e) {
-      throw new DaoException("Could not update the user", e);
+      throw new ConnectionException("Could not update the user", e);
     } catch (SQLException e) {
-      throw new DaoException("Database error", e);
+      throw new ConnectionException("Database error", e);
     }
   }
 
 
   @Override
   public void updateUser(IUser user) {
-    String query =
-        "UPDATE businessDays.users SET username, password, email, first_name, last_name = ("
-            + user.getUsername() + "," + StringHasher.INSTANCE.serialize(user.getPassword()) + ","
-            + user.getEmail() + "," + user.getFirstName() + "," + user.getLastName()
-            + " )  WHERE users_id LIKE '" + user.getId() + "'";
-    PreparedStatement ps;
+    // param check
+    if (user == null) {
+      throw new IllegalArgumentException("The parametre can't be null");
+    }
     try {
+      PreparedStatement ps;
+      ResultSet rs;
+
+      // version check
+      ps =
+          iDalBackend
+              .fetchPrepardedStatement("SELECT version FROM businessdays.users WHERE users_id LIKE '"
+                  + user.getId() + "'");
+      rs = ps.executeQuery();
+      if (rs.next() && rs.getInt("version") != user.getVersion()) {
+        throw new ConcurrentModificationException("La version ne correspond pas");
+      }
+
+      String query =
+          "UPDATE businessDays.users SET username, password, email, first_name, last_name = ("
+              + user.getUsername() + "," + StringHasher.INSTANCE.serialize(user.getPassword())
+              + "," + user.getEmail() + "," + user.getFirstName() + "," + user.getLastName()
+              + " )  WHERE users_id LIKE '" + user.getId() + "'";
+
       ps = iDalBackend.fetchPrepardedStatement(query);
       ps.execute();
       ps.close();
-    } catch (ConnectionException e) {
-      throw new DaoException("Could not update the user", e);
     } catch (SQLException e) {
-      throw new DaoException("Database error", e);
+      if (e.getMessage().contains("duplicate key value violates")) {
+        throw new NonUniqueFieldException("Le username existe déjà");
+      }
     }
   }
 }
