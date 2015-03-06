@@ -18,6 +18,7 @@ public interface IUserDao {
    * @throws java.lang.IllegalArgumentException                     One of the fields failed to
    *                                                                insert due to constraint
    *                                                                violations.
+   * @throws paoo.cappuccino.dal.exception.ConnectionException      Database connection error
    */
   IUser createUser(IUserDto user);
 
@@ -26,7 +27,7 @@ public interface IUserDao {
    *
    * @param username the user's username.
    * @return the matching user or null if none was found.
-   * @throws paoo.cappuccino.dal.exception.ConnectionException a connection error occurred.
+   * @throws paoo.cappuccino.dal.exception.ConnectionException a database connection error occurred.
    */
   IUser fetchUserByUsername(String username);
 
@@ -41,6 +42,7 @@ public interface IUserDao {
    *                                                               the fields failed to insert to to
    *                                                               constraint violations.
    * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The username is not unique.
+   * @throws paoo.cappuccino.dal.exception.ConnectionException     Database connection error
    */
   void updateUser(IUser user);
 }
