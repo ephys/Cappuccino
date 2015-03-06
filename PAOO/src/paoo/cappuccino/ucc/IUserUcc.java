@@ -20,8 +20,8 @@ public interface IUserUcc {
    * @param email     A valid email.
    * @return The registered user's DTO
    *
-   * @throws java.lang.IllegalArgumentException The username isn't unique or the email
-   *                                            is not valid.
+   * @throws java.lang.IllegalArgumentException The username isn't unique, the email
+   *                                            is not valid or the username contains spaces.
    */
   public IUserDto register(String username, String password, String firstName, String lastName,
                            String email);
@@ -32,6 +32,8 @@ public interface IUserUcc {
    * @param username The user's username. The input is case-insensitive.
    * @param password The user's password.
    * @return The logged user's DTO or null if the username/password combination is incorrect.
+   *
+   * @throws java.lang.IllegalArgumentException A parameter is null or empty.
    */
   public IUserDto logIn(String username, String password);
 }

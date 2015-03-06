@@ -12,4 +12,14 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface Singleton {}
+public @interface Singleton {
+
+  /**
+   * Redirects the dependency injector to a given dependency. An implementation of that
+   * dependency is going to be returned instead.
+   *
+   * Used for when a singleton implements multiple interfaces that are not linked to each other
+   * but need to share the same implementation.
+   */
+  Class<?> redirectTo() default void.class;
+}

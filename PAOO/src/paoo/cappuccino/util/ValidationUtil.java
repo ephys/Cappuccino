@@ -16,7 +16,7 @@ public class ValidationUtil {
    */
   public static void ensureNotNull(Object obj, String parameterName) {
     if (obj == null) {
-      throw new NullPointerException("'" + parameterName
+      throw new IllegalArgumentException("'" + parameterName
                                      + "' parameter received an invalid value, it cannot be null");
     }
   }

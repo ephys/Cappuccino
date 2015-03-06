@@ -8,5 +8,9 @@ import paoo.cappuccino.business.dto.IBaseDto;
  * @author Nicolas Fischer
  */
 public interface IBaseEntity extends IBaseDto {
-  public void incrementVersion();
+
+  /**
+   * Increments and returns the entity version
+   */
+  int incrementVersion();
 }

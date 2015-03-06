@@ -29,23 +29,27 @@ class UserUcc implements IUserUcc {
   @Override
   public IUserDto register(String username, String password, String firstName, String lastName,
                            String email) {
+    ValidationUtil.ensureFilled(username, "username");
     username = username.trim();
-    if (username.matches(".*\\w.*")) {
+
+    if (username.matches("^.*\\s.*$")) {
       throw new IllegalArgumentException("username cannot contain any spaces");
     }
 
-    password = password.trim();
     ValidationUtil.validatePassword(password, "password");
     ValidationUtil.ensureFilled(firstName, "firstName");
     ValidationUtil.ensureFilled(lastName, "lastName");
 
     ValidationUtil.ensureNotNull(email, "email");
+    email = email.trim();
     if (!StringUtils.isEmail(email)) {
       throw new IllegalArgumentException("Invalid email format");
     }
 
+    firstName = firstName.trim();
+    lastName = lastName.trim();
     IUser registeredUser = entityFactory.createUser(username, hasher.hash(password),
-                                                    firstName, lastName, email, IUserDto.Role.USER);
+                                                    lastName, firstName, email, IUserDto.Role.USER);
 
     registeredUser = userDao.createUser(registeredUser);
 
@@ -54,13 +58,15 @@ class UserUcc implements IUserUcc {
 
   @Override
   public IUserDto logIn(String username, String password) {
-    username = username.trim();
     ValidationUtil.ensureFilled(username, "username");
-
-    password = password.trim();
     ValidationUtil.ensureFilled(password, "password");
 
-    IUser user = userDao.fetchUserByUsername(username);
+    IUser user = userDao.fetchUserByUsername(username.trim());
+    if (user == null) {
+      return null;
+    }
+
+    password = password.trim();
     IHashHolderDto realPassword = user.getPassword();
     if (!hasher.matchHash(password, realPassword)) {
       return null;

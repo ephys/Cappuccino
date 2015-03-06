@@ -2,6 +2,11 @@ package paoo.cappuccino.core.config;
 
 import paoo.cappuccino.core.injector.Singleton;
 
+/**
+ * Handles a configuration file.
+ *
+ * @author Guylian Cox
+ */
 @Singleton
 public interface IAppConfig {
   /**

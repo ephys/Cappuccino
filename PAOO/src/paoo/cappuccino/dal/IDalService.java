@@ -7,7 +7,7 @@ import paoo.cappuccino.core.injector.Singleton;
  *
  * @author Kevin Bavay
  */
-@Singleton
+@Singleton(redirectTo = IDalBackend.class)
 public interface IDalService {
   /**
    * Starts a transaction.

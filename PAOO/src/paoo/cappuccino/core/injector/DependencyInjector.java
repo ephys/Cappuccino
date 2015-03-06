@@ -8,6 +8,7 @@ import java.util.Map;
 
 import paoo.cappuccino.core.config.IAppConfig;
 import paoo.cappuccino.util.exception.FatalException;
+import paoo.cappuccino.util.exception.MissingAnnotationException;
 
 /**
  * Class used to build and inject dependencies into instances
@@ -59,16 +60,17 @@ public class DependencyInjector {
    * @return true: the dependency has been set. false: the dependency was already set.
    */
   public boolean setDependency(Class<?> depClass, Object depInstance) {
-    if (!isSingleton(depClass)) {
+    Class<?> singletonKey = getSingletonKey(depClass);
+
+    if (singletonKey == null) {
       throw new IllegalArgumentException("Dependency class must be a singleton ");
     }
 
-    if (singletonCache.containsKey(depClass)) {
+    if (singletonCache.containsKey(singletonKey)) {
       return false;
     }
 
-    singletonCache.put(depClass, depInstance);
-
+    singletonCache.put(singletonKey, depInstance);
     return true;
   }
 
@@ -137,11 +139,17 @@ public class DependencyInjector {
    *                                                       populated.
    */
   public Object buildDependency(Class<?> dependency) {
-    Object instance = singletonCache.get(dependency);
-    if (instance != null) {
-      return instance;
+    // get the singleton from the cache
+    Class<?> singletonKey = getSingletonKey(dependency);
+    if (singletonKey != null) {
+      Object instance = singletonCache.get(singletonKey);
+
+      if (instance != null) {
+        return instance;
+      }
     }
 
+    // not in the cache ? Get it's implementation and put it in the cache
     if (dependency.isInterface()) {
       try {
         String depClassName = config.getString(dependency.getCanonicalName());
@@ -152,10 +160,10 @@ public class DependencyInjector {
       }
     }
 
-    instance = instantiateDependency(dependency);
+    Object instance = instantiateDependency(dependency);
 
-    if (isSingleton(dependency)) {
-      singletonCache.put(dependency, instance);
+    if (singletonKey != null) {
+      singletonCache.put(singletonKey, instance);
     }
 
     populate(instance);
@@ -163,8 +171,50 @@ public class DependencyInjector {
     return instance;
   }
 
-  private boolean isSingleton(Class<?> clazz) {
-    return clazz.getAnnotation(Singleton.class) != null;
+  /**
+   * Gets the class acting as a key in the singleton cache if it is a singleton.
+   * 
+   * @param clazz the clazz from which it should be checked
+   * @return the singleton class or null if it isn't a singleton.
+   * @throws paoo.cappuccino.util.exception.MissingAnnotationException The singleton redirected to a
+   *                                                                   non-singleton dependency.
+   * @see paoo.cappuccino.core.injector.DependencyInjector#getSingletonKey(Class, boolean)
+   */
+  private Class<?> getSingletonKey(Class<?> clazz) {
+    return getSingletonKey(clazz, false);
+  }
 
+  /**
+   * Checks if it is a singleton dependency. If it is and it redirects to another singleton (using
+   * {@link Singleton#redirectTo()}), it will follow the redirection and return the final singleton
+   * class.
+   *
+   * @param clazz            the clazz from which it should be checked
+   * @param requireSingleton (internal) if true, it will throw an exception instead of returning
+   *                         null. when the dependency is not a singleton.
+   * @return the singleton class or null if it isn't a singleton.
+   * @throws paoo.cappuccino.util.exception.MissingAnnotationException The class is not a singleton.
+   */
+  private Class<?> getSingletonKey(Class<?> clazz, boolean requireSingleton) {
+    Singleton annotation = clazz.getAnnotation(Singleton.class);
+
+    if (annotation == null) {
+      if (requireSingleton) {
+        throw new MissingAnnotationException(
+            "A singleton dependency redirected to " + clazz.getCanonicalName()
+            + " but the latter does not have a Singleton annotation. "
+            + "This is likely to cause silent problems.");
+      }
+
+      return null;
+    }
+
+    if (annotation.redirectTo() != void.class) {
+      // recursive loop until we get a singleton that does not redirect.
+      // this could cause an infinite loop, should we add a check to change the exception ?
+      return getSingletonKey(annotation.redirectTo(), true);
+    }
+
+    return clazz;
   }
 }

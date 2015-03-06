@@ -32,7 +32,7 @@ abstract class BaseEntity implements IBaseEntity {
   }
 
   @Override
-  public void incrementVersion() {
-    this.version++;
+  public int incrementVersion() {
+    return ++this.version;
   }
 }

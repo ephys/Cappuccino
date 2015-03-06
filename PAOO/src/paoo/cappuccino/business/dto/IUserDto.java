@@ -12,7 +12,7 @@ import paoo.cappuccino.util.hasher.IHashHolderDto;
 public interface IUserDto extends IBaseDto {
 
   /**
-   * Gets the user's username
+   * @return the user's username
    */
   String getUsername();
 

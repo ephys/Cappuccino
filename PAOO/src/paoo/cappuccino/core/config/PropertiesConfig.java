@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
+ * Handles a properties-based configuration file
+ *
  * @author Laurent Batslé
  */
 public final class PropertiesConfig implements IAppConfig {

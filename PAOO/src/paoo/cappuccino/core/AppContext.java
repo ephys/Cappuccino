@@ -17,7 +17,7 @@ import paoo.cappuccino.core.injector.Singleton;
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
- * Configuration specific to the application environment
+ * Application environment-specific configuration
  *
  * @author Guylian Cox
  */
