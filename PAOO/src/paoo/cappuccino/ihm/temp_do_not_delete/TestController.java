@@ -1,6 +1,7 @@
 package paoo.cappuccino.ihm.temp_do_not_delete;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import paoo.cappuccino.ihm.temp_do_not_delete.core.IGuiManager;
 
@@ -20,7 +21,7 @@ public class TestController extends JPanel implements IGuiManager.IManageableGui
   @Override
   public void setupGui() {
     JButton button = new JButton("change frame");
-    button.addActionListener(e -> guiManager.openFrame(/*TestOtherFrame.class*/ null));
+    button.addActionListener(e -> guiManager.openFrame(/* TestOtherFrame.class */null));
 
     // take user input and send actions to model.
   }

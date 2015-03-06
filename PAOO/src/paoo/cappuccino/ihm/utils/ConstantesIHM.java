@@ -6,7 +6,7 @@ package paoo.cappuccino.ihm.utils;
  *
  * @author Opsomer Mathias
  */
-public interface Constantes {
+public interface ConstantesIHM {
   /**
    * medium gap
    */
@@ -22,5 +22,5 @@ public interface Constantes {
   /**
    * error wrong login
    */
-  static final String ERROR_WRONG_LOGIN = "Mauvaise combinaison mot de passe/nom d'utilisateur ";
+  static final String ERROR_WRONG_LOGIN = "Mauvais identifiants ! ";
 }

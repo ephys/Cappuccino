@@ -1,11 +1,12 @@
 package paoo.cappuccino.ihm;
 
-import java.awt.*;
+import java.awt.FlowLayout;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import paoo.cappuccino.business.dto.IUserDto;
-import paoo.cappuccino.ihm.utils.Constantes;
+import paoo.cappuccino.ihm.utils.ConstantesIHM;
 
 /**
  * Controller for the connection ihm
@@ -17,15 +18,18 @@ public class ConnectionController extends JPanel {
 
   private static final long serialVersionUID = -1367769157419064413L;
   private ConnectionView parent;
+  private ErrorModele modele;
 
   /**
    * Constructeur
    *
    * @param ConnectionView the parent
+   * @param modele the modele he's working with
    */
-  public ConnectionController(ConnectionView ConnectionView) {
+  public ConnectionController(ConnectionView ConnectionView, ErrorModele modele) {
     parent = ConnectionView;
-    this.setLayout(new FlowLayout(FlowLayout.RIGHT, Constantes.MGap, Constantes.MGap));
+    this.modele = modele;
+    this.setLayout(new FlowLayout(FlowLayout.RIGHT, ConstantesIHM.MGap, ConstantesIHM.MGap));
 
     JButton inscrire = new JButton("S'inscrire");
     inscrire.addActionListener(e -> {
@@ -47,26 +51,27 @@ public class ConnectionController extends JPanel {
   private void connexion() {
     char[] password = parent.getPassword();
     String pseudo = parent.getUsername();
+    String passwordError = null, usernameError = null;
     if (password.length == 0 || pseudo.length() == 0) {
+
       if (password.length == 0)
-        parent.SetErrorPassword(Constantes.ERROR_FIELD_EMPTY);
-      else
-        parent.SetErrorPassword("");
+        passwordError = ConstantesIHM.ERROR_FIELD_EMPTY;
+
       if (pseudo.length() == 0)
-        parent.SetErrorUsername(Constantes.ERROR_FIELD_EMPTY);
-      else
-        parent.SetErrorUsername("");
+        usernameError = ConstantesIHM.ERROR_FIELD_EMPTY;
+
     } else {
       IUserDto user = null;
       // TODO user = IUserUcc.logIn(pseudo, password);
-      if (user != null) {
-        parent.SetErrorPassword(Constantes.ERROR_WRONG_LOGIN);
-        parent.SetErrorUsername(Constantes.ERROR_WRONG_LOGIN);
+      if (user == null) {
+        passwordError = ConstantesIHM.ERROR_WRONG_LOGIN;
+        usernameError = ConstantesIHM.ERROR_WRONG_LOGIN;
       } else {
         parent.dispose();
         new MenuView(user);
       }
     }
+    modele.setErrors(passwordError, usernameError);
   }
 
   /**
@@ -74,8 +79,7 @@ public class ConnectionController extends JPanel {
    *
    */
   private void inscription() {
-    parent.dispose();
-    new InscriptionView();
+    new InscriptionView(new ErrorModele());
   }
 
 }

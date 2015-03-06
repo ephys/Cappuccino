@@ -24,7 +24,7 @@ public class JPanelPasswordError extends JPanel {
    * @param String description textarea
    */
   public JPanelPasswordError(String description, String exemple) {
-    this.setLayout(new GridLayout(2, 0, Constantes.MGap, 0));
+    this.setLayout(new GridLayout(2, 0, ConstantesIHM.MGap, 0));
     input = new JPasswordField();
     label = new JLabelFont(description + " : ");
     error = new JLabelFont(exemple, 12);

@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 import paoo.cappuccino.core.config.IAppConfig;
 import paoo.cappuccino.core.injector.Inject;
@@ -36,17 +35,15 @@ class SqlDalService implements IDalService, IDalBackend {
     }
   }
 
-  private HashMap<Long, Connection> connections = new HashMap<>(1);
+  private ThreadLocal<Connection> connections = new ThreadLocal<>();
 
   private Connection getThreadConnection() {
-    final long threadId = Thread.currentThread().getId();
-
     try {
-      Connection connection = connections.get(threadId);
+      Connection connection = connections.get();
       if (connection == null || connection.isClosed()) {
         connection = DriverManager.getConnection(HOST + "?user=" + USER + "&password=" + PASSWORD);
 
-        connections.put(threadId, connection);
+        connections.set(connection);
         return connection;
       }
 

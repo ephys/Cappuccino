@@ -1,10 +1,15 @@
 package paoo.cappuccino.ihm;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-import paoo.cappuccino.ihm.utils.Constantes;
+import paoo.cappuccino.ihm.utils.ConstantesIHM;
 import paoo.cappuccino.ihm.utils.JPanelPasswordError;
 import paoo.cappuccino.ihm.utils.JPanelTextError;
 
@@ -12,28 +17,30 @@ import paoo.cappuccino.ihm.utils.JPanelTextError;
  * View for the connection ihm
  *
  * @author Opsomer Mathias
- *
  */
-public class ConnectionView extends JFrame {
+public class ConnectionView extends JFrame implements ChangeListener {
 
   private static final long serialVersionUID = -5349463202389478061L;
-  private JPanelPasswordError panelPassword;
   private JPanelTextError panelUsername;
+  private JPanelPasswordError panelPassword;
+  private ErrorModele modele;
 
   /**
    * Constructeur
    */
-  public ConnectionView() {
+  public ConnectionView(ErrorModele modele) {
     this.setTitle("Connexion");
+    this.modele = modele;
+    modele.addChangeListener(this);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setSize(400, 240);
     this.setResizable(false);
     this.setLocationRelativeTo(null);
     JPanel mainPanel = new JPanel(new BorderLayout());
-    mainPanel.setBorder(BorderFactory.createEmptyBorder(Constantes.LGap, Constantes.MGap, 0,
-        Constantes.MGap));
+    mainPanel.setBorder(BorderFactory.createEmptyBorder(ConstantesIHM.LGap, ConstantesIHM.MGap, 0,
+        ConstantesIHM.MGap));
 
-    JPanel fields = new JPanel(new GridLayout(2, 0, 0, Constantes.MGap));
+    JPanel fields = new JPanel(new GridLayout(2, 0, 0, ConstantesIHM.MGap));
 
     panelUsername = new JPanelTextError("Nom d'utilisateur");
     fields.add(panelUsername);
@@ -41,7 +48,7 @@ public class ConnectionView extends JFrame {
     fields.add(panelPassword);
 
     mainPanel.add(fields);
-    mainPanel.add(new ConnectionController(this), BorderLayout.SOUTH);
+    mainPanel.add(new ConnectionController(this, modele), BorderLayout.SOUTH);
     this.add(mainPanel);
     this.setVisible(true);
   }
@@ -60,21 +67,14 @@ public class ConnectionView extends JFrame {
     return panelPassword.getInput();// gerer le password ici
   }
 
-  /**
-   * Set the JLabel error from the JPanelTextError for the Username
-   *
-   * @param error the error to display
+  /*
+   * (non-Javadoc)
+   * 
+   * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
    */
-  public void SetErrorUsername(String error) {
-    panelUsername.setError(error);
-  }
-
-  /**
-   * Set the JLabel error from the JPanelPasswordError for the Password
-   *
-   * @param error the error to display
-   */
-  public void SetErrorPassword(String error) {
-    panelPassword.setError(error);
+  @Override
+  public void stateChanged(ChangeEvent arg0) {
+    panelPassword.setError(modele.getPasswordError());
+    panelUsername.setError(modele.getUsernameError());
   }
 }

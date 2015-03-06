@@ -1,8 +1,14 @@
 package paoo.cappuccino.ihm;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -46,8 +52,7 @@ public class MenuView extends JFrame implements ChangeListener {
     // TODO to move
     JButton deconnexion = new JButton("Déconnexion");
     deconnexion.addActionListener(e -> {
-      this.dispose();
-      new ConnectionView();
+
     });
     banniere.add(deconnexion, BorderLayout.EAST);
 
@@ -74,7 +79,7 @@ public class MenuView extends JFrame implements ChangeListener {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
    */
   @Override

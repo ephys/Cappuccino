@@ -60,5 +60,6 @@ public class Main {
     } catch (IOException e) {
       throw new FatalException("Could not load the config file " + configFile.getAbsolutePath(), e);
     }
+    // new ConnectionView(new ErrorModele());
   }
 }

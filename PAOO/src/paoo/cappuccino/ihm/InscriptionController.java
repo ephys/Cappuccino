@@ -1,8 +1,9 @@
 package paoo.cappuccino.ihm;
 
-import java.awt.*;
+import java.awt.FlowLayout;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 /**
  * Controller for the inscription ihm
@@ -15,14 +16,17 @@ public class InscriptionController extends JPanel {
 
   private static final long serialVersionUID = 8967022645980426577L;
   private InscriptionView parent;
+  private ErrorModele modele;
 
   /**
    * Constructor
    *
    * @param inscriptionVue la vue sur laquelle il s'affiche
+   * @param modele the modele he's working with
    */
-  public InscriptionController(InscriptionView inscriptionVue) {
+  public InscriptionController(InscriptionView inscriptionVue, ErrorModele modele) {
     parent = inscriptionVue;
+    this.modele = modele;
     this.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
     JButton inscrire = new JButton("Valider");
@@ -31,8 +35,7 @@ public class InscriptionController extends JPanel {
     });
     JButton connecter = new JButton("Annuler");
     connecter.addActionListener(e -> {
-      parent.dispose();
-      new ConnectionView();
+
     });
     this.add(inscrire);
     this.add(connecter);
@@ -43,9 +46,6 @@ public class InscriptionController extends JPanel {
    * Call UCC.register and go to the menu
    */
   private void valider() {
-    // valider input
-    parent.dispose();
-    // new MenuVue(new User);
-    new MenuView(null);
+
   }
 }
