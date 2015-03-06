@@ -1,5 +1,8 @@
 package paoo.cappuccino.core.config;
 
+import paoo.cappuccino.core.injector.Singleton;
+
+@Singleton
 public interface IAppConfig {
   /**
    * Gets a string property from the system configuration
