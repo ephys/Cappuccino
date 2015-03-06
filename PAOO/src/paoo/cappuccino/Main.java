@@ -2,6 +2,7 @@ package paoo.cappuccino;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.config.IAppConfig;
@@ -9,6 +10,7 @@ import paoo.cappuccino.core.config.PropertiesConfig;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.ihm.ConnectionView;
 import paoo.cappuccino.util.exception.FatalException;
+import paoo.cappuccino.util.hasher.IStringHasher;
 import paoo.cappuccino.util.hasher.StringHasher;
 import paoo.cappuccino.util.hasher.pbkdf2.Pbkdf2Hasher;
 
@@ -33,7 +35,15 @@ public class Main {
     injector.setDependency(AppContext.class, appContext);
     injector.setDependency(IAppConfig.class, appConfig);
 
-    StringHasher.INSTANCE.addHashAlgorithm(new Pbkdf2Hasher(appConfig.getInt("pbkdf2_iterations")));
+    try {
+      IStringHasher hasher = new StringHasher();
+      hasher.addHashAlgorithm(new Pbkdf2Hasher(appConfig.getInt("pbkdf2_iterations")));
+
+      injector.setDependency(IStringHasher.class, hasher);
+    } catch (NoSuchAlgorithmException e) {
+      throw new FatalException("Could not fetch the hashing algorithm", e);
+    }
+
     return injector;
   }
 

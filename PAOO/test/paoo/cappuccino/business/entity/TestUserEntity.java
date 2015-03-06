@@ -10,6 +10,7 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
+import paoo.cappuccino.util.hasher.IStringHasher;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -20,12 +21,14 @@ import static org.junit.Assert.assertTrue;
  * JUnit tests for the User entity.
  */
 public class TestUserEntity {
-  //TODO: do the same for the second factory method
+  // TODO: do the same for the second factory method
 
   private static DependencyInjector injector;
 
   @Inject
   private IEntityFactory entityFactory;
+  @Inject
+  private IStringHasher hasher;
 
   private String username;
   private String password;
@@ -51,7 +54,7 @@ public class TestUserEntity {
     this.email = "nicolas@gmail.com";
     this.role = IUserDto.Role.USER;
 
-    user = entityFactory.createUser(username, password, lastName, firstName, email,
+    user = entityFactory.createUser(username, hasher.hash(password), lastName, firstName, email,
                                     role);
   }
 
@@ -82,8 +85,8 @@ public class TestUserEntity {
 
   @Test
   public void testPassword() {
-    assertTrue(user.isPassword(password));
-    assertFalse(user.isPassword("pomme de pain au chocococolat"));
+    assertTrue(hasher.matchHash(password, user.getPassword()));
+    assertFalse(hasher.matchHash("pomme de pain au chocococolat", user.getPassword()));
   }
 
   @Test

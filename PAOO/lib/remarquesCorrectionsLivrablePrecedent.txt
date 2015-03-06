@@ -5,4 +5,3 @@ DSD => ajouter une explication du cancel sur le DSD
 + expliquer ce qu'il se passe avec l'e-mail valide (valeurs possibles)
 + ajouter la pk concaténé sur une ligne et pas sur deux
 + répondre à la 2.5 du document sur l'extranet ->participations créées lors de l'invitation
-+ ajouter un field "hash" dans la table user

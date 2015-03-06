@@ -33,7 +33,7 @@ public class DependencyInjector {
    * @throws NoSuchMethodException there is no default nor injectable constructor.
    */
   private static Constructor<?> fetchConstructor(Class<?> clazz) throws NoSuchMethodException {
-    Constructor<?>[] constructors = clazz.getConstructors();
+    Constructor<?>[] constructors = clazz.getDeclaredConstructors();
     Constructor<?> needle = null;
 
     for (Constructor<?> c : constructors) {
@@ -44,7 +44,7 @@ public class DependencyInjector {
     }
 
     if (needle == null) {
-      needle = clazz.getConstructor();
+      needle = clazz.getDeclaredConstructor();
     }
 
     needle.setAccessible(true);
@@ -59,6 +59,10 @@ public class DependencyInjector {
    * @return true: the dependency has been set. false: the dependency was already set.
    */
   public boolean setDependency(Class<?> depClass, Object depInstance) {
+    if (!isSingleton(depClass)) {
+      throw new IllegalArgumentException("Dependency class must be a singleton ");
+    }
+
     if (singletonCache.containsKey(depClass)) {
       return false;
     }
@@ -133,6 +137,11 @@ public class DependencyInjector {
    *                                                       populated.
    */
   public Object buildDependency(Class<?> dependency) {
+    Object instance = singletonCache.get(dependency);
+    if (instance != null) {
+      return instance;
+    }
+
     if (dependency.isInterface()) {
       try {
         String depClassName = config.getString(dependency.getCanonicalName());
@@ -143,17 +152,19 @@ public class DependencyInjector {
       }
     }
 
-    Object instance = singletonCache.get(dependency);
+    instance = instantiateDependency(dependency);
 
-    if (instance == null) {
-      instance = instantiateDependency(dependency);
-      populate(instance);
-
-      if (dependency.getAnnotation(Singleton.class) != null) {
-        singletonCache.put(dependency, instance);
-      }
+    if (isSingleton(dependency)) {
+      singletonCache.put(dependency, instance);
     }
 
+    populate(instance);
+
     return instance;
+  }
+
+  private boolean isSingleton(Class<?> clazz) {
+    return clazz.getAnnotation(Singleton.class) != null;
+
   }
 }

@@ -9,6 +9,8 @@ import paoo.cappuccino.dal.dao.IUserDao;
 import paoo.cappuccino.ucc.IUserUcc;
 import paoo.cappuccino.util.StringUtils;
 import paoo.cappuccino.util.ValidationUtil;
+import paoo.cappuccino.util.hasher.IHashHolderDto;
+import paoo.cappuccino.util.hasher.IStringHasher;
 
 /**
  * @author Guylian Cox
@@ -21,6 +23,8 @@ class UserUcc implements IUserUcc {
   private IDalService dalService;
   @Inject
   private IUserDao userDao;
+  @Inject
+  private IStringHasher hasher;
 
   @Override
   public IUserDto register(String username, String password, String firstName, String lastName,
@@ -40,12 +44,10 @@ class UserUcc implements IUserUcc {
       throw new IllegalArgumentException("Invalid email format");
     }
 
-    IUser registeredUser = entityFactory.createUser(username, password, firstName, lastName, email,
-                                                    IUserDto.Role.USER);
+    IUser registeredUser = entityFactory.createUser(username, hasher.hash(password),
+                                                    firstName, lastName, email, IUserDto.Role.USER);
 
-    dalService.startTransaction();
     registeredUser = userDao.createUser(registeredUser);
-    dalService.commit();
 
     return registeredUser;
   }
@@ -59,9 +61,14 @@ class UserUcc implements IUserUcc {
     ValidationUtil.ensureFilled(password, "password");
 
     IUser user = userDao.fetchUserByUsername(username);
-    if (!user.isPassword(password)) return null;
+    IHashHolderDto realPassword = user.getPassword();
+    if (!hasher.matchHash(password, realPassword)) {
+      return null;
+    }
 
-    if (user.upgradePassword(password)) {
+    // update the hash algorithm used to store the password if we changed it.
+    if (hasher.isHashOutdated(realPassword)) {
+      user.setPassword(hasher.hash(password));
       userDao.updateUser(user);
     }
 

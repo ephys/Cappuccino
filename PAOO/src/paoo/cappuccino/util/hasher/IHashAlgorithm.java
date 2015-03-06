@@ -12,7 +12,7 @@ public interface IHashAlgorithm {
    *
    * @return The hash encoded as a string.
    */
-  public IHashHolder hash(final String toHash, final IHashHolder oldHashData);
+  public IHashHolder hash(final String toHash, final IHashHolderDto oldHashData);
 
   /**
    * Unserializes the algorithm-specific data and generates a new hash holder contaning that data.
@@ -21,4 +21,11 @@ public interface IHashAlgorithm {
    * @return a proper hash data holder.
    */
   public IHashHolder unserializeCustomData(String data);
+
+  /**
+   * Determines if the hash was created using an outdated configuration of this algorithm.
+   *
+   * @return true: the hash algorithm used is up to date.
+   */
+  public boolean isHashOutdated(IHashHolderDto hash);
 }

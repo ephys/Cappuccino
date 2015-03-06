@@ -22,14 +22,6 @@ public interface IUserDto extends IBaseDto {
   IHashHolderDto getPassword();
 
   /**
-   * Checks the given password matches the user's current password
-   *
-   * @param password A password
-   * @return true: The password matches
-   */
-  boolean isPassword(String password);
-
-  /**
    * Gets the user's last name
    */
   String getLastName();

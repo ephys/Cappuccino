@@ -1,6 +1,5 @@
 package paoo.cappuccino.dal.impl;
 
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +14,7 @@ import paoo.cappuccino.dal.IDalBackend;
 import paoo.cappuccino.dal.dao.IUserDao;
 import paoo.cappuccino.dal.exception.ConnectionException;
 import paoo.cappuccino.dal.exception.NonUniqueFieldException;
-import paoo.cappuccino.util.hasher.StringHasher;
+import paoo.cappuccino.util.hasher.IStringHasher;
 
 /**
  * Implements de IUserDao
@@ -28,14 +27,16 @@ public class UserDao implements IUserDao {
   private IEntityFactory entityFactory;
   @Inject
   private IDalBackend iDalBackend;
+  @Inject
+  private IStringHasher hasher;
 
   @Override
   public IUser createUser(IUserDto user) {
     String query =
         "INSERT INTO businessDays.users VALUES ( DEFAULT," + user.getRole().toString() + ","
-            + StringHasher.INSTANCE.serialize(user.getPassword()) + "," + user.getEmail() + ","
-            + user.getUsername() + "," + user.getFirstName() + "," + user.getLastName()
-            + ",DEFAULT, DEFAULT);";
+        + hasher.serialize(user.getPassword()) + "," + user.getEmail() + ","
+        + user.getUsername() + "," + user.getFirstName() + "," + user.getLastName()
+        + ",DEFAULT, DEFAULT);";
     PreparedStatement ps;
     try {
       ps = iDalBackend.fetchPrepardedStatement(query);
@@ -64,10 +65,12 @@ public class UserDao implements IUserDao {
 
       if (rs.next()) {
         return entityFactory.createUser(rs.getInt("users_id"), rs.getInt("version"),
-            rs.getString("username"), StringHasher.INSTANCE.unserialize(rs.getString("password")),
-            rs.getString("last_name"), rs.getString("first_name"), rs.getString("email"),
-            IUserDto.Role.valueOf(rs.getString("role")),
-            LocalDateTime.parse(rs.getString("register_date")));
+                                        rs.getString("username"),
+                                        hasher.unserialize(rs.getString("password")),
+                                        rs.getString("last_name"), rs.getString("first_name"),
+                                        rs.getString("email"),
+                                        IUserDto.Role.valueOf(rs.getString("role")),
+                                        LocalDateTime.parse(rs.getString("register_date")));
         // TODO fermer les ps et rs
       } else {
         throw new ConnectionException("No user return");
@@ -93,7 +96,8 @@ public class UserDao implements IUserDao {
       // version check
       ps =
           iDalBackend
-              .fetchPrepardedStatement("SELECT version FROM businessdays.users WHERE users_id LIKE '"
+              .fetchPrepardedStatement(
+                  "SELECT version FROM businessdays.users WHERE users_id LIKE '"
                   + user.getId() + "'");
       rs = ps.executeQuery();
       if (rs.next() && rs.getInt("version") != user.getVersion()) {
@@ -102,9 +106,9 @@ public class UserDao implements IUserDao {
 
       String query =
           "UPDATE businessDays.users SET username, password, email, first_name, last_name = ("
-              + user.getUsername() + "," + StringHasher.INSTANCE.serialize(user.getPassword())
-              + "," + user.getEmail() + "," + user.getFirstName() + "," + user.getLastName()
-              + " )  WHERE users_id LIKE '" + user.getId() + "'";
+          + user.getUsername() + "," + hasher.serialize(user.getPassword())
+          + "," + user.getEmail() + "," + user.getFirstName() + "," + user.getLastName()
+          + " )  WHERE users_id LIKE '" + user.getId() + "'";
 
       ps = iDalBackend.fetchPrepardedStatement(query);
       ps.execute();

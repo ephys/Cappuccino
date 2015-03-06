@@ -15,9 +15,8 @@ import paoo.cappuccino.util.hasher.IHashHolderDto;
 final class EntityFactory implements IEntityFactory {
 
   @Override
-  public IUser createUser(String username, String password, String lastName,
+  public IUser createUser(String username, IHashHolderDto password, String lastName,
                           String firstName, String email, IUserDto.Role role) {
-
     return new User(username, password, lastName, firstName, email, role);
   }
 

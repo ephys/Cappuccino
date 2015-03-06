@@ -19,13 +19,13 @@ public interface IEntityFactory {
    * Creates a new user entity (as in not yet stored), for the UCC
    *
    * @param username  The entity's username, must be unique
-   * @param password  A valid password
+   * @param password  A hashed valid password
    * @param lastName  The entity's last name
    * @param firstName The entity's first name
    * @param email     The entity's email, must be valid
    * @param role      The entity's role
    */
-  IUser createUser(String username, String password, String lastName, String firstName,
+  IUser createUser(String username, IHashHolderDto password, String lastName, String firstName,
                    String email, IUserDto.Role role);
 
   /**
