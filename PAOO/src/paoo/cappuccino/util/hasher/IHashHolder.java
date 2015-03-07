@@ -1,5 +1,8 @@
 package paoo.cappuccino.util.hasher;
 
+/**
+ * Interface containing business methods for an hash holder.
+ */
 public interface IHashHolder extends IHashHolderDto {
 
   /**
@@ -10,7 +13,7 @@ public interface IHashHolder extends IHashHolderDto {
   void setHash(final byte[] hash);
 
   /**
-   * Sets the hash
+   * Sets the hash's salt
    */
   void setSalt(final byte[] salt);
 

@@ -31,6 +31,13 @@ public class AppContext {
   private String appName;
   private String version;
 
+  /**
+   * Configures the environment using an hardcoded profile.
+   *
+   * @param appName The name of the application.
+   * @param version The version of the application.
+   * @param profile The name of the profile to load for this instance.
+   */
   public AppContext(String appName, String version, String profile) {
     addCrashListener(new CrashWriter(this));
 
@@ -51,8 +58,8 @@ public class AppContext {
   /**
    * Configures the environment. The profile to load is set from the jvm arguments
    *
-   * @param appName The application name
-   * @param version The application version
+   * @param appName The name of the application.
+   * @param version The version of the application.
    */
   public AppContext(String appName, String version) {
     this(appName, version, System.getProperty("profile"));
@@ -145,7 +152,7 @@ public class AppContext {
    * @return a logger.
    */
   public Logger getLogger(String appLayer) {
-    Logger layerLogger = Logger.getLogger("Capp-" + appLayer);
+    Logger layerLogger = Logger.getLogger(appName + "-" + appLayer);
     layerLogger.setParent(appLogger);
 
     return layerLogger;
@@ -159,12 +166,12 @@ public class AppContext {
   }
 
   /**
-   * Gets the application profile, defaults to PROFILES.PROD if not set. This variable allows the
-   * application to know whether the system is in production, in development or in tests.
+   * <p>Gets the application profile, defaults to PROFILES.PROD if not set. This variable allows the
+   * application to know whether the system is in production, in development or in tests.</p>
    *
-   * It can be changed using the "-Dprofile" flag when running the application: "prod" for a
+   * <p>It can be changed using the "-Dprofile" flag when running the application: "prod" for a
    * production environment, "test" for a testing environment and "dev" for a development
-   * environment
+   * environment</p>
    *
    * @return the current profile type.
    */

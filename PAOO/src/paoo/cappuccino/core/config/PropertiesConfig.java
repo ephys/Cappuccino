@@ -15,7 +15,7 @@ public final class PropertiesConfig implements IAppConfig {
 
   private final File configFile;
   private final Properties properties = new Properties();
-  private final boolean bDebug;
+  private final boolean debug;
 
   /**
    * Creates a application config handler using java properties files.
@@ -27,7 +27,7 @@ public final class PropertiesConfig implements IAppConfig {
    */
   public PropertiesConfig(File configFile, boolean debug) throws IOException {
     this.configFile = configFile;
-    this.bDebug = debug;
+    this.debug = debug;
 
     loadProperties();
   }
@@ -38,13 +38,8 @@ public final class PropertiesConfig implements IAppConfig {
    * @throws paoo.cappuccino.util.exception.FatalException Could not load the config file
    */
   private void loadProperties() throws IOException {
-    FileInputStream input = new FileInputStream(configFile);
-    properties.load(input);
-
-    try {
-      input.close();
-    } catch (IOException e) {
-      e.printStackTrace();
+    try (FileInputStream input = new FileInputStream(configFile)) {
+      properties.load(input);
     }
   }
 
@@ -58,7 +53,7 @@ public final class PropertiesConfig implements IAppConfig {
   public String getString(String key) {
     String returnValue = properties.getProperty(key);
     if (returnValue == null) {
-      if (bDebug) {
+      if (debug) {
         properties.setProperty(key, "TODO: set me.");
 
         try {

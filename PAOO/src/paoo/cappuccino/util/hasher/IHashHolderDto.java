@@ -1,13 +1,11 @@
 package paoo.cappuccino.util.hasher;
 
-import java.io.Serializable;
-
 /**
- * Hash data transfer object
+ * Interface used to transfer data used by the hash.
  *
  * @author Guylian Cox
  */
-public interface IHashHolderDto extends Serializable {
+public interface IHashHolderDto {
 
   /**
    * Gets the actual hash.
@@ -20,7 +18,7 @@ public interface IHashHolderDto extends Serializable {
   byte[] getSalt();
 
   /**
-   * The id of the algorithm used to hash the string
+   * Gets the id of the algorithm used to hash the string
    */
   int getAlgorithmVersion();
 }
