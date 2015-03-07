@@ -1,15 +1,15 @@
-package paoo.cappuccino.ihm.temp_do_not_delete;
+package paoo.cappuccino.ihm.login;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import paoo.cappuccino.ihm.temp_do_not_delete.core.IGuiManager;
+import paoo.cappuccino.ihm.core.IGuiManager;
 
 public class TestController extends JPanel implements IGuiManager.IManageableGui {
   private IGuiManager guiManager;
-  private TestModel model;
+  private LoginModel model;
 
-  public TestController(TestModel model) {
+  public TestController(LoginModel model) {
     this.model = model;
   }
 

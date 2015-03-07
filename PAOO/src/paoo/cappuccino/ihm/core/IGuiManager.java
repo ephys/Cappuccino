@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.temp_do_not_delete.core;
+package paoo.cappuccino.ihm.core;
 
 import javax.swing.JFrame;
 
@@ -6,7 +6,7 @@ import paoo.cappuccino.core.injector.Singleton;
 
 @Singleton
 /**
- * Used to manage the application GUIs
+ * Used to manage the application GUIs.
  *
  * @author Guylian Cox
  */
@@ -16,7 +16,7 @@ public interface IGuiManager {
    * Closes the current window (if exists) and creates a new one
    *
    * @param frame the frame class, must implement
-   *        {@link paoo.cappuccino.ihm.temp_do_not_delete.core.IGuiManager.IManageableFrame}
+   *        {@link paoo.cappuccino.ihm.core.IGuiManager.IManageableGui}
    * @return the new window
    */
   public JFrame openFrame(Class<? extends JFrame> frame);
@@ -30,7 +30,7 @@ public interface IGuiManager {
 
     /**
      * Sets the reference to the current Gui Manager.
-     * 
+     *
      * @param manager the current Gui Manager
      */
     public void setManager(IGuiManager manager);

@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
  * @author Guylian Cox
  */
 public class MissingAnnotationException extends NoSuchElementException {
-  public MissingAnnotationException(String s) {
-    super(s);
+  public MissingAnnotationException(String message) {
+    super(message);
   }
 }

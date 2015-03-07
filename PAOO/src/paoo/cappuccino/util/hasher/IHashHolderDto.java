@@ -18,7 +18,7 @@ public interface IHashHolderDto {
   byte[] getSalt();
 
   /**
-   * Gets the id of the algorithm used to hash the string
+   * Gets the id of the algorithm used to hash the string.
    */
   int getAlgorithmVersion();
 }

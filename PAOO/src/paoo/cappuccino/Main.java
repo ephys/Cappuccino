@@ -8,10 +8,10 @@ import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.config.IAppConfig;
 import paoo.cappuccino.core.config.PropertiesConfig;
 import paoo.cappuccino.core.injector.DependencyInjector;
-import paoo.cappuccino.ihm.ConnectionView;
+import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.login.LoginFrame;
 import paoo.cappuccino.util.exception.FatalException;
 import paoo.cappuccino.util.hasher.IStringHasher;
-import paoo.cappuccino.util.hasher.StringHasher;
 import paoo.cappuccino.util.hasher.pbkdf2.Pbkdf2Hasher;
 
 public class Main {
@@ -27,8 +27,8 @@ public class Main {
     AppContext appContext = new AppContext("Cappuccino", "1.0.0");
     DependencyInjector injector = configureApp(appContext);
 
-    // TODO: change this by GuiManager once it has been pulled
-    ConnectionView view = (ConnectionView) injector.buildDependency(ConnectionView.class);
+    IGuiManager guiManager = injector.buildDependency(IGuiManager.class);
+    guiManager.openFrame(LoginFrame.class);
   }
 
   /**
@@ -49,11 +49,10 @@ public class Main {
     injector.setDependency(AppContext.class, appContext);
     injector.setDependency(IAppConfig.class, appConfig);
 
-    try {
-      IStringHasher hasher = new StringHasher();
-      hasher.addHashAlgorithm(new Pbkdf2Hasher(appConfig.getInt("pbkdf2_iterations")));
+    IStringHasher hasher = injector.buildDependency(IStringHasher.class);
 
-      injector.setDependency(IStringHasher.class, hasher);
+    try {
+      hasher.addHashAlgorithm(new Pbkdf2Hasher(appConfig.getInt("pbkdf2_iterations")));
     } catch (NoSuchAlgorithmException e) {
       throw new FatalException("Could not fetch the hashing algorithm", e);
     }

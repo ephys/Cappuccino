@@ -1,11 +1,11 @@
-package paoo.cappuccino.ihm.temp_do_not_delete;
+package paoo.cappuccino.ihm.login;
 
 import paoo.cappuccino.core.injector.Inject;
 
 public class TestViewController extends TestController {
 
   @Inject
-  public TestViewController(TestModel model) {
+  public TestViewController(LoginModel model) {
     super(model);
     this.add(new TestView(model));
   }

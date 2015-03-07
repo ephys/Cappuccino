@@ -15,6 +15,7 @@ import paoo.cappuccino.util.exception.MissingAnnotationException;
  *
  * @author Guylian Cox
  */
+@Singleton
 public class DependencyInjector {
 
   private final IAppConfig config;
@@ -28,7 +29,7 @@ public class DependencyInjector {
   public DependencyInjector(IAppConfig config) {
     this.config = config;
 
-    singletonCache.put(DependencyInjector.class, this);
+    setDependency(DependencyInjector.class, this);
   }
 
   /**
@@ -38,13 +39,14 @@ public class DependencyInjector {
    * @return the class' constructor.
    * @throws NoSuchMethodException there is no default nor injectable constructor.
    */
-  private static Constructor<?> fetchConstructor(Class<?> clazz) throws NoSuchMethodException {
+  @SuppressWarnings("unchecked")
+  private <A> Constructor<A> fetchConstructor(Class<A> clazz) throws NoSuchMethodException {
     Constructor<?>[] constructors = clazz.getDeclaredConstructors();
-    Constructor<?> needle = null;
+    Constructor<A> needle = null;
 
     for (Constructor<?> c : constructors) {
       if (c.getAnnotation(Inject.class) != null) {
-        needle = c;
+        needle = (Constructor<A>) c;
         break;
       }
     }
@@ -64,8 +66,8 @@ public class DependencyInjector {
    * @param depInstance An instance of an implementation of the dependency.
    * @return true: the dependency has been set. false: the dependency was already set.
    */
-  public boolean setDependency(Class<?> depClass, Object depInstance) {
-    Class<?> singletonKey = getSingletonKey(depClass);
+  public <A> boolean setDependency(Class<A> depClass, A depInstance) {
+    Class<?> singletonKey = redirectSingleton(depClass);
 
     if (singletonKey == null) {
       throw new IllegalArgumentException("Dependency class must be a singleton ");
@@ -87,9 +89,9 @@ public class DependencyInjector {
    * @return The new instance.
    * @throws paoo.cappuccino.util.exception.FatalException The instance could not be created.
    */
-  private Object instantiateDependency(Class<?> dependency) {
+  private <A> A instantiateDependency(Class<A> dependency) {
     try {
-      Constructor<?> constructor = fetchConstructor(dependency);
+      Constructor<A> constructor = fetchConstructor(dependency);
 
       Class<?>[] paramTypes = constructor.getParameterTypes();
       Object[] paramValues = new Object[paramTypes.length];
@@ -100,7 +102,7 @@ public class DependencyInjector {
       return constructor.newInstance(paramValues);
     } catch (NoSuchMethodException e) {
       throw new FatalException("Could not instantiate " + dependency.getCanonicalName()
-                               + ", it does not have a default constructor and " 
+                               + ", it does not have a default constructor and "
                                + "no constructor has an @Inject annotation.",
                                e);
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
@@ -144,37 +146,80 @@ public class DependencyInjector {
    * @throws paoo.cappuccino.util.exception.FatalException The instance could not be created or
    *                                                       populated.
    */
-  public Object buildDependency(Class<?> dependency) {
-    // get the singleton from the cache
-    Class<?> singletonKey = getSingletonKey(dependency);
-    if (singletonKey != null) {
-      Object instance = singletonCache.get(singletonKey);
+  @SuppressWarnings("unchecked")
+  public <A> A buildDependency(final Class<A> dependency) {
+    // If we're a singleton, redirect it to the actual singleton class
+    // then fetch its instance or create it.
+    final Class<?> singletonDep = redirectSingleton(dependency);
+    final boolean isSingleton = singletonDep != null;
+
+    if (isSingleton) {
+      A instance = (A) singletonCache.get(singletonDep);
 
       if (instance != null) {
         return instance;
       }
-    }
 
-    // not in the cache ? Get it's implementation and put it in the cache
-    if (dependency.isInterface()) {
       try {
-        String depClassName = config.getString(dependency.getCanonicalName());
-        dependency = Class.forName(depClassName);
-      } catch (IllegalArgumentException | ClassNotFoundException e) {
-        throw new FatalException("Could not fetch interface " + dependency.getCanonicalName()
-                                 + "'s implementation.", e);
+        return (A) createDependency(singletonDep, true);
+      } catch (ClassCastException e) {
+        throw new FatalException(dependency.getCanonicalName()
+                                 + " was redirected to "
+                                 + singletonDep.getCanonicalName()
+                                 + " but its implementation doesn't implement/extends"
+                                 + " the dependency.", e);
+      }
+    } else {
+      // otherwise create this dependency without redirection.
+
+      try {
+        return createDependency(dependency, false);
+      } catch (ClassCastException e) {
+        throw new FatalException("The defined implementation of interface "
+                                 + dependency.getCanonicalName()
+                                 + "does not implement said interface.", e);
       }
     }
+  }
 
-    Object instance = instantiateDependency(dependency);
+  /**
+   * Creates an instance of an implementation of a dependency and caches it.
+   *
+   * @param abstractDependency The class or interface to instantiate.
+   * @param cache              true: cache the instance.
+   * @return An instance of the dependency.
+   */
+  private <A> A createDependency(final Class<A> abstractDependency, final boolean cache) {
+    final Class<? extends A> implementation = abstractDependency.isInterface()
+                                              ? getImplementation(abstractDependency)
+                                              : abstractDependency;
 
-    if (singletonKey != null) {
-      singletonCache.put(singletonKey, instance);
+    A depInstance = instantiateDependency(implementation);
+
+    if (cache) {
+      singletonCache.put(abstractDependency, depInstance);
     }
 
-    populate(instance);
+    populate(depInstance);
 
-    return instance;
+    return depInstance;
+  }
+
+  /**
+   * Fetches an interface's implementation class.
+   *
+   * @param interfaze The interface to get an implementation for.
+   * @return An implementation.
+   */
+  @SuppressWarnings("unchecked")
+  private <A> Class<? extends A> getImplementation(Class<A> interfaze) {
+    try {
+      String depClassName = config.getString(interfaze.getCanonicalName());
+      return (Class<? extends A>) Class.forName(depClassName);
+    } catch (IllegalArgumentException | ClassNotFoundException e) {
+      throw new FatalException("Could not fetch interface " + interfaze.getCanonicalName()
+                               + "'s implementation.", e);
+    }
   }
 
   /**
@@ -184,10 +229,10 @@ public class DependencyInjector {
    * @return the singleton class or null if it isn't a singleton.
    * @throws paoo.cappuccino.util.exception.MissingAnnotationException The singleton redirected to a
    *                                                                   non-singleton dependency.
-   * @see paoo.cappuccino.core.injector.DependencyInjector#getSingletonKey(Class, boolean)
+   * @see paoo.cappuccino.core.injector.DependencyInjector#redirectSingleton(Class, boolean)
    */
-  private Class<?> getSingletonKey(Class<?> clazz) {
-    return getSingletonKey(clazz, false);
+  private Class<?> redirectSingleton(Class<?> clazz) {
+    return redirectSingleton(clazz, false);
   }
 
   /**
@@ -201,7 +246,7 @@ public class DependencyInjector {
    * @return the singleton class or null if it isn't a singleton.
    * @throws paoo.cappuccino.util.exception.MissingAnnotationException The class is not a singleton.
    */
-  private Class<?> getSingletonKey(Class<?> clazz, boolean requireSingleton) {
+  private Class<?> redirectSingleton(Class<?> clazz, boolean requireSingleton) {
     Singleton annotation = clazz.getAnnotation(Singleton.class);
 
     if (annotation == null) {
@@ -218,7 +263,7 @@ public class DependencyInjector {
     if (annotation.redirectTo() != void.class) {
       // recursive loop until we get a singleton that does not redirect.
       // this could cause an infinite loop, should we add a check to change the exception ?
-      return getSingletonKey(annotation.redirectTo(), true);
+      return redirectSingleton(annotation.redirectTo(), true);
     }
 
     return clazz;

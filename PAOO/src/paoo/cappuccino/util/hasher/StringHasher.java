@@ -9,7 +9,7 @@ import paoo.cappuccino.util.StringUtils;
  *
  * @author Guylian Cox
  */
-public class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash Layer
+class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash Layer
 
   private ArrayList<IHashAlgorithm> hashAlgorithms = new ArrayList<>(1);
 
@@ -45,8 +45,8 @@ public class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstra
   @Override
   public IHashHolderDto hash(final String toHash) {
     if (hashAlgorithms.size() == 0) {
-      throw new IllegalStateException(
-          "This StringHasher does not have any algorithm implemented. Use addHashAlgorithm() to add one.");
+      throw new IllegalStateException("This StringHasher does not have any algorithm implemented. "
+                                      + "Use addHashAlgorithm() to add one.");
     }
 
     final IHashAlgorithm hasher = hashAlgorithms.get(hashAlgorithms.size() - 1);

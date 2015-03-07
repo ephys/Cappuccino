@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.temp_do_not_delete.util;
+package paoo.cappuccino.ihm.util;
 
 import javax.swing.*;
 

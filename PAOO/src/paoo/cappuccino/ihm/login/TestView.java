@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.temp_do_not_delete;
+package paoo.cappuccino.ihm.login;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -6,9 +6,9 @@ import javax.swing.event.ChangeListener;
 
 public class TestView extends JPanel implements ChangeListener {
 
-  private TestModel model;
+  private LoginModel model;
 
-  public TestView(TestModel model) {
+  public TestView(LoginModel model) {
     model.addChangeListener(this);
     this.model = model;
   }
