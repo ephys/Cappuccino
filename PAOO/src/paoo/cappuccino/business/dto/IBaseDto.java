@@ -1,7 +1,7 @@
 package paoo.cappuccino.business.dto;
 
 /**
- * Interface containing getter methods shared by every DTO
+ * Interface containing getter methods shared by every DTO.
  *
  * @author Nicolas Fischer
  */

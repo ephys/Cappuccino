@@ -17,7 +17,7 @@ import paoo.cappuccino.core.injector.Singleton;
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
- * Application environment-specific configuration
+ * Application environment-specific configuration.
  *
  * @author Guylian Cox
  */
@@ -56,7 +56,7 @@ public class AppContext {
   }
 
   /**
-   * Configures the environment. The profile to load is set from the jvm arguments
+   * Configures the environment. The profile to load is set from the jvm arguments.
    *
    * @param appName The name of the application.
    * @param version The version of the application.
@@ -84,20 +84,20 @@ public class AppContext {
   }
 
   /**
-   * Creates the application global catcher
+   * Creates the application global catcher.
    */
   private void initGlobalCatcher() {
-    Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-      for (CrashListener listener : crashListeners) {
-        listener.onCrash(e);
-      }
+    Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
+        for (CrashListener listener : crashListeners) {
+          listener.onCrash(exception);
+        }
 
-      e.printStackTrace();
-    });
+        exception.printStackTrace();
+      });
   }
 
   /**
-   * Setups the application main logger
+   * Setups the application main logger.
    */
   private void initLogger() {
     appLogger = Logger.getLogger(appName);
@@ -148,7 +148,7 @@ public class AppContext {
   /**
    * Creates a logger for a part of the application.
    *
-   * @param appLayer The part of the application requesting a logger (IHM, DAL, DALSQL, UCC, ...)
+   * @param appLayer The part of the application requesting a logger (IHM, DAL, DALSQL, UCC, ...).
    * @return a logger.
    */
   public Logger getLogger(String appLayer) {
@@ -159,7 +159,7 @@ public class AppContext {
   }
 
   /**
-   * Returns the application parent/global logger
+   * Returns the application parent/global logger.
    */
   Logger getAppLogger() {
     return appLogger;
@@ -171,7 +171,7 @@ public class AppContext {
    *
    * <p>It can be changed using the "-Dprofile" flag when running the application: "prod" for a
    * production environment, "test" for a testing environment and "dev" for a development
-   * environment</p>
+   * environment.</p>
    *
    * @return the current profile type.
    */
@@ -180,41 +180,41 @@ public class AppContext {
   }
 
   /**
-   * Gets the application profile name
+   * Gets the application profile name.
    */
   public String getProfile() {
     return profile;
   }
 
   /**
-   * Gets the application version
+   * Gets the application version.
    */
   public String getVersion() {
     return version;
   }
 
   /**
-   * Gets the application name
+   * Gets the application name.
    */
   public String getAppName() {
     return appName;
   }
 
   /**
-   * Adds a listener that will be called just before the application crashes
+   * Adds a listener that will be called just before the application crashes.
    *
-   * @param listener the listener to call
-   * @return true: the listener has been added
+   * @param listener the listener to call.
+   * @return true: the listener has been added.
    */
   public boolean addCrashListener(CrashListener listener) {
     return this.crashListeners.add(listener);
   }
 
   /**
-   * Removes a crash listener
+   * Removes a crash listener.
    *
-   * @param listener the listener to remove
-   * @return true: the listener has been removed
+   * @param listener the listener to remove.
+   * @return true: the listener has been removed.
    */
   public boolean removeCrashListener(CrashListener listener) {
     return this.crashListeners.remove(listener);

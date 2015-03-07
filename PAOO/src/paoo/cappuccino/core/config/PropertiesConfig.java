@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * Handles a properties-based configuration file
+ * Handles a properties-based configuration file.
  *
  * @author Laurent Batslé
  */

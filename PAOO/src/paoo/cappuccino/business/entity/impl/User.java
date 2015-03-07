@@ -6,7 +6,7 @@ import paoo.cappuccino.business.entity.IUser;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
 
 /**
- * Class implementing the IUser entity
+ * Class implementing the IUser entity.
  *
  * @author Nicolas Fischer
  */

@@ -5,39 +5,39 @@ import java.time.LocalDateTime;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
 
 /**
- * Data transfer object for the User entity
+ * Data transfer object for the User entity.
  *
  * @author Nicolas Fischer
  */
 public interface IUserDto extends IBaseDto {
 
   /**
-   * @return the user's username
+   * Gets the user's username.
    */
   String getUsername();
 
   /**
-   * Gets the user's password
+   * Gets the user's password.
    */
   IHashHolderDto getPassword();
 
   /**
-   * Gets the user's last name
+   * Gets the user's last name.
    */
   String getLastName();
 
   /**
-   * Gets the user's first name
+   * Gets the user's first name.
    */
   String getFirstName();
 
   /**
-   * Gets the user's email
+   * Gets the user's email.
    */
   String getEmail();
 
   /**
-   * Gets the user's register date
+   * Gets the user's register date.
    */
   LocalDateTime getRegisterDate();
 
@@ -48,7 +48,7 @@ public interface IUserDto extends IBaseDto {
   IUserDto.Role getRole();
 
   /**
-   * Defines the list of roles an user can hold
+   * Defines the list of roles an user can hold.
    */
   public static enum Role {
     USER, ADMIN

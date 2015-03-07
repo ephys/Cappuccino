@@ -8,7 +8,7 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
 
 /**
- * IEntityFactory implementation
+ * IEntityFactory implementation.
  *
  * @author Nicolas Fischer
  */

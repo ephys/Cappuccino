@@ -8,7 +8,7 @@ import paoo.cappuccino.core.injector.Singleton;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
 
 /**
- * Interface used to create new instances of various business entities
+ * Interface used to create new instances of various business entities.
  *
  * @author Nicolas Fischer
  */
@@ -16,7 +16,7 @@ import paoo.cappuccino.util.hasher.IHashHolderDto;
 public interface IEntityFactory {
 
   /**
-   * Creates a new user entity (as in not yet stored), for the UCC
+   * Creates a new user entity (as in not yet stored), for the UCC.
    *
    * @param username  The entity's username, must be unique
    * @param password  A hashed valid password
@@ -29,7 +29,7 @@ public interface IEntityFactory {
                    String email, IUserDto.Role role);
 
   /**
-   * Creates an already existing user entity, for the DAL
+   * Creates an already existing user entity, for the DAL.
    *
    * @param id           The entity's identifier
    * @param version      The entity version in the database

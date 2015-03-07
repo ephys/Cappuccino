@@ -11,7 +11,7 @@ import paoo.cappuccino.util.exception.FatalException;
 import paoo.cappuccino.util.exception.MissingAnnotationException;
 
 /**
- * Class used to build and inject dependencies into instances
+ * Class used to build and inject dependencies into instances.
  *
  * @author Guylian Cox
  */
@@ -20,6 +20,11 @@ public class DependencyInjector {
   private final IAppConfig config;
   private Map<Class<?>, Object> singletonCache = new HashMap<>();
 
+  /**
+   * Creates a new dependency injector.
+   *
+   * @param config The configuration holder contaning the class -> object mapping
+   */
   public DependencyInjector(IAppConfig config) {
     this.config = config;
 
@@ -75,12 +80,12 @@ public class DependencyInjector {
   }
 
   /**
-   * Creates a new instance for a given class using the constructor annotated by {@link Inject
+   * Creates a new instance for a given class using the constructor annotated by {@link Inject} or
+   * the default constructor if none are annotated.
    *
    * @param dependency The class to instantiate.
    * @return The new instance.
    * @throws paoo.cappuccino.util.exception.FatalException The instance could not be created.
-   * @Inject} or the default constructor if none are annotated.
    */
   private Object instantiateDependency(Class<?> dependency) {
     try {
@@ -95,7 +100,8 @@ public class DependencyInjector {
       return constructor.newInstance(paramValues);
     } catch (NoSuchMethodException e) {
       throw new FatalException("Could not instantiate " + dependency.getCanonicalName()
-                               + ", it does not have a default constructor and no constructor has an @Inject annotation.",
+                               + ", it does not have a default constructor and " 
+                               + "no constructor has an @Inject annotation.",
                                e);
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
       throw new FatalException("Could not instantiate " + dependency.getCanonicalName(), e);
@@ -173,7 +179,7 @@ public class DependencyInjector {
 
   /**
    * Gets the class acting as a key in the singleton cache if it is a singleton.
-   * 
+   *
    * @param clazz the clazz from which it should be checked
    * @return the singleton class or null if it isn't a singleton.
    * @throws paoo.cappuccino.util.exception.MissingAnnotationException The singleton redirected to a
