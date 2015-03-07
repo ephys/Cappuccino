@@ -13,12 +13,14 @@ public interface IHashHolder extends IHashHolderDto {
   void setHash(final byte[] hash);
 
   /**
-   * Sets the hash's salt
+   * Sets the hash's salt.
+   *
+   * @param salt A table of bytes
    */
   void setSalt(final byte[] salt);
 
   /**
-   * Sets the id of the algorithm used to hash the string
+   * Sets the id of the algorithm used to hash the string.
    *
    * @param version the algorithm id
    */
