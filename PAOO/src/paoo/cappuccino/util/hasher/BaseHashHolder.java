@@ -1,7 +1,7 @@
 package paoo.cappuccino.util.hasher;
 
 /**
- * Base hash holder class containing methods shared by every other hash holder
+ * Base hash holder class containing methods shared by every other hash holder.
  *
  * @author Guylian Cox
  */

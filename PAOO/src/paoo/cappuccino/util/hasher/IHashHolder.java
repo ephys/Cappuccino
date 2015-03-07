@@ -2,6 +2,8 @@ package paoo.cappuccino.util.hasher;
 
 /**
  * Interface containing business methods for an hash holder.
+ *
+ * @author Guylian Cox
  */
 public interface IHashHolder extends IHashHolderDto {
 

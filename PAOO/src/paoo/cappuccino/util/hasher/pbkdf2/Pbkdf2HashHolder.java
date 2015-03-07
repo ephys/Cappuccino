@@ -4,7 +4,7 @@ import paoo.cappuccino.util.hasher.BaseHashHolder;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
 
 /**
- * Holder class for pbkdf2 hashes
+ * Holder class for pbkdf2 hashes.
  *
  * @author Guylian Cox
  */

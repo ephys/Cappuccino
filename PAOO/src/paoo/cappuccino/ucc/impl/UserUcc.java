@@ -13,6 +13,8 @@ import paoo.cappuccino.util.hasher.IHashHolderDto;
 import paoo.cappuccino.util.hasher.IStringHasher;
 
 /**
+ * Legit implementation of the User use case controller.
+ *
  * @author Guylian Cox
  */
 class UserUcc implements IUserUcc {

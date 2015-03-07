@@ -1,7 +1,7 @@
 package paoo.cappuccino.util;
 
 /**
- * Utility methods for parameter validation
+ * Utility methods for parameter validation.
  *
  * @author Guylian Cox
  */

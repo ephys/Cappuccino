@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used by the dependency injector to mark a dependency as being a singleton
+ * Annotation used by the dependency injector to mark a dependency as being a singleton.
  *
  * @author Guylian Cox
  */
@@ -15,11 +15,11 @@ import java.lang.annotation.Target;
 public @interface Singleton {
 
   /**
-   * Redirects the dependency injector to a given dependency. An implementation of that
-   * dependency is going to be returned instead.
+   * <p>Redirects the dependency injector to a given dependency. An implementation of that
+   * dependency is going to be returned instead.</p>
    *
-   * Used for when a singleton implements multiple interfaces that are not linked to each other
-   * but need to share the same implementation.
+   * <p>Used for when a singleton implements multiple interfaces that are not linked to each other
+   * but need to share the same implementation.</p>
    */
   Class<?> redirectTo() default void.class;
 }

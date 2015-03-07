@@ -14,7 +14,9 @@ import java.util.logging.Logger;
  * @author Guylian Cox
  */
 class CrashWriter implements CrashListener {
-  private static final DateTimeFormatter FILENAME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+
+  private static final DateTimeFormatter FILENAME_FORMATTER =
+      DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
   private static final File REPORTS_FOLDER = new File("crash-reports");
 
   private final AppContext appContext;
@@ -75,7 +77,7 @@ class CrashWriter implements CrashListener {
       logger.severe("The details have been saved to " + reportFile);
     } else {
       logger.severe("The details could not be saved, the crash-reports folder "
-          + REPORTS_FOLDER.getAbsolutePath() + " cannot be created");
+                    + REPORTS_FOLDER.getAbsolutePath() + " cannot be created");
       crashSource.printStackTrace();
     }
   }

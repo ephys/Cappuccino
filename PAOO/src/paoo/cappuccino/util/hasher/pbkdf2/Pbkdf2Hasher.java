@@ -13,7 +13,7 @@ import paoo.cappuccino.util.hasher.IHashHolder;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
 
 /**
- * Hash algorithm based on PBKDF2
+ * Hash algorithm based on PBKDF2.
  *
  * @author Guylian Cox
  */

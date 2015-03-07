@@ -3,19 +3,22 @@ package paoo.cappuccino.util.hasher;
 import paoo.cappuccino.core.injector.Singleton;
 
 /**
- * This handles string hashing. It enables the developer to write multiple hashing
- * algorithms, in case the older ones are not secure enough, without changing anything else in the
- * application and being backwards-compatible with hashes created using previous algorithms
+ * This handles string hashing. It enables the developer to write multiple hashing algorithms, in
+ * case the older ones are not secure enough, without changing anything else in the application and
+ * being backwards-compatible with hashes created using previous algorithms
+ * 
+ * @author Guylian Cox
  */
 @Singleton
 public interface IStringHasher {
+
   /**
-   * Registers an hash algorithm, the latest registered algorithm will be used to hash new strings
-   * while strings already hashed will be checked using the algorithm used to hash them. The order
-   * in which the algorithms are registered is important and newer algorithms should always be added
-   * after every other.
+   * <p>Registers an hash algorithm, the latest registered algorithm will be used to hash new
+   * strings while strings already hashed will be checked using the algorithm used to hash them. The
+   * order in which the algorithms are registered is important and newer algorithms should always be
+   * added after every other.</p>
    *
-   * An algorithm should never be removed, instead remove its implementation.
+   * <p>An algorithm should never be removed, instead remove its implementation.</p>
    *
    * @param algorithm An algorithm used to hash strings.
    */
@@ -25,9 +28,9 @@ public interface IStringHasher {
    * Checks a given set of byte is the hash of a given string.
    *
    * @param toHash          The string to compare to the hash.
-   * @param currentHashData The hash to match. Its data follows the pattern "hash:algorithm_id:salt:algorithm_data".
-   *                        Obtained via {@link paoo.cappuccino.util.hasher.StringHasher#hash(String)
-   *                        hash()}
+   * @param currentHashData The hash to match. Its data follows the pattern
+   *                        "hash:algorithm_id:salt:algorithm_data". Obtained via
+   *                        {@link paoo.cappuccino.util.hasher.StringHasher#hash(String)}
    * @return true: the given hash is the given string's hash
    */
   public boolean matchHash(final String toHash, final IHashHolderDto currentHashData);
@@ -36,8 +39,7 @@ public interface IStringHasher {
    * Checks if a hash is using the latest algorithm.
    *
    * @param hash The hash to check.
-   * @return A new hash holder if it did rehash or null if the hash is already using the latest
-   * algorithm
+   * @return true: the hash is using the latest algorithm.
    */
   public boolean isHashOutdated(final IHashHolderDto hash);
 

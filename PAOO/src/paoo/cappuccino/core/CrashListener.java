@@ -1,8 +1,8 @@
 package paoo.cappuccino.core;
 
 /**
- * <p>Listener interface for a crash event. That event will be dispatched when the application is about
- * to close because an exception was not caught.</p>
+ * <p>Listener interface for a crash event. That event will be dispatched when the application is
+ * about to close because an exception was not caught.</p>
  *
  * <p>Register a crash listener using {@link AppContext#addCrashListener(CrashListener)}.</p>
  *

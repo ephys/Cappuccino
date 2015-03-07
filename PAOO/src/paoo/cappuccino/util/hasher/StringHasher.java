@@ -6,6 +6,8 @@ import paoo.cappuccino.util.StringUtils;
 
 /**
  * Simple implementation of the {@link paoo.cappuccino.util.hasher.IStringHasher}
+ *
+ * @author Guylian Cox
  */
 public class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash Layer
 

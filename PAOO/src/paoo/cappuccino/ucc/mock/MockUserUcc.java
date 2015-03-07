@@ -9,7 +9,7 @@ import paoo.cappuccino.ucc.IUserUcc;
 import paoo.cappuccino.util.hasher.IStringHasher;
 
 /**
- * Mock implementation of the User use case controller
+ * Mock implementation of the User use case controller.
  *
  * @author Guylian Cox
  */

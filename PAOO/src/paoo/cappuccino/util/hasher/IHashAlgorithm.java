@@ -1,7 +1,7 @@
 package paoo.cappuccino.util.hasher;
 
 /**
- * Interface used to implement new hash algorithms for a StringHasher
+ * Interface used to implement new hash algorithms for a StringHasher.
  *
  * @author Guylian Cox
  */

@@ -1,7 +1,7 @@
 package paoo.cappuccino.util.exception;
 
 /**
- * Base exception for problems occurring in one of the application layers
+ * Base exception for problems occurring in one of the application layers.
  *
  * @author Guylian Cox
  */
