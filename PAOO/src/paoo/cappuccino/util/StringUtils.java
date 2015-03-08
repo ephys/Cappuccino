@@ -1,5 +1,7 @@
 package paoo.cappuccino.util;
 
+import java.util.Random;
+
 /**
  * Utility methods callable for strings.
  *
@@ -11,6 +13,8 @@ public class StringUtils {
   //    "^(([0-9]{4})[ -_/.]((([0-9]{2}){3})|([0-9]{3}[ -_/.]?[0-9]{3})|([0-9][0-9][ -_/.]?[0-9][0-9][ -_/.]?[0-9][0-9])))||([0-9]{10})$";
   private static final String EMAIL_REGEX =
       "^([a-zA-Z0-9][+a-zA-Z0-9_.-]*)+@([a-zA-Z0-9][a-zA-Z0-9_.-]*)+\\.[a-zA-Z]{2,3}$";
+
+  private static final Random random = new Random();
 
   /**
    * Verifies a string is following a valid email format.
@@ -71,5 +75,17 @@ public class StringUtils {
     }
 
     return str.toString();
+  }
+
+  /**
+   * Replaces the contents of a char array by random characters. Avoids the release of sensitive
+   * data via memory dumps.
+   *
+   * @param str the data to clear.
+   */
+  public static void clearString(char[] str) {
+    for (int i = 0; i < str.length; i++) {
+      str[i] = (char) random.nextInt();
+    }
   }
 }

@@ -19,7 +19,7 @@ class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash
   }
 
   @Override
-  public boolean matchHash(final String toHash, final IHashHolderDto currentHashData) {
+  public boolean matchHash(final char[] toHash, final IHashHolderDto currentHashData) {
     byte[] newHash = hash(toHash, (IHashHolder) currentHashData).getHash();
     byte[] currentHash = currentHashData.getHash();
 
@@ -43,7 +43,7 @@ class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash
   }
 
   @Override
-  public IHashHolderDto hash(final String toHash) {
+  public IHashHolderDto hash(final char[] toHash) {
     if (hashAlgorithms.size() == 0) {
       throw new IllegalStateException("This StringHasher does not have any algorithm implemented. "
                                       + "Use addHashAlgorithm() to add one.");
@@ -53,7 +53,7 @@ class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash
     return hasher.hash(toHash, null);
   }
 
-  private IHashHolderDto hash(final String toHash, final IHashHolder hashData) {
+  private IHashHolderDto hash(final char[] toHash, final IHashHolder hashData) {
     final IHashAlgorithm hasher = hashAlgorithms.get(hashData.getAlgorithmVersion());
 
     return hasher.hash(toHash, hashData);

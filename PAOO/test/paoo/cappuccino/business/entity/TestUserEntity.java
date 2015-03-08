@@ -30,12 +30,12 @@ public class TestUserEntity {
   @Inject
   private IStringHasher hasher;
 
-  private String username;
-  private String password;
-  private String lastName;
-  private String firstName;
-  private String email;
-  private IUserDto.Role role;
+  private String username = "Nicolas";
+  private char[] password = new char[] { 'p', 'o', 'm', 'm', 'e' };
+  private String lastName = "Fischer";
+  private String firstName = "Benoit";
+  private String email = "nicolas@gmail.com";
+  private IUserDto.Role role = IUserDto.Role.USER;
   private IUser user;
 
   @BeforeClass
@@ -46,13 +46,6 @@ public class TestUserEntity {
   @Before
   public void createUser() throws Exception {
     injector.populate(this);
-
-    this.username = "Nicolas";
-    this.password = "pomme";
-    this.lastName = "Fischer";
-    this.firstName = "Benoit";
-    this.email = "nicolas@gmail.com";
-    this.role = IUserDto.Role.USER;
 
     user = entityFactory.createUser(username, hasher.hash(password), lastName, firstName, email,
                                     role);
@@ -86,7 +79,7 @@ public class TestUserEntity {
   @Test
   public void testPassword() {
     assertTrue(hasher.matchHash(password, user.getPassword()));
-    assertFalse(hasher.matchHash("pomme de pain au chocococolat", user.getPassword()));
+    assertFalse(hasher.matchHash(new char[] {'p', 'a', 'i', 'n'}, user.getPassword()));
   }
 
   @Test

@@ -6,7 +6,7 @@ import paoo.cappuccino.core.injector.Singleton;
  * This handles string hashing. It enables the developer to write multiple hashing algorithms, in
  * case the older ones are not secure enough, without changing anything else in the application and
  * being backwards-compatible with hashes created using previous algorithms
- * 
+ *
  * @author Guylian Cox
  */
 @Singleton
@@ -33,7 +33,7 @@ public interface IStringHasher {
    *                        {@link paoo.cappuccino.util.hasher.StringHasher#hash(String)}
    * @return true: the given hash is the given string's hash
    */
-  public boolean matchHash(final String toHash, final IHashHolderDto currentHashData);
+  public boolean matchHash(final char[] toHash, final IHashHolderDto currentHashData);
 
   /**
    * Checks if a hash is using the latest algorithm.
@@ -49,7 +49,7 @@ public interface IStringHasher {
    * @param toHash The string to hash.
    * @return The hash encoded as a string.
    */
-  public IHashHolderDto hash(final String toHash);
+  public IHashHolderDto hash(final char[] toHash);
 
   /**
    * Translates an hash holder into a string representation of it, for persistence. Use {@link

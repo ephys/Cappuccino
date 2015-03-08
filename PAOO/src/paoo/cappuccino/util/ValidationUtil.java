@@ -28,10 +28,10 @@ public class ValidationUtil {
    * @param parameterName The name of the variable / parameter checked.
    * @throws java.lang.IllegalArgumentException The password does not match the requirements
    */
-  public static void validatePassword(String password, String parameterName) {
+  public static void validatePassword(char[] password, String parameterName) {
     ensureNotNull(password, parameterName);
 
-    if (password.length() < 6) {
+    if (password.length < 6) {
       throw new IllegalArgumentException(
           "Invalid parameter '" + parameterName + "', must be at least 6 characters long");
     }
@@ -48,6 +48,22 @@ public class ValidationUtil {
     ensureNotNull(str, parameterName);
 
     if (StringUtils.isEmpty(str)) {
+      throw new IllegalArgumentException(
+          "Invalid parameter '" + parameterName + "', must not be empty");
+    }
+  }
+
+  /**
+   * Ensure the given char table is not empty.
+   *
+   * @param str           The string to check
+   * @param parameterName The name of the variable / parameter checked.
+   * @throws java.lang.IllegalArgumentException The string is considered empty
+   */
+  public static void ensureFilled(char[] str, String parameterName) {
+    ensureNotNull(str, parameterName);
+
+    if (str.length == 0) {
       throw new IllegalArgumentException(
           "Invalid parameter '" + parameterName + "', must not be empty");
     }

@@ -22,7 +22,7 @@ public class TestUserUcc {
   private static DependencyInjector injector;
 
   private String username = "john_";
-  private String password = "chocolat";
+  private char[] password = new char[] { 'c', 'h', 'o', 'c', 'o', 'l', 'a', 't' };
   private String firstName = "John";
   private String lastName = "Egbert";
   private String email = "johnegbert@sn.ms";
@@ -65,12 +65,12 @@ public class TestUserUcc {
 
   @Test(expected = IllegalArgumentException.class)
   public void testRegisterPassword() {
-    userUcc.register(username, "12345", firstName, lastName, email);
+    userUcc.register(username, new char[]{ '1', '2', '3', '4', '5' }, firstName, lastName, email);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testRegisterEmail() {
-    userUcc.register(username, "12345", firstName, lastName, "potatoes");
+    userUcc.register(username, password, firstName, lastName, "potatoes");
   }
 
   @Test()
@@ -127,7 +127,7 @@ public class TestUserUcc {
     }
 
     try {
-      userUcc.register(username, "", firstName, lastName, email);
+      userUcc.register(username, new char[0], firstName, lastName, email);
 
       fail("The password cannot be empty");
     } catch (IllegalArgumentException e) {
@@ -179,7 +179,7 @@ public class TestUserUcc {
   public void testLoginWrongPassword() {
     userUcc.register(username, password, firstName, lastName, email);
 
-    assertNull("Incorrect password, should return null", userUcc.logIn(username, "flufl"));
+    assertNull("Incorrect password, should return null", userUcc.logIn(username, new char[] { 'f', 'l', 'u', 'f', 'l' }));
   }
 
   @Test

@@ -29,7 +29,7 @@ class UserUcc implements IUserUcc {
   private IStringHasher hasher;
 
   @Override
-  public IUserDto register(String username, String password, String firstName, String lastName,
+  public IUserDto register(String username, char[] password, String firstName, String lastName,
                            String email) {
     ValidationUtil.ensureFilled(username, "username");
     username = username.trim();
@@ -59,7 +59,7 @@ class UserUcc implements IUserUcc {
   }
 
   @Override
-  public IUserDto logIn(String username, String password) {
+  public IUserDto logIn(String username, char[] password) {
     ValidationUtil.ensureFilled(username, "username");
     ValidationUtil.ensureFilled(password, "password");
 
@@ -68,7 +68,6 @@ class UserUcc implements IUserUcc {
       return null;
     }
 
-    password = password.trim();
     IHashHolderDto realPassword = user.getPassword();
     if (!hasher.matchHash(password, realPassword)) {
       return null;

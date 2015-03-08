@@ -39,7 +39,7 @@ public final class Pbkdf2Hasher implements IHashAlgorithm {
   }
 
   @Override
-  public IHashHolder hash(final String toHash, final IHashHolderDto hashData) {
+  public IHashHolder hash(final char[] toHash, final IHashHolderDto hashData) {
     Pbkdf2HashHolder newHash;
     if (hashData == null) {
       newHash = new Pbkdf2HashHolder(nbIterations);
@@ -48,9 +48,8 @@ public final class Pbkdf2Hasher implements IHashAlgorithm {
       newHash = new Pbkdf2HashHolder(hashData);
     }
 
-    final char[] chars = toHash.toCharArray();
     final PBEKeySpec spec =
-        new PBEKeySpec(chars, newHash.getSalt(), newHash.getNbIterations(), HASH_SIZE);
+        new PBEKeySpec(toHash, newHash.getSalt(), newHash.getNbIterations(), HASH_SIZE);
 
     try {
       newHash.setHash(hashAlgorithm.generateSecret(spec).getEncoded());

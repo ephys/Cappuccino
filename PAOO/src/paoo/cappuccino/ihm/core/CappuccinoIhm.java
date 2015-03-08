@@ -13,7 +13,7 @@ import paoo.cappuccino.core.injector.Inject;
 class CappuccinoIhm implements IGuiManager {
 
   private final DependencyInjector injector;
-  private IManageableGui currentFrame;
+  private JFrame currentFrame;
 
   @Inject
   public CappuccinoIhm(DependencyInjector injector) {
@@ -22,19 +22,13 @@ class CappuccinoIhm implements IGuiManager {
 
   @Override
   public JFrame openFrame(Class<? extends JFrame> frameClass) {
-    if (!IManageableGui.class.isAssignableFrom(frameClass)) {
-      throw new IllegalArgumentException("The frame class should implement IManageableFrame.");
-    }
-
     if (currentFrame != null) {
-      ((JFrame) currentFrame).setVisible(false);
-      ((JFrame) currentFrame).dispose();
+      (currentFrame).setVisible(false);
+      (currentFrame).dispose();
     }
 
-    currentFrame = (IManageableGui) injector.buildDependency(frameClass);
-    currentFrame.setManager(this);
-    currentFrame.setupGui();
+    currentFrame = injector.buildDependency(frameClass);
 
-    return (JFrame) currentFrame;
+    return currentFrame;
   }
 }

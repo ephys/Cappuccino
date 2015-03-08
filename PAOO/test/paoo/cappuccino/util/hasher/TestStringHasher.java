@@ -30,6 +30,9 @@ public class TestStringHasher {
   @Inject
   private IStringHasher hasher;
 
+  private char[] password = new char[] { 'p', 'o', 'm', 'm', 'e' };
+  private IHashHolderDto hashA;
+
   @BeforeClass
   public static void init() {
     injector = Main.configureApp(new AppContext("HasherTest", "0.0.1", "test"));
@@ -38,43 +41,40 @@ public class TestStringHasher {
   @Before
   public void inject() {
     injector.populate(this);
+
+    hashA = hasher.hash(password);
   }
 
   @Test
   public void testHashSize() {
-    IHashHolderDto hashA = hasher.hash("pomme");
     assertEquals(hashA.getHash().length * 8, Pbkdf2Hasher.HASH_SIZE);
     assertEquals(hashA.getSalt().length, Pbkdf2Hasher.SALT_SIZE);
   }
 
   @Test
   public void testHashes() {
-    IHashHolderDto hashA = hasher.hash("pomme");
-    IHashHolderDto hashB = hasher.hash("pomme");
+    IHashHolderDto hashB = hasher.hash(password);
 
     assertThat(hashA.getHash(), not(equalTo(hashB.getHash())));
   }
 
   @Test
   public void testHashValidation() {
-    IHashHolderDto hashA = hasher.hash("pomme");
-    assertTrue(hasher.matchHash("pomme", hashA));
+    assertTrue(hasher.matchHash(password, hashA));
   }
 
   @Test
   public void testRehashNoChanges() {
-    IHashHolderDto hashA = hasher.hash("pomme");
     assertFalse(hasher.isHashOutdated(hashA));
   }
 
   @Test
   public void testSerialize() {
-    IHashHolderDto preSer = hasher.hash("pomme");
-    String serialization = hasher.serialize(preSer);
+    String serialization = hasher.serialize(hashA);
     IHashHolderDto postSer = hasher.unserialize(serialization);
 
-    assertArrayEquals(preSer.getHash(), postSer.getHash());
-    assertArrayEquals(preSer.getSalt(), postSer.getSalt());
-    assertEquals(preSer.getAlgorithmVersion(), postSer.getAlgorithmVersion());
+    assertArrayEquals(hashA.getHash(), postSer.getHash());
+    assertArrayEquals(hashA.getSalt(), postSer.getSalt());
+    assertEquals(hashA.getAlgorithmVersion(), postSer.getAlgorithmVersion());
   }
 }

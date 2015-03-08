@@ -12,7 +12,7 @@ public interface IHashAlgorithm {
    *
    * @return The hash encoded as a string.
    */
-  public IHashHolder hash(final String toHash, final IHashHolderDto oldHashData);
+  public IHashHolder hash(final char[] toHash, final IHashHolderDto oldHashData);
 
   /**
    * Unserializes the algorithm-specific data and generates a new hash holder contaning that data.

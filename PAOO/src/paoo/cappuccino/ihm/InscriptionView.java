@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import paoo.cappuccino.ihm.utils.ConstantesIHM;
+import paoo.cappuccino.ihm.utils.IhmConstants;
 import paoo.cappuccino.ihm.utils.JPanelPasswordError;
 import paoo.cappuccino.ihm.utils.JPanelTextError;
 
@@ -38,10 +38,10 @@ public class InscriptionView extends JFrame implements ChangeListener {
     this.setSize(450, 600);
     this.setLocationRelativeTo(null);
     JPanel mainPanel = new JPanel(new BorderLayout());
-    mainPanel.setBorder(BorderFactory.createEmptyBorder(ConstantesIHM.LGap, ConstantesIHM.MGap, 0,
-        ConstantesIHM.MGap));
+    mainPanel.setBorder(BorderFactory.createEmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0,
+        IhmConstants.M_GAP));
 
-    JPanel fields = new JPanel(new GridLayout(2, 0, 0, ConstantesIHM.MGap));
+    JPanel fields = new JPanel(new GridLayout(2, 0, 0, IhmConstants.M_GAP));
 
     username = new JPanelTextError("Nom d'utilisateur");
     fields.add(username);
@@ -65,7 +65,7 @@ public class InscriptionView extends JFrame implements ChangeListener {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
    */
   @Override

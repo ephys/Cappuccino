@@ -21,15 +21,15 @@ class MockUserUcc implements IUserUcc {
   private IStringHasher hasher;
 
   @Override
-  public IUserDto register(String username, String password, String firstName, String lastName,
+  public IUserDto register(String username, char[] password, String firstName, String lastName,
                            String email) {
     return factory.createUser(1, 1, username, hasher.hash(password), lastName, firstName, email,
                               IUserDto.Role.USER, LocalDateTime.now());
   }
 
   @Override
-  public IUserDto logIn(String username, String password) {
-    if (!username.equalsIgnoreCase("rose") || !password.equals("doomsday")) {
+  public IUserDto logIn(String username, char[] password) {
+    if (!username.equalsIgnoreCase("rose") || password.length != 8) {
       return null;
     }
 
