@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.utils;
+package paoo.cappuccino.ihm.util;
 
 /**
  * Constants specifics to the ihm.

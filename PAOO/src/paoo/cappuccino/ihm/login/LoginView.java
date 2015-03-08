@@ -7,7 +7,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import paoo.cappuccino.ihm.util.ErrorableTextField;
-import paoo.cappuccino.ihm.utils.IhmConstants;
+import paoo.cappuccino.ihm.util.IhmConstants;
 
 public class LoginView extends JPanel implements ChangeListener {
 

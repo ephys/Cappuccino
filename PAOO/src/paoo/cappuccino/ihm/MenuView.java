@@ -13,7 +13,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import paoo.cappuccino.business.dto.IUserDto;
-import paoo.cappuccino.ihm.utils.JLabelFont;
+import paoo.cappuccino.ihm.util.JLabelFont;
 
 /**
  * View of the menu ihm

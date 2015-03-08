@@ -4,7 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import paoo.cappuccino.ihm.utils.MenuState;
+import paoo.cappuccino.ihm.util.MenuState;
 
 /**
  * The Controller for the menu ( all the button to the left )

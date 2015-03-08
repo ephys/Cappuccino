@@ -6,7 +6,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import paoo.cappuccino.business.dto.IUserDto;
-import paoo.cappuccino.ihm.utils.MenuState;
+import paoo.cappuccino.ihm.util.MenuState;
 
 /**
  * Modele for the main application

@@ -9,9 +9,9 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import paoo.cappuccino.ihm.utils.IhmConstants;
-import paoo.cappuccino.ihm.utils.JPanelPasswordError;
-import paoo.cappuccino.ihm.utils.JPanelTextError;
+import paoo.cappuccino.ihm.util.IhmConstants;
+import paoo.cappuccino.ihm.util.JPanelPasswordError;
+import paoo.cappuccino.ihm.util.JPanelTextError;
 
 /**
  * View for the inscription ihm

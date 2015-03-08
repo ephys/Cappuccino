@@ -3,7 +3,7 @@ package paoo.cappuccino.ihm.login;
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.ihm.util.BaseModel;
-import paoo.cappuccino.ihm.utils.IhmConstants;
+import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ucc.IUserUcc;
 import paoo.cappuccino.util.StringUtils;
 
@@ -25,7 +25,6 @@ public class LoginModel extends BaseModel {
     boolean isValid = true;
     if (StringUtils.isEmpty(username)) {
       usernameError = IhmConstants.ERROR_FIELD_EMPTY;
-
       isValid = false;
     }
 
@@ -43,7 +42,7 @@ public class LoginModel extends BaseModel {
     IUserDto user = userUcc.logIn(username, password);
 
     if (user == null) {
-      formError = "Mot de passe ou login incorrect.";
+      formError = IhmConstants.ERROR_WRONG_LOGIN;
     } else {
       // avoid password release in case of memory dump.
       StringUtils.clearString(password);

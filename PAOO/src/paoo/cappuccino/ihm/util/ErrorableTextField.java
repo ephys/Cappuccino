@@ -7,9 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import paoo.cappuccino.ihm.utils.IhmConstants;
-import paoo.cappuccino.ihm.utils.JLabelFont;
-
 /**
  * Input panel contaning a label, input field and error.
  *
