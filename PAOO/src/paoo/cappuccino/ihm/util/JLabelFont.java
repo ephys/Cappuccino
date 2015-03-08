@@ -1,8 +1,9 @@
 package paoo.cappuccino.ihm.util;
 
-import java.awt.*;
+import java.awt.Font;
 
-import javax.swing.*;
+import javax.swing.JLabel;
+
 
 /**
  * Specialiation of a JLabel with a different Font
@@ -13,7 +14,7 @@ import javax.swing.*;
 public class JLabelFont extends JLabel {
 
   private static final long serialVersionUID = 5620229542204605508L;
-  private final String font = "Arial";
+  private String font = "Arial";
 
   /**
    * Constructor JLabelFont

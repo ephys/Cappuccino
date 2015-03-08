@@ -7,10 +7,13 @@ package paoo.cappuccino.ihm.util;
  *
  */
 public enum MenuState {
-  ACCUEIL(1, "Accueil"), RECH_PARTICIPATION(2, "Recherche - Participation"), RECH_PERS_CONTACT(3,
-      "Recherche - Personne de contact"), RECH_ENTREPRISE(4, "Recherche - Entreprise"), SELEC_ENTREPRISES(
-      5, "Sélèctionner des entreprises"), CREER_JOURNEE(6, "Créer une journée des entreprises"), CREER_ENTREPRISE(
-      7, "créer une entreprise"), CREER_PERS_CONTACT(7, "Créer une personne de contact");
+  ACCUEIL(1, "Accueil"), RECH_PARTICIPATION(2, "Recherche - Participation"), RECH_PERS_CONTACT(
+      3, "Recherche - Personne de contact"), RECH_ENTREPRISE(4,
+      "Recherche - Entreprise"), SELEC_ENTREPRISES(5,
+      "Sélèctionner des entreprises"), CREER_JOURNEE(6,
+      "Créer une journée des entreprises"), CREER_ENTREPRISE(7,
+      "créer une entreprise"), CREER_PERS_CONTACT(7,
+      "Créer une personne de contact");
 
   private Integer state;
   private String titre;
@@ -30,9 +33,18 @@ public enum MenuState {
   /**
    * Get title linked to a state
    *
-   * @return String title
+   * @return title
    */
   public String getTitre() {
     return titre;
+  }
+
+  /**
+   * get state
+   *
+   * @return state
+   */
+  public int getState() {
+    return this.state;
   }
 }
