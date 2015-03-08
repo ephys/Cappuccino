@@ -1,5 +1,6 @@
 package paoo.cappuccino.ihm.login;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 
 import javax.swing.*;
@@ -8,6 +9,7 @@ import javax.swing.event.ChangeListener;
 
 import paoo.cappuccino.ihm.util.ErrorableTextField;
 import paoo.cappuccino.ihm.util.IhmConstants;
+import paoo.cappuccino.ihm.util.JLabelFont;
 
 public class LoginView extends JPanel implements ChangeListener {
 
@@ -15,9 +17,10 @@ public class LoginView extends JPanel implements ChangeListener {
 
   private ErrorableTextField usernamePanel;
   private ErrorableTextField passwordPanel;
+  private JLabel error;
 
   public LoginView(LoginModel model, JTextField usernameField, JPasswordField passwordField) {
-    super(new GridLayout(2, 1, 0, IhmConstants.M_GAP));
+    super(new GridLayout(3, 1, 0, IhmConstants.M_GAP));
 
     this.model = model;
 
@@ -27,6 +30,10 @@ public class LoginView extends JPanel implements ChangeListener {
     this.passwordPanel = new ErrorableTextField(passwordField, "Mot de passe");
     this.add(this.passwordPanel);
 
+    this.error = new JLabelFont(null, 12);
+    this.error.setForeground(Color.RED);
+    this.add(error);
+
     model.addChangeListener(this);
     stateChanged(null);
   }
@@ -35,5 +42,6 @@ public class LoginView extends JPanel implements ChangeListener {
   public void stateChanged(ChangeEvent event) {
     usernamePanel.setError(model.getUsernameError());
     passwordPanel.setError(model.getPasswordError());
+    error.setText(model.getFormError());
   }
 }
