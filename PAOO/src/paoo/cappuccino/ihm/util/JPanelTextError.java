@@ -1,8 +1,13 @@
 package paoo.cappuccino.ihm.util;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.GridLayout;
 
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+
 
 /**
  * Description + input + (error)
@@ -20,8 +25,8 @@ public class JPanelTextError extends JPanel {
   /**
    * Constructor
    *
-   * @param String the textarea's template
-   * @param String description textarea
+   * @param exemple the textarea's template
+   * @param description description textarea
    */
   public JPanelTextError(String description, String exemple) {
     this.setLayout(new GridLayout(2, 0, IhmConstants.M_GAP, 0));
@@ -56,7 +61,7 @@ public class JPanelTextError extends JPanel {
   /**
    * SetError
    *
-   * @param String new error
+   * @param error new error
    */
   public void setError(String error) {
     this.error.setText(error);

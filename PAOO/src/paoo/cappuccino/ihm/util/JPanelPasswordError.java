@@ -1,8 +1,12 @@
 package paoo.cappuccino.ihm.util;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.GridLayout;
 
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+
 
 /**
  * description of a JPasswordField and this linked error
@@ -20,8 +24,8 @@ public class JPanelPasswordError extends JPanel {
   /**
    * Constructor
    *
-   * @param String the textarea's template
-   * @param String description textarea
+   * @param description of the text area
+   * @param exemple the textarea's template
    */
   public JPanelPasswordError(String description, String exemple) {
     this.setLayout(new GridLayout(2, 0, IhmConstants.M_GAP, 0));
@@ -39,7 +43,7 @@ public class JPanelPasswordError extends JPanel {
   /**
    * Constructor only with label
    *
-   * @param label description textarea
+   * @param label description of the textarea
    */
   public JPanelPasswordError(String label) {
     this(label, "");
@@ -57,7 +61,7 @@ public class JPanelPasswordError extends JPanel {
   /**
    * SetError
    *
-   * @param String new error
+   * @param error new error
    */
   public void setError(String error) {
     this.error.setText(error);
