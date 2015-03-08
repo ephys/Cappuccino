@@ -31,7 +31,6 @@ public class LoginViewController extends JPanel {
 
     JButton registerButton = new JButton("S'inscrire");
     registerButton.addActionListener(e -> {
-      JOptionPane.showMessageDialog(this, "Not yet implemented");
       throw new UnsupportedOperationException("Not yet implemented.");
       // guiManager.openFrame(null);
       });
@@ -39,8 +38,6 @@ public class LoginViewController extends JPanel {
     JButton loginButton = new JButton("Se connecter");
     loginButton.addActionListener(e -> {
       if (model.attemptLogin(usernameField.getText(), passwordField.getPassword())) {
-        JOptionPane.showMessageDialog(this, "Login success but the following "
-            + "is not yet implemented");
         throw new UnsupportedOperationException("Login success but the following "
             + "is not yet implemented");
         // guiManager.openFrame();
