@@ -69,17 +69,12 @@ public class AppContext {
    * Parses the profile name and extrapolates the profile type from it.
    */
   private void fetchProfile() {
-    switch (profile) {
-      case "prod":
-        profileType = Profile.PROD;
-        break;
-      case "dev":
-        profileType = Profile.DEV;
-        break;
-      case "test":
-      default:
-        profileType = Profile.TEST;
-        break;
+    if (profile.startsWith("prod")) {
+      profileType = Profile.PROD;
+    } else if (profile.startsWith("dev")) {
+      profileType = Profile.DEV;
+    } else {
+      profileType = Profile.TEST;
     }
   }
 
@@ -88,12 +83,12 @@ public class AppContext {
    */
   private void initGlobalCatcher() {
     Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
-        for (CrashListener listener : crashListeners) {
-          listener.onCrash(exception);
-        }
+      for (CrashListener listener : crashListeners) {
+        listener.onCrash(exception);
+      }
 
-        exception.printStackTrace();
-      });
+      exception.printStackTrace();
+    });
   }
 
   /**
