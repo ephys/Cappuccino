@@ -12,8 +12,6 @@ public interface IUserDao {
    *
    * @param user The user to insert.
    * @return The user entity with its informations updated from the database.
-   * @throws paoo.cappuccino.dal.exception.NonUniqueEntityException The entity already exists in the
-   *                                                                database.
    * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException  The username is not unique.
    * @throws java.lang.IllegalArgumentException                     One of the fields failed to
    *                                                                insert due to constraint

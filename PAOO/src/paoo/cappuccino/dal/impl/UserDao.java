@@ -3,6 +3,8 @@ package paoo.cappuccino.dal.impl;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ConcurrentModificationException;
 
 import paoo.cappuccino.business.dto.IUserDto;
@@ -13,10 +15,12 @@ import paoo.cappuccino.dal.IDalBackend;
 import paoo.cappuccino.dal.dao.IUserDao;
 import paoo.cappuccino.dal.exception.ConnectionException;
 import paoo.cappuccino.dal.exception.NonUniqueFieldException;
+import paoo.cappuccino.util.ValidationUtil;
+import paoo.cappuccino.util.hasher.IHashHolderDto;
 import paoo.cappuccino.util.hasher.IStringHasher;
 
 /**
- * Implements de IUserDao
+ * IUserDao implementation.
  *
  * @author Kevin Bavay
  */
@@ -25,56 +29,87 @@ class UserDao implements IUserDao {
   @Inject
   private IEntityFactory entityFactory;
   @Inject
-  private IDalBackend iDalBackend;
+  private IDalBackend dalBackend;
   @Inject
   private IStringHasher hasher;
 
+  private IUser makeUserFromSet(ResultSet set) throws SQLException {
+    int id = set.getInt(1);
+    IUserDto.Role role = IUserDto.Role.valueOf(set.getString(2));
+    IHashHolderDto password = hasher.unserialize(set.getString(3));
+    String email = set.getString(4);
+    String username = set.getString(5);
+    String firstName = set.getString(6);
+    String lastName = set.getString(7);
+    LocalDateTime registerDate = Timestamp.valueOf(set.getString(8)).toLocalDateTime();
+    int version = set.getInt(9);
+
+    return entityFactory.createUser(id, version, username, password, lastName,
+                                    firstName, email, role, registerDate);
+  }
+
+  private void rethrowSqlException(SQLException exception)
+      throws IllegalArgumentException, ConnectionException, NonUniqueFieldException {
+    if (exception.getMessage().contains("users_username_key")) {
+      throw new NonUniqueFieldException("The user's username already exists.");
+    }
+
+    if (exception.getMessage().contains("violates")) {
+      throw new IllegalArgumentException(
+          "One of the fields failed to insert due to constraint violations.");
+    }
+
+    throw new ConnectionException("Database error", exception);
+  }
+
   @Override
   public IUser createUser(IUserDto user) {
+    ValidationUtil.ensureNotNull(user, "user");
+
     String query =
-        "INSERT INTO businessDays.users VALUES ( DEFAULT," + user.getRole().toString() + ","
-            + hasher.serialize(user.getPassword()) + "," + user.getEmail() + ","
-            + user.getUsername() + "," + user.getFirstName() + "," + user.getLastName()
-            + ",DEFAULT, DEFAULT);";
-    PreparedStatement ps;
-    try {
-      ps = iDalBackend.fetchPrepardedStatement(query);
-      ps.execute();
-      ps.close();
+        "INSERT INTO business_days.users(user_id, role, password, email, username,"
+        + " first_name, last_name, register_date, version) "
+        + "VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, DEFAULT, DEFAULT) "
+        + "RETURNING (user_id, role, password, email, username,"
+        + " first_name, last_name, register_date, version)";
+
+    try (PreparedStatement ps = dalBackend.fetchPrepardedStatement(query)) {
+      ps.setString(1, user.getRole().toString());
+      ps.setString(2, hasher.serialize(user.getPassword()));
+      ps.setString(3, user.getEmail());
+      ps.setString(4, user.getUsername());
+      ps.setString(5, user.getFirstName());
+      ps.setString(6, user.getLastName());
+
+      try (ResultSet set = ps.executeQuery()) {
+        set.next();
+
+        return makeUserFromSet(set);
+      }
     } catch (SQLException e) {
-      if (e.getMessage().contains("users_username_key")) {
-        throw new NonUniqueFieldException("Le username existe déjà");
-      }
-      if (e.getMessage().contains("violates")) {
-        throw new IllegalArgumentException(
-            "One of the fields failed to insert due to constraint violations.");
-      }
+      rethrowSqlException(e);
     }
-    return fetchUserByUsername(user.getUsername());
+
+    return null;
   }
 
   @Override
   public IUser fetchUserByUsername(String username) {
-    String query = "SELECT * FROM businessDays.users WHERE username LIKE '" + username + "'";
-    PreparedStatement ps;
-    ResultSet rs;
-    try {
-      ps = iDalBackend.fetchPrepardedStatement(query);
-      rs = ps.executeQuery();
+    ValidationUtil.ensureFilled(username, "username");
 
-      if (rs.next()) {
-        java.sql.Timestamp register_date =
-            java.sql.Timestamp.valueOf(rs.getString("register_date"));
-        return entityFactory.createUser(rs.getInt("users_id"), rs.getInt("version"),
-            rs.getString("username"), hasher.unserialize(rs.getString("password")),
-            rs.getString("last_name"), rs.getString("first_name"), rs.getString("email"),
-            IUserDto.Role.valueOf(rs.getString("role")), register_date.toLocalDateTime());
-        // TODO fermer les ps et rs
-      } else {
-        throw new ConnectionException("No user return");
+    String query = "SELECT user_id, role, password, email, username, first_name, last_name, "
+                   + "register_date, version FROM business_days.users WHERE username = ?";
+
+    try (PreparedStatement ps = dalBackend.fetchPrepardedStatement(query)) {
+      ps.setString(1, username);
+
+      try (ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) {
+          return makeUserFromSet(rs);
+        }
+
+        return null;
       }
-    } catch (ConnectionException e) {
-      throw new ConnectionException("Could not update the user", e);
     } catch (SQLException e) {
       throw new ConnectionException("Database error", e);
     }
@@ -82,37 +117,32 @@ class UserDao implements IUserDao {
 
   @Override
   public void updateUser(IUser user) {
-    // param check
-    if (user == null) {
-      throw new IllegalArgumentException("The parametre can't be null");
-    }
-    try {
-      PreparedStatement ps;
-      ResultSet rs;
+    ValidationUtil.ensureNotNull(user, "user");
 
-      // version check
-      ps =
-          iDalBackend
-              .fetchPrepardedStatement("SELECT version FROM businessdays.users WHERE users_id LIKE '"
-                  + user.getId() + "'");
-      rs = ps.executeQuery();
-      if (rs.next() && rs.getInt("version") != user.getVersion()) {
-        throw new ConcurrentModificationException("La version ne correspond pas");
+    String query =
+        "UPDATE business_days.users SET password = ?, email = ?, first_name = ?, last_name = ?,"
+        + " version = version + 1"
+        + "WHERE user_id = ? AND version = ?";
+
+    try (PreparedStatement ps = dalBackend.fetchPrepardedStatement(query)) {
+      ps.setString(1, hasher.serialize(user.getPassword()));
+      ps.setString(2, user.getEmail());
+      ps.setString(3, user.getFirstName());
+      ps.setString(4, user.getLastName());
+      ps.setInt(5, user.getId());
+      ps.setInt(6, user.getVersion());
+
+      int affectedRows = ps.executeUpdate();
+      if (affectedRows == 0) {
+        throw new ConcurrentModificationException(
+            "The user with id " + user.getId() + " and version " + user.getVersion()
+            + " was not found in the database. "
+            + "Either it was deleted or modified by another thread.");
       }
 
-      String query =
-          "UPDATE businessDays.users SET username, password, email, first_name, last_name = ("
-              + user.getUsername() + "," + hasher.serialize(user.getPassword()) + ","
-              + user.getEmail() + "," + user.getFirstName() + "," + user.getLastName()
-              + " )  WHERE users_id LIKE '" + user.getId() + "'";
-
-      ps = iDalBackend.fetchPrepardedStatement(query);
-      ps.execute();
-      ps.close();
+      user.incrementVersion();
     } catch (SQLException e) {
-      if (e.getMessage().contains("duplicate key value violates")) {
-        throw new NonUniqueFieldException("Le username existe déjà");
-      }
+      rethrowSqlException(e);
     }
   }
 }
