@@ -14,44 +14,38 @@ import javax.swing.JTextField;
  */
 public class ErrorableTextField extends JPanel {
 
-	private JLabelFont error;
+  private JLabelFont error;
 
-	/**
-	 * Creates an input panel.
-	 *
-	 * @param field
-	 *            An input field.
-	 * @param label
-	 *            The field's description.
-	 * @param errorMessage
-	 *            The error to display.
-	 */
-	public ErrorableTextField(JTextField field, String label,
-			String errorMessage) {
-		super(new GridLayout(2, 2, IhmConstants.M_GAP, 0));
+  /**
+   * Creates an input panel.
+   *
+   * @param field An input field.
+   * @param label The field's description.
+   * @param errorMessage The error to display.
+   */
+  public ErrorableTextField(JTextField field, String label, String errorMessage) {
+    super(new GridLayout(2, 2, IhmConstants.M_GAP, 0));
 
-		this.error = new JLabelFont(errorMessage, 12);
-		this.error.setForeground(Color.RED);
+    this.error = new JLabelFont(errorMessage, 12);
+    this.error.setForeground(Color.RED);
 
-		this.add(new JLabelFont(label + " : "));
-		this.add(field);
-		this.add(new JLabel());
-		this.add(this.error);
-	}
+    this.add(new JLabelFont(label + " : "));
+    this.add(field);
+    this.add(new JLabel());
+    this.add(this.error);
+  }
 
-	/**
-	 * Creates an input panel without a default error.
-	 *
-	 * @param field
-	 *            An input field.
-	 * @param label
-	 *            The field's description.
-	 */
-	public ErrorableTextField(JTextField field, String label) {
-		this(field, label, null);
-	}
+  /**
+   * Creates an input panel without a default error.
+   *
+   * @param field An input field.
+   * @param label The field's description.
+   */
+  public ErrorableTextField(JTextField field, String label) {
+    this(field, label, null);
+  }
 
-	public void setError(String error) {
-		this.error.setText(error);
-	}
+  public void setError(String error) {
+    this.error.setText(error);
+  }
 }
