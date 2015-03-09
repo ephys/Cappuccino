@@ -6,6 +6,7 @@ package paoo.cappuccino.ihm.util;
  * @author Opsomer Mathias
  */
 public interface IhmConstants {
+
   /**
    * medium gap.
    */

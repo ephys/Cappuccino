@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import paoo.cappuccino.core.AppContext;
-import paoo.cappuccino.core.CrashListener;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.util.exception.FatalException;
@@ -24,7 +23,8 @@ class CappuccinoIhm implements IGuiManager {
     this.injector = injector;
 
     app.addCrashListener(fatalException -> {
-      JOptionPane.showMessageDialog(currentFrame, fatalException.getMessage(), "Une erreur est survenue", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(currentFrame, fatalException.getMessage(),
+                                    "Une erreur est survenue", JOptionPane.ERROR_MESSAGE);
 
       if (fatalException instanceof FatalException) {
         closeFrame();

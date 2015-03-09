@@ -3,7 +3,10 @@ package paoo.cappuccino.ihm.login;
 import java.awt.Color;
 import java.awt.GridLayout;
 
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -11,6 +14,11 @@ import paoo.cappuccino.ihm.util.ErrorableTextField;
 import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JLabelFont;
 
+/**
+ * View for the Login Gui.
+ *
+ * @author Opsomer Mathias
+ */
 public class LoginView extends JPanel implements ChangeListener {
 
   private LoginModel model;
@@ -19,6 +27,13 @@ public class LoginView extends JPanel implements ChangeListener {
   private ErrorableTextField passwordPanel;
   private JLabel error;
 
+  /**
+   * Creates a new login view.
+   *
+   * @param model         The view's model.
+   * @param usernameField A text field for the username input.
+   * @param passwordField A password field for the password input.
+   */
   public LoginView(LoginModel model, JTextField usernameField, JPasswordField passwordField) {
     super(new GridLayout(3, 1, 0, IhmConstants.M_GAP));
 

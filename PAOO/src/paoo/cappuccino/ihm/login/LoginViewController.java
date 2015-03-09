@@ -6,7 +6,6 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -14,12 +13,22 @@ import javax.swing.JTextField;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.util.IhmConstants;
 
+/**
+ * ViewController for the Login Gui.
+ *
+ * @author Opsomer Mathias
+ */
 public class LoginViewController extends JPanel {
 
+  /**
+   * Creates a new ViewController for the Login gui.
+   * @param model The ViewController's model.
+   * @param manager The manager responsible for the containing frame.
+   */
   public LoginViewController(LoginModel model, IGuiManager manager) {
     super(new BorderLayout());
     this.setBorder(BorderFactory.createEmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0,
-        IhmConstants.M_GAP));
+                                                   IhmConstants.M_GAP));
 
     JTextField usernameField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
@@ -33,13 +42,13 @@ public class LoginViewController extends JPanel {
     registerButton.addActionListener(e -> {
       throw new UnsupportedOperationException("Not yet implemented.");
       // guiManager.openFrame(null);
-      });
+    });
 
     JButton loginButton = new JButton("Se connecter");
     loginButton.addActionListener(e -> {
       if (model.attemptLogin(usernameField.getText(), passwordField.getPassword())) {
         throw new UnsupportedOperationException("Login success but the following "
-            + "is not yet implemented");
+                                                + "is not yet implemented");
         // guiManager.openFrame();
       }
     });

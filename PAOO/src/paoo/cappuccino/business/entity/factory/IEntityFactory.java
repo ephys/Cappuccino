@@ -34,7 +34,8 @@ public interface IEntityFactory {
    * @param id           The entity's identifier
    * @param version      The entity version in the database
    * @param username     The entity's username
-   * @param password     The entity's password hash holder, see {@link paoo.cappuccino.util.hasher.StringHasher#unserialize(String)}
+   * @param password     The entity's password hash holder, see
+   *                     {@link paoo.cappuccino.util.hasher.StringHasher#unserialize(String)}
    *                     for details on how to get that object
    * @param lastName     The entity's last name
    * @param firstName    The entity's first name

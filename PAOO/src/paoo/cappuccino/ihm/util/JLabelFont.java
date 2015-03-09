@@ -4,43 +4,41 @@ import java.awt.Font;
 
 import javax.swing.JLabel;
 
-
 /**
- * Specialiation of a JLabel with a different Font
+ * Specialisation of a JLabel with a different Font.
  *
  * @author Opsomer Mathias
- *
  */
 public class JLabelFont extends JLabel {
 
   private static final long serialVersionUID = 5620229542204605508L;
-  private String font = "Arial";
 
   /**
-   * Constructor JLabelFont
+   * Creates a new JLabel using the Arial font.
    *
-   * @param texte the texte to display
-   * @param size the font's size
+   * @param text the text to display.
+   * @param size  the font size.
    */
-  public JLabelFont(String texte, int size) {
-    super(texte);
+  public JLabelFont(String text, int size) {
+    super(text);
+    String font = "Arial";
     Font arial = new Font(font, Font.PLAIN, size);
     this.setFont(arial);
   }
 
   /**
-   * Constructor JLabelFont with Default size = 16
+   * Creates a new JLabel using the Arial font and a font size of 16.
    *
-   * @param texte the texte to display
+   * @param text the text to display
    */
-  public JLabelFont(String texte) {
-    this(texte, 16);
+  public JLabelFont(String text) {
+    this(text, 16);
   }
 
   /**
-   * Constructor JLabelFont with default size = 16 and texte = "";
+   * Creates a new JLabel using the Arial font and text.
    */
   public JLabelFont() {
-    this("", 16);
+    this(null, 16);
   }
 }

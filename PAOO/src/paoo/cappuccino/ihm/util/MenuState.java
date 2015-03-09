@@ -1,10 +1,9 @@
 package paoo.cappuccino.ihm.util;
 
 /**
- * State of the menu ihm
+ * State of the main gui menu.
  *
  * @author Opsomer Mathias
- *
  */
 public enum MenuState {
   ACCUEIL(1, "Accueil"), RECH_PARTICIPATION(2, "Recherche - Participation"), RECH_PERS_CONTACT(
@@ -16,31 +15,31 @@ public enum MenuState {
       "Créer une personne de contact");
 
   private Integer state;
-  private String titre;
+  private String title;
 
   /**
-   * Constructor
-   * 
-   * @param state the state
-   * @param titre the title linked tot this state
+   * Enum constructor.
+   *
+   * @param state the state id.
+   * @param title the state title.
    */
-  private MenuState(Integer state, String titre) {
+  private MenuState(Integer state, String title) {
     this.state = state;
-    this.titre = titre;
+    this.title = title;
   }
 
 
   /**
-   * Get title linked to a state
+   * Gets the title linked to the state.
    *
    * @return title
    */
-  public String getTitre() {
-    return titre;
+  public String getTitle() {
+    return title;
   }
 
   /**
-   * get state
+   * gets state id.
    *
    * @return state
    */

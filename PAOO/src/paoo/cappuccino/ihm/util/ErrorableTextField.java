@@ -13,13 +13,14 @@ import javax.swing.JTextField;
  * @author mopsome
  */
 public class ErrorableTextField extends JPanel {
+
   private JLabelFont error;
 
   /**
    * Creates an input panel.
    *
-   * @param field An input field.
-   * @param label The field's description.
+   * @param field        An input field.
+   * @param label        The field's description.
    * @param errorMessage The error to display.
    */
   public ErrorableTextField(JTextField field, String label, String errorMessage) {
@@ -36,6 +37,7 @@ public class ErrorableTextField extends JPanel {
 
   /**
    * Creates an input panel without a default error.
+   *
    * @param field An input field.
    * @param label The field's description.
    */

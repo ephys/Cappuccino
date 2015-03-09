@@ -7,6 +7,11 @@ import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ucc.IUserUcc;
 import paoo.cappuccino.util.StringUtils;
 
+/**
+ * Model for the Login View/ViewController.
+ *
+ * @author Opsomer Mathias
+ */
 public class LoginModel extends BaseModel {
 
   private final IUserUcc userUcc;
@@ -19,6 +24,13 @@ public class LoginModel extends BaseModel {
     this.userUcc = userUcc;
   }
 
+  /**
+   * Tries to log the user in.
+   *
+   * @param username The user's username.
+   * @param password The user's password.
+   * @return true: the user logged in.
+   */
   public boolean attemptLogin(String username, char[] password) {
     resetErrors();
 
@@ -52,20 +64,32 @@ public class LoginModel extends BaseModel {
     return user != null;
   }
 
+  /**
+   * Clears the form errors.
+   */
   private void resetErrors() {
     passwordError = null;
     usernameError = null;
     formError = null;
   }
 
+  /**
+   * Gets the errors relative to the username input.
+   */
   public String getUsernameError() {
     return usernameError;
   }
 
+  /**
+   * Gets the errors relative to the password input.
+   */
   public String getPasswordError() {
     return passwordError;
   }
 
+  /**
+   * Gets the errors relative to the form as a whole.
+   */
   public String getFormError() {
     return formError;
   }

@@ -13,20 +13,22 @@ import paoo.cappuccino.dal.exception.ConnectionException;
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
+ * Data access layer services for an SQL connection.
+ *
  * @author Bavay Kevin
  */
 class SqlDalService implements IDalService, IDalBackend {
 
-  private final String HOST;
-  private final String USER;
-  private final String PASSWORD;
+  private final String host;
+  private final String user;
+  private final String password;
 
 
   @Inject
   public SqlDalService(IAppConfig config) {
-    HOST = config.getString("db_host");
-    USER = config.getString("db_username");
-    PASSWORD = config.getString("db_password");
+    host = config.getString("db_host");
+    user = config.getString("db_username");
+    password = config.getString("db_password");
 
     try {
       Class.forName(config.getString("jdbc.driver"));
@@ -41,7 +43,7 @@ class SqlDalService implements IDalService, IDalBackend {
     try {
       Connection connection = connections.get();
       if (connection == null || connection.isClosed()) {
-        connection = DriverManager.getConnection(HOST + "?user=" + USER + "&password=" + PASSWORD);
+        connection = DriverManager.getConnection(host + "?user=" + user + "&password=" + password);
 
         connections.set(connection);
         return connection;
