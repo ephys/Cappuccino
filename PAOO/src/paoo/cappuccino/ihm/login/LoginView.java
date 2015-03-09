@@ -19,43 +19,37 @@ import paoo.cappuccino.ihm.util.IhmConstants;
  */
 public class LoginView extends JPanel implements ChangeListener {
 
-	private LoginModel model;
+  private LoginModel model;
 
-	private ErrorableTextField usernamePanel;
-	private ErrorableTextField passwordPanel;
-	private JLabel error;
+  private ErrorableTextField usernamePanel;
+  private ErrorableTextField passwordPanel;
+  private JLabel error;
 
-	/**
-	 * Creates a new login view.
-	 *
-	 * @param model
-	 *            The view's model.
-	 * @param usernameField
-	 *            A text field for the username input.
-	 * @param passwordField
-	 *            A password field for the password input.
-	 */
-	public LoginView(LoginModel model, JTextField usernameField,
-			JPasswordField passwordField) {
-		super(new GridLayout(2, 0, 0, IhmConstants.M_GAP));
+  /**
+   * Creates a new login view.
+   *
+   * @param model The view's model.
+   * @param usernameField A text field for the username input.
+   * @param passwordField A password field for the password input.
+   */
+  public LoginView(LoginModel model, JTextField usernameField, JPasswordField passwordField) {
+    super(new GridLayout(2, 0, 0, IhmConstants.M_GAP));
 
-		this.model = model;
+    this.model = model;
 
-		this.usernamePanel = new ErrorableTextField(usernameField,
-				"Nom d'utilisateur");
-		this.add(this.usernamePanel);
+    this.usernamePanel = new ErrorableTextField(usernameField, "Nom d'utilisateur");
+    this.add(this.usernamePanel);
 
-		this.passwordPanel = new ErrorableTextField(passwordField,
-				"Mot de passe");
-		this.add(this.passwordPanel);
+    this.passwordPanel = new ErrorableTextField(passwordField, "Mot de passe");
+    this.add(this.passwordPanel);
 
-		model.addChangeListener(this);
-		stateChanged(null);
-	}
+    model.addChangeListener(this);
+    stateChanged(null);
+  }
 
-	@Override
-	public void stateChanged(ChangeEvent event) {
-		usernamePanel.setError(model.getUsernameError());
-		passwordPanel.setError(model.getPasswordError());
-	}
+  @Override
+  public void stateChanged(ChangeEvent event) {
+    usernamePanel.setError(model.getUsernameError());
+    passwordPanel.setError(model.getPasswordError());
+  }
 }
