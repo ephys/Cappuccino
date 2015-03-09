@@ -2,7 +2,6 @@ package paoo.cappuccino.ihm.login;
 
 import java.awt.GridLayout;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -23,17 +22,16 @@ public class LoginView extends JPanel implements ChangeListener {
 
   private ErrorableTextField usernamePanel;
   private ErrorableTextField passwordPanel;
-  private JLabel error;
 
   /**
    * Creates a new login view.
    *
-   * @param model The view's model.
+   * @param model         The view's model.
    * @param usernameField A text field for the username input.
    * @param passwordField A password field for the password input.
    */
   public LoginView(LoginModel model, JTextField usernameField, JPasswordField passwordField) {
-    super(new GridLayout(2, 0, 0, IhmConstants.M_GAP));
+    super(new GridLayout(2, 1, 0, IhmConstants.M_GAP));
 
     this.model = model;
 

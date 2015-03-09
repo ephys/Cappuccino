@@ -194,7 +194,7 @@ public class TestUserUcc {
     userUcc.register(username, password, firstName, lastName, email);
 
     try {
-      assertNull("Incorrect username, should return null", userUcc.logIn(null, password));
+      assertNull("Incorrect username, should throw IllegalArgumentException", userUcc.logIn(null, password));
 
       fail("Username null, should throw IllegalArgumentException.");
     } catch(IllegalArgumentException e) {
@@ -202,7 +202,7 @@ public class TestUserUcc {
     }
 
     try {
-      assertNull("Incorrect username, should return null", userUcc.logIn(username, null));
+      assertNull("Incorrect username, should throw IllegalArgumentException", userUcc.logIn(username, null));
 
       fail("Password null, should throw IllegalArgumentException.");
     } catch(IllegalArgumentException e) {
