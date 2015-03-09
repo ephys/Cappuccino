@@ -19,66 +19,69 @@ import paoo.cappuccino.util.hasher.IStringHasher;
  */
 class UserUcc implements IUserUcc {
 
-  @Inject
-  private IEntityFactory entityFactory;
-  @Inject
-  private IDalService dalService;
-  @Inject
-  private IUserDao userDao;
-  @Inject
-  private IStringHasher hasher;
+	@Inject
+	private IEntityFactory entityFactory;
+	@Inject
+	private IDalService dalService;
+	@Inject
+	private IUserDao userDao;
+	@Inject
+	private IStringHasher hasher;
 
-  @Override
-  public IUserDto register(String username, char[] password, String firstName, String lastName,
-                           String email) {
-    ValidationUtil.ensureFilled(username, "username");
-    username = username.trim();
+	@Override
+	public IUserDto register(String username, char[] password,
+			String firstName, String lastName, String email) {
+		ValidationUtil.ensureFilled(username, "username");
+		username = username.trim();
 
-    if (username.matches("^.*\\s.*$")) {
-      throw new IllegalArgumentException("username cannot contain any spaces");
-    }
+		if (username.matches("^.*\\s.*$")) {
+			throw new IllegalArgumentException(
+					"username cannot contain any spaces");
+		}
 
-    ValidationUtil.validatePassword(password, "password");
-    ValidationUtil.ensureFilled(firstName, "firstName");
-    ValidationUtil.ensureFilled(lastName, "lastName");
+		ValidationUtil.validatePassword(password, "password");
+		ValidationUtil.ensureFilled(firstName, "firstName");
+		ValidationUtil.ensureFilled(lastName, "lastName");
 
-    ValidationUtil.ensureNotNull(email, "email");
-    email = email.trim();
-    if (!StringUtils.isEmail(email)) {
-      throw new IllegalArgumentException("Invalid email format");
-    }
+		ValidationUtil.ensureNotNull(email, "email");
+		email = email.trim();
+		if (!StringUtils.isEmail(email)) {
+			throw new IllegalArgumentException("Invalid email format");
+		}
 
-    firstName = firstName.trim();
-    lastName = lastName.trim();
-    IUser registeredUser = entityFactory.createUser(username, hasher.hash(password),
-                                                    lastName, firstName, email, IUserDto.Role.USER);
+		firstName = firstName.trim();
+		lastName = lastName.trim();
+		IUser registeredUser = entityFactory.createUser(username,
+				hasher.hash(password), lastName, firstName, email,
+				IUserDto.Role.USER);
 
-    registeredUser = userDao.createUser(registeredUser);
+		registeredUser = userDao.createUser(registeredUser);
 
-    return registeredUser;
-  }
+		return registeredUser;
+	}
 
-  @Override
-  public IUserDto logIn(String username, char[] password) {
-    ValidationUtil.ensureFilled(username, "username");
-    ValidationUtil.ensureFilled(password, "password");
+	@Override
+	public IUserDto logIn(String username, char[] password) {
+		ValidationUtil.ensureFilled(username, "username");
+		ValidationUtil.ensureFilled(password, "password");
 
-    IUser user = userDao.fetchUserByUsername(username.trim());
-    if (user == null) {
-      return null;
-    }
+		IUser user = userDao.fetchUserByUsername(username.trim());
+		if (user == null) {
+			return null;
+		}
 
-    IHashHolderDto realPassword = user.getPassword();
-    if (!hasher.matchHash(password, realPassword)) {
-      return null;
-    }
+		IHashHolderDto realPassword = user.getPassword();
+		if (!hasher.matchHash(password, realPassword)) {
+			return null;
+		}
 
-    // update the hash algorithm used to store the password if we changed it.
-    if (hasher.isHashOutdated(realPassword)) {
-      user.setPassword(hasher.hash(password));
-      userDao.updateUser(user);
-    }
+		// update the hash algorithm used to store the password if we changed
+		// it.
+		if (hasher.isHashOutdated(realPassword)) {
+			user.setPassword(hasher.hash(password));
+			userDao.updateUser(user);
+		}
 
-    return user;
-  }
+		return user;
+	}
 }
