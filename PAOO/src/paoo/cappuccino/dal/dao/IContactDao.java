@@ -6,12 +6,12 @@ import paoo.cappuccino.core.injector.Singleton;
 public interface IContactDao {
 
   //TODO JavaDoc
-  IContactDto createContact(IContactDto contact);
+  //IContactDto createContact(IContactDto contact);
 
   //TODO JavaDoc
-  IContactDto[] fetchContactsByCompany(int company);
+  //IContactDto[] fetchContactsByCompany(int company);
 
   //TODO JavaDoc
-  IContactDto[] fetchContactByName(String firstName, String lastName);
+  //IContactDto[] fetchContactByName(String firstName, String lastName);
 
 }

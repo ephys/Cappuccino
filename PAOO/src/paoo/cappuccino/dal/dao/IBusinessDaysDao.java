@@ -8,9 +8,9 @@ import paoo.cappuccino.core.injector.Singleton;
 public interface IBusinessDaysDao {
 
   //TODO JavaDoc
-  IBusinessDayDto createBusinessDay(IBusinessDayDto businessDay);
+  //IBusinessDayDto createBusinessDay(IBusinessDayDto businessDay);
 
   //TODO JavaDoc
-  IBusinessDaysDto fetchBusinessDaysByDate(LocalDateTime time);
+  //IBusinessDaysDto fetchBusinessDaysByDate(LocalDateTime time);
 
 }

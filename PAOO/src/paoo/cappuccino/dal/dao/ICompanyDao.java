@@ -8,12 +8,12 @@ import paoo.cappuccino.core.injector.Singleton;
 public interface ICompanyDao {
 
   //TODO JavaDoc
-  ICompanyDto createCompany(ICompanyDto company);
+  //ICompanyDto createCompany(ICompanyDto company);
 
   //TODO JavaDoc
-  IParticipation[] fetchParticipationByDate(LocalDateTime time);
+  //IParticipation[] fetchParticipationByDate(LocalDateTime time);
 
   //TODO JavaDoc
-  ICompanyDto fetchCompanyByName(String name, String postcode, String street, String town);
+  //ICompanyDto fetchCompanyByName(String name, String postcode, String street, String town);
 
 }
