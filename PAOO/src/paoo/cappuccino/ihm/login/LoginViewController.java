@@ -11,6 +11,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.registration.RegistrationFrame;
 import paoo.cappuccino.ihm.util.IhmConstants;
 
 /**
@@ -40,8 +41,7 @@ public class LoginViewController extends JPanel {
 
     JButton registerButton = new JButton("S'inscrire");
     registerButton.addActionListener(e -> {
-      throw new UnsupportedOperationException("Not yet implemented.");
-      // guiManager.openFrame(null);
+      manager.openFrame(RegistrationFrame.class);
     });
 
     JButton loginButton = new JButton("Se connecter");
@@ -59,6 +59,6 @@ public class LoginViewController extends JPanel {
     this.add(controls, BorderLayout.SOUTH);
     // end buttons //
 
-    this.add(new LoginView(model, usernameField, passwordField), BorderLayout.CENTER);
+    this.add(new LoginView(model, usernameField, passwordField));
   }
 }
