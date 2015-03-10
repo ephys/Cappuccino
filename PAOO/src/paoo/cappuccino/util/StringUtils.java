@@ -17,7 +17,17 @@ public class StringUtils {
   private static final Random random = new Random();
 
   /**
-   * Verifies a string is following a valid email format.
+   * Verifies if a string contains only alphabetical letter and if it's not too long.
+   *
+   * @param str The string to check.
+   * @return true if the string contains only letter and if it's not too long, false otherwise.
+   */
+  public static boolean isAlphaString(String str) {
+	    
+	    return str.matches("^[a-zA-Z]{1,20}$");
+	  }
+  /**
+   * Verifies if a string is following a valid email format.
    *
    * @param str The string to check.
    * @return true if the string is an email, false otherwise.
@@ -26,7 +36,7 @@ public class StringUtils {
     // are we allowed to use libraries ? Because we shouldn't handle this ourselves
     return str.matches(EMAIL_REGEX);
   }
-
+  
   /**
    * Checks if a string contains non-space characters.
    *
