@@ -26,4 +26,19 @@ public interface IhmConstants {
    * error wrong login.
    */
   static final String ERROR_WRONG_LOGIN = "Mauvais identifiants ! ";
+  
+  /**
+   * error passwords are not matching.
+   */
+  static final String ERROR_NOT_MATCHING_PASSWORD = "Les mots de passes ne correspondent pas ! ";
+  /**
+   * error invalid email.
+   */
+  static final String ERROR_INVALID_EMAIL = "l'email spécifié est invalide ! ";
+  
+  /**
+   * error invalid input string.
+   */
+  static final String ERROR_INVALID_INPUT_STRING = "Ce champ est invalide !";
+  
 }
