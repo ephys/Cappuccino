@@ -10,6 +10,8 @@ import javax.swing.WindowConstants;
  */
 public abstract class BaseFrame extends JFrame {
 
+  private static final long serialVersionUID = -5882096175427359233L;
+
   /**
    * Creates a new frame.
    *

@@ -14,6 +14,8 @@ import javax.swing.JTextField;
  */
 public class ErrorableTextField extends JPanel {
 
+
+  private static final long serialVersionUID = -4802276683409889790L;
   private JLabelFont error;
 
   /**

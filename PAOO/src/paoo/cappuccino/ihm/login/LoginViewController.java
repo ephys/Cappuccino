@@ -21,15 +21,19 @@ import paoo.cappuccino.ihm.util.IhmConstants;
  */
 public class LoginViewController extends JPanel {
 
+
+  private static final long serialVersionUID = 3071496812344175953L;
+
   /**
    * Creates a new ViewController for the Login gui.
+   * 
    * @param model The ViewController's model.
    * @param manager The manager responsible for the containing frame.
    */
   public LoginViewController(LoginModel model, IGuiManager manager) {
     super(new BorderLayout());
     this.setBorder(BorderFactory.createEmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0,
-                                                   IhmConstants.M_GAP));
+        IhmConstants.M_GAP));
 
     JTextField usernameField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
@@ -42,13 +46,13 @@ public class LoginViewController extends JPanel {
     JButton registerButton = new JButton("S'inscrire");
     registerButton.addActionListener(e -> {
       manager.openFrame(RegistrationFrame.class);
-    });
+      });
 
     JButton loginButton = new JButton("Se connecter");
     loginButton.addActionListener(e -> {
       if (model.attemptLogin(usernameField.getText(), passwordField.getPassword())) {
         throw new UnsupportedOperationException("Login success but the following "
-                                                + "is not yet implemented");
+            + "is not yet implemented");
         // guiManager.openFrame();
       }
     });

@@ -18,6 +18,9 @@ import paoo.cappuccino.ihm.util.IhmConstants;
  */
 public class LoginView extends JPanel implements ChangeListener {
 
+
+  private static final long serialVersionUID = -5524493008076142378L;
+
   private LoginModel model;
 
   private ErrorableTextField usernamePanel;
@@ -26,7 +29,7 @@ public class LoginView extends JPanel implements ChangeListener {
   /**
    * Creates a new login view.
    *
-   * @param model         The view's model.
+   * @param model The view's model.
    * @param usernameField A text field for the username input.
    * @param passwordField A password field for the password input.
    */

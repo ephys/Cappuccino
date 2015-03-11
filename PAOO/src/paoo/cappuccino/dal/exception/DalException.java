@@ -9,6 +9,8 @@ import paoo.cappuccino.util.exception.CappuccinoException;
  */
 public abstract class DalException extends CappuccinoException {
 
+  private static final long serialVersionUID = 7915439352322904989L;
+
   public DalException(String message) {
     super(message);
   }

@@ -8,6 +8,11 @@ package paoo.cappuccino.dal.exception;
  */
 public class NonUniqueFieldException extends DalException {
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 644504307169445054L;
+
   public NonUniqueFieldException(String message) {
     super(message);
   }

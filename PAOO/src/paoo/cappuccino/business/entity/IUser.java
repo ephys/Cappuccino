@@ -3,7 +3,6 @@ package paoo.cappuccino.business.entity;
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
 
-
 /**
  * Interface containing business methods relative to the user entity.
  *

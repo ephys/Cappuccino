@@ -12,6 +12,8 @@ import paoo.cappuccino.ucc.IUserUcc;
  */
 public class LoginFrame extends BaseFrame {
 
+  private static final long serialVersionUID = 7523864408691215725L;
+
   /**
    * Creates a new frame for the login gui.
    *
