@@ -26,7 +26,7 @@ public interface IHashHolder extends IHashHolderDto {
    *
    * @param version the algorithm id
    */
-  void setAlgorithmVersion(final int version);
+  void setAlgorithmVersion(final String version);
 
   /**
    * Converts the hash holder's algorithm custom data into a string representation for persistence.

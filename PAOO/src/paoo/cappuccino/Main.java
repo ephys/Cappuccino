@@ -52,7 +52,8 @@ public class Main {
     IStringHasher hasher = injector.buildDependency(IStringHasher.class);
 
     try {
-      hasher.addHashAlgorithm(new Pbkdf2Hasher(appConfig.getInt("pbkdf2_iterations")));
+      hasher.addHashAlgorithm("pbkdf2", new Pbkdf2Hasher(appConfig.getInt("pbkdf2_iterations")));
+      hasher.setPreferedAlgorithm("pbkdf2");
     } catch (NoSuchAlgorithmException e) {
       throw new FatalException("Could not fetch the hashing algorithm", e);
     }

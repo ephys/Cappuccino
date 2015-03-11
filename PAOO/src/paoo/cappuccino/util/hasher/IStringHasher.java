@@ -10,22 +10,30 @@ package paoo.cappuccino.util.hasher;
 public interface IStringHasher {
 
   /**
-   * <p>Registers an hash algorithm, the latest registered algorithm will be used to hash new
-   * strings while strings already hashed will be checked using the algorithm used to hash them. The
-   * order in which the algorithms are registered is important and newer algorithms should always be
-   * added after every other.</p>
+   * <p>Registers an hash algorithm, the algorithm marked as preferred registered algorithm will be
+   * used to hash new strings while strings already hashed will be checked using the algorithm used
+   * to hash them.</p>
    *
-   * <p>An algorithm should never be removed, instead remove its implementation.</p>
+   * <p>You're free to remove an algorithm once it isn't used by any legacy hash anymore.</p>
    *
-   * @param algorithm An algorithm used to hash strings.
+   * @param identifier A key used to identify the algorithm used to hash a string.
+   * @param algorithm  An algorithm used to hash strings.
    */
-  public boolean addHashAlgorithm(IHashAlgorithm algorithm);
+  public boolean addHashAlgorithm(String identifier, IHashAlgorithm algorithm);
+
+  /**
+   * Makes the string hasher use that algorithm for newer hashes.
+   *
+   * @param identifier The identifier of a previously registered hash algorithm.
+   * @throws java.lang.IllegalArgumentException No algorithm is registered under that identifier.
+   */
+  public void setPreferedAlgorithm(String identifier);
 
   /**
    * Checks a given set of byte is the hash of a given string.
    *
    * @param toHash          The string to compare to the hash.
-   * @param currentHashData The hash to match. Its data follows the pattern
+   * @param currentHashData The hash to match. Its data follows the pattern 
    *                        "hash:algorithm_id:salt:algorithm_data".
    *                        Obtained via
    *                        {@link paoo.cappuccino.util.hasher.StringHasher#hash(char[])}

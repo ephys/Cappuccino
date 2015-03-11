@@ -20,5 +20,5 @@ public interface IHashHolderDto {
   /**
    * Gets the id of the algorithm used to hash the string.
    */
-  int getAlgorithmVersion();
+  String getAlgorithmVersion();
 }

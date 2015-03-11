@@ -7,7 +7,7 @@ package paoo.cappuccino.util.hasher;
  */
 public abstract class BaseHashHolder implements IHashHolder {
 
-  private int algorithmVersion;
+  private String algorithmVersion;
   private byte[] salt;
   private byte[] hash;
 
@@ -45,12 +45,12 @@ public abstract class BaseHashHolder implements IHashHolder {
   }
 
   @Override
-  public int getAlgorithmVersion() {
+  public String getAlgorithmVersion() {
     return algorithmVersion;
   }
 
   @Override
-  public void setAlgorithmVersion(int version) {
+  public void setAlgorithmVersion(String version) {
     this.algorithmVersion = version;
   }
 }

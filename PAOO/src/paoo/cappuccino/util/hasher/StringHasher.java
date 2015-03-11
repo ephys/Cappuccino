@@ -1,6 +1,7 @@
 package paoo.cappuccino.util.hasher;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import paoo.cappuccino.util.StringUtils;
 
@@ -11,11 +12,31 @@ import paoo.cappuccino.util.StringUtils;
  */
 class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash Layer
 
-  private ArrayList<IHashAlgorithm> hashAlgorithms = new ArrayList<>(1);
+  private IHashAlgorithm preferedAlgorithm;
+  private String preferedAlgorithmName;
+  private HashMap<String, IHashAlgorithm> hashAlgorithms = new HashMap<>(1);
 
   @Override
-  public boolean addHashAlgorithm(IHashAlgorithm algorithm) {
-    return hashAlgorithms.add(algorithm);
+  public boolean addHashAlgorithm(String identifier, IHashAlgorithm algorithm) {
+    if (hashAlgorithms.containsKey(identifier)) {
+      return false;
+    }
+
+    hashAlgorithms.put(identifier, algorithm);
+    return true;
+  }
+
+  @Override
+  public void setPreferedAlgorithm(String identifier) {
+    IHashAlgorithm algorithm = hashAlgorithms.get(identifier);
+
+    if (algorithm == null) {
+      throw new IllegalArgumentException(
+          "There is no algorithm registered under the identifier " + identifier + ".");
+    }
+
+    this.preferedAlgorithm = algorithm;
+    this.preferedAlgorithmName = identifier;
   }
 
   @Override
@@ -23,45 +44,45 @@ class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash
     byte[] newHash = hash(toHash, (IHashHolder) currentHashData).getHash();
     byte[] currentHash = currentHashData.getHash();
 
-    if (currentHash.length != newHash.length) {
-      return false;
-    }
-
-    for (int i = 0; i < newHash.length; i++) {
-      if (newHash[i] != currentHash[i]) {
-        return false;
-      }
-    }
-
-    return true;
+    return Arrays.equals(newHash, currentHash);
   }
 
   @Override
   public boolean isHashOutdated(final IHashHolderDto hash) {
-    return hash.getAlgorithmVersion() != hashAlgorithms.size() - 1
-           && hashAlgorithms.get(hash.getAlgorithmVersion()).isHashOutdated(hash);
+    ensureAlgorithmExists();
+
+    return !preferedAlgorithmName.equals(hash.getAlgorithmVersion())
+           && preferedAlgorithm.isHashOutdated(hash);
+
   }
 
   @Override
   public IHashHolderDto hash(final char[] toHash) {
-    if (hashAlgorithms.size() == 0) {
-      throw new IllegalStateException("This StringHasher does not have any algorithm implemented. "
-                                      + "Use addHashAlgorithm() to add one.");
-    }
+    ensureAlgorithmExists();
 
-    final IHashAlgorithm hasher = hashAlgorithms.get(hashAlgorithms.size() - 1);
-    return hasher.hash(toHash, null);
+    IHashHolder hashHolder = preferedAlgorithm.hash(toHash, null);
+    hashHolder.setAlgorithmVersion(preferedAlgorithmName);
+    return hashHolder;
   }
 
   private IHashHolderDto hash(final char[] toHash, final IHashHolder hashData) {
     final IHashAlgorithm hasher = hashAlgorithms.get(hashData.getAlgorithmVersion());
 
-    return hasher.hash(toHash, hashData);
+    if (hasher == null) {
+      throw new UnsupportedOperationException(
+          "The hash algorithm used to create this hash ("
+          + hashData.getAlgorithmVersion()
+          + ") is no longer supported.");
+    }
+
+    IHashHolder hashHolder = preferedAlgorithm.hash(toHash, hashData);
+    hashHolder.setAlgorithmVersion(preferedAlgorithmName);
+    return hashHolder;
   }
 
   @Override
   public String serialize(IHashHolderDto hash) {
-    return String.valueOf(hash.getAlgorithmVersion()) + ':'
+    return hash.getAlgorithmVersion() + ':'
            + StringUtils.bytesToString(hash.getHash()) + ':'
            + StringUtils.bytesToString(hash.getSalt()) + ':'
            + ((IHashHolder) hash).serializeCustomData();
@@ -71,7 +92,7 @@ class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash
   public IHashHolderDto unserialize(String data) {
     // version:hash:salt:[algorithm data]
     int versionIndex = data.indexOf(':');
-    int version = Integer.parseInt(data.substring(0, versionIndex));
+    String version = data.substring(0, versionIndex);
 
     int hashIndex = data.indexOf(':', versionIndex + 1);
     byte[] hash = StringUtils.strToBytes(data.substring(versionIndex + 1, hashIndex));
@@ -80,8 +101,7 @@ class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash
     byte[] salt = StringUtils.strToBytes(data.substring(hashIndex + 1, saltIndex));
 
     IHashAlgorithm hasher = hashAlgorithms.get(version);
-    IHashHolder
-        unserializedData = hasher.unserializeCustomData(
+    IHashHolder unserializedData = hasher.unserializeCustomData(
         data.substring(saltIndex + 1, data.length()));
 
     unserializedData.setHash(hash);
@@ -89,5 +109,12 @@ class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash
     unserializedData.setAlgorithmVersion(version);
 
     return unserializedData;
+  }
+
+  private void ensureAlgorithmExists() {
+    if (preferedAlgorithm == null) {
+      throw new IllegalStateException("This StringHasher does not have any algorithm implemented. "
+                                      + "Use addHashAlgorithm() to add one.");
+    }
   }
 }
