@@ -25,7 +25,7 @@ public class AppContext {
   private List<CrashListener> crashListeners = new ArrayList<>();
   private Logger appLogger;
   private Profile profileType = Profile.PROD;
-  private String profile = "prod";
+  private String profile = "test_ucc";
   private String appName;
   private String version;
 
@@ -50,7 +50,8 @@ public class AppContext {
     fetchProfile();
     initGlobalCatcher();
 
-    appLogger.info(appName + " " + version + " launched using profile \"" + this.profile + "\"");
+    appLogger.info(appName + " " + version + " launched using profile \""
+        + this.profile + "\"");
   }
 
   /**
@@ -101,10 +102,11 @@ public class AppContext {
         public String format(LogRecord record) {
 
           return "["
-                 + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
-                 + "][" + record.getLoggerName()
-                 + "][" + record.getLevel().getLocalizedName()
-                 + "] " + record.getMessage() + "\r\n";
+              + LocalDateTime.now().format(
+                  DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
+              + "][" + record.getLoggerName() + "]["
+              + record.getLevel().getLocalizedName() + "] "
+              + record.getMessage() + "\r\n";
         }
       };
 
@@ -159,12 +161,16 @@ public class AppContext {
   }
 
   /**
-   * <p>Gets the application profile, defaults to PROFILES.PROD if not set. This variable allows the
-   * application to know whether the system is in production, in development or in tests.</p>
+   * <p>
+   * Gets the application profile, defaults to PROFILES.PROD if not set. This variable allows the
+   * application to know whether the system is in production, in development or in tests.
+   * </p>
    *
-   * <p>It can be changed using the "-Dprofile" flag when running the application: "prod" for a
+   * <p>
+   * It can be changed using the "-Dprofile" flag when running the application: "prod" for a
    * production environment, "test" for a testing environment and "dev" for a development
-   * environment.</p>
+   * environment.
+   * </p>
    *
    * @return the current profile type.
    */

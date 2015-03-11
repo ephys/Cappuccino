@@ -1,5 +1,9 @@
 package paoo.cappuccino.ihm.util;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
@@ -21,7 +25,10 @@ public abstract class BaseFrame extends JFrame {
    */
   public BaseFrame(String title, int width, int height) {
     super(title);
-
+    try {
+      setIconImage(ImageIO.read(new FileInputStream("lib/icon.png")));
+    } catch (IOException e) {
+    };
     setSize(width, height);
     setLocationRelativeTo(null);
 
