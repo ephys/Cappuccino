@@ -1,7 +1,5 @@
 package paoo.cappuccino.util.hasher;
 
-import paoo.cappuccino.core.injector.Singleton;
-
 /**
  * This handles string hashing. It enables the developer to write multiple hashing algorithms, in
  * case the older ones are not secure enough, without changing anything else in the application and
@@ -9,7 +7,6 @@ import paoo.cappuccino.core.injector.Singleton;
  *
  * @author Guylian Cox
  */
-@Singleton
 public interface IStringHasher {
 
   /**
@@ -29,8 +26,9 @@ public interface IStringHasher {
    *
    * @param toHash          The string to compare to the hash.
    * @param currentHashData The hash to match. Its data follows the pattern
-   *                        "hash:algorithm_id:salt:algorithm_data". Obtained via
-   *                        {@link paoo.cappuccino.util.hasher.StringHasher#hash(String)}
+   *                        "hash:algorithm_id:salt:algorithm_data".
+   *                        Obtained via
+   *                        {@link paoo.cappuccino.util.hasher.StringHasher#hash(char[])}
    * @return true: the given hash is the given string's hash
    */
   public boolean matchHash(final char[] toHash, final IHashHolderDto currentHashData);

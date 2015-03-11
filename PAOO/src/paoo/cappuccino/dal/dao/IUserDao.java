@@ -2,9 +2,7 @@ package paoo.cappuccino.dal.dao;
 
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.IUser;
-import paoo.cappuccino.core.injector.Singleton;
 
-@Singleton
 public interface IUserDao {
 
   /**
@@ -12,11 +10,11 @@ public interface IUserDao {
    *
    * @param user The user to insert.
    * @return The user entity with its informations updated from the database.
-   * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException  The username is not unique.
-   * @throws java.lang.IllegalArgumentException                     One of the fields failed to
-   *                                                                insert due to constraint
-   *                                                                violations.
-   * @throws paoo.cappuccino.dal.exception.ConnectionException      Database connection error
+   * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The username is not unique.
+   * @throws java.lang.IllegalArgumentException                    One of the fields failed to
+   *                                                               insert due to constraint
+   *                                                               violations.
+   * @throws paoo.cappuccino.dal.exception.ConnectionException     Database connection error
    */
   IUser createUser(IUserDto user);
 
@@ -25,7 +23,8 @@ public interface IUserDao {
    *
    * @param username the user's username.
    * @return the matching user or null if none was found.
-   * @throws paoo.cappuccino.dal.exception.ConnectionException a database connection error occurred.
+   * @throws paoo.cappuccino.dal.exception.ConnectionException a database connection error
+   *                                                           occurred.
    */
   IUser fetchUserByUsername(String username);
 

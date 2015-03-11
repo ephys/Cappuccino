@@ -1,14 +1,12 @@
 package paoo.cappuccino.dal;
 
-import paoo.cappuccino.core.injector.Singleton;
-
 /**
  * Interface responsible for handling transactions.
  *
  * @author Kevin Bavay
  */
-@Singleton(redirectTo = IDalBackend.class)
 public interface IDalService {
+
   /**
    * Starts a transaction.
    *

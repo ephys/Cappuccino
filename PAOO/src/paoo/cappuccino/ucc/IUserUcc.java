@@ -1,14 +1,12 @@
 package paoo.cappuccino.ucc;
 
 import paoo.cappuccino.business.dto.IUserDto;
-import paoo.cappuccino.core.injector.Singleton;
 
 /**
  * Use case controller containing methods relative to an user (as en entity, not as an actor).
  *
  * @author Guylian Cox
  */
-@Singleton
 public interface IUserUcc {
 
   /**

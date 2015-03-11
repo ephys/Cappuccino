@@ -45,7 +45,7 @@ public class Main {
         makeConfig(appContext.getProfile() + ".properties",
                    appContext.getProfileType() == AppContext.Profile.DEV);
 
-    DependencyInjector injector = new DependencyInjector(appConfig);
+    DependencyInjector injector = new DependencyInjector(appConfig, appContext);
     injector.setDependency(AppContext.class, appContext);
     injector.setDependency(IAppConfig.class, appConfig);
 

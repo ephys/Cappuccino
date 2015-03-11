@@ -5,29 +5,33 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
+import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.config.IAppConfig;
 import paoo.cappuccino.util.exception.FatalException;
-import paoo.cappuccino.util.exception.MissingAnnotationException;
 
 /**
  * Class used to build and inject dependencies into instances.
  *
  * @author Guylian Cox
  */
-@Singleton
 public class DependencyInjector {
 
   private final IAppConfig config;
-  private Map<Class<?>, Object> singletonCache = new HashMap<>();
+  private final AppContext app;
+  private final Logger logger;
+  private Map<Class<?>, Object> instanceCache = new HashMap<>();
 
   /**
    * Creates a new dependency injector.
    *
    * @param config The configuration holder contaning the class -> object mapping
    */
-  public DependencyInjector(IAppConfig config) {
+  public DependencyInjector(IAppConfig config, AppContext app) {
     this.config = config;
+    this.app = app;
+    this.logger = app.getLogger("Injector");
 
     setDependency(DependencyInjector.class, this);
   }
@@ -62,22 +66,18 @@ public class DependencyInjector {
   /**
    * Hardcodes dependencies for dependencies impossible to fetch dynamically.
    *
-   * @param depClass    The dependency's class/interface
+   * @param dependency  The dependency's class/interface
    * @param depInstance An instance of an implementation of the dependency.
    * @return true: the dependency has been set. false: the dependency was already set.
    */
-  public <A> boolean setDependency(Class<A> depClass, A depInstance) {
-    Class<?> singletonKey = redirectSingleton(depClass);
+  public <A> boolean setDependency(Class<A> dependency, A depInstance) {
+    final Class<? extends A> implementation = getImplementation(dependency);
 
-    if (singletonKey == null) {
-      throw new IllegalArgumentException("Dependency class must be a singleton ");
-    }
-
-    if (singletonCache.containsKey(singletonKey)) {
+    if (instanceCache.containsKey(implementation)) {
       return false;
     }
 
-    singletonCache.put(singletonKey, depInstance);
+    instanceCache.put(implementation, depInstance);
     return true;
   }
 
@@ -123,13 +123,19 @@ public class DependencyInjector {
     Field[] fields = clazz.getDeclaredFields();
     for (Field field : fields) {
       if (field.getAnnotation(Inject.class) != null) {
+        if (app.getProfileType() != AppContext.Profile.TEST) {
+          logger.warning("Injecting directly into field '" + field.getName() + "' in class '"
+                         + clazz.getCanonicalName() + "'. This behavior is deprecated and should "
+                         + "only be used for populating JUnit tests.");
+        }
+
         field.setAccessible(true);
 
         try {
           field.set(obj, buildDependency(field.getType()));
         } catch (Exception e) {
-          throw new FatalException("Populating " + obj.getClass().getCanonicalName() + " failed",
-                                   e);
+          throw new FatalException("Populating " + obj.getClass().getCanonicalName()
+                                   + " failed", e);
         }
       }
     }
@@ -137,9 +143,7 @@ public class DependencyInjector {
 
   /**
    * Creates a new instance of a class and populates it. If the class is an interface, it will
-   * create an instance maching the application configuration. If the class or interface is
-   * annotated by {@link paoo.cappuccino.core.injector.Singleton @Singleton}, it will not create
-   * more than one instance and will always give out the same one.
+   * create an instance matching the application configuration.
    *
    * @param dependency The class or interface to instantiate.
    * @return An instance with the same type as the class given.
@@ -148,61 +152,26 @@ public class DependencyInjector {
    */
   @SuppressWarnings("unchecked")
   public <A> A buildDependency(final Class<A> dependency) {
-    // If we're a singleton, redirect it to the actual singleton class
-    // then fetch its instance or create it.
-    final Class<?> singletonDep = redirectSingleton(dependency);
-    final boolean isSingleton = singletonDep != null;
+    final Class<? extends A> implementation = getImplementation(dependency);
 
-    if (isSingleton) {
-      A instance = (A) singletonCache.get(singletonDep);
-
+    try {
+      A instance = (A) instanceCache.get(implementation);
       if (instance != null) {
         return instance;
       }
 
-      try {
-        return (A) createDependency(singletonDep, true);
-      } catch (ClassCastException e) {
-        throw new FatalException(dependency.getCanonicalName()
-                                 + " was redirected to "
-                                 + singletonDep.getCanonicalName()
-                                 + " but its implementation doesn't implement/extends"
-                                 + " the dependency.", e);
-      }
-    } else {
-      // otherwise create this dependency without redirection.
+      A depInstance = instantiateDependency(implementation);
+      instanceCache.put(implementation, depInstance);
+      populate(depInstance);
 
-      try {
-        return createDependency(dependency, false);
-      } catch (ClassCastException e) {
-        throw new FatalException("The defined implementation of interface "
-                                 + dependency.getCanonicalName()
-                                 + "does not implement said interface.", e);
-      }
+      return depInstance;
+    } catch (ClassCastException e) {
+      throw new FatalException(dependency.getCanonicalName()
+                               + " has for declared instanciable class '"
+                               + implementation.getCanonicalName()
+                               + "' but that class doesn't implement/extends"
+                               + " the dependency.", e);
     }
-  }
-
-  /**
-   * Creates an instance of an implementation of a dependency and caches it.
-   *
-   * @param abstractDependency The class or interface to instantiate.
-   * @param cache              true: cache the instance.
-   * @return An instance of the dependency.
-   */
-  private <A> A createDependency(final Class<A> abstractDependency, final boolean cache) {
-    final Class<? extends A> implementation = abstractDependency.isInterface()
-                                              ? getImplementation(abstractDependency)
-                                              : abstractDependency;
-
-    A depInstance = instantiateDependency(implementation);
-
-    if (cache) {
-      singletonCache.put(abstractDependency, depInstance);
-    }
-
-    populate(depInstance);
-
-    return depInstance;
   }
 
   /**
@@ -213,6 +182,10 @@ public class DependencyInjector {
    */
   @SuppressWarnings("unchecked")
   private <A> Class<? extends A> getImplementation(Class<A> interfaze) {
+    if (!interfaze.isInterface()) {
+      return interfaze;
+    }
+
     try {
       String depClassName = config.getString(interfaze.getCanonicalName());
       return (Class<? extends A>) Class.forName(depClassName);
@@ -220,52 +193,5 @@ public class DependencyInjector {
       throw new FatalException("Could not fetch interface " + interfaze.getCanonicalName()
                                + "'s implementation.", e);
     }
-  }
-
-  /**
-   * Gets the class acting as a key in the singleton cache if it is a singleton.
-   *
-   * @param clazz the clazz from which it should be checked
-   * @return the singleton class or null if it isn't a singleton.
-   * @throws paoo.cappuccino.util.exception.MissingAnnotationException The singleton redirected to a
-   *                                                                   non-singleton dependency.
-   * @see paoo.cappuccino.core.injector.DependencyInjector#redirectSingleton(Class, boolean)
-   */
-  private Class<?> redirectSingleton(Class<?> clazz) {
-    return redirectSingleton(clazz, false);
-  }
-
-  /**
-   * Checks if it is a singleton dependency. If it is and it redirects to another singleton (using
-   * {@link Singleton#redirectTo()}), it will follow the redirection and return the final singleton
-   * class.
-   *
-   * @param clazz            the clazz from which it should be checked
-   * @param requireSingleton (internal) if true, it will throw an exception instead of returning
-   *                         null. when the dependency is not a singleton.
-   * @return the singleton class or null if it isn't a singleton.
-   * @throws paoo.cappuccino.util.exception.MissingAnnotationException The class is not a singleton.
-   */
-  private Class<?> redirectSingleton(Class<?> clazz, boolean requireSingleton) {
-    Singleton annotation = clazz.getAnnotation(Singleton.class);
-
-    if (annotation == null) {
-      if (requireSingleton) {
-        throw new MissingAnnotationException(
-            "A singleton dependency redirected to " + clazz.getCanonicalName()
-            + " but the latter does not have a Singleton annotation. "
-            + "This is likely to cause silent problems.");
-      }
-
-      return null;
-    }
-
-    if (annotation.redirectTo() != void.class) {
-      // recursive loop until we get a singleton that does not redirect.
-      // this could cause an infinite loop, should we add a check to change the exception ?
-      return redirectSingleton(annotation.redirectTo(), true);
-    }
-
-    return clazz;
   }
 }

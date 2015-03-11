@@ -1,8 +1,5 @@
 package paoo.cappuccino.dal.dao;
 
-import paoo.cappuccino.core.injector.Singleton;
-
-@Singleton
 public interface IContactDao {
 
   //TODO JavaDoc

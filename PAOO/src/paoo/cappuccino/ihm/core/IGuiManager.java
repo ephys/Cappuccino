@@ -2,9 +2,6 @@ package paoo.cappuccino.ihm.core;
 
 import javax.swing.JFrame;
 
-import paoo.cappuccino.core.injector.Singleton;
-
-@Singleton
 /**
  * Used to manage the application GUIs.
  *

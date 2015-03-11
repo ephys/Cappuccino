@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import paoo.cappuccino.core.injector.Singleton;
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
@@ -21,7 +20,6 @@ import paoo.cappuccino.util.exception.FatalException;
  *
  * @author Guylian Cox
  */
-@Singleton
 public class AppContext {
 
   private List<CrashListener> crashListeners = new ArrayList<>();
