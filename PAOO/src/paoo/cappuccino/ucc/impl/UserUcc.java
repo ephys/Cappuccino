@@ -19,14 +19,17 @@ import paoo.cappuccino.util.hasher.IStringHasher;
  */
 class UserUcc implements IUserUcc {
 
+  private final IEntityFactory entityFactory;
+  private final IUserDao userDao;
+  private final IStringHasher hasher;
+
   @Inject
-  private IEntityFactory entityFactory;
-  @Inject
-  private IDalService dalService;
-  @Inject
-  private IUserDao userDao;
-  @Inject
-  private IStringHasher hasher;
+  public UserUcc(IEntityFactory entityFactory, IDalService dalService, IUserDao userDao,
+          IStringHasher hasher) {
+    this.entityFactory = entityFactory;
+    this.userDao = userDao;
+    this.hasher = hasher;
+  }
 
   @Override
   public IUserDto register(String username, char[] password, String firstName, String lastName,

@@ -26,12 +26,16 @@ import paoo.cappuccino.util.hasher.IStringHasher;
  */
 class UserDao implements IUserDao {
 
+  private final IEntityFactory entityFactory;
+  private final IDalBackend dalBackend;
+  private final IStringHasher hasher;
+
   @Inject
-  private IEntityFactory entityFactory;
-  @Inject
-  private IDalBackend dalBackend;
-  @Inject
-  private IStringHasher hasher;
+  public UserDao(IEntityFactory entityFactory, IDalBackend dalBackend, IStringHasher hasher) {
+    this.entityFactory = entityFactory;
+    this.dalBackend = dalBackend;
+    this.hasher = hasher;
+  }
 
   private IUser makeUserFromSet(ResultSet set) throws SQLException {
     int id = set.getInt(1);

@@ -23,7 +23,6 @@ class SqlDalService implements IDalService, IDalBackend {
   private final String user;
   private final String password;
 
-
   @Inject
   public SqlDalService(IAppConfig config) {
     host = config.getString("db_host");
