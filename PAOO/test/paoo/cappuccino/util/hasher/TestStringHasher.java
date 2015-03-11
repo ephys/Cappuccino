@@ -4,18 +4,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import paoo.cappuccino.Main;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.util.hasher.pbkdf2.Pbkdf2Hasher;
 
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -30,7 +29,7 @@ public class TestStringHasher {
   @Inject
   private IStringHasher hasher;
 
-  private char[] password = new char[] { 'p', 'o', 'm', 'm', 'e' };
+  private char[] password = new char[]{'p', 'o', 'm', 'm', 'e'};
   private IHashHolderDto hashA;
 
   @BeforeClass
@@ -55,7 +54,8 @@ public class TestStringHasher {
   public void testHashes() {
     IHashHolderDto hashB = hasher.hash(password);
 
-    assertThat(hashA.getHash(), not(equalTo(hashB.getHash())));
+    assertFalse("Re-hashing the same password should output a different hash.",
+                Arrays.equals(hashB.getHash(), hashA.getHash()));
   }
 
   @Test
