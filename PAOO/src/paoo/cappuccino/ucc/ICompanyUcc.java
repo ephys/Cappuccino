@@ -7,4 +7,6 @@ package paoo.cappuccino.ucc;
  */
 public interface ICompanyUcc {
 
+
+
 }
