@@ -59,7 +59,7 @@ public class LoginViewController extends JPanel {
           model.attemptLogin(usernameField.getText(),
               passwordField.getPassword());
       if (user != null) {
-        manager.openFrame(MenuFrame.class, user);
+        manager.openFrame(MenuFrame.class);
       }
     });
 
