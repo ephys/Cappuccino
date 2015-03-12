@@ -1,7 +1,0 @@
-!Différence anglais/français
-Etat => ajouter pour quel changement d'états agit l'UC dans lequel le diagramme d'état a été intégré
-DSD => ajouter une explication du cancel sur le DSD
-+ ajouter une lettre devant les ID pour les rendre plus distincitif
-+ expliquer ce qu'il se passe avec l'e-mail valide (valeurs possibles)
-+ ajouter la pk concaténé sur une ligne et pas sur deux
-+ répondre à la 2.5 du document sur l'extranet ->participations créées lors de l'invitation
