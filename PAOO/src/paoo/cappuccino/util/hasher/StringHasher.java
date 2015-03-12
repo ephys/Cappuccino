@@ -101,6 +101,12 @@ class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash
     byte[] salt = StringUtils.strToBytes(data.substring(hashIndex + 1, saltIndex));
 
     IHashAlgorithm hasher = hashAlgorithms.get(version);
+    if (hasher == null) {
+      throw new UnsupportedOperationException(
+          "The hash algorithm used to create this hash ("
+          + version
+          + ") is no longer supported.");
+    }
     IHashHolder unserializedData = hasher.unserializeCustomData(
         data.substring(saltIndex + 1, data.length()));
 

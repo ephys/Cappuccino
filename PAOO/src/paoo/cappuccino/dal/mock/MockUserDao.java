@@ -2,6 +2,7 @@ package paoo.cappuccino.dal.mock;
 
 import java.util.HashMap;
 
+import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.IUser;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
@@ -34,5 +35,10 @@ public class MockUserDao implements IUserDao {
   @Override
   public void updateUser(IUser user) {
     // do nothing
+  }
+
+  @Override
+  public IUser getCompanyCreator(ICompanyDto company) {
+    return null;
   }
 }

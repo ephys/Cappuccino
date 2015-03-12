@@ -4,15 +4,10 @@ import java.time.LocalDateTime;
 
 /**
  * Data transfer object for the Business day entity.
- * 
+ *
  * @author Nicolas Fischer
  */
 public interface IBusinessDayDto {
-
-  /**
-   * Gets the academic year during which the event will occur.
-   */
-  String getAcademicYear();
 
   /**
    * Gets the date on which the event will occur.
@@ -25,7 +20,7 @@ public interface IBusinessDayDto {
   LocalDateTime getCreationDate();
 
   /**
-   * Gets the table of participations.
+   * Gets the list of participations.
    */
   IParticipationDto[] getParticipations();
 }

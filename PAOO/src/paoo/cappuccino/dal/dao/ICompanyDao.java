@@ -1,40 +1,42 @@
 package paoo.cappuccino.dal.dao;
 
+import paoo.cappuccino.business.dto.IBusinessDayDto;
+import paoo.cappuccino.business.dto.ICompanyDto;
+
 public interface ICompanyDao {
 
   /**
-   * Inserts a new comany in the database.
+   * Inserts a new company in the database.
    *
-   * @param company The company to insert
-   * @return The company entity with its informations updated from the database
-   * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The name is not unique.
+   * @param company The company to insert.
+   * @return The company entity with its information updated from the database.
+   * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The company name is not unique.
    * @throws java.lang.IllegalArgumentException                    One of the fields failed to
    *                                                               insert due to constraint
    *                                                               violations.
-   * @throws paoo.cappuccino.dal.exception.ConnectionException     Database connection error
+   * @throws paoo.cappuccino.dal.exception.ConnectionException     Database connection error.
    */
-  //ICompanyDto createCompany(ICompanyDto company);
+  ICompanyDto createCompany(ICompanyDto company);
+
+  void updateCompany(ICompanyDto company);
 
   /**
-   * Fetche all the participations about the day in the database
+   * Fetches the companies matching all the non-null parameters.
    *
-   * @param BusinessDay The day who we want the participation about (pas très anglais ma phrase)
-   * @return An that arrayList contains all the participation or null if none was found.
-   * @throws paoo.cappuccino.dal.exception.ConnectionException Database connection error
+   * @param name     The name of the company, nullable.
+   * @param postcode The postcode part of the address of the company, nullable.
+   * @param street   The street part of the address of the company, nullable.
+   * @param town     The town part of the address of the company, nullable.
+   * @return Every companies matching the fields.
+   * @throws paoo.cappuccino.dal.exception.ConnectionException Database connection error.
    */
-  //ArrayList<IParticipation> fetchParticipationByDate(BusinessDay businessDay);
+  /* TODO Eager loading: Automatically fetches the company's creator (with the same query). */
+  ICompanyDto[] searchCompanies(String name, String postcode, String street, String town);
 
-  /**
-   * Fetche all the company matching all the not-null param.
-   *
-   * @param name     The name of the company
-   * @param postcode The postcode of the adress of the company
-   * @param street   The street of the adress of the company
-   * @param town     The town of the adress of the company
-   * @return An arrayList that contains all the company or null if none was found.
-   * @throws paoo.cappuccino.dal.exception.ConnectionException Database connection error
-   */
-  //ArrayList<ICompanyDto> fetchCompanyByName(String name, String postcode, String street,
-  //                                         String town);
+  ICompanyDto[] fetchAll();
 
+  ICompanyDto[] fetchInvitableCompanies();
+
+  /* TODO Eager loading: Automatically fetches the company's creator (with the same query). */
+  ICompanyDto[] fetchCompaniesByDay(IBusinessDayDto businessDay);
 }

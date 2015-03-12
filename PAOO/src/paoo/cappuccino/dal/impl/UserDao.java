@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ConcurrentModificationException;
 
+import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.IUser;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
@@ -148,5 +149,10 @@ class UserDao implements IUserDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
+  }
+
+  @Override
+  public IUser getCompanyCreator(ICompanyDto company) {
+    return null;
   }
 }

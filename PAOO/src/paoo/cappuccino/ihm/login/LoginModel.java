@@ -31,7 +31,7 @@ public class LoginModel extends BaseModel {
    * @return true: the user logged in.
    */
   public boolean attemptLogin(String username, char[] password) {
-    resetErrors();// ??
+    resetErrors();
 
     boolean isValid = true;
     if (StringUtils.isEmpty(username)) {
