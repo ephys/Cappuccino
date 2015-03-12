@@ -42,11 +42,4 @@ public interface IContactUcc {
    */
   public IContactDto[] getContacts(String firstName, String lastName);
 
-  /**
-   * Return all the contacts of a known company.
-   * 
-   * @param company The contacts's company
-   * @return A table with the contact's DTO researched.
-   */
-  public IContactDto[] getContactsByCompany(ICompanyDto company);
 }

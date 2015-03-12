@@ -55,12 +55,4 @@ public interface IBusinessDayUcc {
    * @return A table with the business Day's DTO existing in the database.
    */
   public IBusinessDayDto[] getBusinessDays();
-
-  /**
-   * Get all the participating companies of a known Business Days.
-   * 
-   * @param businessDays The business day for which the companies are needed.
-   * @return A table of companies DTO participating to the business Day wanted.
-   */
-  public ICompanyDto[] getParticipations(IBusinessDayDto businessDays);
 }
