@@ -17,14 +17,5 @@ public interface IGuiManager {
    * @param frame the frame class
    * @return the new window
    */
-  public JFrame openFrame(Class<? extends JFrame> frame);
-
-  /**
-   * 
-   *
-   * @param user the user dto to pass by
-   * @param frame the frame class
-   * @return the new window
-   */
-  public JFrame openFrame(Class<? extends JFrame> frame, IUserDto user);
+  public <A extends JFrame> A openFrame(Class<A> frame);
 }
