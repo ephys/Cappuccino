@@ -4,6 +4,7 @@ import java.util.Date;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.business.dto.IParticipationDto;
 
 /**
  * Use case controller containing methods relative to a Business Day as an entity.
@@ -13,46 +14,37 @@ import paoo.cappuccino.business.dto.ICompanyDto;
 public interface IBusinessDayUcc {
 
   /**
-   * Register à new Business Day In the database.
-   * 
-   * @param evenDate The exact date of the even.
-   * @param academicYear The year of the even.
-   * @return The new Business Day DTO
-   * 
-   * @throws java.lang.IllegalArgumentException The academic year must be unique.
+   * Creates a new business day and persists it.
+   *
+   * @param evenDate The date of the event.
+   * @return The new Business Day DTO.
+   * @throws java.lang.IllegalArgumentException There is already a business day on that academic
+   *                                            year, or the date is null.
    */
-  public IBusinessDayDto add(Date evenDate, int academicYear);
+  public IBusinessDayDto create(Date evenDate);
 
   /**
-   * Add a company to the business day with a state set as INVITED.
-   * 
-   * @param company The company added.
-   * @return The company's DTO if successfully added.
+   * Adds a list of invited companies to the business day participation list.
+   *
+   * @param companies   The list of companies to add.
+   * @param businessDay The business day the list must be added to.
+   * @return The complete list of invited companies.
    */
-  public ICompanyDto addCompany(ICompanyDto company);
+  public ICompanyDto[] addInvitedCompanies(ICompanyDto[] companies, IBusinessDayDto businessDay);
 
   /**
-   * Change a company state in the database.
-   * 
-   * @param company The company which need changes.
-   * @param state The new state of the company.
-   * @return The company's DTO if the change is a success.
+   * Changes the state of a participation.
+   *
+   * @param participation The participation that needs its state changed.
+   * @param state         The new state of the participation. Null to cancel the participation.
+   * @return true: the change was successful.
    */
-  public ICompanyDto switchState(ICompanyDto company, String state);
+  public boolean changeState(IParticipationDto participation, IParticipationDto.State state);
 
+  public IBusinessDayDto[] getInvitationlessDays();
+  
   /**
-   * Return the Business Day's DTO of the researched year.
-   * 
-   * @param firstName The year of the business day searched.
-   * @return The business Day's DTO researched.
-   * @throws java.lang.IllegalArgumentException No BusinessDay known at this year.
-   */
-  public IBusinessDayDto getBusinessDay(int academicYear);
-
-  /**
-   * Return a table with all the Business Day's DTO .
-   * 
-   * @return A table with the business Day's DTO existing in the database.
+   * Returns the table of every registered business days.
    */
   public IBusinessDayDto[] getBusinessDays();
 }

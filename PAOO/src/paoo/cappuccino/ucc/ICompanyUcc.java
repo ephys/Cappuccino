@@ -11,30 +11,32 @@ import paoo.cappuccino.business.dto.IUserDto;
 public interface ICompanyUcc {
 
   /**
-   * Register a new Company in the database.
-   * 
+   * Creates a new company and persists it in the database.
+   *
    * @param creator The user who add this company.
-   * @param name The Company's name.
-   * @param street The company's street address.
-   * @param numAdress The company's number address.
-   * @param mailBox The company's mailbox
-   * @param postCode The company's post code.
-   * @param town The company's town.
+   * @param name The name of the company.
+   * @param street The street of the company's address.
+   * @param numAdress The number of the company's address.
+   * @param mailBox The mailbox of the company's address, nullable.
+   * @param postCode The post code of the company's address.
+   * @param town The town of the company's address.
    * @return The new company's DTO.
-   * 
-   * @throws java.lang.IllegalArgumentException The company's name must be unique.
+   *
+   * @throws java.lang.IllegalArgumentException The company name is not unique or a field is empty.
    */
-  public ICompanyDto add(IUserDto creator, String name, String street, String numAdress,
-      String mailBox, String postCode, String town);
+  public ICompanyDto create(IUserDto creator, String name, String street, String numAdress,
+                            String mailBox, String postCode, String town);
 
   /**
    * Get the companies matching the criteria of research.
-   * 
+   *
    * @param name The name searched.
    * @param postCode The post code of the area within the searched company is established.
    * @param town The town within the searched company is established.
    * @param street The street within the searched company is established.
    * @return A array of the companies'DTO matching the criteria.
    */
-  public ICompanyDto[] getCompanies(String name, String postCode, String town, String street);
+  public ICompanyDto[] searchCompanies(String name, String postCode, String town, String street);
+
+  public ICompanyDto[] getInvitableCompanies();
 }
