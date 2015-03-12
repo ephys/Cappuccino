@@ -25,7 +25,7 @@ public interface ICompanyUcc {
    * @throws java.lang.IllegalArgumentException The company name is not unique or a field is empty.
    */
   public ICompanyDto create(IUserDto creator, String name, String street, String numAdress,
-                            String mailBox, String postCode, String town);
+      String mailBox, String postCode, String town);
 
   /**
    * Get the companies matching the criteria of research.
@@ -34,9 +34,14 @@ public interface ICompanyUcc {
    * @param postCode The post code of the area within the searched company is established.
    * @param town The town within the searched company is established.
    * @param street The street within the searched company is established.
-   * @return A array of the companies'DTO matching the criteria.
+   * @return An array of the companies'DTO matching the criteria.
    */
   public ICompanyDto[] searchCompanies(String name, String postCode, String town, String street);
 
+  /**
+   * Get all the companies that can be invite to the business days.
+   * 
+   * @return An array of DTO of the companies that can be invite.
+   */
   public ICompanyDto[] getInvitableCompanies();
 }
