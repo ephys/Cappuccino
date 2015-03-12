@@ -3,6 +3,7 @@ package paoo.cappuccino.ihm.core;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
@@ -23,8 +24,9 @@ class CappuccinoIhm implements IGuiManager {
     this.injector = injector;
 
     app.addCrashListener(fatalException -> {
-      JOptionPane.showMessageDialog(currentFrame, fatalException.getMessage(),
-                                    "Une erreur est survenue", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(currentFrame,
+          fatalException.getMessage(), "Une erreur est survenue",
+          JOptionPane.ERROR_MESSAGE);
 
       if (fatalException instanceof FatalException) {
         closeFrame();
@@ -34,7 +36,8 @@ class CappuccinoIhm implements IGuiManager {
 
   @Override
   public JFrame openFrame(Class<? extends JFrame> frameClass) {
-	 if(currentFrame != null) closeFrame();	 
+    if (currentFrame != null)
+      closeFrame();
     currentFrame = injector.buildDependency(frameClass);
     return currentFrame;
   }
@@ -44,5 +47,17 @@ class CappuccinoIhm implements IGuiManager {
       currentFrame.setVisible(false);
       currentFrame.dispose();
     }
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see paoo.cappuccino.ihm.core.IGuiManager#openFrame(java.lang.Class,
+   * paoo.cappuccino.business.dto.IUserDto)
+   */
+  @Override
+  public JFrame openFrame(Class<? extends JFrame> frame, IUserDto user) {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

@@ -10,7 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.menu.MenuFrame;
 import paoo.cappuccino.ihm.registration.RegistrationFrame;
 import paoo.cappuccino.ihm.util.IhmConstants;
 
@@ -32,28 +34,32 @@ public class LoginViewController extends JPanel {
    */
   public LoginViewController(LoginModel model, IGuiManager manager) {
     super(new BorderLayout());
-    this.setBorder(BorderFactory.createEmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0,
-        IhmConstants.M_GAP));
+    this.setBorder(BorderFactory.createEmptyBorder(IhmConstants.L_GAP,
+        IhmConstants.M_GAP, 0, IhmConstants.M_GAP));
 
     JTextField usernameField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
 
     // buttons //
-    JPanel controls = new JPanel(new GridLayout(2, 0, 0, IhmConstants.M_GAP));
+    JPanel controls =
+        new JPanel(new GridLayout(2, 0, 0, IhmConstants.M_GAP));
 
-    controls.setLayout(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
+    controls.setLayout(new FlowLayout(FlowLayout.RIGHT,
+        IhmConstants.M_GAP, IhmConstants.M_GAP));
 
     JButton registerButton = new JButton("S'inscrire");
     registerButton.addActionListener(e -> {
       manager.openFrame(RegistrationFrame.class);
-      });
+    });
 
     JButton loginButton = new JButton("Se connecter");
     loginButton.addActionListener(e -> {
-      if (model.attemptLogin(usernameField.getText(), passwordField.getPassword())) {
-        throw new UnsupportedOperationException("Login success but the following "
-            + "is not yet implemented");
-        // guiManager.openFrame();
+      IUserDto user = null;
+      user =
+          model.attemptLogin(usernameField.getText(),
+              passwordField.getPassword());
+      if (user != null) {
+        manager.openFrame(MenuFrame.class, user);
       }
     });
 

@@ -25,7 +25,7 @@ public class AppContext {
   private List<CrashListener> crashListeners = new ArrayList<>();
   private Logger appLogger;
   private Profile profileType = Profile.PROD;
-  private String profile = "prod";
+  private String profile = "test_ucc";
   private String appName;
   private String version;
 

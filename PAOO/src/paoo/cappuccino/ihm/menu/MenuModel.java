@@ -15,6 +15,43 @@ public class MenuModel extends BaseModel {
     this.userUcc = userUcc;
   }
 
+  /**
+   * Controls the main view to display. Don't switch view if same view demanded
+   * 
+   * @param state new state
+   */
+  public void setState(MenuState state) {
+    if (state != this.state) {
+      this.state = state;
+      switch (state) {
+        case ACCUEIL:
+          // TODO
+          break;
+        case CREER_ENTREPRISE:
+          // TODO
+          break;
+        case CREER_JOURNEE:
+          // TODO
+          break;
+        case CREER_PERS_CONTACT:
+          // TODO
+          break;
+        case RECH_ENTREPRISE:
+          // TODO
+          break;
+        case RECH_PARTICIPATION:
+          // TODO
+          break;
+        case RECH_PERS_CONTACT:
+          // TODO
+          break;
+        case SELEC_ENTREPRISES:
+          // TODO
+          break;
+      }
+    }
+  }
+
 
 
 }

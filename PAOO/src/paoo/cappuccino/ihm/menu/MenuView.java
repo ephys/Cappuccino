@@ -32,6 +32,7 @@ public class MenuView extends JPanel {
     JPanel panelDeconnection = new JPanel();
     panelDeconnection.add(deconection);
     this.add(panelDeconnection, BorderLayout.EAST);
+
     this.setBorder(BorderFactory
         .createMatteBorder(0, 0, 3, 0, Color.BLACK));
 

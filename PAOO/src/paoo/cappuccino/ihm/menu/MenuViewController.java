@@ -11,44 +11,44 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.login.LoginFrame;
 import paoo.cappuccino.ihm.util.JLabelFont;
+import paoo.cappuccino.ihm.util.MenuState;
 
 public class MenuViewController extends JPanel {
 
   public MenuViewController(MenuModel model, IGuiManager manager) {
     super(new BorderLayout());
 
-
-
     // buttons //
     JButton deconection = new JButton("déconexion");
     deconection.addActionListener(e -> {
-      // TODO
-      });
+      manager.openFrame(LoginFrame.class);
+    });
     JButton accueil = new JButton("Accueil");
     accueil.addActionListener(e -> {
-      // TODO
-      });
+      model.setState(MenuState.ACCUEIL);
+    });
     JButton participation = new JButton("Participations");
     participation.addActionListener(e -> {
-      // TODO
-      });
+      model.setState(MenuState.RECH_PARTICIPATION);
+    });
     JButton contact = new JButton("Pers. de Contact");
     contact.addActionListener(e -> {
-      // TODO
-      });
+      model.setState(MenuState.RECH_PERS_CONTACT);
+    });
     JButton entreprise = new JButton("Entreprises");
     entreprise.addActionListener(e -> {
-      // TODO
-      });
+      model.setState(MenuState.RECH_ENTREPRISE);
+    });
     JButton selecEntreprisee = new JButton("Sélèc. entreprises");
     selecEntreprisee.addActionListener(e -> {
-      // TODO
-      });
+      model.setState(MenuState.SELEC_ENTREPRISES);
+    });
     JButton newDay = new JButton("Créer journée");
     newDay.addActionListener(e -> {
-      // TODO
-      });
+      model.setState(MenuState.CREER_JOURNEE);
+    });
 
     // JPanel
     JPanel searchPanel = new JPanel();
@@ -84,16 +84,16 @@ public class MenuViewController extends JPanel {
     // button admin
     JButton newEntreprise = new JButton("Créer entreprise");
     newEntreprise.addActionListener(e -> {
-      // TODO
-      });
+      model.setState(MenuState.CREER_ENTREPRISE);
+    });
     JButton newContact = new JButton("Créer pers. de contact");
     newContact.addActionListener(e -> {
-      // TODO
-      });
+      model.setState(MenuState.CREER_PERS_CONTACT);
+    });
 
     // labels admin
     JPanel entreprisePanel = new JPanel();
-    JLabelFont entrepriseLabel = new JLabelFont("Recherches", 16);
+    JLabelFont entrepriseLabel = new JLabelFont("Gérer entreprises", 16);
     entreprisePanel.add(entrepriseLabel);
     entreprisePanel.setBackground(Color.BLUE);
 
@@ -103,9 +103,8 @@ public class MenuViewController extends JPanel {
     controls.add(newContact, gbc);
 
 
-
     JPanel west = new JPanel();
-    west.add(controls);// TODO supress gap
+    west.add(controls);
     west.setBorder(BorderFactory
         .createMatteBorder(0, 0, 0, 3, Color.BLACK));
 

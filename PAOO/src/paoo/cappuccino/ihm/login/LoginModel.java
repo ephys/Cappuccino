@@ -28,9 +28,9 @@ public class LoginModel extends BaseModel {
    *
    * @param username The user's username.
    * @param password The user's password.
-   * @return true: the user logged in.
+   * @return the user logged in or null
    */
-  public boolean attemptLogin(String username, char[] password) {
+  public IUserDto attemptLogin(String username, char[] password) {
     resetErrors();
 
     boolean isValid = true;
@@ -47,7 +47,7 @@ public class LoginModel extends BaseModel {
 
     if (!isValid) {
       dispatchChangeEvent();
-      return false;
+      return null;
     }
 
     IUserDto user = userUcc.logIn(username, password);
@@ -61,7 +61,7 @@ public class LoginModel extends BaseModel {
     }
 
     dispatchChangeEvent();
-    return user != null;
+    return user;
   }
 
   /**
