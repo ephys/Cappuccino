@@ -19,14 +19,14 @@ public interface IBusinessDayUcc {
    * @param evenDate The date of the event.
    * @return The new Business Day DTO.
    * @throws java.lang.IllegalArgumentException There is already a business day on that academic
-   *         year, or the date is null.
+   *                                            year, or the date is null.
    */
   public IBusinessDayDto create(Date evenDate);
 
   /**
    * Adds a list of invited companies to the business day participation list.
    *
-   * @param companies The list of companies to add.
+   * @param companies   The list of companies to add.
    * @param businessDay The business day the list must be added to.
    * @return The complete list of invited companies.
    */
@@ -36,15 +36,13 @@ public interface IBusinessDayUcc {
    * Changes the state of a participation.
    *
    * @param participation The participation that needs its state changed.
-   * @param state The new state of the participation. Null to cancel the participation.
+   * @param state         The new state of the participation. Null to cancel the participation.
    * @return true: the change was successful.
    */
   public boolean changeState(IParticipationDto participation, IParticipationDto.State state);
 
   /**
-   * Get all the business day that haven't any invitation yet.
-   * 
-   * @return An array of the business days without any invitations.
+   * Returns all the business day that haven't any participation yet.
    */
   public IBusinessDayDto[] getInvitationlessDays();
 
