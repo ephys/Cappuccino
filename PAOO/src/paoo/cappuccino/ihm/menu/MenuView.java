@@ -18,16 +18,15 @@ import paoo.cappuccino.ihm.util.JLabelFont;
 
 public class MenuView extends JPanel {
 
-  private MenuModel model;
 
 
   public MenuView(MenuModel model, JButton deconection,
       JPanel titreEnbedFrame) {
     super(new BorderLayout());
-    this.model = model;
 
-
-    JLabelFont bienvenu = new JLabelFont("Bienvenue TODO ", 28);// TODO
+    JLabelFont bienvenu =
+        new JLabelFont("Bienvenue "
+            + model.getConnectedUser().getUsername(), 28);
     bienvenu.setHorizontalAlignment(JLabel.CENTER);
     this.add(bienvenu);
 
