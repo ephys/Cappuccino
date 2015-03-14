@@ -20,7 +20,7 @@ public class RegistrationFrame extends BaseFrame {
    */
   @Inject
   public RegistrationFrame(IUserUcc userUcc, IGuiManager guiManager) {
-    super("S'inscrire", 490, 520);
+    super("S'inscrire", 490, 520, guiManager);
     this.setResizable(false);
 
     this.add(new RegistrationViewController(

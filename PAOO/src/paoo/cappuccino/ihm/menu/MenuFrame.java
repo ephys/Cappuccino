@@ -13,7 +13,7 @@ public class MenuFrame extends BaseFrame {
   @Inject
   public MenuFrame(IUserUcc userUcc, IGuiManager guiManager) {
     // TODO autre dépendences
-    super("Cappuccino", 950, 600);
+    super("Cappuccino", 950, 600, guiManager);
     this.setResizable(false);
 
     this.add(new MenuViewController(new MenuModel(userUcc), guiManager));

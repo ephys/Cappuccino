@@ -22,7 +22,7 @@ public class LoginFrame extends BaseFrame {
    */
   @Inject
   public LoginFrame(IUserUcc userUcc, IGuiManager guiManager) {
-    super("Connexion", 400, 240);
+    super("Connexion", 400, 240, guiManager);
     this.setResizable(false);
 
     this.add(new LoginViewController(new LoginModel(userUcc), guiManager));

@@ -1,5 +1,7 @@
 package paoo.cappuccino.ihm.core;
 
+import java.util.logging.Logger;
+
 import javax.swing.JFrame;
 
 import paoo.cappuccino.business.dto.IUserDto;
@@ -18,4 +20,9 @@ public interface IGuiManager {
    * @return the new window
    */
   public <A extends JFrame> A openFrame(Class<A> frame);
+
+  /**
+   * Returns the Gui logger.
+   */
+  public Logger getLogger();
 }
