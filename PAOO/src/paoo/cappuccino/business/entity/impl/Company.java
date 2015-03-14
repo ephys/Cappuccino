@@ -53,27 +53,9 @@ public class Company extends BaseEntity implements ICompany {
     return null;
   }
 
-  /*
-   * @Override public IUser GetCreator() { // TODO Auto-generated method stub return null; }
-   * 
-   * @Override public IParticipationDto[] getParticipations() { // TODO Auto-generated method stub
-   * return null; }
-   * 
-   * @Override public void addContact(IContactDto contact) { // TODO Auto-generated method stub
-   * 
-   * }
-   */
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see paoo.cappuccino.business.dto.ICompanyDto#getCreator()
-   */
   @Override
   public int getCreator() {
     // TODO Auto-generated method stub
     return 0;
   }
-
-
 }

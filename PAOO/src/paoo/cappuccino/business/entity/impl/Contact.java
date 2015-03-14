@@ -62,8 +62,4 @@ public class Contact extends BaseEntity implements IContact {
     // TODO Auto-generated method stub
 
   }
-  /*
-   * @Override public IParticipationDto[] getParticipations() { // TODO Auto-generated method stub
-   * return null; }
-   */
 }
