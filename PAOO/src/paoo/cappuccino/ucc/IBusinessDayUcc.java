@@ -50,4 +50,11 @@ public interface IBusinessDayUcc {
    * Returns the table of every registered business days.
    */
   public IBusinessDayDto[] getBusinessDays();
+
+  /**
+   * Returns the list of companies attending the business day matching a given identifier.
+   *
+   * @param businessDayId The identifier of the business day.
+   */
+  public ICompanyDto[] getAttendingCompanies(int businessDayId);
 }
