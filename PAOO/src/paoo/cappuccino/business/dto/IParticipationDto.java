@@ -6,12 +6,7 @@ package paoo.cappuccino.business.dto;
  * @author Nicolas Fischer
  */
 public interface IParticipationDto {
-
-  /**
-   * Returns whether or not the participation is cancelled.
-   */
-  boolean isCancelled();
-
+  
   /**
    * Returns the state of the participation.
    */
@@ -31,6 +26,6 @@ public interface IParticipationDto {
    * Defines the list of states a participation can take.
    */
   public static enum State {
-    INVITED, CONFIRMED, DECLINED, BILLED, PAID
+    INVITED, CONFIRMED, DECLINED, BILLED, PAID, CANCELLED
   }
 }

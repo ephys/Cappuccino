@@ -42,6 +42,4 @@ public interface ICompanyUcc {
    * Returns all the companies that can be invite to a business days.
    */
   public ICompanyDto[] getInvitableCompanies();
-
-
 }

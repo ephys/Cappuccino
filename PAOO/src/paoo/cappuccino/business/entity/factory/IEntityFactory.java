@@ -110,5 +110,5 @@ public interface IEntityFactory {
    * TODO. version DAL
    */
   IParticipation createParticipation(int companyId, int businessDayId, int version,
-                                     IParticipationDto.State state, boolean cancelled);
+                                     IParticipationDto.State state);
 }

@@ -10,6 +10,4 @@ import paoo.cappuccino.business.dto.IParticipationDto;
 public interface IParticipation extends IParticipationDto, IBaseEntity {
 
   void setState(State state);
-
-  void setCancelled(boolean cancelled);
 }

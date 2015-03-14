@@ -36,7 +36,7 @@ public interface IBusinessDayUcc {
    * Changes the state of a participation.
    *
    * @param participation The participation that needs its state changed.
-   * @param state         The new state of the participation. Null to cancel the participation.
+   * @param state         The new state of the participation.
    * @return true: the change was successful.
    */
   public boolean changeState(IParticipationDto participation, IParticipationDto.State state);
