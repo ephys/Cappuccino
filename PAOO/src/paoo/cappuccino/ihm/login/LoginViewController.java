@@ -52,12 +52,10 @@ public class LoginViewController extends JPanel {
 
     JButton loginButton = new JButton("Se connecter");
     loginButton.addActionListener(e -> {
-      IUserDto user =
-          model.attemptLogin(usernameField.getText(),
+      IUserDto user = model.attemptLogin(usernameField.getText(),
               passwordField.getPassword());
       if (user != null) {
-        MenuFrame menu = manager.openFrame(MenuFrame.class);
-        menu.setConnectedUser(user);
+        manager.openFrame(MenuFrame.class).setLoggedUser(user);
       }
     });
 

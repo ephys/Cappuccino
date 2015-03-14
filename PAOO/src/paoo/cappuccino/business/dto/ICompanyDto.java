@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
  *
  * @author Nicolas Fischer
  */
-public interface ICompanyDto {
+public interface ICompanyDto extends IBaseDto {
 
   /**
    * Gets the company's creator id.

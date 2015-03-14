@@ -6,7 +6,7 @@ package paoo.cappuccino.business.dto;
  * @author Nicolas Fischer
  */
 public interface IParticipationDto {
-  
+
   /**
    * Returns the state of the participation.
    */
@@ -21,6 +21,11 @@ public interface IParticipationDto {
    * Returns the id of the company assisting on the participation.
    */
   int getCompany();
+
+  /**
+   * Gets the entity version.
+   */
+  int getVersion();
 
   /**
    * Defines the list of states a participation can take.

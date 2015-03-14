@@ -19,17 +19,18 @@ public class AccueilModel extends BaseModel {
 
   private final ICompanyUcc companyUcc;
   private final IBusinessDayUcc businessDayUcc;
+  private IBusinessDayDto selectedDay;
 
   @Inject
   public AccueilModel(ICompanyUcc companyUcc,
-      IBusinessDayUcc businessDayUcc) {
+                      IBusinessDayUcc businessDayUcc) {
     this.companyUcc = companyUcc;
     this.businessDayUcc = businessDayUcc;
   }
 
   /**
    * get all the business day
-   * 
+   *
    * @return a table with all the business day
    */
   public IBusinessDayDto[] getAllDays() {
@@ -38,17 +39,17 @@ public class AccueilModel extends BaseModel {
 
   /**
    * get all companies suscribed for a day
-   * 
+   *
    * @return table with all companies concerned
    */
-  public ICompanyDto[] getCompanies(IBusinessDayDto day) {
-    // return companyUcc.getCompaniesForADay(day);
-    return null;
+  public ICompanyDto[] getCompanies() {
+    return selectedDay == null ? new ICompanyDto[0]
+                               : businessDayUcc.getAttendingCompanies(selectedDay.getId());
   }
 
   /**
    * unsubscribe a company for the selected day
-   * 
+   *
    * @param c the company to unsubscribe
    */
   public void removeCompany(ICompanyDto c) {
@@ -58,12 +59,22 @@ public class AccueilModel extends BaseModel {
 
   /**
    * get all the state possible for a company
-   * 
+   *
    * @param c the company
    * @return a table with all the state possible
    */
   public ComboBoxModel<State> getPossibleState(ICompanyDto c) {
     // companyUcc.getPossibleState(c);
     return null;
+  }
+
+  public IBusinessDayDto getSelectedDay() {
+    return selectedDay;
+  }
+
+  public void setSelectedDay(IBusinessDayDto selectedDay) {
+    this.selectedDay = selectedDay;
+
+    dispatchChangeEvent();
   }
 }

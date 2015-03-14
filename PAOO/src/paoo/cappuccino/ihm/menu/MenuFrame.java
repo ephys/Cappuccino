@@ -11,31 +11,51 @@ import paoo.cappuccino.ucc.IUserUcc;
 
 public class MenuFrame extends BaseFrame {
 
-
-  private IUserDto connectedUser = null;
+  private final IUserUcc userUcc;
+  private final IBusinessDayUcc businessDayUcc;
+  private final ICompanyUcc companyUcc;
+  private final IContactUcc contactUcc;
+  private final IGuiManager guiManager;
+  private IUserDto loggedUser;
 
   /**
    * Creates a new frame for the login gui.
    */
   @Inject
   public MenuFrame(IUserUcc userUcc, IBusinessDayUcc businessDayUcc,
-      ICompanyUcc companyUcc, IContactUcc contactUcc,
-      IGuiManager guiManager) {
+                   ICompanyUcc companyUcc, IContactUcc contactUcc,
+                   IGuiManager guiManager) {
     super("Cappuccino", 950, 600, guiManager);
-    this.setResizable(false);
+    this.userUcc = userUcc;
+    this.businessDayUcc = businessDayUcc;
+    this.companyUcc = companyUcc;
+    this.contactUcc = contactUcc;
+    this.guiManager = guiManager;
+  }
 
-    this.add(new MenuViewController(new MenuModel(connectedUser, userUcc,
-        businessDayUcc, companyUcc, contactUcc), guiManager));
-    this.setVisible(true);
+  IUserDto getLoggedUser() {
+    return loggedUser;
   }
 
   /**
-   * set the connected user
+   * Sets the user currently logged in.
    *
-   * @param user the connected user
+   * @param user the logged user.
    */
+  public void setLoggedUser(IUserDto user) {
+    this.loggedUser = user;
 
-  public void setConnectedUser(IUserDto user) {
-    this.connectedUser = user;
+    // we need to have the user before rendering.
+    setupDisplay();
+  }
+
+  private void setupDisplay() {
+    MenuModel model = new MenuModel(this, userUcc, businessDayUcc, companyUcc, contactUcc,
+                                    guiManager);
+
+    this.add(new MenuViewController(model, guiManager));
+    model.changePage(MenuEntry.HOME);
+
+    this.setVisible(true);
   }
 }

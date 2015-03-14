@@ -13,45 +13,32 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import paoo.cappuccino.ihm.core.IGuiManager;
-import paoo.cappuccino.ihm.login.LoginFrame;
 import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JLabelFont;
-import paoo.cappuccino.ihm.util.MenuState;
 
-public class MenuViewController extends JPanel {
+public class MenuViewController extends MenuView {
 
   public MenuViewController(MenuModel model, IGuiManager manager) {
-    super(new BorderLayout());
+    super(model, manager);
 
     // buttons //
-    JButton deconection = new JButton("déconexion");
-    deconection.addActionListener(e -> {
-      manager.openFrame(LoginFrame.class);
-    });
-    JButton accueil = new JButton("Accueil");
-    accueil.addActionListener(e -> {
-      model.setState(MenuState.ACCUEIL);
-    });
+    JButton home = new JButton("Accueil");
+    home.addActionListener(e -> model.changePage(MenuEntry.HOME));
+
     JButton participationButton = new JButton("Participations");
-    participationButton.addActionListener(e -> {
-      model.setState(MenuState.RECH_PARTICIPATION);
-    });
-    JButton contactButton = new JButton("Pers. de Contact");
-    contactButton.addActionListener(e -> {
-      model.setState(MenuState.RECH_PERS_CONTACT);
-    });
-    JButton entrepriseButton = new JButton("Entreprises");
-    entrepriseButton.addActionListener(e -> {
-      model.setState(MenuState.RECH_ENTREPRISE);
-    });
+    participationButton.addActionListener(e -> model.changePage(MenuEntry.SEARCH_PARTICIPATION));
+
+    JButton contactButton = new JButton("Contacts");
+    contactButton.addActionListener(e -> model.changePage(MenuEntry.SEARCH_CONTACT));
+
+    JButton companyButton = new JButton("Entreprises");
+    companyButton.addActionListener(e -> model.changePage(MenuEntry.SEARCH_COMPANY));
+
     JButton companiesSelectButton = new JButton("Sélèc. entreprises");
-    companiesSelectButton.addActionListener(e -> {
-      model.setState(MenuState.SELEC_ENTREPRISES);
-    });
+    companiesSelectButton.addActionListener(e -> model.changePage(MenuEntry.SELEC_COMPANY));
+
     JButton newDayButton = new JButton("Créer journée");
-    newDayButton.addActionListener(e -> {
-      model.setState(MenuState.CREER_JOURNEE);
-    });
+    newDayButton.addActionListener(e -> model.changePage(MenuEntry.CREATE_BDAY));
 
     // JPanel
     JPanel searchLabelPanel = new JPanel();
@@ -72,39 +59,33 @@ public class MenuViewController extends JPanel {
     gbc.fill = GridBagConstraints.HORIZONTAL;
     gbc.insets = new Insets(0, 0, 13, 0);
 
-
-    JPanel search = new JPanel(new BorderLayout());
     JPanel searchCenter = new JPanel(new GridLayout(3, 0));
     searchCenter.add(participationButton);
     searchCenter.add(contactButton);
-    searchCenter.add(entrepriseButton);
+    searchCenter.add(companyButton);
+
+    JPanel search = new JPanel(new BorderLayout());
     search.add(searchLabelPanel, BorderLayout.NORTH);
     search.add(searchCenter);
 
-    JPanel day = new JPanel(new BorderLayout());
     JPanel dayCenter = new JPanel(new GridLayout(2, 0));
     dayCenter.add(companiesSelectButton);
     dayCenter.add(newDayButton);
+
+    JPanel day = new JPanel(new BorderLayout());
     day.add(dayCenter);
     day.add(dayLabelPanel, BorderLayout.NORTH);
 
-    controls.add(accueil, gbc);
-
+    controls.add(home, gbc);
     controls.add(search, gbc);
     controls.add(day, gbc);
-
-
 
     // si admin
     // button admin
     JButton newEntrepriseButton = new JButton("Créer entreprise");
-    newEntrepriseButton.addActionListener(e -> {
-      model.setState(MenuState.CREER_ENTREPRISE);
-    });
-    JButton newContactButton = new JButton("Créer pers. de contact");
-    newContactButton.addActionListener(e -> {
-      model.setState(MenuState.CREER_PERS_CONTACT);
-    });
+    newEntrepriseButton.addActionListener(e -> model.changePage(MenuEntry.CREATE_COMPANY));
+    JButton newContactButton = new JButton("Créer contact");
+    newContactButton.addActionListener(e -> model.changePage(MenuEntry.CREATE_CONTACT));
 
     // labels admin
     JPanel entrepriseLabelPanel = new JPanel();
@@ -122,20 +103,13 @@ public class MenuViewController extends JPanel {
 
     controls.add(companies, gbc);
 
-
     JPanel west = new JPanel(new BorderLayout());
     west.add(controls, BorderLayout.NORTH);
-    west.setBorder(BorderFactory
-        .createMatteBorder(0, 0, 0, 2, Color.BLACK));
+    west.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Color.BLACK));
 
     this.add(west, BorderLayout.WEST);
     // end buttons //
 
-    JPanel titreEnbedFrame = new JPanel();
-    this.add(new MenuView(model, deconection, titreEnbedFrame),
-        BorderLayout.NORTH);
-    JPanel enbedFrame = new JPanel(new BorderLayout());
-    enbedFrame.add(titreEnbedFrame, BorderLayout.NORTH);
-    this.add(enbedFrame);
+    //  this.add(new MenuView(model, disconnection), BorderLayout.NORTH);
   }
 }

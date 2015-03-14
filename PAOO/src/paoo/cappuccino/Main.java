@@ -3,7 +3,9 @@ package paoo.cappuccino;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 
+import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.config.IAppConfig;
 import paoo.cappuccino.core.config.PropertiesConfig;
@@ -11,6 +13,7 @@ import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuFrame;
 import paoo.cappuccino.util.exception.FatalException;
+import paoo.cappuccino.util.hasher.IHashHolderDto;
 import paoo.cappuccino.util.hasher.IStringHasher;
 import paoo.cappuccino.util.hasher.pbkdf2.Pbkdf2Hasher;
 
@@ -26,9 +29,7 @@ public class Main {
   public static void main(String[] args) {
     AppContext appContext = new AppContext("Cappuccino", "1.0.0");
     DependencyInjector injector = configureApp(appContext);
-
-    IGuiManager guiManager = injector.buildDependency(IGuiManager.class);
-    guiManager.openFrame(MenuFrame.class);
+    createGui(injector);
   }
 
   /**
@@ -84,5 +85,59 @@ public class Main {
       throw new FatalException("Could not load the config file "
                                + configFile.getAbsolutePath(), e);
     }
+  }
+
+  private static void createGui(DependencyInjector injector) {
+    IGuiManager guiManager = injector.buildDependency(IGuiManager.class);
+    // TODO, put back this line and remove the rest
+    // guiManager.openFrame(LoginFrame.class);
+
+    guiManager.getLogger().warning("[LoginFrame] Skipping login.");
+    guiManager.openFrame(MenuFrame.class).setLoggedUser(new IUserDto() {
+      @Override
+      public String getUsername() {
+        return "john_";
+      }
+
+      @Override
+      public IHashHolderDto getPassword() {
+        return null;
+      }
+
+      @Override
+      public String getLastName() {
+        return "John";
+      }
+
+      @Override
+      public String getFirstName() {
+        return "Smith";
+      }
+
+      @Override
+      public String getEmail() {
+        return "smith@something.net";
+      }
+
+      @Override
+      public LocalDateTime getRegisterDate() {
+        return LocalDateTime.now();
+      }
+
+      @Override
+      public Role getRole() {
+        return Role.USER;
+      }
+
+      @Override
+      public int getId() {
+        return 1;
+      }
+
+      @Override
+      public int getVersion() {
+        return 1;
+      }
+    });
   }
 }

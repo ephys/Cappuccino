@@ -7,7 +7,12 @@ import paoo.cappuccino.business.dto.IParticipationDto;
  *
  * @author Nicolas Fischer
  */
-public interface IParticipation extends IParticipationDto, IBaseEntity {
+public interface IParticipation extends IParticipationDto {
 
   void setState(State state);
+
+  /**
+   * Increments and returns the entity version.
+   */
+  int incrementVersion();
 }

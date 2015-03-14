@@ -5,7 +5,7 @@ package paoo.cappuccino.business.dto;
  *
  * @author Nicolas Fischer
  */
-public interface IContactDto {
+public interface IContactDto extends IBaseDto {
 
   /**
    * Gets the contact's company id.

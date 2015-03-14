@@ -21,8 +21,8 @@ public class JLabelFont extends JLabel {
    */
   public JLabelFont(String text, int size) {
     super(text);
-    String font = "Arial";
-    Font arial = new Font(font, Font.PLAIN, size);
+
+    Font arial = new Font("Arial", Font.PLAIN, size);
     this.setFont(arial);
   }
 
@@ -39,6 +39,6 @@ public class JLabelFont extends JLabel {
    * Creates a new JLabel using the Arial font and text.
    */
   public JLabelFont() {
-    this(null, 16);
+    this(null);
   }
 }

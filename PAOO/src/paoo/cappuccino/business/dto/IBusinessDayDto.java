@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
  *
  * @author Nicolas Fischer
  */
-public interface IBusinessDayDto {
+public interface IBusinessDayDto extends IBaseDto {
 
   /**
    * Gets the date on which the event will occur.

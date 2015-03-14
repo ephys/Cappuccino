@@ -40,12 +40,11 @@ class CappuccinoIhm implements IGuiManager {
 
   @Override
   public <A extends JFrame> A openFrame(Class<A> frameClass) {
-    if (currentFrame != null) {
-      closeFrame();
-    }
+    closeFrame();
 
     A frame = injector.buildDependency(frameClass);
     currentFrame = frame;
+
     return frame;
   }
 
