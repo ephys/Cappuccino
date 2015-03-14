@@ -1,6 +1,5 @@
 package paoo.cappuccino.dal.dao;
 
-import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
 
 public interface IContactDao {
@@ -26,17 +25,15 @@ public interface IContactDao {
    * @return The list of contact matching the first name and/or the last name.
    * @throws paoo.cappuccino.dal.exception.ConnectionException Database connection error.
    */
-  /* TODO Eager loading: Automatically fetches the contact's company (with the same query). */
   IContactDto[] fetchContactByName(String firstName, String lastName);
 
   /**
    * Fetches all contacts working for a given company.
    *
-   * @param company The company.
+   * @param companyId The company.
    * @return The list of contacts working for the company.
-   *
    * @throws paoo.cappuccino.dal.exception.ConnectionException Database connection error.
    */
-  IContactDto[] fetchContactsByCompany(ICompanyDto company);
+  IContactDto[] fetchContactsByCompany(int companyId);
 }
 

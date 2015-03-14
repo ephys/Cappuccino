@@ -1,6 +1,5 @@
 package paoo.cappuccino.dal.dao;
 
-import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
 
 public interface ICompanyDao {
@@ -30,13 +29,11 @@ public interface ICompanyDao {
    * @return Every companies matching the fields.
    * @throws paoo.cappuccino.dal.exception.ConnectionException Database connection error.
    */
-  /* TODO Eager loading: Automatically fetches the company's creator (with the same query). */
   ICompanyDto[] searchCompanies(String name, String postcode, String street, String town);
 
   ICompanyDto[] fetchAll();
 
   ICompanyDto[] fetchInvitableCompanies();
 
-  /* TODO Eager loading: Automatically fetches the company's creator (with the same query). */
-  ICompanyDto[] fetchCompaniesByDay(IBusinessDayDto businessDay);
+  ICompanyDto[] fetchCompaniesByDay(int businessDayId);
 }

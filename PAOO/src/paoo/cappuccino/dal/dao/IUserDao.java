@@ -1,6 +1,5 @@
 package paoo.cappuccino.dal.dao;
 
-import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.IUser;
 
@@ -44,5 +43,5 @@ public interface IUserDao {
    */
   void updateUser(IUser user);
 
-  IUser getCompanyCreator(ICompanyDto company);
+  IUser getCompanyCreator(int companyId);
 }
