@@ -17,7 +17,7 @@ public interface IHashAlgorithm {
   /**
    * Unserializes the algorithm-specific data and generates a new hash holder contaning that data.
    *
-   * @param data the data to unserialize.
+   * @param data the data to deserialize.
    * @return a proper hash data holder.
    */
   public IHashHolder unserializeCustomData(String data);

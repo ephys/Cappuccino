@@ -33,7 +33,7 @@ public interface IStringHasher {
    * Checks a given set of byte is the hash of a given string.
    *
    * @param toHash          The string to compare to the hash.
-   * @param currentHashData The hash to match. Its data follows the pattern 
+   * @param currentHashData The hash to match. Its data follows the pattern
    *                        "hash:algorithm_id:salt:algorithm_data".
    *                        Obtained via
    *                        {@link paoo.cappuccino.util.hasher.StringHasher#hash(char[])}
@@ -59,7 +59,7 @@ public interface IStringHasher {
 
   /**
    * Translates an hash holder into a string representation of it, for persistence. Use {@link
-   * paoo.cappuccino.util.hasher.StringHasher#unserialize(String)} to unserialize the result
+   * paoo.cappuccino.util.hasher.StringHasher#deserialize(String)} to deserialize the result
    *
    * @param hash The hash holder to serialize.
    * @return The representation of the holder as a string.
@@ -72,5 +72,5 @@ public interface IStringHasher {
    * @param data the representation of the holder.
    * @return the instance containing the data of the hash.
    */
-  public IHashHolderDto unserialize(String data);
+  public IHashHolderDto deserialize(String data);
 }

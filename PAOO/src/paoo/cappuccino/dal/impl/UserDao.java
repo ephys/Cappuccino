@@ -40,7 +40,7 @@ class UserDao implements IUserDao {
   private IUser makeUserFromSet(ResultSet set) throws SQLException {
     int id = set.getInt(1);
     IUserDto.Role role = IUserDto.Role.valueOf(set.getString(2));
-    IHashHolderDto password = hasher.unserialize(set.getString(3));
+    IHashHolderDto password = hasher.deserialize(set.getString(3));
     String email = set.getString(4);
     String username = set.getString(5);
     String firstName = set.getString(6);

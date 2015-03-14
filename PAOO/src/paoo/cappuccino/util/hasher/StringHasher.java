@@ -89,7 +89,7 @@ class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash
   }
 
   @Override
-  public IHashHolderDto unserialize(String data) {
+  public IHashHolderDto deserialize(String data) {
     // version:hash:salt:[algorithm data]
     int versionIndex = data.indexOf(':');
     String version = data.substring(0, versionIndex);

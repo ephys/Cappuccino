@@ -71,7 +71,7 @@ public class TestStringHasher {
   @Test
   public void testSerialize() {
     String serialization = hasher.serialize(hashA);
-    IHashHolderDto postSer = hasher.unserialize(serialization);
+    IHashHolderDto postSer = hasher.deserialize(serialization);
 
     assertArrayEquals(hashA.getHash(), postSer.getHash());
     assertArrayEquals(hashA.getSalt(), postSer.getSalt());
