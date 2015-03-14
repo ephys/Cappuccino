@@ -1,6 +1,5 @@
 package paoo.cappuccino.business.entity;
 
-import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
 
 /**
@@ -9,9 +8,8 @@ import paoo.cappuccino.business.dto.IParticipationDto;
  * @author Nicolas Fischer
  */
 public interface IParticipation extends IParticipationDto, IBaseEntity {
+
   void setState(State state);
 
   void setCancelled(boolean cancelled);
-
-  void addContact(IContactDto contact);
 }

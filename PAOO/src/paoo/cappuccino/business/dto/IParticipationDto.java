@@ -2,7 +2,7 @@ package paoo.cappuccino.business.dto;
 
 /**
  * Data transfer object for the Participation entity.
- * 
+ *
  * @author Nicolas Fischer
  */
 public interface IParticipationDto {
@@ -18,19 +18,14 @@ public interface IParticipationDto {
   State getState();
 
   /**
-   * Returns the business day of the participation.
+   * Returns the id of the business day of the participation.
    */
-  IBusinessDayDto getBusinessDay();
+  int getBusinessDay();
 
   /**
-   * Returns the company assisting on the participation.
+   * Returns the id of the company assisting on the participation.
    */
-  ICompanyDto getCompany();
-
-  /**
-   * Returns the group of contacts assisting the event.
-   */
-  IContactDto[] getContacts();
+  int getCompany();
 
   /**
    * Defines the list of states a participation can take.

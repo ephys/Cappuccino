@@ -2,18 +2,17 @@ package paoo.cappuccino.business.dto;
 
 import java.time.LocalDateTime;
 
-import paoo.cappuccino.business.entity.IUser;
-
 /**
  * Data transfer object for the Compagny entity.
  *
  * @author Nicolas Fischer
  */
 public interface ICompanyDto {
+
   /**
-   * Gets the company's creator.
+   * Gets the company's creator id.
    */
-  IUser GetCreator();
+  int getCreator();
 
   /**
    * Gets the company's name.
@@ -49,9 +48,4 @@ public interface ICompanyDto {
    * Gets the company's address town.
    */
   String getAddressTown();
-
-  /**
-   * Gets the list of business day this company (will attend) attended.
-   */
-  IParticipationDto[] getParticipations();
 }

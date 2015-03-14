@@ -18,9 +18,4 @@ public interface IBusinessDayDto {
    * Gets the date on which the event was registered.
    */
   LocalDateTime getCreationDate();
-
-  /**
-   * Gets the list of participations.
-   */
-  IParticipationDto[] getParticipations();
 }

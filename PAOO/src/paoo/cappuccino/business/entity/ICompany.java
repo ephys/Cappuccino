@@ -9,10 +9,5 @@ import paoo.cappuccino.business.dto.IContactDto;
  * @author Nicolas Fischer
  */
 public interface ICompany extends ICompanyDto, IBaseEntity {
-
-  /**
-   * 
-   * @param contact
-   */
-  void addContact(IContactDto contact);
+  
 }

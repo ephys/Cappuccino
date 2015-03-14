@@ -1,18 +1,16 @@
 package paoo.cappuccino.business.dto;
 
-import paoo.cappuccino.business.entity.ICompany;
-
-
 /**
  * Data transfer object for the Contact entity.
  *
  * @author Nicolas Fischer
  */
 public interface IContactDto {
+
   /**
-   * Gets the contact's compagny.
+   * Gets the contact's company id.
    */
-  ICompany getCompany();
+  int getCompany();
 
   /**
    * Gets the contact's email.
@@ -38,9 +36,4 @@ public interface IContactDto {
    * Gets the contact's phone.
    */
   String getPhone();
-
-  /**
-   * Gets the contact's phone.
-   */
-  IParticipationDto[] getParticipations();
 }

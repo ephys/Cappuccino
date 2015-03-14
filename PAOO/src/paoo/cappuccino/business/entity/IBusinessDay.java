@@ -10,10 +10,5 @@ import paoo.cappuccino.business.dto.IParticipationDto;
  * @author Nicolas Fischer
  */
 public interface IBusinessDay extends IBusinessDayDto, IBaseEntity {
-/**
- * 
- * @param company
- * @return a participation
- */
-  IParticipationDto addCompany(ICompanyDto company);
+
 }
