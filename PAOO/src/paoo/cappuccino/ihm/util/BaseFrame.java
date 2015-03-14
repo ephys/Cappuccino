@@ -26,7 +26,7 @@ public abstract class BaseFrame extends JFrame {
   public BaseFrame(String title, int width, int height) {
     super(title);
     try {
-      setIconImage(ImageIO.read(new FileInputStream("lib/icon.png")));
+      setIconImage(ImageIO.read(new FileInputStream("lib/logo.png")));
     } catch (IOException e) {
     };
     setSize(width, height);
