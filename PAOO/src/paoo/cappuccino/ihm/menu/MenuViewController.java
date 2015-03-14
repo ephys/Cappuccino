@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.login.LoginFrame;
+import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JLabelFont;
 import paoo.cappuccino.ihm.util.MenuState;
 
@@ -54,12 +55,12 @@ public class MenuViewController extends JPanel {
     JPanel searchPanel = new JPanel();
     JLabelFont searchLabel = new JLabelFont("Recherches", 16);
     searchPanel.add(searchLabel);
-    searchPanel.setBackground(Color.BLUE);
+    searchPanel.setBackground(IhmConstants.LIGHT_BLUE);
 
     JPanel dayPanel = new JPanel();
     JLabelFont dayLabel = new JLabelFont("Gérer journées", 16);
     dayPanel.add(dayLabel);
-    dayPanel.setBackground(Color.BLUE);
+    dayPanel.setBackground(IhmConstants.LIGHT_BLUE);
 
     JPanel controls = new JPanel(new GridBagLayout());
     controls.setAlignmentY(Component.TOP_ALIGNMENT);
@@ -95,7 +96,7 @@ public class MenuViewController extends JPanel {
     JPanel entreprisePanel = new JPanel();
     JLabelFont entrepriseLabel = new JLabelFont("Gérer entreprises", 16);
     entreprisePanel.add(entrepriseLabel);
-    entreprisePanel.setBackground(Color.BLUE);
+    entreprisePanel.setBackground(IhmConstants.LIGHT_BLUE);
 
     controls.add(new JPanel(), gbc);// TODO find alternative to this montruosity
     controls.add(entreprisePanel, gbc);
@@ -103,14 +104,19 @@ public class MenuViewController extends JPanel {
     controls.add(newContact, gbc);
 
 
-    JPanel west = new JPanel();
-    west.add(controls);
+    JPanel west = new JPanel(new BorderLayout());
+    west.add(controls, BorderLayout.NORTH);
     west.setBorder(BorderFactory
-        .createMatteBorder(0, 0, 0, 3, Color.BLACK));
+        .createMatteBorder(0, 0, 0, 2, Color.BLACK));
 
     this.add(west, BorderLayout.WEST);
     // end buttons //
 
-    this.add(new MenuView(model, deconection), BorderLayout.NORTH);
+    JPanel titreEnbedFrame = new JPanel();
+    this.add(new MenuView(model, deconection, titreEnbedFrame),
+        BorderLayout.NORTH);
+    JPanel main = new JPanel(new BorderLayout());
+    main.add(titreEnbedFrame, BorderLayout.NORTH);
+    this.add(main, BorderLayout.CENTER);
   }
 }

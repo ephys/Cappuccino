@@ -8,7 +8,7 @@ import paoo.cappuccino.ucc.IUserUcc;
 public class MenuModel extends BaseModel {
 
   private final IUserUcc userUcc;
-  private MenuState state;
+  private MenuState state = MenuState.ACCUEIL;
 
   @Inject
   public MenuModel(IUserUcc userUcc) {
@@ -50,6 +50,15 @@ public class MenuModel extends BaseModel {
           break;
       }
     }
+  }
+
+  /**
+   * get current state
+   * 
+   * @return current state
+   */
+  public MenuState getState() {
+    return this.state;
   }
 
 
