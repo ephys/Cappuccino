@@ -2,6 +2,7 @@ package paoo.cappuccino.ihm.registration;
 
 import java.util.Arrays;
 
+import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.ihm.util.BaseModel;
 import paoo.cappuccino.ihm.util.IhmConstants;
@@ -33,54 +34,48 @@ public class RegistrationModel extends BaseModel {
    *
    * @param username The user's username.
    * @param password The user's password.
-   * @return true: the user has been registered.
+   * @return a user or null if registration failed
    */
-  public boolean attemptRegistration(String username, char[] password,
-                                     char[] confirmPassword, String lastName, String firstName,
-                                     String email) {
+  public IUserDto attemptRegistration(String username, char[] password,
+      char[] confirmPassword, String lastName, String firstName,
+      String email) {
     String isValid = "";
 
     usernameError =
         StringUtils.isEmpty(username) ? IhmConstants.ERROR_FIELD_EMPTY
-                                      : "";
+            : "";
     isValid += usernameError;
     lastNameError =
         StringUtils.isEmpty(lastName) ? IhmConstants.ERROR_FIELD_EMPTY
-                                      : (!StringUtils.isAlphaString(lastName)
-                                         ? IhmConstants.ERROR_INVALID_INPUT_STRING
-                                         : "");
+            : (!StringUtils.isAlphaString(lastName) ? IhmConstants.ERROR_INVALID_INPUT_STRING
+                : "");
     isValid += lastNameError;
     firstNameError =
         StringUtils.isEmpty(firstName) ? IhmConstants.ERROR_FIELD_EMPTY
-                                       : (!StringUtils.isAlphaString(firstName)
-                                          ? IhmConstants.ERROR_INVALID_INPUT_STRING
-                                          : "");
+            : (!StringUtils.isAlphaString(firstName) ? IhmConstants.ERROR_INVALID_INPUT_STRING
+                : "");
     isValid += firstNameError;
     emailError =
         StringUtils.isEmpty(email) ? IhmConstants.ERROR_FIELD_EMPTY
-                                   : (!StringUtils.isEmail(email) ? IhmConstants.ERROR_INVALID_EMAIL
-                                                                  : "");
+            : (!StringUtils.isEmail(email) ? IhmConstants.ERROR_INVALID_EMAIL
+                : "");
     isValid += emailError;
     passwordError =
         password.length == 0 ? IhmConstants.ERROR_FIELD_EMPTY : "";
     isValid += passwordError;
     confirmPasswordError =
         confirmPassword.length == 0 ? IhmConstants.ERROR_FIELD_EMPTY
-                                    : (!Arrays.equals(password, confirmPassword)
-                                       ? IhmConstants.ERROR_NOT_MATCHING_PASSWORD
-                                       : "");
+            : (!Arrays.equals(password, confirmPassword) ? IhmConstants.ERROR_NOT_MATCHING_PASSWORD
+                : "");
     isValid += confirmPasswordError;
 
     dispatchChangeEvent();
 
     if (!isValid.equals("")) {
-      return false;
+      return null;
+      // return userUcc.registration(....);
     }
-
-    // méthode à ajouter dans l'ucc
-    // IUserDto user = userUcc.registration(username, password,lastName,firstName,email);
-
-    return true;
+    return null;
   }
 
 

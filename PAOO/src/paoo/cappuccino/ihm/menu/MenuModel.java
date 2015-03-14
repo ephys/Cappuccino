@@ -1,18 +1,32 @@
 package paoo.cappuccino.ihm.menu;
 
+import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.ihm.util.BaseModel;
 import paoo.cappuccino.ihm.util.MenuState;
+import paoo.cappuccino.ucc.IBusinessDayUcc;
+import paoo.cappuccino.ucc.ICompanyUcc;
+import paoo.cappuccino.ucc.IContactUcc;
 import paoo.cappuccino.ucc.IUserUcc;
 
 public class MenuModel extends BaseModel {
 
+  private final IUserDto connectedUser;
   private final IUserUcc userUcc;
+  private final IBusinessDayUcc businessDayUcc;
+  private final ICompanyUcc companyUcc;
+  private final IContactUcc contactUcc;
   private MenuState state = MenuState.ACCUEIL;
 
   @Inject
-  public MenuModel(IUserUcc userUcc) {
+  public MenuModel(IUserDto connectedUser, IUserUcc userUcc,
+      IBusinessDayUcc businessDayUcc, ICompanyUcc companyUcc,
+      IContactUcc contactUcc) {
     this.userUcc = userUcc;
+    this.businessDayUcc = businessDayUcc;
+    this.companyUcc = companyUcc;
+    this.contactUcc = contactUcc;
+    this.connectedUser = connectedUser;
   }
 
   /**
@@ -61,6 +75,14 @@ public class MenuModel extends BaseModel {
     return this.state;
   }
 
+  /**
+   * get connected user
+   *
+   * @return the connected user
+   */
+  public IUserDto getConnectedUser() {
+    return connectedUser;
+  }
 
 
 }

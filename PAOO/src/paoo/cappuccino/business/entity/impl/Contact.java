@@ -1,6 +1,5 @@
 package paoo.cappuccino.business.entity.impl;
 
-import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.entity.IContact;
 
 public class Contact extends BaseEntity implements IContact {
@@ -11,9 +10,9 @@ public class Contact extends BaseEntity implements IContact {
   }
 
   @Override
-  public Company getCompany() {
+  public int getCompany() {
     // TODO Auto-generated method stub
-    return null;
+    return 0;
   }
 
   @Override
@@ -63,11 +62,8 @@ public class Contact extends BaseEntity implements IContact {
     // TODO Auto-generated method stub
 
   }
-
-  @Override
-  public IParticipationDto[] getParticipations() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
+  /*
+   * @Override public IParticipationDto[] getParticipations() { // TODO Auto-generated method stub
+   * return null; }
+   */
 }

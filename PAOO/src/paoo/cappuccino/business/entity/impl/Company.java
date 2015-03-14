@@ -2,10 +2,7 @@ package paoo.cappuccino.business.entity.impl;
 
 import java.time.LocalDateTime;
 
-import paoo.cappuccino.business.dto.IContactDto;
-import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.entity.ICompany;
-import paoo.cappuccino.business.entity.IUser;
 
 public class Company extends BaseEntity implements ICompany {
 
@@ -56,22 +53,27 @@ public class Company extends BaseEntity implements ICompany {
     return null;
   }
 
+  /*
+   * @Override public IUser GetCreator() { // TODO Auto-generated method stub return null; }
+   * 
+   * @Override public IParticipationDto[] getParticipations() { // TODO Auto-generated method stub
+   * return null; }
+   * 
+   * @Override public void addContact(IContactDto contact) { // TODO Auto-generated method stub
+   * 
+   * }
+   */
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see paoo.cappuccino.business.dto.ICompanyDto#getCreator()
+   */
   @Override
-  public IUser GetCreator() {
+  public int getCreator() {
     // TODO Auto-generated method stub
-    return null;
+    return 0;
   }
 
-  @Override
-  public IParticipationDto[] getParticipations() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public void addContact(IContactDto contact) {
-    // TODO Auto-generated method stub
-
-  }
 
 }

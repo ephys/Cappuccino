@@ -70,7 +70,7 @@ public class MenuViewController extends JPanel {
 
     gbc.gridx = 0;
     gbc.fill = GridBagConstraints.HORIZONTAL;
-    gbc.insets = new Insets(0, 0, 20, 0);
+    gbc.insets = new Insets(0, 0, 13, 0);
 
 
     JPanel search = new JPanel(new BorderLayout());
@@ -113,7 +113,7 @@ public class MenuViewController extends JPanel {
     entrepriseLabelPanel.setBackground(IhmConstants.LIGHT_BLUE);
 
     JPanel companies = new JPanel(new BorderLayout());
-    JPanel companiesCenter = new JPanel(new BorderLayout(2, 0));
+    JPanel companiesCenter = new JPanel(new GridLayout(2, 0));
     companiesCenter.add(newEntrepriseButton);
     companiesCenter.add(newContactButton);
     controls.add(companies, gbc);
@@ -134,8 +134,8 @@ public class MenuViewController extends JPanel {
     JPanel titreEnbedFrame = new JPanel();
     this.add(new MenuView(model, deconection, titreEnbedFrame),
         BorderLayout.NORTH);
-    JPanel main = new JPanel(new BorderLayout());
-    main.add(titreEnbedFrame, BorderLayout.NORTH);
-    this.add(main, BorderLayout.CENTER);
+    JPanel enbedFrame = new JPanel(new BorderLayout());
+    enbedFrame.add(titreEnbedFrame, BorderLayout.NORTH);
+    this.add(enbedFrame);
   }
 }
