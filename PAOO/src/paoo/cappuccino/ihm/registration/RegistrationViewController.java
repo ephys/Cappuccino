@@ -20,7 +20,7 @@ import paoo.cappuccino.ihm.util.IhmConstants;
  */
 @SuppressWarnings("serial")
 public class RegistrationViewController extends JPanel{
-	
+
 	  /**
 	   * Creates a new ViewController for the registration gui.
 	   * @param model The ViewController's model.
@@ -42,8 +42,10 @@ public class RegistrationViewController extends JPanel{
 
 	    JButton validateButton = new JButton("Valider");
 	    validateButton.addActionListener(e -> {
-	    if (model.registrationAttempt(usernameField.getText(), passwordField.getPassword(),confirmPasswordField.getPassword(),lastNameField.getText(),
-		    		  firstNameField.getText(),emailField.getText())) {
+	    if (model.attemptRegistration(usernameField.getText(), passwordField.getPassword(),
+					  confirmPasswordField.getPassword(),
+					  lastNameField.getText(),
+					  firstNameField.getText(), emailField.getText())) {
 		        manager.openFrame(LoginFrame.class);
 		        // guiManager.openFrame();
 		      }
