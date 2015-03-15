@@ -36,48 +36,47 @@ public class RegistrationModel extends BaseModel {
    * @param password The user's password.
    * @return a user or null if registration failed
    */
-  public IUserDto attemptRegistration(String username, char[] password,
-      char[] confirmPassword, String lastName, String firstName,
-      String email) {
-    String isValid = "";
+  public IUserDto attemptRegistration(String username, char[] password, char[] confirmPassword,
+      String lastName, String firstName, String email) {
 
-    usernameError =
-        StringUtils.isEmpty(username) ? IhmConstants.ERROR_FIELD_EMPTY
-            : "";
-    isValid += usernameError;
+    boolean isValid = true;
+
+    usernameError = StringUtils.isEmpty(username) ? IhmConstants.ERROR_FIELD_EMPTY : "";
+    if (isValid && usernameError != "")
+      isValid = false;
     lastNameError =
-        StringUtils.isEmpty(lastName) ? IhmConstants.ERROR_FIELD_EMPTY
-            : (!StringUtils.isAlphaString(lastName) ? IhmConstants.ERROR_INVALID_INPUT_STRING
-                : "");
-    isValid += lastNameError;
+        StringUtils.isEmpty(lastName) ? IhmConstants.ERROR_FIELD_EMPTY : (!StringUtils
+            .isAlphaString(lastName) ? IhmConstants.ERROR_INVALID_INPUT_STRING : "");
+    if (isValid && lastNameError != "")
+      isValid = false;
     firstNameError =
-        StringUtils.isEmpty(firstName) ? IhmConstants.ERROR_FIELD_EMPTY
-            : (!StringUtils.isAlphaString(firstName) ? IhmConstants.ERROR_INVALID_INPUT_STRING
-                : "");
-    isValid += firstNameError;
+        StringUtils.isEmpty(firstName) ? IhmConstants.ERROR_FIELD_EMPTY : (!StringUtils
+            .isAlphaString(firstName) ? IhmConstants.ERROR_INVALID_INPUT_STRING : "");
+    if (isValid && firstNameError != "")
+      isValid = false;
     emailError =
         StringUtils.isEmpty(email) ? IhmConstants.ERROR_FIELD_EMPTY
-            : (!StringUtils.isEmail(email) ? IhmConstants.ERROR_INVALID_EMAIL
-                : "");
-    isValid += emailError;
-    passwordError =
-        password.length == 0 ? IhmConstants.ERROR_FIELD_EMPTY : "";
-    isValid += passwordError;
+            : (!StringUtils.isEmail(email) ? IhmConstants.ERROR_INVALID_EMAIL : "");
+    if (isValid && emailError != "")
+      isValid = false;
+    passwordError = password.length == 0 ? IhmConstants.ERROR_FIELD_EMPTY : "";
+    if (isValid && passwordError != "")
+      isValid = false;
     confirmPasswordError =
-        confirmPassword.length == 0 ? IhmConstants.ERROR_FIELD_EMPTY
-            : (!Arrays.equals(password, confirmPassword) ? IhmConstants.ERROR_NOT_MATCHING_PASSWORD
-                : "");
-    isValid += confirmPasswordError;
+        confirmPassword.length == 0 ? IhmConstants.ERROR_FIELD_EMPTY : (!Arrays.equals(password,
+            confirmPassword) ? IhmConstants.ERROR_NOT_MATCHING_PASSWORD : "");
+    if (isValid && confirmPasswordError != "")
+      isValid = false;
 
     dispatchChangeEvent();
 
-    if (!isValid.equals("")) {
+    if (!isValid)
       return null;
-      // return userUcc.registration(....);
-    }
+
+    // return userUcc.registration(....);
+
     return null;
   }
-
 
   /**
    * Gets the errors relative to the username input.
@@ -120,4 +119,5 @@ public class RegistrationModel extends BaseModel {
   public String getemailError() {
     return emailError;
   }
+
 }
