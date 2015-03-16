@@ -1,65 +1,76 @@
 package paoo.cappuccino.business.entity.impl;
 
 import paoo.cappuccino.business.entity.IContact;
+import paoo.cappuccino.util.StringUtils;
 
 public class Contact extends BaseEntity implements IContact {
+  private int CompanyId;
+  private String email;
+  private boolean emailValid;
+  private String firstName;
+  private String lastName;
+  private String phone;
 
-  public Contact(int id) {
-    super(id);
-    // TODO Auto-generated constructor stub
+  public Contact(int companyId, String email, boolean emailValid, String firstName,
+      String lastName, String phone) {
+    this(-1, 0, companyId, email, emailValid, firstName, lastName, phone);
+  }
+
+  public Contact(int id, int version, int companyId, String email, boolean emailValid,
+      String firstName, String lastName, String phone) {
+    super(id, version);
+    CompanyId = companyId;
+    this.email = email;
+    this.emailValid = emailValid;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.phone = phone;
   }
 
   @Override
   public int getCompany() {
-    // TODO Auto-generated method stub
-    return 0;
+    return this.CompanyId;
   }
 
   @Override
   public String getEmail() {
-    // TODO Auto-generated method stub
-    return null;
+    return this.email;
   }
 
   @Override
   public boolean isEmailValid() {
-    // TODO Auto-generated method stub
-    return false;
+    return this.emailValid;
   }
 
   @Override
   public String getFirstName() {
-    // TODO Auto-generated method stub
-    return null;
+    return this.firstName;
   }
 
   @Override
   public String getLastName() {
-    // TODO Auto-generated method stub
-    return null;
+    return this.lastName;
   }
 
   @Override
   public String getPhone() {
-    // TODO Auto-generated method stub
-    return null;
+    return this.phone;
   }
 
   @Override
   public void setEmail(String email) {
-    // TODO Auto-generated method stub
-
+    if (StringUtils.isEmail(email))
+      this.email = email;
   }
 
   @Override
   public void setEmailValid(boolean emailValid) {
-    // TODO Auto-generated method stub
-
+    this.emailValid = emailValid;
   }
 
   @Override
   public void setPhone(String phone) {
-    // TODO Auto-generated method stub
+    this.phone = phone;
 
   }
 }

@@ -21,94 +21,126 @@ public interface IEntityFactory {
   /**
    * Creates a new user entity (as in not yet stored), for the UCC.
    *
-   * @param username  The user's username, must be unique
-   * @param password  A hashed valid password
-   * @param lastName  The user's last name
-   * @param firstName The user's first name
-   * @param email     The user's email, must be a valid email.
-   * @param role      The user's role
+   * @param username The user's username, must be unique.
+   * @param password A hashed valid password.
+   * @param lastName The user's last name.
+   * @param firstName The user's first name.
+   * @param email The user's email, must be a valid email.
+   * @param role The user's role.
    */
   IUser createUser(String username, IHashHolderDto password, String lastName, String firstName,
-                   String email, IUserDto.Role role);
+      String email, IUserDto.Role role);
 
   /**
    * Creates an already existing user entity, for the DAL.
    *
-   * @param id           The user's identifier
-   * @param version      The user version in the database
-   * @param username     The user's username
-   * @param password     The user's password hash holder, see
-   *                     {@link paoo.cappuccino.util.hasher.StringHasher#deserialize(String)}
-   *                     for details on how to get that object
-   * @param lastName     The user's last name
-   * @param firstName    The user's first name
-   * @param email        The user's email, must be valid
-   * @param role         The user's role
-   * @param registerDate The date and time at which the entity was registered
+   * @param id The user's identifier.
+   * @param version The user version in the database.
+   * @param username The user's username.
+   * @param password The user's password hash holder, see
+   *        {@link paoo.cappuccino.util.hasher.StringHasher#deserialize(String)} for details on how
+   *        to get that object.
+   * @param lastName The user's last name.
+   * @param firstName The user's first name.
+   * @param email The user's email, must be valid.
+   * @param role The user's role.
+   * @param registerDate The date and time at which the entity was registered.
    */
   IUser createUser(int id, int version, String username, IHashHolderDto password, String lastName,
-                   String firstName, String email, IUserDto.Role role, LocalDateTime registerDate);
+      String firstName, String email, IUserDto.Role role, LocalDateTime registerDate);
 
   /**
-   * Creates a new Contact entity (as in not yet stored), for the UCC.
+   * Creates a new contact entity (as in not yet stored), for the UCC.
    *
    * @param companyId The identifier of the company the entity is working for.
-   * @param lastName  The contact's last name.
+   * @param lastName The contact's last name.
    * @param firstName The contact's first name.
-   * @param email     The contact's email, nullable.
-   * @param phone     The contact's phone, nullable.
+   * @param email The contact's email, nullable.
+   * @param phone The contact's phone, nullable.
    */
   IContact createContact(int companyId, String email, String firstName, String lastName,
-                         String phone);
+      String phone);
 
   /**
    * Creates an already existing contact entity, for the DAL.
    *
-   * @param id         The contact's identifier
-   * @param version    The contact version in the database
-   * @param companyId  The identifier of the company the entity is working for.
-   * @param lastName   The contact's last name.
-   * @param firstName  The contact's first name.
-   * @param email      The contact's email, nullable.
+   * @param id The contact's identifier.
+   * @param version The contact version in the database.
+   * @param companyId The identifier of the company the entity is working for.
+   * @param lastName The contact's last name.
+   * @param firstName The contact's first name.
+   * @param email The contact's email, nullable.
    * @param emailValid Whether or not the email of the contact is valid.
-   * @param phone      The contact's phone, nullable.
+   * @param phone The contact's phone, nullable.
    */
   IContact createContact(int id, int version, int companyId, String email, boolean emailValid,
-                         String firstName, String lastName, String phone);
+      String firstName, String lastName, String phone);
 
   /**
-   * TODO. version UCC
+   * Creates a new company entity (as in not yet stored), for the UCC.
+   *
+   * @param creatorId The identifier of the user who create the company .
+   * @param name The company's name.
+   * @param addressStreet The address street of the company.
+   * @param addressNum The address number of the company.
+   * @param addressMailbox The address mail box of the company.
+   * @param addressPostcode The address post code of the company.
+   * @param addressTown The address town of the company.
    */
   ICompany createCompany(int creatorId, String name, String addressStreet, String addressNum,
-                         String addressMailbox, String addressPostcode, String addressTown);
+      String addressMailbox, String addressPostcode, String addressTown);
 
   /**
-   * TODO. version DAL
+   * Creates an already existing company entity, for the DAL.
+   *
+   * @param id The company's identifier.
+   * @param version The company version in the database.
+   * @param creatorId The identifier of the user who create the company .
+   * @param name The company's name.
+   * @param addressStreet The address street of the company.
+   * @param addressNum The address number of the company.
+   * @param addressMailbox The address mail box of the company.
+   * @param addressPostcode The address post code of the company.
+   * @param addressTown The address town of the company.
+   * @param registerDate The date and time at which the entity was registered.
    */
-  ICompany createCompany(int id, int version, int creatorId, String name,
-                         String addressStreet, String addressNum, String addressMailbox,
-                         String addressPostcode,
-                         String addressTown);
+  ICompany createCompany(int id, int version, int creatorId, String name, String addressStreet,
+      String addressNum, String addressMailbox, String addressPostcode, String addressTown,
+      LocalDateTime registerDate);
 
   /**
-   * TODO. version UCC
+   * Creates a new businessDay entity (as in not yet stored), for the UCC.
+   * 
+   * @param eventDate The date of the businessDay will take place .
    */
   IBusinessDay createBusinessDay(LocalDateTime eventDate);
 
-  /**
-   * TODO. version DAL
-   */
-  IBusinessDay createBusinessDay(int id, int version, LocalDateTime creationDate,
-                                 LocalDateTime eventDate);
 
   /**
-   * TODO. version UCC
+   * Creates an already existing businessDay entity, for the DAL.
+   *
+   * @param id The businessDay's identifier.
+   * @param version The businessDay version in the database.
+   * @param eventDate The date of the businessDay will take place .
+   */
+  IBusinessDay createBusinessDay(int id, int version, LocalDateTime eventDate);
+
+  /**
+   * Creates a new participation entity (as in not yet stored), for the UCC.
+   * 
+   * @param companyId Refer the company's identifier of a participation.
+   * @param businessDayId Refer the businessDay's identifier of a participation.
    */
   IParticipation createParticipation(int companyId, int businessDayId);
 
   /**
-   * TODO. version DAL
+   * Creates an already existing businessDay entity, for the DAL.
+   * 
+   * @param companyId Refer the company's identifier of a participation.
+   * @param businessDayId Refer the businessDay's identifier of a participation.
+   * @param version The participation version in the database.
+   * @param state The participation's state.
    */
   IParticipation createParticipation(int companyId, int businessDayId, int version,
-                                     IParticipationDto.State state);
+      IParticipationDto.State state);
 }
