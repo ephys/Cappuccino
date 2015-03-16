@@ -39,22 +39,24 @@ public class RegistrationModel extends BaseModel {
   public IUserDto attemptRegistration(String username, char[] password, char[] confirmPassword,
       String lastName, String firstName, String email) {
 
-    usernameError = StringUtils.isEmpty(username) ? IhmConstants.ERROR_FIELD_EMPTY
-                    : (!StringUtils.isAlphaString(username)
-                       ? IhmConstants.ERROR_ALPHANUM_INPUT : null);
+    usernameError =
+        StringUtils.isEmpty(username) ? IhmConstants.ERROR_FIELD_EMPTY : (!StringUtils
+            .isAlphaString(username) ? IhmConstants.ERROR_ALPHANUM_INPUT : null);
 
     lastNameError = StringUtils.isEmpty(lastName) ? IhmConstants.ERROR_FIELD_EMPTY : null;
 
     firstNameError = StringUtils.isEmpty(firstName) ? IhmConstants.ERROR_FIELD_EMPTY : null;
 
-    emailError = StringUtils.isEmpty(email) ? IhmConstants.ERROR_FIELD_EMPTY
-                 : (!StringUtils.isEmail(email) ? IhmConstants.ERROR_INVALID_EMAIL : null);
+    emailError =
+        StringUtils.isEmpty(email) ? IhmConstants.ERROR_FIELD_EMPTY
+            : (!StringUtils.isEmail(email) ? IhmConstants.ERROR_INVALID_EMAIL : null);
 
-    passwordError = StringUtils.isValidPassword(password)
-                    ? IhmConstants.ERROR_INVALID_PASSWORD : null;
+    passwordError =
+        !StringUtils.isValidPassword(password) ? IhmConstants.ERROR_INVALID_PASSWORD : null;
 
-    confirmPasswordError = (!Arrays.equals(password, confirmPassword)
-                            ? IhmConstants.ERROR_NOT_MATCHING_PASSWORD : null);
+    confirmPasswordError =
+        (!Arrays.equals(password, confirmPassword) ? IhmConstants.ERROR_NOT_MATCHING_PASSWORD
+            : null);
 
     dispatchChangeEvent();
 

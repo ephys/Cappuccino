@@ -30,21 +30,21 @@ public class Main {
     AppContext appContext = new AppContext("Cappuccino", "1.0.0");
     DependencyInjector injector = configureApp(appContext);
     createGui(injector);
+
   }
 
   /**
-   * Configures the application. Separated so that it can be used to setup the test environment
-   * too.
+   * Configures the application. Separated so that it can be used to setup the test environment too.
    *
    * @param appContext the application context.
    * @return The application dependency injector.
    * @throws paoo.cappuccino.util.exception.FatalException An exception made it impossible to
-   *                                                       configure the application.
+   *         configure the application.
    */
   public static DependencyInjector configureApp(AppContext appContext) {
     IAppConfig appConfig =
         makeConfig(appContext.getProfile() + ".properties",
-                   appContext.getProfileType() == AppContext.Profile.DEV);
+            appContext.getProfileType() == AppContext.Profile.DEV);
 
     DependencyInjector injector = new DependencyInjector(appConfig, appContext);
     injector.setDependency(AppContext.class, appContext);
@@ -66,15 +66,14 @@ public class Main {
    * Loads the config file or dies.
    *
    * @param filename The name of the config file.
-   * @param debug    Whether or not the config handler should debug
+   * @param debug Whether or not the config handler should debug
    * @return The newly created config handler.
    * @throws paoo.cappuccino.util.exception.FatalException The config file could not be loaded
    */
-  private static IAppConfig makeConfig(final String filename,
-                                       final boolean debug) {
+  private static IAppConfig makeConfig(final String filename, final boolean debug) {
     if (!RESOURCES_FOLDER.exists() && !RESOURCES_FOLDER.mkdirs()) {
       throw new FatalException("Could not make config directory "
-                               + RESOURCES_FOLDER.getAbsolutePath());
+          + RESOURCES_FOLDER.getAbsolutePath());
     }
 
     final File configFile = new File(RESOURCES_FOLDER, filename);
@@ -82,8 +81,7 @@ public class Main {
     try {
       return new PropertiesConfig(configFile, debug);
     } catch (IOException e) {
-      throw new FatalException("Could not load the config file "
-                               + configFile.getAbsolutePath(), e);
+      throw new FatalException("Could not load the config file " + configFile.getAbsolutePath(), e);
     }
   }
 

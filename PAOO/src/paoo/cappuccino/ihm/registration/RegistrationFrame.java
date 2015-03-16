@@ -1,6 +1,7 @@
 package paoo.cappuccino.ihm.registration;
 
 import paoo.cappuccino.core.injector.Inject;
+import paoo.cappuccino.core.injector.NoCache;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.util.BaseFrame;
 import paoo.cappuccino.ucc.IUserUcc;
@@ -10,6 +11,7 @@ import paoo.cappuccino.ucc.IUserUcc;
  *
  * @author Maduka Junior
  */
+@NoCache
 public class RegistrationFrame extends BaseFrame {
 
   /**
@@ -23,8 +25,7 @@ public class RegistrationFrame extends BaseFrame {
     super("S'inscrire", 490, 520, guiManager);
     this.setResizable(false);
 
-    this.add(new RegistrationViewController(
-        new RegistrationModel(userUcc), guiManager));
+    this.add(new RegistrationViewController(new RegistrationModel(userUcc), guiManager));
     this.setVisible(true);
   }
 }

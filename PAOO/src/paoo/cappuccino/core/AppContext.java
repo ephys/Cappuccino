@@ -50,8 +50,7 @@ public class AppContext {
     fetchProfile();
     initGlobalCatcher();
 
-    appLogger.info(appName + " " + version + " launched using profile \""
-        + this.profile + "\"");
+    appLogger.info(appName + " " + version + " launched using profile \"" + this.profile + "\"");
   }
 
   /**
@@ -102,10 +101,8 @@ public class AppContext {
         public String format(LogRecord record) {
 
           return "["
-              + LocalDateTime.now().format(
-                  DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
-              + "][" + record.getLoggerName() + "]["
-              + record.getLevel().getLocalizedName() + "] "
+              + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
+              + "][" + record.getLoggerName() + "][" + record.getLevel().getLocalizedName() + "] "
               + record.getMessage() + "\r\n";
         }
       };

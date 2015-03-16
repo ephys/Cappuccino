@@ -15,16 +15,20 @@ import paoo.cappuccino.util.hasher.IStringHasher;
  */
 class MockUserUcc implements IUserUcc {
 
-  @Inject
   private IEntityFactory factory;
-  @Inject
   private IStringHasher hasher;
+
+  @Inject
+  public MockUserUcc(IEntityFactory factory, IStringHasher hasher) {
+    this.factory = factory;
+    this.hasher = hasher;
+  }
 
   @Override
   public IUserDto register(String username, char[] password, String firstName, String lastName,
-                           String email) {
+      String email) {
     return factory.createUser(1, 1, username, hasher.hash(password), lastName, firstName, email,
-                              IUserDto.Role.USER, LocalDateTime.now());
+        IUserDto.Role.USER, LocalDateTime.now());
   }
 
   @Override
@@ -34,7 +38,6 @@ class MockUserUcc implements IUserUcc {
     }
 
     return factory.createUser(1, 1, username, hasher.hash(password), "Smith", "John",
-                              "Verne@council.gal", IUserDto.Role.USER,
-                              LocalDateTime.of(1963, 12, 14, 0, 0, 0));
+        "Verne@council.gal", IUserDto.Role.USER, LocalDateTime.of(1963, 12, 14, 0, 0, 0));
   }
 }

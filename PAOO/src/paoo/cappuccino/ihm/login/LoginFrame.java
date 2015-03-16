@@ -1,6 +1,7 @@
 package paoo.cappuccino.ihm.login;
 
 import paoo.cappuccino.core.injector.Inject;
+import paoo.cappuccino.core.injector.NoCache;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.util.BaseFrame;
 import paoo.cappuccino.ucc.IUserUcc;
@@ -10,6 +11,7 @@ import paoo.cappuccino.ucc.IUserUcc;
  *
  * @author Opsomer Mathias
  */
+@NoCache
 public class LoginFrame extends BaseFrame {
 
   private static final long serialVersionUID = 7523864408691215725L;
