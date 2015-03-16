@@ -11,7 +11,7 @@ public interface IParticipationDao {
    *
    * @param businessDayId The day the participations are relative to.
    * @return The list of participation entities.
-   * @throws paoo.cappuccino.dal.exception.ConnectionException Database connection error.
+   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error.
    */
   IParticipationDto[] fetchParticipationsByDate(int businessDayId);
 

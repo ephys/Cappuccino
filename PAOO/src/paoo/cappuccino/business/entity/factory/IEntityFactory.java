@@ -111,7 +111,7 @@ public interface IEntityFactory {
   /**
    * Creates a new businessDay entity (as in not yet stored), for the UCC.
    * 
-   * @param eventDate The date of the businessDay will take place .
+   * @param eventDate The date of the businessDay will take place.
    */
   IBusinessDay createBusinessDay(LocalDateTime eventDate);
 
@@ -121,9 +121,11 @@ public interface IEntityFactory {
    *
    * @param id The businessDay's identifier.
    * @param version The businessDay version in the database.
-   * @param eventDate The date of the businessDay will take place .
+   * @param eventDate The date of the businessDay will take place.
+   * @param creationDate The creation date of the businessDay
    */
-  IBusinessDay createBusinessDay(int id, int version, LocalDateTime eventDate);
+  IBusinessDay createBusinessDay(int id, int version, LocalDateTime eventDate,
+      LocalDateTime creationDate);
 
   /**
    * Creates a new participation entity (as in not yet stored), for the UCC.

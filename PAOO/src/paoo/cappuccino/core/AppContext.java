@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+import javax.swing.JOptionPane;
+
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
@@ -81,11 +83,13 @@ public class AppContext {
    */
   private void initGlobalCatcher() {
     Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
+      exception.printStackTrace();
+
       for (CrashListener listener : crashListeners) {
         listener.onCrash(exception);
       }
 
-      exception.printStackTrace();
+      System.exit(1);
     });
   }
 

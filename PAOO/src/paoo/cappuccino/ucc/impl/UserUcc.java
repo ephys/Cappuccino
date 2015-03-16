@@ -25,7 +25,7 @@ class UserUcc implements IUserUcc {
 
   @Inject
   public UserUcc(IEntityFactory entityFactory, IDalService dalService, IUserDao userDao,
-          IStringHasher hasher) {
+      IStringHasher hasher) {
     this.entityFactory = entityFactory;
     this.userDao = userDao;
     this.hasher = hasher;
@@ -57,9 +57,7 @@ class UserUcc implements IUserUcc {
         entityFactory.createUser(username, hasher.hash(password), lastName, firstName, email,
             IUserDto.Role.USER);
 
-    registeredUser = userDao.createUser(registeredUser);
-
-    return registeredUser;
+    return userDao.createUser(registeredUser);
   }
 
   @Override
@@ -67,7 +65,7 @@ class UserUcc implements IUserUcc {
     ValidationUtil.ensureFilled(username, "username");
     ValidationUtil.ensureFilled(password, "password");
 
-    IUser user = userDao.fetchUserByUsername(username.trim());
+    IUser user = (IUser) userDao.fetchUserByUsername(username.trim());
     if (user == null) {
       return null;
     }

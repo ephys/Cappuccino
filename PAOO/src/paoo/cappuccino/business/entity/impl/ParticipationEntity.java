@@ -4,24 +4,21 @@ import paoo.cappuccino.business.entity.IParticipation;
 import paoo.cappuccino.util.ParticipationUtils;
 
 /**
- * TODO, class javadoc.
+ * Class implementing the IParticipation entity.
+ *
+ * @author Nicolas Fischer
  */
-public class ParticipationEntity implements IParticipation {
+final class ParticipationEntity implements IParticipation {
   private State state;
   private int businessDay;
   private int company;
   private int version;
 
-  /**
-   * TODO.
-   */
+
   public ParticipationEntity(int businessDayId, int companyId) {
     this(0, State.INVITED, businessDayId, companyId);
   }
 
-  /**
-   * TODO.
-   */
   public ParticipationEntity(int version, State state, int businessDayId, int companyId) {
     this.state = state;
     this.businessDay = businessDayId;
@@ -55,7 +52,7 @@ public class ParticipationEntity implements IParticipation {
     }
 
     throw new IllegalArgumentException("Invalid state " + newState.name()
-                                       + " cannot be transitioned directly from " + state.name());
+        + " cannot be transitioned directly from " + state.name());
   }
 
   @Override

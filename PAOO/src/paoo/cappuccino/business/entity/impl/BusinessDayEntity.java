@@ -5,28 +5,23 @@ import java.time.LocalDateTime;
 import paoo.cappuccino.business.entity.IBusinessDay;
 
 /**
- * TODO, class javadoc.
+ * Class implementing the IBusinessDay entity.
+ *
+ * @author Nicolas Fischer
  */
-public class BusinessDayEntity extends BaseEntity implements IBusinessDay {
+final class BusinessDayEntity extends BaseEntity implements IBusinessDay {
 
   private final LocalDateTime eventDate;
-  private LocalDateTime creationDate; // TODO mark final
+  private final LocalDateTime creationDate;
 
-  /**
-   * TODO.
-   */
   public BusinessDayEntity(LocalDateTime eventDate) {
-    this(-1, 0, eventDate);
-    this.creationDate = LocalDateTime.now();
+    this(-1, 0, eventDate, null);
   }
 
-  /**
-   * TODO.
-   */
-  public BusinessDayEntity(int id, int version, LocalDateTime eventDate) {
+  public BusinessDayEntity(int id, int version, LocalDateTime eventDate, LocalDateTime creationDate) {
     super(id, version);
     this.eventDate = eventDate;
-    // TODO missing creation date
+    this.creationDate = creationDate;
   }
 
   @Override

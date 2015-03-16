@@ -13,9 +13,9 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalBackend;
 import paoo.cappuccino.dal.dao.IUserDao;
-import paoo.cappuccino.dal.exception.ConnectionException;
 import paoo.cappuccino.dal.exception.NonUniqueFieldException;
 import paoo.cappuccino.util.ValidationUtil;
+import paoo.cappuccino.util.exception.FatalException;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
 import paoo.cappuccino.util.hasher.IStringHasher;
 
@@ -29,6 +29,7 @@ class UserDao implements IUserDao {
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;
   private final IStringHasher hasher;
+  private PreparedStatement psFetchUserByUsername;
 
   @Inject
   public UserDao(IEntityFactory entityFactory, IDalBackend dalBackend, IStringHasher hasher) {
@@ -52,8 +53,7 @@ class UserDao implements IUserDao {
                                     firstName, email, role, registerDate);
   }
 
-  private void rethrowSqlException(SQLException exception)
-      throws IllegalArgumentException, ConnectionException, NonUniqueFieldException {
+  private void rethrowSqlException(SQLException exception) {
     if (exception.getMessage().contains("users_username_key")) {
       throw new NonUniqueFieldException("The user's username already exists.");
     }
@@ -63,11 +63,11 @@ class UserDao implements IUserDao {
           "One of the fields failed to insert due to constraint violations.");
     }
 
-    throw new ConnectionException("Database error", exception);
+    throw new FatalException("Database error", exception);
   }
 
   @Override
-  public IUser createUser(IUserDto user) {
+  public IUserDto createUser(IUserDto user) {
     ValidationUtil.ensureNotNull(user, "user");
 
     String query =
@@ -77,7 +77,7 @@ class UserDao implements IUserDao {
         + "RETURNING (user_id, role, password, email, username,"
         + " first_name, last_name, register_date, version)";
 
-    try (PreparedStatement ps = dalBackend.fetchPrepardedStatement(query)) {
+    try (PreparedStatement ps = dalBackend.fetchPreparedStatement(query)) {
       ps.setString(1, user.getRole().toString());
       ps.setString(2, hasher.serialize(user.getPassword()));
       ps.setString(3, user.getEmail());
@@ -104,10 +104,11 @@ class UserDao implements IUserDao {
     String query = "SELECT user_id, role, password, email, username, first_name, last_name, "
                    + "register_date, version FROM business_days.users WHERE username = ?";
 
-    try (PreparedStatement ps = dalBackend.fetchPrepardedStatement(query)) {
-      ps.setString(1, username);
+    try {
+      if (psFetchUserByUsername==null) psFetchUserByUsername = dalBackend.fetchPreparedStatement(query);
+      psFetchUserByUsername.setString(1, username);
 
-      try (ResultSet rs = ps.executeQuery()) {
+      try (ResultSet rs = psFetchUserByUsername.executeQuery()) {
         if (rs.next()) {
           return makeUserFromSet(rs);
         }
@@ -115,7 +116,7 @@ class UserDao implements IUserDao {
         return null;
       }
     } catch (SQLException e) {
-      throw new ConnectionException("Database error", e);
+      throw new FatalException("Database error", e);
     }
   }
 
@@ -128,7 +129,7 @@ class UserDao implements IUserDao {
         + " version = version + 1"
         + "WHERE user_id = ? AND version = ?";
 
-    try (PreparedStatement ps = dalBackend.fetchPrepardedStatement(query)) {
+    try (PreparedStatement ps = dalBackend.fetchPreparedStatement(query)) {
       ps.setString(1, hasher.serialize(user.getPassword()));
       ps.setString(2, user.getEmail());
       ps.setString(3, user.getFirstName());

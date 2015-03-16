@@ -13,7 +13,7 @@ public interface ICompanyDao {
    * @throws java.lang.IllegalArgumentException                    One of the fields failed to
    *                                                               insert due to constraint
    *                                                               violations.
-   * @throws paoo.cappuccino.dal.exception.ConnectionException     Database connection error.
+   * @throws paoo.cappuccino.dal.exception.FatalException     Database connection error.
    */
   ICompanyDto createCompany(ICompanyDto company);
 
@@ -27,7 +27,7 @@ public interface ICompanyDao {
    * @param street   The street part of the address of the company, nullable.
    * @param town     The town part of the address of the company, nullable.
    * @return Every companies matching the fields.
-   * @throws paoo.cappuccino.dal.exception.ConnectionException Database connection error.
+   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error.
    */
   ICompanyDto[] searchCompanies(String name, String postcode, String street, String town);
 

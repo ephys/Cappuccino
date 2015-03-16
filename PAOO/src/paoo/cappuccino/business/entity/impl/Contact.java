@@ -4,9 +4,11 @@ import paoo.cappuccino.business.entity.IContact;
 import paoo.cappuccino.util.StringUtils;
 
 /**
- * TODO.
+ * Class implementing the IContact entity.
+ *
+ * @author Nicolas Fischer
  */
-public class Contact extends BaseEntity implements IContact {
+final class Contact extends BaseEntity implements IContact {
 
   private final int companyId;
   private final String firstName;
@@ -15,17 +17,13 @@ public class Contact extends BaseEntity implements IContact {
   private String email;
   private boolean emailValid;
 
-  /**
-   * TODO.
-   */
+
   public Contact(int companyId, String email, boolean emailValid, String firstName,
                  String lastName, String phone) {
     this(-1, 0, companyId, email, emailValid, firstName, lastName, phone);
   }
 
-  /**
-   * TODO.
-   */
+
   public Contact(int id, int version, int companyId, String email, boolean emailValid,
                  String firstName, String lastName, String phone) {
     super(id, version);

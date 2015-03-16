@@ -9,7 +9,6 @@ import paoo.cappuccino.core.config.IAppConfig;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalBackend;
 import paoo.cappuccino.dal.IDalService;
-import paoo.cappuccino.dal.exception.ConnectionException;
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
@@ -50,7 +49,7 @@ class SqlDalService implements IDalService, IDalBackend {
 
       return connection;
     } catch (SQLException e) {
-      throw new ConnectionException("Could not fetch the thread connection", e);
+      throw new FatalException("Could not fetch the thread connection", e);
     }
   }
 
@@ -65,7 +64,7 @@ class SqlDalService implements IDalService, IDalBackend {
 
       sqlConnection.setAutoCommit(false);
     } catch (SQLException e) {
-      throw new ConnectionException("Could not start the transaction", e);
+      throw new FatalException("Could not start the transaction", e);
     }
   }
 
@@ -81,7 +80,7 @@ class SqlDalService implements IDalService, IDalBackend {
       sqlConnection.commit();
       sqlConnection.setAutoCommit(true);
     } catch (SQLException e) {
-      throw new ConnectionException("Could not commit the transaction", e);
+      throw new FatalException("Could not commit the transaction", e);
     }
   }
 
@@ -97,18 +96,18 @@ class SqlDalService implements IDalService, IDalBackend {
       sqlConnection.rollback();
       sqlConnection.setAutoCommit(true);
     } catch (SQLException e) {
-      throw new ConnectionException("Could not rollback the transaction", e);
+      throw new FatalException("Could not rollback the transaction", e);
     }
   }
 
   @Override
-  public PreparedStatement fetchPrepardedStatement(String query) {
+  public PreparedStatement fetchPreparedStatement(String query) {
     Connection sqlConnection = getThreadConnection();
 
     try {
       return sqlConnection.prepareStatement(query);
     } catch (SQLException e) {
-      throw new ConnectionException("Could not create statement " + query, e);
+      throw new FatalException("Could not create statement " + query, e);
     }
   }
 }

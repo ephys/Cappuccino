@@ -22,7 +22,7 @@ public class TestUserUcc {
   private static DependencyInjector injector;
 
   private String username = "john_";
-  private char[] password = new char[] { 'c', 'h', 'o', 'c', 'o', 'l', 'a', 't' };
+  private char[] password = "chocolat".toCharArray();
   private String firstName = "John";
   private String lastName = "Egbert";
   private String email = "johnegbert@sn.ms";

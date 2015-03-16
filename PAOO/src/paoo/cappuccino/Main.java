@@ -16,7 +16,7 @@ import paoo.cappuccino.util.exception.FatalException;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
 import paoo.cappuccino.util.hasher.IStringHasher;
 import paoo.cappuccino.util.hasher.pbkdf2.Pbkdf2Hasher;
-
+// TODO: destatifier le code.
 public class Main {
 
   private static final File RESOURCES_FOLDER = new File("lib");
@@ -27,6 +27,10 @@ public class Main {
    * @param args program args.
    */
   public static void main(String[] args) {
+    new Main(args);
+  }
+  
+  private Main(String[] args) {
     AppContext appContext = new AppContext("Cappuccino", "1.0.0");
     DependencyInjector injector = configureApp(appContext);
     createGui(injector);
@@ -85,7 +89,7 @@ public class Main {
     }
   }
 
-  private static void createGui(DependencyInjector injector) {
+  private void createGui(DependencyInjector injector) {
     IGuiManager guiManager = injector.buildDependency(IGuiManager.class);
     // TODO, put back this line and remove the rest
     // guiManager.openFrame(LoginFrame.class);

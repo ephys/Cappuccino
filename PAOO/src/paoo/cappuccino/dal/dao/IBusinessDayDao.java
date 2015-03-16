@@ -13,7 +13,7 @@ public interface IBusinessDayDao {
    * @throws java.lang.IllegalArgumentException                    One of the fields failed to
    *                                                               insert due to constraint
    *                                                               violations.
-   * @throws paoo.cappuccino.dal.exception.ConnectionException     Database connection error.
+   * @throws paoo.cappuccino.dal.exception.FatalException     Database connection error.
    */
   IBusinessDayDto createBusinessDay(IBusinessDayDto businessDay);
 
@@ -25,7 +25,7 @@ public interface IBusinessDayDao {
    *
    * @param date The date of the business day
    * @return The business day or null if none was found.
-   * @throws paoo.cappuccino.dal.exception.ConnectionException Database connection error
+   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error
    */
   //IBusinessDaysDto fetchBusinessDaysByDate(int year);
 }

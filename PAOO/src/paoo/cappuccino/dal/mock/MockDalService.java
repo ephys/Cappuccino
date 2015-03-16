@@ -8,7 +8,7 @@ import paoo.cappuccino.dal.IDalService;
 public class MockDalService implements IDalBackend, IDalService {
 
   @Override
-  public PreparedStatement fetchPrepardedStatement(String query) {
+  public PreparedStatement fetchPreparedStatement(String query) {
     return null;
   }
 
