@@ -38,6 +38,17 @@ public class StringUtils {
   }
 
   /**
+   * Verifies if a string is following a valid password format according to the application
+   * specifications.
+   *
+   * @param str The string to check.
+   * @return true if the string is a password, false otherwise.
+   */
+  public static boolean isValidPassword(char[] str) {
+    return str.length >= 6;
+  }
+
+  /**
    * Checks if a string contains non-space characters.
    *
    * @param str The string to check.

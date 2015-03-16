@@ -78,8 +78,8 @@ public class RegistrationView extends JPanel implements ChangeListener {
     usernamePanel.setError(model.getUsernameError());
     passwordPanel.setError(model.getPasswordError());
     confirmPasswordPanel.setError(model.getConfirmPasswordError());
-    lastNamePanel.setError(model.getlastNameError());
-    firstNamePanel.setError(model.getfirstNameError());
-    emailPanel.setError(model.getemailError());
+    lastNamePanel.setError(model.getLastNameError());
+    firstNamePanel.setError(model.getFirstNameError());
+    emailPanel.setError(model.getEmailError());
   }
 }

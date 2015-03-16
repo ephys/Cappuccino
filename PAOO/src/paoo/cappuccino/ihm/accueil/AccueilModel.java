@@ -68,10 +68,6 @@ public class AccueilModel extends BaseModel {
     return null;
   }
 
-  public IBusinessDayDto getSelectedDay() {
-    return selectedDay;
-  }
-
   public void setSelectedDay(IBusinessDayDto selectedDay) {
     this.selectedDay = selectedDay;
 

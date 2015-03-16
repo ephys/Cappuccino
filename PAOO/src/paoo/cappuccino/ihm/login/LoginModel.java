@@ -45,8 +45,9 @@ public class LoginModel extends BaseModel {
       isValid = false;
     }
 
+    dispatchChangeEvent();
+
     if (!isValid) {
-      dispatchChangeEvent();
       return null;
     }
 
@@ -60,7 +61,6 @@ public class LoginModel extends BaseModel {
       StringUtils.clearString(password);
     }
 
-    dispatchChangeEvent();
     return user;
   }
 

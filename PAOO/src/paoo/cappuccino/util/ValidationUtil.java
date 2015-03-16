@@ -31,7 +31,7 @@ public class ValidationUtil {
   public static void validatePassword(char[] password, String parameterName) {
     ensureNotNull(password, parameterName);
 
-    if (password.length < 6) {
+    if (!StringUtils.isValidPassword(password)) {
       throw new IllegalArgumentException(
           "Invalid parameter '" + parameterName + "', must be at least 6 characters long");
     }
