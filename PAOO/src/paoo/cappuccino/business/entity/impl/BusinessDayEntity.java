@@ -15,7 +15,7 @@ final class BusinessDayEntity extends BaseEntity implements IBusinessDay {
   private final LocalDateTime creationDate;
 
   public BusinessDayEntity(LocalDateTime eventDate) {
-    this(-1, 0, eventDate, null);
+    this(-1, 0, eventDate, LocalDateTime.now());
   }
 
   public BusinessDayEntity(int id, int version, LocalDateTime eventDate, LocalDateTime creationDate) {

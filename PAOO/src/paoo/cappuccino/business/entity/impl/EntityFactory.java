@@ -22,7 +22,7 @@ final class EntityFactory implements IEntityFactory {
   @Override
   public IUser createUser(String username, IHashHolderDto password, String lastName,
       String firstName, String email, IUserDto.Role role) {
-    return new User(username, password, lastName, firstName, email, role);
+    return new UserEntity(username, password, lastName, firstName, email, role);
   }
 
   @Override
@@ -30,25 +30,25 @@ final class EntityFactory implements IEntityFactory {
       String lastName, String firstName, String email, IUserDto.Role role,
       LocalDateTime registerDate) {
 
-    return new User(id, version, username, password, lastName, firstName, email, registerDate, role);
+    return new UserEntity(id, version, username, password, lastName, firstName, email, registerDate, role);
   }
 
   @Override
   public IContact createContact(int companyId, String email, String firstName, String lastName,
       String phone) {
-    return new Contact(companyId, email, true, firstName, lastName, phone);
+    return new ContactEntity(companyId, email, true, firstName, lastName, phone);
   }
 
   @Override
   public IContact createContact(int id, int version, int companyId, String email,
       boolean emailValid, String firstName, String lastName, String phone) {
-    return new Contact(id, version, companyId, email, emailValid, firstName, lastName, phone);
+    return new ContactEntity(id, version, companyId, email, emailValid, firstName, lastName, phone);
   }
 
   @Override
   public ICompany createCompany(int creatorId, String name, String addressStreet,
       String addressNum, String addressMailbox, String addressPostcode, String addressTown) {
-    return new Company(name, addressStreet, addressNum, addressMailbox, addressPostcode,
+    return new CompanyEntity(name, addressStreet, addressNum, addressMailbox, addressPostcode,
         addressTown, creatorId);
   }
 
@@ -56,7 +56,7 @@ final class EntityFactory implements IEntityFactory {
   public ICompany createCompany(int id, int version, int creatorId, String name,
       String addressStreet, String addressNum, String addressMailbox, String addressPostcode,
       String addressTown, LocalDateTime registerDate) {
-    return new Company(id, version, name, registerDate, addressStreet, addressNum, addressMailbox,
+    return new CompanyEntity(id, version, name, registerDate, addressStreet, addressNum, addressMailbox,
         addressPostcode, addressTown, creatorId);
   }
 

@@ -9,7 +9,7 @@ import paoo.cappuccino.business.entity.ICompany;
  *
  * @author Nicolas Fischer
  */
-final class Company extends BaseEntity implements ICompany {
+final class CompanyEntity extends BaseEntity implements ICompany {
 
   private final String name;
   private final LocalDateTime registerDate;
@@ -20,13 +20,13 @@ final class Company extends BaseEntity implements ICompany {
   private String addressPostcode;
   private String addressTown;
 
-  public Company(String name, String addressStreet, String addressNum, String addressMailbox,
+  public CompanyEntity(String name, String addressStreet, String addressNum, String addressMailbox,
       String addressPostcode, String addressTown, int creatorId) {
     this(-1, 0, name, LocalDateTime.now(), addressStreet, addressNum, addressMailbox,
         addressPostcode, addressTown, creatorId);
   }
 
-  public Company(int id, int version, String name, LocalDateTime registerDate,
+  public CompanyEntity(int id, int version, String name, LocalDateTime registerDate,
       String addressStreet, String addressNum, String addressMailbox, String addressPostcode,
       String addressTown, int creatorId) {
     super(id, version);

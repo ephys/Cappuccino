@@ -10,7 +10,7 @@ import paoo.cappuccino.util.hasher.IHashHolderDto;
  *
  * @author Nicolas Fischer
  */
-final class User extends BaseEntity implements IUser {
+final class UserEntity extends BaseEntity implements IUser {
 
   private final String username;
   private IHashHolderDto password;
@@ -20,13 +20,13 @@ final class User extends BaseEntity implements IUser {
   private LocalDateTime registerDate;
   private Role role;
 
-  public User(String username, IHashHolderDto password, String lastName, String firstName,
+  public UserEntity(String username, IHashHolderDto password, String lastName, String firstName,
       String email, Role role) {
 
     this(-1, 0, username, password, lastName, firstName, email, LocalDateTime.now(), role);
   }
 
-  public User(int id, int version, String username, IHashHolderDto password, String lastName,
+  public UserEntity(int id, int version, String username, IHashHolderDto password, String lastName,
       String firstName, String email, LocalDateTime registerDate, Role role) {
 
     super(id, version);

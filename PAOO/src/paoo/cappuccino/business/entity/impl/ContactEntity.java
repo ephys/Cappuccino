@@ -8,7 +8,7 @@ import paoo.cappuccino.util.StringUtils;
  *
  * @author Nicolas Fischer
  */
-final class Contact extends BaseEntity implements IContact {
+final class ContactEntity extends BaseEntity implements IContact {
 
   private final int companyId;
   private final String firstName;
@@ -18,13 +18,13 @@ final class Contact extends BaseEntity implements IContact {
   private boolean emailValid;
 
 
-  public Contact(int companyId, String email, boolean emailValid, String firstName,
+  public ContactEntity(int companyId, String email, boolean emailValid, String firstName,
                  String lastName, String phone) {
     this(-1, 0, companyId, email, emailValid, firstName, lastName, phone);
   }
 
 
-  public Contact(int id, int version, int companyId, String email, boolean emailValid,
+  public ContactEntity(int id, int version, int companyId, String email, boolean emailValid,
                  String firstName, String lastName, String phone) {
     super(id, version);
     this.companyId = companyId;
