@@ -4,29 +4,35 @@ import java.time.LocalDateTime;
 
 import paoo.cappuccino.business.entity.ICompany;
 
+/**
+ * TODO, class javadoc.
+ */
 public class Company extends BaseEntity implements ICompany {
 
-
-  private String name;
-  private LocalDateTime registerDate;
+  private final String name;
+  private final LocalDateTime registerDate;
+  private final int creatorId;
   private String addressStreet;
   private String addressNum;
   private String addressMailbox;
   private String addressPostcode;
   private String addressTown;
-  private int creatorId;
 
-
-
+  /**
+   * TODO.
+   */
   public Company(String name, String addressStreet, String addressNum,
-      String addressMailbox, String addressPostcode, String addressTown, int creatorId) {
-    this(-1, 0, name, LocalDateTime.now(), addressStreet, addressNum, addressMailbox, addressPostcode,
-        addressTown, creatorId);
+                 String addressMailbox, String addressPostcode, String addressTown, int creatorId) {
+    this(-1, 0, name, LocalDateTime.now(), addressStreet, addressNum, addressMailbox,
+         addressPostcode, addressTown, creatorId);
   }
 
+  /**
+   * TODO.
+   */
   public Company(int id, int version, String name, LocalDateTime registerDate,
-      String addressStreet, String addressNum, String addressMailbox, String addressPostcode,
-      String addressTown, int creatorId) {
+                 String addressStreet, String addressNum, String addressMailbox,
+                 String addressPostcode, String addressTown, int creatorId) {
     super(id, version);
     this.name = name;
     this.registerDate = registerDate;

@@ -3,33 +3,44 @@ package paoo.cappuccino.business.entity.impl;
 import paoo.cappuccino.business.entity.IContact;
 import paoo.cappuccino.util.StringUtils;
 
+/**
+ * TODO.
+ */
 public class Contact extends BaseEntity implements IContact {
-  private int CompanyId;
+
+  private final int companyId;
+  private final String firstName;
+  private final String lastName;
+  private String phone;
   private String email;
   private boolean emailValid;
-  private String firstName;
-  private String lastName;
-  private String phone;
 
+  /**
+   * TODO.
+   */
   public Contact(int companyId, String email, boolean emailValid, String firstName,
-      String lastName, String phone) {
+                 String lastName, String phone) {
     this(-1, 0, companyId, email, emailValid, firstName, lastName, phone);
   }
 
+  /**
+   * TODO.
+   */
   public Contact(int id, int version, int companyId, String email, boolean emailValid,
-      String firstName, String lastName, String phone) {
+                 String firstName, String lastName, String phone) {
     super(id, version);
-    CompanyId = companyId;
-    this.email = email;
+    this.companyId = companyId;
     this.emailValid = emailValid;
     this.firstName = firstName;
     this.lastName = lastName;
     this.phone = phone;
+
+    setEmail(email);
   }
 
   @Override
   public int getCompany() {
-    return this.CompanyId;
+    return this.companyId;
   }
 
   @Override
@@ -38,8 +49,22 @@ public class Contact extends BaseEntity implements IContact {
   }
 
   @Override
+  public void setEmail(String email) {
+    if (!StringUtils.isEmail(email)) {
+      throw new IllegalArgumentException("Invalid email " + email);
+    }
+
+    this.email = email;
+  }
+
+  @Override
   public boolean isEmailValid() {
     return this.emailValid;
+  }
+
+  @Override
+  public void setEmailValid(boolean emailValid) {
+    this.emailValid = emailValid;
   }
 
   @Override
@@ -58,19 +83,7 @@ public class Contact extends BaseEntity implements IContact {
   }
 
   @Override
-  public void setEmail(String email) {
-    if (StringUtils.isEmail(email))
-      this.email = email;
-  }
-
-  @Override
-  public void setEmailValid(boolean emailValid) {
-    this.emailValid = emailValid;
-  }
-
-  @Override
   public void setPhone(String phone) {
     this.phone = phone;
-
   }
 }

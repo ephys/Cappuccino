@@ -30,7 +30,8 @@ final class EntityFactory implements IEntityFactory {
       String lastName, String firstName, String email, IUserDto.Role role,
       LocalDateTime registerDate) {
 
-    return new User(id, version, username, password, lastName, firstName, email, registerDate, role);
+    return new User(id, version, username, password, lastName,
+                    firstName, email, registerDate, role);
   }
 
   @Override
@@ -65,7 +66,7 @@ final class EntityFactory implements IEntityFactory {
     return new BusinessDayEntity(eventDate);
   }
 
-  @Override
+  @Override //TODO creation date
   public IBusinessDay createBusinessDay(int id, int version, LocalDateTime eventDate) {
     return new BusinessDayEntity(id, version, eventDate);
   }
@@ -80,6 +81,4 @@ final class EntityFactory implements IEntityFactory {
       State state) {
     return new ParticipationEntity(version, state, businessDayId, companyId);
   }
-
-
 }
