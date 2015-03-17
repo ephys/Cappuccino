@@ -1,6 +1,6 @@
 package paoo.cappuccino.ucc;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
@@ -21,7 +21,7 @@ public interface IBusinessDayUcc {
    * @throws java.lang.IllegalArgumentException There is already a business day on that academic
    *         year, or the date is null.
    */
-  public IBusinessDayDto create(Date evenDate);
+  public IBusinessDayDto create(LocalDateTime evenDate);
 
   /**
    * Adds a list of invited companies to the business day participation list.

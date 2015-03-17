@@ -1,6 +1,6 @@
 package paoo.cappuccino.ucc.impl;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
@@ -23,10 +23,10 @@ public class BusinessDayUcc implements IBusinessDayUcc {
   }
 
   @Override
-  public IBusinessDayDto create(Date eventDate) {
-    // IBusinessDayDto dto = factory.createBusinessDay(eventDate);// -- PROBLEME DE DATE ICI --
+  public IBusinessDayDto create(LocalDateTime eventDate) {
+    IBusinessDayDto dto = factory.createBusinessDay(eventDate);// -- PROBLEME DE DATE ICI --
     IBusinessDayDto returnedDto = null;
-    // returnedDto = dao.createBusinessDay(dto);
+    returnedDto = dao.createBusinessDay(dto);
     return returnedDto;
   }
 
