@@ -29,7 +29,7 @@ class UserDao implements IUserDao {
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;
   private final IStringHasher hasher;
-  private PreparedStatement psFetchUserByUsername;
+  private PreparedStatement psFetchUserByUsername, psCreateUser, psUpdateUser;
 
   @Inject
   public UserDao(IEntityFactory entityFactory, IDalBackend dalBackend, IStringHasher hasher) {
@@ -77,23 +77,24 @@ class UserDao implements IUserDao {
         + "RETURNING (user_id, role, password, email, username,"
         + " first_name, last_name, register_date, version)";
 
-    try (PreparedStatement ps = dalBackend.fetchPreparedStatement(query)) {
-      ps.setString(1, user.getRole().toString());
-      ps.setString(2, hasher.serialize(user.getPassword()));
-      ps.setString(3, user.getEmail());
-      ps.setString(4, user.getUsername());
-      ps.setString(5, user.getFirstName());
-      ps.setString(6, user.getLastName());
+    try {
+      if (psCreateUser == null) {
+        psCreateUser = dalBackend.fetchPreparedStatement(query);
+      }
+      psCreateUser.setString(1, user.getRole().toString());
+      psCreateUser.setString(2, hasher.serialize(user.getPassword()));
+      psCreateUser.setString(3, user.getEmail());
+      psCreateUser.setString(4, user.getUsername());
+      psCreateUser.setString(5, user.getFirstName());
+      psCreateUser.setString(6, user.getLastName());
 
-      try (ResultSet set = ps.executeQuery()) {
+      try (ResultSet set = psCreateUser.executeQuery()) {
         set.next();
-
         return makeUserFromSet(set);
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-
     return null;
   }
 
@@ -105,7 +106,9 @@ class UserDao implements IUserDao {
                    + "register_date, version FROM business_days.users WHERE username = ?";
 
     try {
-      if (psFetchUserByUsername==null) psFetchUserByUsername = dalBackend.fetchPreparedStatement(query);
+      if (psFetchUserByUsername == null) {
+        psFetchUserByUsername = dalBackend.fetchPreparedStatement(query);
+      }
       psFetchUserByUsername.setString(1, username);
 
       try (ResultSet rs = psFetchUserByUsername.executeQuery()) {
@@ -129,15 +132,18 @@ class UserDao implements IUserDao {
         + " version = version + 1"
         + "WHERE user_id = ? AND version = ?";
 
-    try (PreparedStatement ps = dalBackend.fetchPreparedStatement(query)) {
-      ps.setString(1, hasher.serialize(user.getPassword()));
-      ps.setString(2, user.getEmail());
-      ps.setString(3, user.getFirstName());
-      ps.setString(4, user.getLastName());
-      ps.setInt(5, user.getId());
-      ps.setInt(6, user.getVersion());
+    try {
+      if (psUpdateUser == null) {
+        psCreateUser = dalBackend.fetchPreparedStatement(query);
+      }
+      psUpdateUser.setString(1, hasher.serialize(user.getPassword()));
+      psUpdateUser.setString(2, user.getEmail());
+      psUpdateUser.setString(3, user.getFirstName());
+      psUpdateUser.setString(4, user.getLastName());
+      psUpdateUser.setInt(5, user.getId());
+      psUpdateUser.setInt(6, user.getVersion());
 
-      int affectedRows = ps.executeUpdate();
+      int affectedRows = psUpdateUser.executeUpdate();
       if (affectedRows == 0) {
         throw new ConcurrentModificationException(
             "The user with id " + user.getId() + " and version " + user.getVersion()

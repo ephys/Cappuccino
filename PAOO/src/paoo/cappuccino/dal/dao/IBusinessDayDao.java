@@ -9,15 +9,23 @@ public interface IBusinessDayDao {
    *
    * @param businessDay The business day to insert.
    * @return The business day entity with its information updated from the database.
-   * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The is already a business day during that academic year
+   * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The is already a business day
+   *                                                               during that academic year
    * @throws java.lang.IllegalArgumentException                    One of the fields failed to
    *                                                               insert due to constraint
    *                                                               violations.
-   * @throws paoo.cappuccino.dal.exception.FatalException     Database connection error.
+   * @throws paoo.cappuccino.dal.exception.FatalException          Database connection error.
    */
   IBusinessDayDto createBusinessDay(IBusinessDayDto businessDay);
 
+  /**
+   * Fetch all the business day
+   *
+   * @return All the business day found in the database or null if non was found
+   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error.
+   */
   IBusinessDayDto[] fetchAll();
+
   IBusinessDayDto[] fetchInvitationlessDays();
 
   /**
@@ -27,5 +35,5 @@ public interface IBusinessDayDao {
    * @return The business day or null if none was found.
    * @throws paoo.cappuccino.dal.exception.FatalException Database connection error
    */
-  //IBusinessDaysDto fetchBusinessDaysByDate(int year);
+  IBusinessDayDto fetchBusinessDaysByDate(int year);
 }
