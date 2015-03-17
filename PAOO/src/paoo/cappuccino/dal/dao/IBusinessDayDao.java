@@ -26,12 +26,13 @@ public interface IBusinessDayDao {
    */
   IBusinessDayDto[] fetchAll();
 
+  //TODO
   IBusinessDayDto[] fetchInvitationlessDays();
 
   /**
    * Fetch the BusinessDay corresponding at the date.
    *
-   * @param date The date of the business day
+   * @param year The year of the business day
    * @return The business day or null if none was found.
    * @throws paoo.cappuccino.dal.exception.FatalException Database connection error
    */

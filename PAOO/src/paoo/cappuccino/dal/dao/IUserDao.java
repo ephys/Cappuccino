@@ -11,9 +11,10 @@ public interface IUserDao {
    * @param user The user to insert.
    * @return The user entity with its informations updated from the database.
    * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The username is not unique.
-   * @throws java.lang.IllegalArgumentException One of the fields failed to insert due to constraint
-   *         violations.
-   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error
+   * @throws java.lang.IllegalArgumentException                    One of the fields failed to
+   *                                                               insert due to constraint
+   *                                                               violations.
+   * @throws paoo.cappuccino.dal.exception.FatalException          Database connection error
    */
   IUserDto createUser(IUserDto user);
 
@@ -30,14 +31,23 @@ public interface IUserDao {
    * Updates an user in the database.
    *
    * @param user A user entity.
-   * @throws java.util.ConcurrentModificationException the entity version did not match or the
-   *         entity has been deleted.
-   * @throws java.lang.IllegalArgumentException the entity hasn't been inserted in the database yet.
-   *         Or one of the fields failed to insert to to constraint violations.
+   * @throws java.util.ConcurrentModificationException             The entity version did not match
+   *                                                               or the entity has been deleted.
+   * @throws java.lang.IllegalArgumentException                    The entity hasn't been inserted
+   *                                                               in the database yet. Or one of
+   *                                                               the fields failed to insert to to
+   *                                                               constraint violations.
    * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The username is not unique.
-   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error
+   * @throws paoo.cappuccino.dal.exception.FatalException          Database connection error
    */
   void updateUser(IUser user);
 
+  /**
+   * Fetch the user who discover the company
+   *
+   * @param companyId The id of a company
+   * @return A user entity
+   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error
+   */
   IUserDto getCompanyCreator(int companyId);
 }

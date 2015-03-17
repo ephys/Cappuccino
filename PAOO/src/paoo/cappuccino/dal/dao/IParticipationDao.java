@@ -15,5 +15,12 @@ public interface IParticipationDao {
    */
   IParticipationDto[] fetchParticipationsByDate(int businessDayId);
 
+  /**
+   * Fetch all the participation of the company
+   *
+   * @param companyId The id of a company
+   * @return All the participation or null if none was found
+   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error
+   */
   IParticipationDto[] fetchParticipationsByCompany(int companyId);
 }

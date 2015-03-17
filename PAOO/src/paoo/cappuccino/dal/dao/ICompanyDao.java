@@ -13,10 +13,24 @@ public interface ICompanyDao {
    * @throws java.lang.IllegalArgumentException                    One of the fields failed to
    *                                                               insert due to constraint
    *                                                               violations.
-   * @throws paoo.cappuccino.dal.exception.FatalException     Database connection error.
+   * @throws paoo.cappuccino.dal.exception.FatalException          Database connection error.
    */
   ICompanyDto createCompany(ICompanyDto company);
 
+  /**
+   * Update a company in the database
+   *
+   * @param company A company entity
+   * @throws java.util.ConcurrentModificationException             the entity version did not match
+   *                                                               or the entity has been deleted.
+   * @throws java.lang.IllegalArgumentException                    the entity hasn't been inserted
+   *                                                               in the database yet. Or one of
+   *                                                               the fields failed to insert to to
+   *                                                               constraint violations.
+   * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The name is not unique.
+   * @throws paoo.cappuccino.dal.exception.FatalException          a database connection error
+   *                                                               occurred.
+   */
   void updateCompany(ICompanyDto company);
 
   /**
@@ -31,9 +45,29 @@ public interface ICompanyDao {
    */
   ICompanyDto[] searchCompanies(String name, String postcode, String street, String town);
 
+
+  /**
+   * Fetch all the company stored in the database
+   *
+   * @return All the company found in the database or null if none was found
+   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error.
+   */
   ICompanyDto[] fetchAll();
 
+  /**
+   * Fetch all the invitable companies
+   *
+   * @return Every companies invitable or null if none was found
+   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error
+   */
   ICompanyDto[] fetchInvitableCompanies();
 
+  /**
+   * Fetch all the companies who have participate at the businessDay
+   *
+   * @param businessDayId The id of the business day
+   * @return Every companies who was present or null if none was found
+   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error
+   */
   ICompanyDto[] fetchCompaniesByDay(int businessDayId);
 }
