@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import paoo.cappuccino.dal.IDalBackend;
 import paoo.cappuccino.dal.IDalService;
 
-public class MockDalService implements IDalBackend, IDalService {
+class MockDalService implements IDalBackend, IDalService {
 
   @Override
   public PreparedStatement fetchPreparedStatement(String query) {

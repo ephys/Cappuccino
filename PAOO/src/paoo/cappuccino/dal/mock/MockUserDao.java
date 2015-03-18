@@ -8,14 +8,18 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.dao.IUserDao;
 
-public class MockUserDao implements IUserDao {
+class MockUserDao implements IUserDao {
 
   private int entityCount = 0;
   private HashMap<String, IUser> users = new HashMap<>();
 
-  @Inject
   private IEntityFactory factory;
 
+  @Inject
+  public MockUserDao(IEntityFactory factory) {
+    this.factory = factory;
+  }
+  
   @Override
   public IUser createUser(IUserDto user) {
     IUser userEntity = factory.createUser(++entityCount, 1, user.getUsername(), user.getPassword(),

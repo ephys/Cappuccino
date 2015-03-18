@@ -3,7 +3,7 @@ package paoo.cappuccino.dal.mock;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.dal.dao.ICompanyDao;
 
-public class MockCompanyDao implements ICompanyDao {
+class MockCompanyDao implements ICompanyDao {
 
   @Override
   public ICompanyDto createCompany(ICompanyDto company) {

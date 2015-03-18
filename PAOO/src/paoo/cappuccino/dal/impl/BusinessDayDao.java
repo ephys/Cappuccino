@@ -1,6 +1,5 @@
 package paoo.cappuccino.dal.impl;
 
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +20,7 @@ import paoo.cappuccino.util.exception.FatalException;
  *
  * @author Kevin Bavay
  */
-public class BusinessDayDao implements IBusinessDayDao {
+class BusinessDayDao implements IBusinessDayDao {
 
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;

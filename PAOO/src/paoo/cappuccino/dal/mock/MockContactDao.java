@@ -10,7 +10,7 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.dao.IContactDao;
 
-public class MockContactDao implements IContactDao {
+class MockContactDao implements IContactDao {
   private List<IContact> contactList = new ArrayList<>();
 
   private IEntityFactory factory;
