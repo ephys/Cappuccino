@@ -22,8 +22,7 @@ public class AccueilModel extends BaseModel {
   private IBusinessDayDto selectedDay;
 
   @Inject
-  public AccueilModel(ICompanyUcc companyUcc,
-                      IBusinessDayUcc businessDayUcc) {
+  public AccueilModel(ICompanyUcc companyUcc, IBusinessDayUcc businessDayUcc) {
     this.companyUcc = companyUcc;
     this.businessDayUcc = businessDayUcc;
   }
@@ -43,8 +42,8 @@ public class AccueilModel extends BaseModel {
    * @return table with all companies concerned
    */
   public ICompanyDto[] getCompanies() {
-    return selectedDay == null ? new ICompanyDto[0]
-                               : businessDayUcc.getAttendingCompanies(selectedDay.getId());
+    return selectedDay == null ? new ICompanyDto[0] : businessDayUcc
+        .getAttendingCompanies(selectedDay.getId());
   }
 
   /**
@@ -73,4 +72,5 @@ public class AccueilModel extends BaseModel {
 
     dispatchChangeEvent();
   }
+
 }
