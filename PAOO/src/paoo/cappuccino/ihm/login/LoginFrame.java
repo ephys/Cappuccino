@@ -1,5 +1,10 @@
 package paoo.cappuccino.ihm.login;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.core.injector.NoCache;
 import paoo.cappuccino.ihm.core.IGuiManager;
@@ -24,10 +29,15 @@ public class LoginFrame extends BaseFrame {
    */
   @Inject
   public LoginFrame(IUserUcc userUcc, IGuiManager guiManager) {
-    super("Connexion", 400, 240, guiManager);
-    this.setResizable(false);
+    super("Connexion", 440, 490, guiManager);
+    
+    this.setMinimumSize(new Dimension(350, 240));
 
-    this.add(new LoginViewController(new LoginModel(userUcc), guiManager));
+    this.setLayout(new GridBagLayout());
+    this.add(new LoginViewController(new LoginModel(userUcc), guiManager), new GridBagConstraints());
+    
+    this.getContentPane().setBackground(new Color(212, 82, 82));
+    
     this.setVisible(true);
   }
 }

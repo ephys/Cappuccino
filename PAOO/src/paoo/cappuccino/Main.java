@@ -26,7 +26,7 @@ public class Main extends BaseMain {
   }
   
   protected Main() {
-    super(new AppContext("Cappuccino", "1.0.0"));
+    super(new AppContext("Cappuccino", "1.1.0"));
 
     createGui();
   }
@@ -38,7 +38,7 @@ public class Main extends BaseMain {
       guiManager.openFrame(LoginFrame.class);
       return;
     }
-    
+
     guiManager.getLogger().warning("[LoginFrame] Skipping login.");
     guiManager.openFrame(MenuFrame.class).setLoggedUser(new IUserDto() {
       @Override

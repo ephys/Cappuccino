@@ -1,6 +1,7 @@
 package paoo.cappuccino.ihm.login;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
@@ -9,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
@@ -38,8 +40,10 @@ public class LoginViewController extends JPanel {
     super(new BorderLayout());
     this.model = model;
     this.manager = manager;
-    this.setBorder(BorderFactory.createEmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0,
-        IhmConstants.M_GAP));
+   
+    this.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(80,80,80)),
+        new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0, IhmConstants.M_GAP)));
 
     JTextField usernameField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
@@ -94,7 +98,6 @@ public class LoginViewController extends JPanel {
       model.setPasswordError(IhmConstants.ERROR_FIELD_EMPTY);
       isValid = false;
     }
-
 
     if (!isValid) {
       return null;

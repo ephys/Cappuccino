@@ -1,8 +1,5 @@
 package paoo.cappuccino.ihm.login;
 
-import javax.swing.event.ChangeEvent;
-
-import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.ihm.util.BaseModel;
 import paoo.cappuccino.ucc.IUserUcc;
 
@@ -17,11 +14,9 @@ public class LoginModel extends BaseModel {
   private String passwordError;
   private String usernameError;
 
-  @Inject
   public LoginModel(IUserUcc userUcc) {
     this.userUcc = userUcc;
   }
-
 
   /**
    * Clears the form errors.
@@ -45,22 +40,18 @@ public class LoginModel extends BaseModel {
     return passwordError;
   }
 
-
   public void setUsernameError(String error) {
     usernameError = error;
-    dispatchChangeEvent(new ChangeEvent(this));
+    dispatchChangeEvent();
   }
-
 
   public void setPasswordError(String error) {
     passwordError = error;
-    dispatchChangeEvent(new ChangeEvent(this));
+    dispatchChangeEvent();
 
   }
-
 
   public IUserUcc getUserUcc() {
     return userUcc;
   }
-
 }
