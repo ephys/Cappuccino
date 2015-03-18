@@ -28,6 +28,7 @@ public class MenuViewController extends MenuView {
     this.model = model;
     this.manager = manager;
 
+    changePage(MenuEntry.HOME);
     // buttons //
     JButton home = new JButton("Accueil");
     home.addActionListener(e -> changePage(MenuEntry.HOME));
@@ -147,16 +148,16 @@ public class MenuViewController extends MenuView {
 
   }
 
-  private <A> A createViewController(Class<A> viewController, Object model) {
+  private <A> A createViewController(Class<A> viewController, Object modelPage) {
     try {
       Constructor<A> constructor =
-          viewController.getDeclaredConstructor(model.getClass(), this.getClass(),
+          viewController.getDeclaredConstructor(modelPage.getClass(), model.getClass(),
               IGuiManager.class);
-      return constructor.newInstance(model, this, manager);
+      return constructor.newInstance(modelPage, model, manager);
     } catch (NoSuchMethodException e) {
       throw new GuiException("The view controller '" + viewController.getCanonicalName()
           + "' does not have a constructor with the "
-          + "arguments 'model, menu model, gui manager'.");
+          + "arguments 'model, MenuModel, gui manager'.");
     } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
       throw new GuiException("An exception occured while creating the view controller '"
           + viewController.getCanonicalName() + "'", e);

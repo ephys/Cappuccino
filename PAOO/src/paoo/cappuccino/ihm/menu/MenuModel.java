@@ -19,7 +19,7 @@ public class MenuModel extends BaseModel {
 
   private final MenuFrame containingFrame;
   private final IGuiManager guiManager;
-  private MenuEntry currentEntry = MenuEntry.HOME;
+  private MenuEntry currentEntry;
   private JPanel currentViewController;
 
   public MenuModel(MenuFrame containingFrame, IUserUcc userUcc, IBusinessDayUcc businessDayUcc,
