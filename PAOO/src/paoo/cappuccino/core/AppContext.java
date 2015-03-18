@@ -13,8 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import javax.swing.JOptionPane;
-
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
@@ -51,8 +49,6 @@ public class AppContext {
     initLogger();
     fetchProfile();
     initGlobalCatcher();
-
-    appLogger.info(appName + " " + version + " launched using profile \"" + this.profile + "\"");
   }
 
   /**
@@ -157,7 +153,7 @@ public class AppContext {
   /**
    * Returns the application parent/global logger.
    */
-  Logger getAppLogger() {
+  public Logger getAppLogger() {
     return appLogger;
   }
 

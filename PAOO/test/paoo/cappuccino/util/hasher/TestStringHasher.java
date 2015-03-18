@@ -1,21 +1,21 @@
 package paoo.cappuccino.util.hasher;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.util.Arrays;
-
-import paoo.cappuccino.Main;
-import paoo.cappuccino.core.AppContext;
-import paoo.cappuccino.core.injector.DependencyInjector;
-import paoo.cappuccino.core.injector.Inject;
-import paoo.cappuccino.util.hasher.pbkdf2.Pbkdf2Hasher;
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import paoo.cappuccino.BaseMain;
+import paoo.cappuccino.core.AppContext;
+import paoo.cappuccino.core.injector.DependencyInjector;
+import paoo.cappuccino.core.injector.Inject;
+import paoo.cappuccino.util.hasher.pbkdf2.Pbkdf2Hasher;
 
 /**
  * String hasher Unit test
@@ -29,12 +29,13 @@ public class TestStringHasher {
   @Inject
   private IStringHasher hasher;
 
-  private char[] password = new char[]{'p', 'o', 'm', 'm', 'e'};
+  private char[] password = "pomme".toCharArray();
   private IHashHolderDto hashA;
 
   @BeforeClass
-  public static void init() {
-    injector = Main.configureApp(new AppContext("HasherTest", "0.0.1", "test"));
+  public static void systemInit() {
+    BaseMain main = new BaseMain(new AppContext("HasherTest", "0.1.0", "test"));
+    injector = main.getInjector();
   }
 
   @Before

@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import paoo.cappuccino.Main;
+import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
@@ -12,7 +12,6 @@ import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
 import paoo.cappuccino.util.hasher.IStringHasher;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -40,7 +39,8 @@ public class TestUserEntity {
 
   @BeforeClass
   public static void systemInit() {
-    injector = Main.configureApp(new AppContext("UserEntityTest", "0.0.1", "test"));
+    BaseMain main = new BaseMain(new AppContext("UserEntityTest", "0.1.0", "test"));
+    injector = main.getInjector();
   }
 
   @Before
