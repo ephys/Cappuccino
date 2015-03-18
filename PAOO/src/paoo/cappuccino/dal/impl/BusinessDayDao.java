@@ -1,8 +1,6 @@
 package paoo.cappuccino.dal.impl;
 
 
-import com.sun.xml.internal.ws.addressing.model.ActionNotSupportedException;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,9 +39,8 @@ public class BusinessDayDao implements IBusinessDayDao {
 
     String query =
         "INSERT INTO business_days.business_days(business_day_id, event_date, creation_date, "
-        + "academic_year, version)"
-        + "VALUES (DEFAULT, ?, DEFAULT, ?, DEFAULT)"
-        + "RETURNING (business_day_id, event_date, creation_date, academic_year, version)";
+            + "academic_year, version)" + "VALUES (DEFAULT, ?, DEFAULT, ?, DEFAULT)"
+            + "RETURNING (business_day_id, event_date, creation_date, academic_year, version)";
     try {
       if (psCreateBusinessDay == null) {
         psCreateBusinessDay = dalBackend.fetchPreparedStatement(query);
@@ -83,8 +80,8 @@ public class BusinessDayDao implements IBusinessDayDao {
 
   @Override
   public IBusinessDayDto[] fetchInvitationlessDays() {
-    //TODO
-    throw new ActionNotSupportedException("Not implemented yet");
+    // TODO
+    throw new FatalException("Not implemented yet");
   }
 
   @Override
@@ -111,7 +108,7 @@ public class BusinessDayDao implements IBusinessDayDao {
     int id = set.getInt(1);
     LocalDateTime eventDate = Timestamp.valueOf(set.getString(2)).toLocalDateTime();
     LocalDateTime creationDate = Timestamp.valueOf(set.getString(3)).toLocalDateTime();
-    //String year = set.getString(4);
+    // String year = set.getString(4);
     int version = set.getInt(5);
 
     return entityFactory.createBusinessDay(id, version, eventDate, creationDate);
@@ -130,5 +127,3 @@ public class BusinessDayDao implements IBusinessDayDao {
     throw new FatalException("Database error", exception);
   }
 }
-
-

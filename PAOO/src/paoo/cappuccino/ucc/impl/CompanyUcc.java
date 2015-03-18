@@ -3,6 +3,7 @@ package paoo.cappuccino.ucc.impl;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
+import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalService;
 import paoo.cappuccino.dal.dao.ICompanyDao;
 import paoo.cappuccino.ucc.ICompanyUcc;
@@ -12,6 +13,7 @@ public class CompanyUcc implements ICompanyUcc {
   private final IEntityFactory factory;
   private final ICompanyDao dao;
 
+  @Inject
   public CompanyUcc(IEntityFactory entityFactory, IDalService dalService, ICompanyDao companyDao) {
     this.factory = entityFactory;
     this.dao = companyDao;

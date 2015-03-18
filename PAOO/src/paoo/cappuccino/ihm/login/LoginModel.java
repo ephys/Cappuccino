@@ -1,11 +1,10 @@
 package paoo.cappuccino.ihm.login;
 
-import paoo.cappuccino.business.dto.IUserDto;
+import javax.swing.event.ChangeEvent;
+
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.ihm.util.BaseModel;
-import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ucc.IUserUcc;
-import paoo.cappuccino.util.StringUtils;
 
 /**
  * Model for the Login View/ViewController.
@@ -23,51 +22,11 @@ public class LoginModel extends BaseModel {
     this.userUcc = userUcc;
   }
 
-  /**
-   * Tries to log the user in.
-   *
-   * @param username The user's username.
-   * @param password The user's password.
-   * @return the user logged in or null
-   */
-  public IUserDto attemptLogin(String username, char[] password) {
-    resetErrors();
-
-    boolean isValid = true;
-    if (StringUtils.isEmpty(username)) {
-      usernameError = IhmConstants.ERROR_FIELD_EMPTY;
-      isValid = false;
-    }
-
-    if (password.length == 0) {
-      passwordError = IhmConstants.ERROR_FIELD_EMPTY;
-
-      isValid = false;
-    }
-
-    dispatchChangeEvent();
-
-    if (!isValid) {
-      return null;
-    }
-
-    IUserDto user = userUcc.logIn(username, password);
-
-    if (user == null) {
-      usernameError = IhmConstants.ERROR_WRONG_LOGIN;
-      passwordError = IhmConstants.ERROR_WRONG_LOGIN;
-    } else {
-      // avoid password release in case of memory dump.
-      StringUtils.clearString(password);
-    }
-
-    return user;
-  }
 
   /**
    * Clears the form errors.
    */
-  private void resetErrors() {
+  public void resetErrors() {
     passwordError = null;
     usernameError = null;
   }
@@ -84,6 +43,24 @@ public class LoginModel extends BaseModel {
    */
   public String getPasswordError() {
     return passwordError;
+  }
+
+
+  public void setUsernameError(String error) {
+    usernameError = error;
+    dispatchChangeEvent(new ChangeEvent(this));
+  }
+
+
+  public void setPasswordError(String error) {
+    passwordError = error;
+    dispatchChangeEvent(new ChangeEvent(this));
+
+  }
+
+
+  public IUserUcc getUserUcc() {
+    return userUcc;
   }
 
 }

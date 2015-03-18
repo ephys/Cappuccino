@@ -7,6 +7,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,30 +17,35 @@ import javax.swing.JPanel;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JLabelFont;
+import paoo.cappuccino.ihm.util.exception.GuiException;
 
 public class MenuViewController extends MenuView {
+  private final MenuModel model;
+  private final IGuiManager manager;
 
   public MenuViewController(MenuModel model, IGuiManager manager) {
     super(model, manager);
+    this.model = model;
+    this.manager = manager;
 
     // buttons //
     JButton home = new JButton("Accueil");
-    home.addActionListener(e -> model.changePage(MenuEntry.HOME));
+    home.addActionListener(e -> changePage(MenuEntry.HOME));
 
     JButton participationButton = new JButton("Participations");
-    participationButton.addActionListener(e -> model.changePage(MenuEntry.SEARCH_PARTICIPATION));
+    participationButton.addActionListener(e -> changePage(MenuEntry.SEARCH_PARTICIPATION));
 
     JButton contactButton = new JButton("Contacts");
-    contactButton.addActionListener(e -> model.changePage(MenuEntry.SEARCH_CONTACT));
+    contactButton.addActionListener(e -> changePage(MenuEntry.SEARCH_CONTACT));
 
     JButton companyButton = new JButton("Entreprises");
-    companyButton.addActionListener(e -> model.changePage(MenuEntry.SEARCH_COMPANY));
+    companyButton.addActionListener(e -> changePage(MenuEntry.SEARCH_COMPANY));
 
     JButton companiesSelectButton = new JButton("Sélèc. entreprises");
-    companiesSelectButton.addActionListener(e -> model.changePage(MenuEntry.SELEC_COMPANY));
+    companiesSelectButton.addActionListener(e -> changePage(MenuEntry.SELEC_COMPANY));
 
     JButton newDayButton = new JButton("Créer journée");
-    newDayButton.addActionListener(e -> model.changePage(MenuEntry.CREATE_BDAY));
+    newDayButton.addActionListener(e -> changePage(MenuEntry.CREATE_BDAY));
 
     // JPanel
     JPanel searchLabelPanel = new JPanel();
@@ -83,9 +90,9 @@ public class MenuViewController extends MenuView {
     // si admin
     // button admin
     JButton newEntrepriseButton = new JButton("Créer entreprise");
-    newEntrepriseButton.addActionListener(e -> model.changePage(MenuEntry.CREATE_COMPANY));
+    newEntrepriseButton.addActionListener(e -> changePage(MenuEntry.CREATE_COMPANY));
     JButton newContactButton = new JButton("Créer contact");
-    newContactButton.addActionListener(e -> model.changePage(MenuEntry.CREATE_CONTACT));
+    newContactButton.addActionListener(e -> changePage(MenuEntry.CREATE_CONTACT));
 
     // labels admin
     JPanel entrepriseLabelPanel = new JPanel();
@@ -110,6 +117,49 @@ public class MenuViewController extends MenuView {
     this.add(west, BorderLayout.WEST);
     // end buttons //
 
-    //  this.add(new MenuView(model, disconnection), BorderLayout.NORTH);
+    // this.add(new MenuView(model, disconnection), BorderLayout.NORTH);
+  }
+
+  /**
+   * Controls the main view to display. Don't switch view if same view demanded
+   *
+   * @param page the page to open.
+   */
+  public void changePage(MenuEntry page) {
+    if (page == model.getCurrentPageEntry()) {
+      return;
+    }
+
+    model.setCurrentEntry(page);
+
+    if (page.getModel() == null) {
+      throw new IllegalArgumentException(page.getTitle()
+          + "'s model is null, either this is a bug or it hasn't been implemented yet.");
+    }
+
+    if (page.getViewController() == null) {
+      throw new IllegalArgumentException(page.getTitle()
+          + "'s view controller is null, either this is a bug or it hasn't been implemented yet.");
+    }
+
+    model.setCurrentViewController((JPanel) createViewController(page.getViewController(),
+        page.getModel()));
+
+  }
+
+  private <A> A createViewController(Class<A> viewController, Object model) {
+    try {
+      Constructor<A> constructor =
+          viewController.getDeclaredConstructor(model.getClass(), this.getClass(),
+              IGuiManager.class);
+      return constructor.newInstance(model, this, manager);
+    } catch (NoSuchMethodException e) {
+      throw new GuiException("The view controller '" + viewController.getCanonicalName()
+          + "' does not have a constructor with the "
+          + "arguments 'model, menu model, gui manager'.");
+    } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
+      throw new GuiException("An exception occured while creating the view controller '"
+          + viewController.getCanonicalName() + "'", e);
+    }
   }
 }

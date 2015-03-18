@@ -55,7 +55,6 @@ public class MenuFrame extends BaseFrame {
         new MenuModel(this, userUcc, businessDayUcc, companyUcc, contactUcc, guiManager);
 
     this.add(new MenuViewController(model, guiManager));
-    model.changePage(MenuEntry.HOME);
 
     this.setVisible(true);
   }
