@@ -8,7 +8,7 @@ import paoo.cappuccino.dal.IDalService;
 import paoo.cappuccino.dal.dao.ICompanyDao;
 import paoo.cappuccino.ucc.ICompanyUcc;
 
-public class CompanyUcc implements ICompanyUcc {
+class CompanyUcc implements ICompanyUcc {
 
   private final IEntityFactory factory;
   private final ICompanyDao dao;

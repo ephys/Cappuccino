@@ -12,7 +12,7 @@ import paoo.cappuccino.dal.IDalService;
 import paoo.cappuccino.dal.dao.IBusinessDayDao;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 
-public class BusinessDayUcc implements IBusinessDayUcc {
+class BusinessDayUcc implements IBusinessDayUcc {
 
   private final IEntityFactory factory;
   private final IBusinessDayDao dao;

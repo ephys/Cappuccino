@@ -9,7 +9,7 @@ import paoo.cappuccino.dal.IDalService;
 import paoo.cappuccino.dal.dao.IContactDao;
 import paoo.cappuccino.ucc.IContactUcc;
 
-public class ContactUcc implements IContactUcc {
+class ContactUcc implements IContactUcc {
 
   private final IEntityFactory factory;
   private final IContactDao dao;
