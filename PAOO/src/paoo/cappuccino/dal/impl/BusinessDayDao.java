@@ -117,12 +117,10 @@ class BusinessDayDao implements IBusinessDayDao {
     if (exception.getMessage().contains("academic_year_key")) {
       throw new NonUniqueFieldException("There is already a business day for that year.");
     }
-
     if (exception.getMessage().contains("violates")) {
       throw new IllegalArgumentException(
           "One of the fields failed to insert due to constraint violations.");
     }
-
     throw new FatalException("Database error", exception);
   }
 }
