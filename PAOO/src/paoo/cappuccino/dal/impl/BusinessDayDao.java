@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
@@ -42,9 +44,9 @@ class BusinessDayDao implements IBusinessDayDao {
 
     String query =
         "INSERT INTO business_days.business_days(business_day_id, event_date, creation_date, "
-            + "academic_year, version) "
-            + "VALUES (DEFAULT, ?, DEFAULT, ?, DEFAULT)"
-            + "RETURNING (business_day_id, event_date, creation_date, version)";
+        + "academic_year, version) "
+        + "VALUES (DEFAULT, ?, DEFAULT, ?, DEFAULT)"
+        + "RETURNING (business_day_id, event_date, creation_date, version)";
 
     try {
       if (psCreateBusinessDay == null) {
@@ -76,12 +78,13 @@ class BusinessDayDao implements IBusinessDayDao {
       }
 
       try (ResultSet rs = psFetchAll.executeQuery()) {
-        IBusinessDayDto[] businessTable = new IBusinessDayDto[rs.getFetchSize()];
-        for (int i = 0; rs.next(); i++) {
-          businessTable[i] = makeBusinessDaysFromSet(rs);
+        List<IBusinessDayDto> businessDayList = new ArrayList<>();
+
+        while (rs.next()) {
+          businessDayList.add(makeBusinessDaysFromSet(rs));
         }
 
-        return businessTable;
+        return businessDayList.toArray(new IBusinessDayDto[businessDayList.size()]);
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
@@ -93,7 +96,7 @@ class BusinessDayDao implements IBusinessDayDao {
   @Override
   public IBusinessDayDto[] fetchInvitationlessDays() {
     // TODO
-    throw new FatalException("Not implemented yet");
+    throw new FatalException("Not yet implemented");
   }
 
   @Override
