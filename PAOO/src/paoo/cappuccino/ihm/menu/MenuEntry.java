@@ -1,6 +1,7 @@
 package paoo.cappuccino.ihm.menu;
 
 import paoo.cappuccino.ihm.accueil.AccueilViewController;
+import paoo.cappuccino.ihm.companySelection.CompanySelectionViewController;
 
 /**
  * List of entries of the main menu.
@@ -8,14 +9,11 @@ import paoo.cappuccino.ihm.accueil.AccueilViewController;
  * @author Opsomer Mathias
  */
 public enum MenuEntry {
-  HOME("Accueil", AccueilViewController.class),
-  SEARCH_PARTICIPATION("Recherche - Participation", null),
-  SEARCH_CONTACT("Recherche - Personne de contact", null),
-  SEARCH_COMPANY("Recherche - Entreprise", null),
-  SELEC_COMPANY("Sélectionner des entreprises", null),
-  CREATE_BDAY("Créer une journée des entreprises", null),
-  CREATE_COMPANY("créer une entreprise", null),
-  CREATE_CONTACT("Créer une personne de contact", null);
+  HOME("Accueil", AccueilViewController.class), SEARCH_PARTICIPATION("Recherche - Participation",
+      null), SEARCH_CONTACT("Recherche - Personne de contact", null), SEARCH_COMPANY(
+      "Recherche - Entreprise", null), SELEC_COMPANY("Sélectionner des entreprises",
+      CompanySelectionViewController.class), CREATE_BDAY("Créer une journée des entreprises", null), CREATE_COMPANY(
+      "créer une entreprise", null), CREATE_CONTACT("Créer une personne de contact", null);
 
   private final String title;
   private final Class<?> viewController;
