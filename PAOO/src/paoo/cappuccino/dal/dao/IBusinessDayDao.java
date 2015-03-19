@@ -14,7 +14,7 @@ public interface IBusinessDayDao {
    * @throws java.lang.IllegalArgumentException                    One of the fields failed to
    *                                                               insert due to constraint
    *                                                               violations.
-   * @throws paoo.cappuccino.dal.exception.FatalException          Database connection error.
+   * @throws paoo.cappuccino.util.exception.FatalException         Database connection error.
    */
   IBusinessDayDto createBusinessDay(IBusinessDayDto businessDay);
 
@@ -22,7 +22,7 @@ public interface IBusinessDayDao {
    * Fetch all the business day
    *
    * @return All the business day found in the database or null if non was found
-   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   IBusinessDayDto[] fetchAll();
 
@@ -32,9 +32,10 @@ public interface IBusinessDayDao {
   /**
    * Fetch the BusinessDay corresponding at the date.
    *
-   * @param year The year of the business day
+   * @param year The first year of the academic year of the business day (ex; in "2012-2013" it
+   *             would be 2012)
    * @return The business day or null if none was found.
-   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error
    */
   IBusinessDayDto fetchBusinessDaysByDate(int year);
 }

@@ -12,6 +12,7 @@ import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalBackend;
 import paoo.cappuccino.dal.dao.IBusinessDayDao;
 import paoo.cappuccino.dal.exception.NonUniqueFieldException;
+import paoo.cappuccino.util.DateUtils;
 import paoo.cappuccino.util.ValidationUtil;
 import paoo.cappuccino.util.exception.FatalException;
 
@@ -24,7 +25,10 @@ class BusinessDayDao implements IBusinessDayDao {
 
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;
-  private PreparedStatement psCreateBusinessDay, psFetchAll, psFetchByDate;
+
+  private PreparedStatement psCreateBusinessDay;
+  private PreparedStatement psFetchAll;
+  private PreparedStatement psFetchByDate;
 
   @Inject
   public BusinessDayDao(IEntityFactory entityFactory, IDalBackend dalBackend) {
@@ -38,14 +42,17 @@ class BusinessDayDao implements IBusinessDayDao {
 
     String query =
         "INSERT INTO business_days.business_days(business_day_id, event_date, creation_date, "
-            + "academic_year, version)" + "VALUES (DEFAULT, ?, DEFAULT, ?, DEFAULT)"
-            + "RETURNING (business_day_id, event_date, creation_date, academic_year, version)";
+            + "academic_year, version) "
+            + "VALUES (DEFAULT, ?, DEFAULT, ?, DEFAULT)"
+            + "RETURNING (business_day_id, event_date, creation_date, version)";
+
     try {
       if (psCreateBusinessDay == null) {
         psCreateBusinessDay = dalBackend.fetchPreparedStatement(query);
       }
-      psCreateBusinessDay.setString(1, businessDay.getEventDate().toString());
-      psCreateBusinessDay.setString(2, businessDay.getCreationDate().toString());
+
+      psCreateBusinessDay.setTimestamp(1, Timestamp.valueOf(businessDay.getEventDate()));
+      psCreateBusinessDay.setString(2, DateUtils.getAcademicYear(businessDay.getEventDate()));
 
       try (ResultSet rs = psCreateBusinessDay.executeQuery()) {
         rs.next();
@@ -54,26 +61,32 @@ class BusinessDayDao implements IBusinessDayDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
+
     return null;
   }
 
   @Override
   public IBusinessDayDto[] fetchAll() {
-    String query = "SELECT * FROM business_days.business_days";
+    String query = "SELECT business_day_id, event_date, creation_date, version"
+                   + " FROM business_days.business_days";
+
     try {
       if (psFetchAll == null) {
         psFetchAll = dalBackend.fetchPreparedStatement(query);
       }
+
       try (ResultSet rs = psFetchAll.executeQuery()) {
         IBusinessDayDto[] businessTable = new IBusinessDayDto[rs.getFetchSize()];
         for (int i = 0; rs.next(); i++) {
           businessTable[i] = makeBusinessDaysFromSet(rs);
         }
+
         return businessTable;
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
+
     return null;
   }
 
@@ -86,11 +99,16 @@ class BusinessDayDao implements IBusinessDayDao {
   @Override
   public IBusinessDayDto fetchBusinessDaysByDate(int year) {
     String query =
-        "SELECT * FROM business_days.business_days WHERE date_part('years', event_date) = ?";
+        "SELECT business_day_id, event_date, creation_date, version"
+        + " FROM business_days.business_days WHERE academic_year = ?";
+
     try {
       if (psFetchByDate == null) {
         psFetchByDate = dalBackend.fetchPreparedStatement(query);
       }
+
+      psFetchByDate.setString(1, (year + "-" + (year + 1)));
+
       try (ResultSet rs = psFetchByDate.executeQuery()) {
         if (rs.next()) {
           return makeBusinessDaysFromSet(rs);
@@ -100,15 +118,15 @@ class BusinessDayDao implements IBusinessDayDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
+
     return null;
   }
 
   private IBusinessDayDto makeBusinessDaysFromSet(ResultSet set) throws SQLException {
     int id = set.getInt(1);
-    LocalDateTime eventDate = Timestamp.valueOf(set.getString(2)).toLocalDateTime();
-    LocalDateTime creationDate = Timestamp.valueOf(set.getString(3)).toLocalDateTime();
-    // String year = set.getString(4);
-    int version = set.getInt(5);
+    LocalDateTime eventDate = set.getTimestamp(2).toLocalDateTime();
+    LocalDateTime creationDate = set.getTimestamp(3).toLocalDateTime();
+    int version = set.getInt(4);
 
     return entityFactory.createBusinessDay(id, version, eventDate, creationDate);
   }
