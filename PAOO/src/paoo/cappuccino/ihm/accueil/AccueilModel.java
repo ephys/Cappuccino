@@ -4,6 +4,7 @@ import javax.swing.ComboBoxModel;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.dto.IParticipationDto.State;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.ihm.util.BaseModel;
@@ -22,7 +23,8 @@ public class AccueilModel extends BaseModel {
   private IBusinessDayDto selectedDay;
 
   @Inject
-  public AccueilModel(ICompanyUcc companyUcc, IBusinessDayUcc businessDayUcc) {
+  public AccueilModel(ICompanyUcc companyUcc,
+      IBusinessDayUcc businessDayUcc) {
     this.companyUcc = companyUcc;
     this.businessDayUcc = businessDayUcc;
   }
@@ -71,6 +73,25 @@ public class AccueilModel extends BaseModel {
     this.selectedDay = selectedDay;
 
     dispatchChangeEvent();
+  }
+
+  /**
+   *
+   * @return
+   */
+  public IParticipationDto[] getParticipations() {
+    // TODO Auto-generated method stub
+    return new IParticipationDto[0];
+  }
+
+  /**
+   *
+   * @param company
+   * @return
+   */
+  public String getCompanyById(int company) {
+    // return companyUcc.getCompanyById(company)
+    return null;
   }
 
 }
