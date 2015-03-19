@@ -16,7 +16,7 @@ import paoo.cappuccino.util.exception.FatalException;
  *
  * @author Kevin Bavay
  */
-public class ContactDao implements IContactDao {
+class ContactDao implements IContactDao {
 
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;

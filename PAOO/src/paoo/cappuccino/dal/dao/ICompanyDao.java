@@ -13,7 +13,7 @@ public interface ICompanyDao {
    * @throws java.lang.IllegalArgumentException                    One of the fields failed to
    *                                                               insert due to constraint
    *                                                               violations.
-   * @throws paoo.cappuccino.dal.exception.FatalException          Database connection error.
+   * @throws paoo.cappuccino.util.exception.FatalException         Database connection error.
    */
   ICompanyDto createCompany(ICompanyDto company);
 
@@ -28,7 +28,7 @@ public interface ICompanyDao {
    *                                                               the fields failed to insert to to
    *                                                               constraint violations.
    * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The name is not unique.
-   * @throws paoo.cappuccino.dal.exception.FatalException          a database connection error
+   * @throws paoo.cappuccino.util.exception.FatalException         a database connection error
    *                                                               occurred.
    */
   void updateCompany(ICompanyDto company);
@@ -41,7 +41,7 @@ public interface ICompanyDao {
    * @param street   The street part of the address of the company, nullable.
    * @param town     The town part of the address of the company, nullable.
    * @return Every companies matching the fields.
-   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   ICompanyDto[] searchCompanies(String name, String postcode, String street, String town);
 
@@ -50,7 +50,7 @@ public interface ICompanyDao {
    * Fetch all the company stored in the database
    *
    * @return All the company found in the database or null if none was found
-   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   ICompanyDto[] fetchAll();
 
@@ -58,7 +58,7 @@ public interface ICompanyDao {
    * Fetch all the invitable companies
    *
    * @return Every companies invitable or null if none was found
-   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error
    */
   ICompanyDto[] fetchInvitableCompanies();
 
@@ -67,7 +67,7 @@ public interface ICompanyDao {
    *
    * @param businessDayId The id of the business day
    * @return Every companies who was present or null if none was found
-   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error
    */
   ICompanyDto[] fetchCompaniesByDay(int businessDayId);
 }

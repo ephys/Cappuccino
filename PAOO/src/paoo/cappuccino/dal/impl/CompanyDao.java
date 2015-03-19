@@ -3,8 +3,9 @@ package paoo.cappuccino.dal.impl;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
@@ -20,12 +21,13 @@ import paoo.cappuccino.util.exception.FatalException;
  *
  * @author Kevin Bavay
  */
-public class CompanyDao implements ICompanyDao {
-
+class CompanyDao implements ICompanyDao {
 
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;
-  private PreparedStatement psCreateCompany, psFetchAll;
+
+  private PreparedStatement psCreateCompany;
+  private PreparedStatement psFetchAll;
 
   @Inject
   public CompanyDao(IEntityFactory entityFactory, IDalBackend dalBackend) {
@@ -38,21 +40,24 @@ public class CompanyDao implements ICompanyDao {
     ValidationUtil.ensureNotNull(company, "company");
 
     String query = "INSERT INTO business_days.companies "
-                   + "(company_id, creator, name, register_date, adress_street, adress_num, "
-                   + "adresse_mailbox, adresse_postcode, adresse_town,version ) "
-                   + "VALUES (DEFAULT, ?, ?,DEFAULT,?,?, "
-                   + "?,?, ?, DEFAULT) RETURNING *";
-    try {
+                   + "(creator, name, address_street, address_num, "
+                   + "address_mailbox, address_postcode, address_town) "
+                   + "VALUES (?, ?, ?, ?, ?, ?, ?) "
+                   + "RETURNING (company_id, creator, name, register_date, address_street, "
+                   + "address_num, address_mailbox, address_postcode, address_town,version)";
 
+    try {
       if (psCreateCompany == null) {
         psCreateCompany = dalBackend.fetchPreparedStatement(query);
       }
+
       psCreateCompany.setInt(1, company.getCreator());
+
       psCreateCompany.setString(2, company.getName());
       psCreateCompany.setString(3, company.getAddressStreet());
-      psCreateCompany.setInt(4, Integer.parseInt(company.getAddressNum()));
+      psCreateCompany.setString(4, company.getAddressNum());
       psCreateCompany.setString(5, company.getAddressMailbox());
-      psCreateCompany.setInt(6, Integer.parseInt(company.getAddressPostcode()));
+      psCreateCompany.setString(6, company.getAddressPostcode());
       psCreateCompany.setString(7, company.getAddressTown());
 
       try (ResultSet rs = psCreateCompany.executeQuery()) {
@@ -68,31 +73,37 @@ public class CompanyDao implements ICompanyDao {
 
   @Override
   public void updateCompany(ICompanyDto company) {
-    throw new FatalException("Method not supported yet");
+    throw new FatalException("Method not yet supported");
   }
 
   @Override
   public ICompanyDto[] searchCompanies(String name, String postcode, String street, String town) {
-    throw new FatalException("Method not supported yet");
+    throw new FatalException("Method not yet supported");
   }
 
   @Override
   public ICompanyDto[] fetchAll() {
-    String query = "SELECT * FROM business_days.companies";
+    String query = "SELECT company_id, creator, name, register_date, address_street, "
+                   + "address_num, address_mailbox, address_postcode, address_town, version "
+                   + "FROM business_days.companies";
     try {
       if (psFetchAll == null) {
-        dalBackend.fetchPreparedStatement(query);
+        psFetchAll = dalBackend.fetchPreparedStatement(query);
       }
+
       try (ResultSet rs = psFetchAll.executeQuery()) {
-        ICompanyDto[] companiesTable = new ICompanyDto[rs.getFetchSize()];
-        for (int i = 0; rs.next(); i++) {
-          companiesTable[i] = makeCompanyFromSet(rs);
+        List<ICompanyDto> companiesList = new ArrayList<>();
+
+        while (rs.next()) {
+          companiesList.add(makeCompanyFromSet(rs));
         }
-        return companiesTable;
+
+        return companiesList.toArray(new ICompanyDto[companiesList.size()]);
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
+
     return null;
   }
 
@@ -107,19 +118,21 @@ public class CompanyDao implements ICompanyDao {
   }
 
   private ICompanyDto makeCompanyFromSet(ResultSet rs) throws SQLException {
-    int company_id = rs.getInt(1);
+    int companyId = rs.getInt(1);
     int creator = rs.getInt(2);
     String name = rs.getString(3);
-    LocalDateTime register_date = Timestamp.valueOf(rs.getString(4)).toLocalDateTime();
-    String adress_street = rs.getString(5);
-    String adress_num = "" + rs.getInt(6);
-    String adress_mailbox = rs.getString(7);
-    String adress_postcode = "" + rs.getInt(8);
-    String adress_town = rs.getString(9);
+    LocalDateTime registerDate = rs.getTimestamp(4).toLocalDateTime();
+
+    String addressStreet = rs.getString(5);
+    String addressNum = rs.getString(6);
+    String addressMailbox = rs.getString(7);
+    String addressPostcode = rs.getString(8);
+    String addressTown = rs.getString(9);
+
     int version = rs.getInt(10);
-    return entityFactory
-        .createCompany(company_id, version, creator, name, adress_street, adress_num,
-                       adress_mailbox, adress_postcode, adress_town, register_date);
+
+    return entityFactory.createCompany(companyId, version, creator, name, addressStreet, addressNum,
+                       addressMailbox, addressPostcode, addressTown, registerDate);
   }
 
   private void rethrowSqlException(SQLException exception) {

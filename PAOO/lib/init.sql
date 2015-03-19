@@ -25,11 +25,11 @@ CREATE TABLE IF NOT EXISTS business_days.companies (
   creator          INTEGER REFERENCES business_days.users (user_id)  NOT NULL,
   name             VARCHAR(25)                                       NOT NULL UNIQUE,
   register_date    TIMESTAMP WITHOUT TIME ZONE                       NOT NULL DEFAULT now(),
-  adress_street    VARCHAR(50)                                       NOT NULL,
-  adress_num       INTEGER                                           NOT NULL,
-  adresse_mailbox  VARCHAR(10),
-  adresse_postcode INTEGER                                           NOT NULL,
-  adresse_town     VARCHAR(25)                                       NOT NULL,
+  address_street    VARCHAR(50)                                       NOT NULL,
+  address_num       VARCHAR(10)                                       NOT NULL,
+  address_mailbox  VARCHAR(10),
+  address_postcode VARCHAR(10)                                           NOT NULL,
+  address_town     VARCHAR(25)                                       NOT NULL,
   version          INTEGER                                           NOT NULL DEFAULT 1
 );
 
