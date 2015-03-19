@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.core.injector.NoCache;
 import paoo.cappuccino.ihm.core.IGuiManager;
@@ -24,20 +25,21 @@ public class LoginFrame extends BaseFrame {
   /**
    * Creates a new frame for the login gui.
    *
-   * @param userUcc The app User use case controller.
+   * @param userUcc    The app User use case controller.
    * @param guiManager The manager reponsible for opening this frame.
    */
   @Inject
-  public LoginFrame(IUserUcc userUcc, IGuiManager guiManager) {
-    super("Connexion", 440, 490, guiManager);
-    
-    this.setMinimumSize(new Dimension(350, 240));
+  public LoginFrame(IUserUcc userUcc, IGuiManager guiManager, AppContext context) {
+    super(context.getAppName(), 440, 490, guiManager);
+
+    this.setMinimumSize(new Dimension(350, 380));
 
     this.setLayout(new GridBagLayout());
-    this.add(new LoginViewController(new LoginModel(userUcc), guiManager), new GridBagConstraints());
-    
+    this.add(new LoginViewController(new LoginModel(userUcc), guiManager),
+             new GridBagConstraints());
+
     this.getContentPane().setBackground(new Color(212, 82, 82));
-    
+
     this.setVisible(true);
   }
 }

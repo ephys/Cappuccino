@@ -6,7 +6,9 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -17,6 +19,7 @@ import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuFrame;
 import paoo.cappuccino.ihm.registration.RegistrationFrame;
 import paoo.cappuccino.ihm.util.IhmConstants;
+import paoo.cappuccino.ihm.util.JLabelFont;
 import paoo.cappuccino.util.StringUtils;
 
 /**
@@ -28,22 +31,36 @@ public class LoginViewController extends JPanel {
 
   private static final long serialVersionUID = 3071496812344175953L;
   private final LoginModel model;
-  private final IGuiManager manager;
+  private final IGuiManager guiManager;
 
   /**
    * Creates a new ViewController for the Login gui.
    *
    * @param model The ViewController's model.
-   * @param manager The manager responsible for the containing frame.
+   * @param guiManager The manager responsible for the containing frame.
    */
-  public LoginViewController(LoginModel model, IGuiManager manager) {
+  public LoginViewController(LoginModel model, IGuiManager guiManager) {
     super(new BorderLayout());
     this.model = model;
-    this.manager = manager;
-   
+    this.guiManager = guiManager;
+
     this.setBorder(BorderFactory.createCompoundBorder(
         BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(80,80,80)),
         new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0, IhmConstants.M_GAP)));
+
+    JPanel titlePanel = new JPanel(new BorderLayout());
+    titlePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, IhmConstants.L_GAP, 0));
+
+    JLabel logo = new JLabel(new ImageIcon(guiManager.getResourceManager()
+                                               .fetchImage(IhmConstants.PATH_LOGO)));
+    logo.setBorder(BorderFactory.createEmptyBorder(0, 0, IhmConstants.M_GAP, 0));
+
+    titlePanel.add(logo, BorderLayout.CENTER);
+    JLabel titleLabel = new JLabelFont("Connexion", 20);
+    titleLabel.setHorizontalAlignment(JLabel.CENTER);
+    titlePanel.add(titleLabel, BorderLayout.SOUTH);
+
+    this.add(titlePanel, BorderLayout.NORTH);
 
     JTextField usernameField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
@@ -54,12 +71,11 @@ public class LoginViewController extends JPanel {
     controls.setLayout(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
 
     JButton registerButton = new JButton("S'inscrire");
-    registerButton.addActionListener(e -> manager.openFrame(RegistrationFrame.class));
+    registerButton.addActionListener(e -> guiManager.openFrame(RegistrationFrame.class));
 
     JButton loginButton = new JButton("Se connecter");
-    loginButton.addActionListener(e -> {
-      login(usernameField, passwordField);
-    });
+    loginButton.addActionListener(e ->  attemptLogin(usernameField.getText(),
+                                                     passwordField.getPassword()));
 
     controls.add(registerButton);
     controls.add(loginButton);
@@ -67,15 +83,7 @@ public class LoginViewController extends JPanel {
     this.add(controls, BorderLayout.SOUTH);
     // end buttons //
 
-    this.add(new LoginView(model, usernameField, passwordField));
-  }
-
-  private void login(JTextField usernameField, JPasswordField passwordField) {
-    IUserDto user = attemptLogin(usernameField.getText(), passwordField.getPassword());
-    if (user != null) {
-      manager.openFrame(MenuFrame.class).setLoggedUser(user);
-    }
-
+    this.add(new LoginView(model, usernameField, passwordField), BorderLayout.CENTER);
   }
 
   /**
@@ -83,9 +91,8 @@ public class LoginViewController extends JPanel {
    *
    * @param username The user's username.
    * @param password The user's password.
-   * @return the user logged in or null
    */
-  private IUserDto attemptLogin(String username, char[] password) {
+  private void attemptLogin(String username, char[] password) {
     model.resetErrors();
 
     boolean isValid = true;
@@ -100,7 +107,7 @@ public class LoginViewController extends JPanel {
     }
 
     if (!isValid) {
-      return null;
+      return;
     }
 
     IUserDto user = model.getUserUcc().logIn(username, password);
@@ -108,11 +115,13 @@ public class LoginViewController extends JPanel {
     if (user == null) {
       model.setUsernameError(IhmConstants.ERROR_WRONG_LOGIN);
       model.setPasswordError(IhmConstants.ERROR_WRONG_LOGIN);
-    } else {
-      // avoid password release in case of memory dump.
-      StringUtils.clearString(password);
+
+      return;
     }
 
-    return user;
+    // avoid password release in case of memory dump.
+    StringUtils.clearString(password);
+
+    guiManager.openFrame(MenuFrame.class).setLoggedUser(user);
   }
 }

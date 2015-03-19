@@ -51,4 +51,5 @@ public interface IhmConstants {
 
   static final Color LIGHT_BLUE = new Color(155, 178, 247);
 
+  static final String PATH_LOGO = "lib/logo.png";
 }

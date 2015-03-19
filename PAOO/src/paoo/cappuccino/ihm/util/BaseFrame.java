@@ -1,10 +1,5 @@
 package paoo.cappuccino.ihm.util;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.logging.Level;
-
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
@@ -29,11 +24,7 @@ public abstract class BaseFrame extends JFrame {
   public BaseFrame(String title, int width, int height, IGuiManager guiManager) {
     super(title);
 
-    try {
-      setIconImage(ImageIO.read(new FileInputStream("lib/logo.png")));
-    } catch (IOException e) {
-      guiManager.getLogger().log(Level.WARNING, "Could not read the app icon", e);
-    }
+    setIconImage(guiManager.getResourceManager().fetchImage(IhmConstants.PATH_LOGO));
 
     setSize(width, height);
     setLocationRelativeTo(null);

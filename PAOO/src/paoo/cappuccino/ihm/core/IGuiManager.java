@@ -4,8 +4,6 @@ import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
-import paoo.cappuccino.business.dto.IUserDto;
-
 /**
  * Used to manage the application GUIs.
  *
@@ -25,4 +23,9 @@ public interface IGuiManager {
    * Returns the Gui logger.
    */
   public Logger getLogger();
+
+  /**
+   * Returns the resource manager.
+   */
+  public IResourceManager getResourceManager();
 }

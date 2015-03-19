@@ -3,6 +3,7 @@ package paoo.cappuccino.ihm.util;
 import java.awt.Color;
 import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -21,8 +22,8 @@ public class ErrorableTextField extends JPanel {
   /**
    * Creates an input panel.
    *
-   * @param field An input field.
-   * @param label The field's description.
+   * @param field        An input field.
+   * @param label        The field's description.
    * @param errorMessage The error to display.
    */
   public ErrorableTextField(JTextField field, String label, String errorMessage) {
@@ -30,6 +31,10 @@ public class ErrorableTextField extends JPanel {
 
     this.error = new JLabelFont(errorMessage, 12);
     this.error.setForeground(Color.RED);
+
+    field.setBorder(BorderFactory.createCompoundBorder(
+        field.getBorder(),
+        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
     this.add(new JLabelFont(label + " : "));
     this.add(field);

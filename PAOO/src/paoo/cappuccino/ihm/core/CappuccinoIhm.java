@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
-import paoo.cappuccino.util.exception.FatalException;
 
 /**
  * Gui Manager, prepares frames and view controllers and handles what frame is currently open.
@@ -17,8 +16,10 @@ import paoo.cappuccino.util.exception.FatalException;
  */
 class CappuccinoIhm implements IGuiManager {
 
+  private final IResourceManager resourceManager = new CachedResourceManager(this);
   private final Logger logger;
   private final DependencyInjector injector;
+
   private JFrame currentFrame;
 
   @Inject
@@ -26,16 +27,12 @@ class CappuccinoIhm implements IGuiManager {
     this.injector = injector;
     this.logger = app.getLogger("ihm");
 
-    app.addCrashListener(fatalException -> {
-      JOptionPane.showMessageDialog(currentFrame,
-                                    fatalException.getMessage(),
-                                    "Une erreur est survenue",
-                                    JOptionPane.ERROR_MESSAGE);
-
-      if (fatalException instanceof FatalException) {
-        closeFrame();
-      }
-    });
+    app.addCrashListener(fatalException ->
+                             JOptionPane.showMessageDialog(
+                                 currentFrame,
+                                 fatalException.getMessage(),
+                                 "Une erreur est survenue",
+                                 JOptionPane.ERROR_MESSAGE));
   }
 
   @Override
@@ -51,6 +48,11 @@ class CappuccinoIhm implements IGuiManager {
   @Override
   public Logger getLogger() {
     return logger;
+  }
+
+  @Override
+  public IResourceManager getResourceManager() {
+    return resourceManager;
   }
 
   private void closeFrame() {
