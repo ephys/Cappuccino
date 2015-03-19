@@ -52,7 +52,7 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
       }
 
     } else {
-      
+
       JPanel centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
       centerPadding.add(new JLabel("Il n'y a aucune journée d'entreprise pour l'instant."));
 
@@ -60,9 +60,9 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
     }
 
   }
-  
-  public JTable getTable(){
-    
+
+  public JTable getTable() {
+
     return this.table;
   }
 
