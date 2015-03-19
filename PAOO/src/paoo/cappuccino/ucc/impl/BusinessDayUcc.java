@@ -10,6 +10,7 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalService;
 import paoo.cappuccino.dal.dao.IBusinessDayDao;
+import paoo.cappuccino.dal.exception.NonUniqueFieldException;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.util.ValidationUtil;
 
@@ -20,7 +21,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
   @Inject
   public BusinessDayUcc(IEntityFactory entityFactory, IDalService dalService,
-      IBusinessDayDao businessDayDao) {
+                        IBusinessDayDao businessDayDao) {
     this.factory = entityFactory;
     this.dao = businessDayDao;
   }
@@ -28,13 +29,18 @@ class BusinessDayUcc implements IBusinessDayUcc {
   @Override
   public IBusinessDayDto create(LocalDateTime eventDate) {
     ValidationUtil.ensureNotNull(eventDate, "evenDate");
+
     IBusinessDayDto dto = factory.createBusinessDay(eventDate);
-    IBusinessDayDto returnedDto = null;
-    if (dao.fetchBusinessDaysByDate(eventDate.getYear()) != null) {
-      throw new IllegalArgumentException("A business day already exists for this year");
+    // if (dao.fetchBusinessDaysByDate(eventDate.getYear()) != null) {
+    //   // note: fetchBusinessDaysByDate works using the academic year, not the date year
+    //   throw new IllegalArgumentException("A business day already exists for this year");
+    // }
+
+    try {
+      return dao.createBusinessDay(dto);
+    } catch (NonUniqueFieldException e) {
+      throw new IllegalArgumentException("A business day already exists for this year", e);
     }
-    returnedDto = dao.createBusinessDay(dto);
-    return returnedDto;
   }
 
   @Override
@@ -66,5 +72,4 @@ class BusinessDayUcc implements IBusinessDayUcc {
     // TODO Auto-generated method stub
     return null;
   }
-
 }

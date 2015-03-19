@@ -1,6 +1,5 @@
 package paoo.cappuccino.ucc.impl;
 
-import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.entity.IContact;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
@@ -22,30 +21,45 @@ class ContactUcc implements IContactUcc {
     this.dao = contactDao;
   }
 
-
   @Override
-  public IContactDto create(ICompanyDto company, String email, String firstName, String lastName,
-      String phone) {
+  public IContactDto create(int companyId, String email, String firstName,
+                            String lastName, String phone) {
     ValidationUtil.ensureFilled(lastName, "lastName");
     ValidationUtil.ensureFilled(firstName, "firstName");
-    ValidationUtil.ensureFilled(phone, "phone");
-    ValidationUtil.ensureNotNull(company, "company");
-    ValidationUtil.ensureNotNull(lastName, "lastName");
-    ValidationUtil.ensureNotNull(firstName, "firstName");
-    ValidationUtil.ensureNotNull(phone, "phone");
-    StringUtils.isEmail(email);
-    StringUtils.isEmpty(email);
-    IContactDto dto = factory.createContact(company.getId(), email, firstName, lastName, phone);
-    IContactDto returnedDto = dao.createContact(dto);
-    return returnedDto;
-  }
 
+    if (StringUtils.isEmpty(phone)) {
+      phone = null;
+    }
+
+    if (StringUtils.isEmpty(email)) {
+      email = null;
+    } else {
+      if (!StringUtils.isEmail(email)) {
+        throw new IllegalArgumentException("Invalid email format for " + email);
+      }
+    }
+
+    return dao.createContact(factory.createContact(companyId, email, firstName, lastName, phone));
+  }
 
   @Override
   public boolean setMailInvalid(IContactDto dto) {
-    IContact contact = (IContact) dto;
+    if (StringUtils.isEmpty(dto.getEmail()) || !dto.isEmailValid()) {
+      return false;
+    }
+
+    IContact contact;
+    if (dto instanceof IContact) {
+      contact = (IContact) dto;
+    } else {
+      contact = factory.createContact(dto.getId(), dto.getVersion(), dto.getCompany(),
+                                      dto.getEmail(), dto.isEmailValid(), dto.getFirstName(),
+                                      dto.getLastName(), dto.getPhone());
+    }
+
     contact.setEmailValid(false);
     dao.updateContact(contact);
+
     return true;
   }
 
