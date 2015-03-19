@@ -21,9 +21,9 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
   @Inject
   public BusinessDayUcc(IEntityFactory entityFactory, IDalService dalService,
-                        IBusinessDayDao businessDayDao) {
-    this.factory = entityFactory;
-    this.dao = businessDayDao;
+      IBusinessDayDao businessDayDao) {
+    factory = entityFactory;
+    dao = businessDayDao;
   }
 
   @Override
@@ -32,8 +32,8 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
     IBusinessDayDto dto = factory.createBusinessDay(eventDate);
     // if (dao.fetchBusinessDaysByDate(eventDate.getYear()) != null) {
-    //   // note: fetchBusinessDaysByDate works using the academic year, not the date year
-    //   throw new IllegalArgumentException("A business day already exists for this year");
+    // // note: fetchBusinessDaysByDate works using the academic year, not the date year
+    // throw new IllegalArgumentException("A business day already exists for this year");
     // }
 
     try {
@@ -64,7 +64,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
   @Override
   public IBusinessDayDto[] getBusinessDays() {
     // TODO Auto-generated method stub
-    return null;
+    return new IBusinessDayDto[0];
   }
 
   @Override

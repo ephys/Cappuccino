@@ -23,4 +23,14 @@ public class JLabelFont extends JLabel {
 
     this.setFont(this.getFont().deriveFont(size));
   }
+
+  /**
+   * Creates a new JLabel using a custom font size. The used font is defined by the default font
+   * (See {@link paoo.cappuccino.ihm.util.BaseFrame#setDefaultFont(java.awt.Font)} to change it)
+   *
+   * @param text the text to display.
+   */
+  public JLabelFont(String text) {
+    this(text, 12);
+  }
 }
