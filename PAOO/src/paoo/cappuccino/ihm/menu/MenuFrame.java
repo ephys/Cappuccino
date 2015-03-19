@@ -51,10 +51,13 @@ public class MenuFrame extends BaseFrame {
   }
 
   private void setupDisplay() {
-    MenuModel model =
-        new MenuModel(this, userUcc, businessDayUcc, companyUcc, contactUcc, guiManager);
 
-    this.add(new MenuViewController(model, guiManager));
+    MenuModel model = new MenuModel(this);
+    MenuViewController controller =
+        new MenuViewController(userUcc, businessDayUcc, companyUcc, contactUcc, guiManager, model,
+            guiManager);
+
+    this.add(controller);
 
     this.setVisible(true);
   }
