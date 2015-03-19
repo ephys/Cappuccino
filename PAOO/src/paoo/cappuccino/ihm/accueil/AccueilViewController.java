@@ -6,8 +6,6 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -17,20 +15,18 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
-import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuModel;
+import paoo.cappuccino.ihm.menu.MenuViewController;
 import paoo.cappuccino.ihm.util.JLabelFont;
-import paoo.cappuccino.util.ParticipationUtils;
 
 /**
  * ViewController for the Login Gui.
  *
  * @author Opsomer Mathias
  */
-public class AccueilViewController extends JPanel implements
-    ChangeListener {
+public class AccueilViewController extends JPanel implements ChangeListener {
 
   private static final long serialVersionUID = 3071496812344175953L;
   private final AccueilModel model;
@@ -41,27 +37,26 @@ public class AccueilViewController extends JPanel implements
    *
    * @param model The ViewController's model.
    */
-  public AccueilViewController(AccueilModel model, MenuModel menu,
-      IGuiManager guiManager) {
+  public AccueilViewController(AccueilModel model, MenuModel menu, IGuiManager guiManager,
+      MenuViewController controller) {
     super(new BorderLayout());
     this.model = model;
     model.addChangeListener(this);
 
     // north
-    JPanel daylistPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));// TODO listener
-    JComboBox<IBusinessDayDto> dayList =
-        new JComboBox<IBusinessDayDto>(model.getAllDays());
-    dayList.addActionListener(e -> {
-      int index = dayList.getSelectedIndex();
-      if (index == -1) {
-        model.setSelectedDay(null);
-      }
+    JPanel daylistPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    // JComboBox<IBusinessDayDto> dayList = new JComboBox<>(model.getAllDays());
+    // dayList.addActionListener(e -> {
+    // int index = dayList.getSelectedIndex();
+    // if (index == -1) {
+    // model.setSelectedDay(null);
+    // }
+    //
+    // model.setSelectedDay(dayList.getItemAt(index));
+    // });
 
-      model.setSelectedDay(dayList.getItemAt(index));
-    });
-
-    daylistPanel.add(new JLabel("journée du : "));
-    daylistPanel.add(dayList);
+    daylistPanel.add(new JLabelFont("journée du : "));
+    // daylistPanel.add(dayList);
 
     this.add(daylistPanel, BorderLayout.NORTH);
 
@@ -86,49 +81,47 @@ public class AccueilViewController extends JPanel implements
         return this.title[col];
       }
 
-
+      // Retourne vrai si la cellule est éditable : celle-ci sera donc éditable
       public boolean isCellEditable(int row, int col) {
-        return false;
-
+        // On appelle la méthode getValueAt qui retourne la valeur d'une cellule
+        // Et on effectue un traitement spécifique si c'est un JButton
+        if (getValueAt(0, col) instanceof JButton)
+          return false;
+        return true;
       }
     };
-
     JTable table = new JTable(dataModel);
-    table.setRowHeight(40);
-    table.setDefaultRenderer(JComponent.class, new CellRenderer());
+    table.setDefaultRenderer(JButton.class, new CellRenderer());
     JScrollPane scrollpane = new JScrollPane(table);
     this.add(scrollpane);
   }
 
   private class CellRenderer extends DefaultTableCellRenderer {
 
-    public Component getTableCellRendererComponent(JTable table,
-        Object value, boolean isSelected, boolean hasFocus, int row,
-        int column) {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+        boolean hasFocus, int row, int column) {
       // Si la valeur de la cellule est un JButton, on transtype cette valeur
-      if (value instanceof JComponent)
-        return (JComponent) value;
+      if (value instanceof JButton)
+        return (JButton) value;
       else
         return this;
     }
   }
 
   protected Object[][] getTableCompanies() {
-    IParticipationDto[] participations = model.getParticipations();
-    Object[][] data = new Object[participations.length][2];
-    for (int i = 0; i < participations.length; i++) {
-      IParticipationDto currentParticipation = participations[i];
+    // ICompanyDto[] companies = model.getCompanies();
+    String[] companies = {"test", "test", "test", "teste"};
+    Object[][] data = new Object[companies.length][2];
+    for (int i = 0; i < companies.length; i++) {
+      String currentCompany = companies[i];
       // data[i][0] = currentCompany.getName();
-      data[i][0] =
-          new JLabelFont(model.getCompanyById(currentParticipation
-              .getCompany()), 12);
+      data[i][0] = currentCompany;
 
       // constructionJ Jpanel
-      JComboBox<IParticipationDto.State> states =
-          new JComboBox<IParticipationDto.State>(
-              ParticipationUtils.getFollowingStates(currentParticipation
-                  .getState()));
+      // JComboBox<IParticipationDto.State> states =
+      // new JComboBox<IParticipationDto.State>(model.getPossibleState(currentCompany));
 
+      JComboBox<IParticipationDto.State> states = new JComboBox<IParticipationDto.State>();
       JButton cancel = new JButton("Annuler");
       cancel.addActionListener(e -> {
         // ucc evolve contact
@@ -137,7 +130,7 @@ public class AccueilViewController extends JPanel implements
       JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
       controls.add(states);
       controls.add(cancel);
-      data[i][1] = controls;
+      data[i][1] = cancel;
     }
     return data;
   }
