@@ -11,6 +11,7 @@ import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalService;
 import paoo.cappuccino.dal.dao.IBusinessDayDao;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
+import paoo.cappuccino.util.ValidationUtil;
 
 class BusinessDayUcc implements IBusinessDayUcc {
 
@@ -26,8 +27,12 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
   @Override
   public IBusinessDayDto create(LocalDateTime eventDate) {
-    IBusinessDayDto dto = factory.createBusinessDay(eventDate);// -- PROBLEME DE DATE ICI --
+    ValidationUtil.ensureNotNull(eventDate, "evenDate");
+    IBusinessDayDto dto = factory.createBusinessDay(eventDate);
     IBusinessDayDto returnedDto = null;
+    if (dao.fetchBusinessDaysByDate(eventDate.getYear()) != null) {
+      throw new IllegalArgumentException("A business day already exists for this year");
+    }
     returnedDto = dao.createBusinessDay(dto);
     return returnedDto;
   }
