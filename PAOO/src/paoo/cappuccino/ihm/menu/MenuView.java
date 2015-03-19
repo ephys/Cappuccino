@@ -37,7 +37,8 @@ public class MenuView extends JPanel implements ChangeListener {
     JPanel header = new JPanel(new BorderLayout());
     header.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
 
-    JLabelFont welcome = new JLabelFont("Bienvenue " + menuModel.getLoggedUser().getUsername(), 28);
+    JLabelFont welcome = new JLabelFont("Bienvenue " + menuModel.getLoggedUser().getFirstName()
+                                        + " " + menuModel.getLoggedUser().getLastName(), 28);
     welcome.setHorizontalAlignment(JLabel.CENTER);
     header.add(welcome);
 

@@ -12,7 +12,7 @@ import paoo.cappuccino.util.hasher.IHashHolderDto;
 
 /**
  * Main for an app with a graphical user interface.
- * 
+ *
  * @author Guylian Cox
  */
 public class Main extends BaseMain {
@@ -24,7 +24,7 @@ public class Main extends BaseMain {
   public static void main(String[] args) {
     new Main();
   }
-  
+
   protected Main() {
     super(new AppContext("Cappuccino", "1.1.0"));
 
@@ -33,7 +33,7 @@ public class Main extends BaseMain {
 
   private void createGui() {
     IGuiManager guiManager = getInjector().buildDependency(IGuiManager.class);
-    
+
     if (getContext().getProfileType() != Profile.DEV) {
       guiManager.openFrame(LoginFrame.class);
       return;
@@ -52,12 +52,12 @@ public class Main extends BaseMain {
       }
 
       @Override
-      public String getLastName() {
+      public String getFirstName() {
         return "John";
       }
 
       @Override
-      public String getFirstName() {
+      public String getLastName() {
         return "Smith";
       }
 

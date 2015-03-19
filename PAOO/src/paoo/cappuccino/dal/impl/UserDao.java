@@ -103,13 +103,13 @@ class UserDao implements IUserDao {
     ValidationUtil.ensureFilled(username, "username");
 
     String query = "SELECT user_id, role, password, email, username, first_name, last_name, "
-                   + "register_date, version FROM business_days.users WHERE username = ?";
+                   + "register_date, version FROM business_days.users WHERE LOWER(username) = ?";
 
     try {
       if (psFetchUserByUsername == null) {
         psFetchUserByUsername = dalBackend.fetchPreparedStatement(query);
       }
-      psFetchUserByUsername.setString(1, username);
+      psFetchUserByUsername.setString(1, username.toLowerCase());
 
       try (ResultSet rs = psFetchUserByUsername.executeQuery()) {
         if (rs.next()) {
