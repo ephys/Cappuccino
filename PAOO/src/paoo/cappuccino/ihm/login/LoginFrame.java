@@ -32,13 +32,12 @@ public class LoginFrame extends BaseFrame {
   public LoginFrame(IUserUcc userUcc, IGuiManager guiManager, AppContext context) {
     super(context.getAppName(), 440, 490, guiManager);
 
-    this.setMinimumSize(new Dimension(350, 380));
+    this.setMinimumSize(new Dimension(380, 440));
+    this.getContentPane().setBackground(new Color(212, 82, 82));
 
     this.setLayout(new GridBagLayout());
     this.add(new LoginViewController(new LoginModel(userUcc), guiManager),
              new GridBagConstraints());
-
-    this.getContentPane().setBackground(new Color(212, 82, 82));
 
     this.setVisible(true);
   }

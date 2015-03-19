@@ -1,5 +1,10 @@
 package paoo.cappuccino.ihm.registration;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.core.injector.NoCache;
 import paoo.cappuccino.ihm.core.IGuiManager;
@@ -22,10 +27,15 @@ public class RegistrationFrame extends BaseFrame {
    */
   @Inject
   public RegistrationFrame(IUserUcc userUcc, IGuiManager guiManager) {
-    super("S'inscrire", 490, 520, guiManager);
-    this.setResizable(false);
+    super("S'inscrire", 500, 660, guiManager);
+    this.setMinimumSize(new Dimension(500, 660));
 
-    this.add(new RegistrationViewController(new RegistrationModel(userUcc), guiManager));
+    this.getContentPane().setBackground(new Color(212, 82, 82));
+
+    this.setLayout(new GridBagLayout());
+    this.add(new RegistrationViewController(new RegistrationModel(userUcc), guiManager),
+             new GridBagConstraints());
+
     this.setVisible(true);
   }
 }

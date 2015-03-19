@@ -1,19 +1,23 @@
 package paoo.cappuccino.ihm.registration;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.login.LoginFrame;
 import paoo.cappuccino.ihm.menu.MenuFrame;
 import paoo.cappuccino.ihm.util.IhmConstants;
+import paoo.cappuccino.ihm.util.JLabelFont;
 
 /**
  * ViewController for the registration Gui.
@@ -31,8 +35,9 @@ public class RegistrationViewController extends JPanel {
    */
   public RegistrationViewController(RegistrationModel model, IGuiManager manager) {
     super(new BorderLayout());
-    this.setBorder(BorderFactory.createEmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0, 
-                                                   IhmConstants.M_GAP));
+    this.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(80, 80, 80)),
+        new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0, IhmConstants.M_GAP)));
 
     JTextField usernameField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
@@ -41,7 +46,7 @@ public class RegistrationViewController extends JPanel {
     JTextField firstNameField = new JTextField();
     JTextField emailField = new JTextField();
 
-    JPanel controls = new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, 
+    JPanel controls = new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP,
                                                 IhmConstants.M_GAP));
 
     JButton validateButton = new JButton("Valider");
@@ -62,6 +67,11 @@ public class RegistrationViewController extends JPanel {
 
     controls.add(validateButton);
     controls.add(cancelButton);
+
+    JLabel titleLabel = new JLabelFont("Inscription", 20);
+    titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, IhmConstants.L_GAP, 0));
+    titleLabel.setHorizontalAlignment(JLabel.CENTER);
+    this.add(titleLabel, BorderLayout.NORTH);
 
     this.add(controls, BorderLayout.SOUTH);
     // end buttons //

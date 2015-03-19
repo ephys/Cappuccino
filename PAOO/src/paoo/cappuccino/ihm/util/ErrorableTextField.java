@@ -36,7 +36,7 @@ public class ErrorableTextField extends JPanel {
         field.getBorder(),
         BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
-    this.add(new JLabelFont(label + " : "));
+    this.add(new JLabel(label));
     this.add(field);
     this.add(new JLabel());
     this.add(this.error);

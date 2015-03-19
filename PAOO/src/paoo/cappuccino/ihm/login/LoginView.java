@@ -35,7 +35,7 @@ public class LoginView extends JPanel implements ChangeListener {
    */
   public LoginView(LoginModel model, JTextField usernameField, JPasswordField passwordField) {
     super(new GridLayout(2, 1, 0, IhmConstants.M_GAP));
-    
+
     this.model = model;
 
     this.usernamePanel = new ErrorableTextField(usernameField, "Nom d'utilisateur");

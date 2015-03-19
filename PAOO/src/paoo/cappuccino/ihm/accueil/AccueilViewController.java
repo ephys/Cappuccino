@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -18,7 +19,6 @@ import javax.swing.table.TableModel;
 import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuModel;
-import paoo.cappuccino.ihm.util.JLabelFont;
 
 /**
  * ViewController for the Login Gui.
@@ -53,7 +53,7 @@ public class AccueilViewController extends JPanel implements ChangeListener {
     // model.setSelectedDay(dayList.getItemAt(index));
     // });
 
-    daylistPanel.add(new JLabelFont("journée du : "));
+    daylistPanel.add(new JLabel("journée du : "));
     // daylistPanel.add(dayList);
 
     this.add(daylistPanel, BorderLayout.NORTH);
@@ -84,7 +84,7 @@ public class AccueilViewController extends JPanel implements ChangeListener {
         //Et on effectue un traitement spécifique si c'est un JButton
         if(getValueAt(0, col) instanceof JButton)
           return false;
-        return true; 
+        return true;
       }
     };
     JTable table = new JTable(dataModel);
@@ -134,7 +134,7 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
    */
   @Override
