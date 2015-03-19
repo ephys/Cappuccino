@@ -11,7 +11,7 @@ public interface IContactDao {
    * @return the contact entity with its information updated from the database.
    * @throws java.lang.IllegalArgumentException           One of the fields failed to insert. due to
    *                                                      constraint violations.
-   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   IContactDto createContact(IContactDto contact);
 
@@ -24,7 +24,7 @@ public interface IContactDao {
    * @throws java.lang.IllegalArgumentException           The entity hasn't been inserted in the
    *                                                      database yet. Or one of the fields failed
    *                                                      to insert to to constraint violations.
-   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error
    */
   void updateContact(IContactDto contact);
 
@@ -34,7 +34,7 @@ public interface IContactDao {
    * @param firstName The first name of the contact, nullable.
    * @param lastName  The last name of the contact, nullable.
    * @return The list of contact matching the first name and/or the last name.
-   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   IContactDto[] fetchContactByName(String firstName, String lastName);
 
@@ -43,7 +43,7 @@ public interface IContactDao {
    *
    * @param companyId The company.
    * @return The list of contacts working for the company.
-   * @throws paoo.cappuccino.dal.exception.FatalException Database connection error.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   IContactDto[] fetchContactsByCompany(int companyId);
 }
