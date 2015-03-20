@@ -1,6 +1,8 @@
 package paoo.cappuccino.core;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -99,11 +101,23 @@ public class AppContext {
       Formatter formatter = new Formatter() {
         @Override
         public String format(LogRecord record) {
+          StringBuilder str = new StringBuilder();
 
-          return "["
-              + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
-              + "][" + record.getLoggerName() + "][" + record.getLevel().getLocalizedName() + "] "
-              + record.getMessage() + "\r\n";
+          str.append("[")
+              .append(LocalDateTime.now()
+                          .format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
+              .append("][").append(record.getLoggerName()).append("][")
+              .append(record.getLevel().getLocalizedName()).append("] ")
+              .append(record.getMessage()).append("\r\n");
+
+          Throwable throwable = record.getThrown();
+          if (throwable != null) {
+            StringWriter stringWriter = new StringWriter();
+            throwable.printStackTrace(new PrintWriter(stringWriter));
+            str.append(stringWriter).append("\r\n");
+          }
+
+          return str.toString();
         }
       };
 
