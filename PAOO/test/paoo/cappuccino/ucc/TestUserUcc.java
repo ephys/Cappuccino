@@ -1,11 +1,5 @@
 package paoo.cappuccino.ucc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,6 +10,12 @@ import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.util.hasher.IStringHasher;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * User UCC Unit test
@@ -37,7 +37,7 @@ public class TestUserUcc {
 
   @BeforeClass
   public static void systemInit() {
-    BaseMain main = new BaseMain(new AppContext("UserUccTest", "0.1.0", "test"));
+    BaseMain main = new BaseMain(new AppContext("UserUccTest", "0.1.0", "test_ucc"));
     injector = main.getInjector();
   }
 
