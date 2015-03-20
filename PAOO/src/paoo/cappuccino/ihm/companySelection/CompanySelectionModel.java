@@ -6,7 +6,7 @@ import paoo.cappuccino.ihm.util.BaseModel;
 public class CompanySelectionModel extends BaseModel {
 
 
-  ICompanyDto[] companyDto;
+  private ICompanyDto[] companyDto;
   boolean selectAll;
 
 

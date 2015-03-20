@@ -17,11 +17,11 @@ import paoo.cappuccino.business.dto.ICompanyDto;
 @SuppressWarnings("serial")
 public class CompanySelectionView extends JPanel implements ChangeListener {
 
-  CompanySelectionModel model;
-  JTable table;
-  String[] header = {"Nom entreprise", "Adresse entreprise", "Date de l'enregistrement",
+  private CompanySelectionModel model;
+  private JTable table;
+  private String[] header = {"Nom entreprise", "Adresse entreprise", "Date de l'enregistrement",
       "Selectionner"};
-  DefaultTableModel tableModel;
+  private DefaultTableModel tableModel;
 
   public CompanySelectionView(CompanySelectionModel model) {
 
