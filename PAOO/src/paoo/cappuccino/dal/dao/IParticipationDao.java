@@ -4,6 +4,7 @@ import paoo.cappuccino.business.dto.IParticipationDto;
 
 public interface IParticipationDao {
 
+  //TODO JavaDoc
   IParticipationDto createParticipation(IParticipationDto participation);
 
   /**

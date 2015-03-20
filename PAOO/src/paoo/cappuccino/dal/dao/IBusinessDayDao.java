@@ -26,7 +26,7 @@ public interface IBusinessDayDao {
    */
   IBusinessDayDto[] fetchAll();
 
-  //TODO
+  //TODO Javadoc
   IBusinessDayDto[] fetchInvitationlessDays();
 
   /**

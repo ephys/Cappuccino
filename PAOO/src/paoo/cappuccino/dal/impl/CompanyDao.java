@@ -157,11 +157,13 @@ class CompanyDao implements ICompanyDao {
 
   @Override
   public ICompanyDto[] fetchInvitableCompanies() {
+    //TODO
     throw new FatalException("Method not supported yet");
   }
 
   @Override
   public ICompanyDto[] fetchCompaniesByDay(int businessDayId) {
+    //TODO
     throw new FatalException("Method not supported yet");
   }
 
