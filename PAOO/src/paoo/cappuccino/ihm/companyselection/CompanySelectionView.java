@@ -1,9 +1,8 @@
-package paoo.cappuccino.ihm.companySelection;
+package paoo.cappuccino.ihm.companyselection;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;

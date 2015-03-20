@@ -4,8 +4,8 @@ import java.awt.Component;
 
 import paoo.cappuccino.ihm.accueil.AccueilModel;
 import paoo.cappuccino.ihm.accueil.AccueilViewController;
-import paoo.cappuccino.ihm.companySelection.CompanySelectionModel;
-import paoo.cappuccino.ihm.companySelection.CompanySelectionViewController;
+import paoo.cappuccino.ihm.companyselection.CompanySelectionModel;
+import paoo.cappuccino.ihm.companyselection.CompanySelectionViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
