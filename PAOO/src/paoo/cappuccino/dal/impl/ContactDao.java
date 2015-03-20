@@ -4,6 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.List;
 
 import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
@@ -13,7 +16,7 @@ import paoo.cappuccino.dal.dao.IContactDao;
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
- * ICompanyDao implementation.
+ * IContactDao implementation.
  *
  * @author Kevin Bavay
  */
@@ -21,13 +24,15 @@ class ContactDao implements IContactDao {
 
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;
-  private PreparedStatement psCreateContact;
+  private PreparedStatement psCreateContact, psFetchContactByName, psFetchContactsByCompany,
+      psUpdateContact;
 
   @Inject
   public ContactDao(IEntityFactory entityFactory, IDalBackend dalBackend) {
     this.entityFactory = entityFactory;
     this.dalBackend = dalBackend;
   }
+
 
   @Override
   public IContactDto createContact(IContactDto contact) {
@@ -60,23 +65,85 @@ class ContactDao implements IContactDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-
     return null;
   }
 
+
   @Override
   public void updateContact(IContactDto contact) {
-    throw new UnsupportedOperationException("Not yet implemented.");
+    String query = "UPDATE business_days.contacts SET company = ?, email = ?, "
+                   + "first_name = ?, last_name = ?, phone = ?, version = version + 1 "
+                   + "WHERE user_id = ? AND version = ?";
+    try {
+      if (psUpdateContact == null) {
+        psUpdateContact = dalBackend.fetchPreparedStatement(query);
+      }
+      psUpdateContact.setInt(1, contact.getCompany());
+      psUpdateContact.setString(2, contact.getEmail());
+      //psUpdateContact.setBoolean(3, contact.getEmailValid());
+      psUpdateContact.setString(3, contact.getFirstName());
+      psUpdateContact.setString(4, contact.getLastName());
+      psUpdateContact.setString(5, contact.getPhone());
+
+      int affectedRows = psUpdateContact.executeUpdate();
+      if (affectedRows == 0) {
+        throw new ConcurrentModificationException(
+            "The user with id " + contact.getId() + " and version " + contact.getVersion()
+            + " was not found in the database. "
+            + "Either it was deleted or modified by another thread.");
+      }
+
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
   }
 
   @Override
   public IContactDto[] fetchContactByName(String firstName, String lastName) {
-    throw new UnsupportedOperationException("Not yet implemented.");
+    String query = "SELECT * FROM business_days.contacts "
+                   + "WHERE first_name LIKE '%?%' AND last_name LIKE '%?%'";
+    try {
+      if (psFetchContactByName == null) {
+        psFetchContactByName = dalBackend.fetchPreparedStatement(query);
+      }
+      psFetchContactByName.setString(1, firstName);
+      psFetchContactByName.setString(2, lastName);
+
+      try (ResultSet rs = psFetchContactByName.executeQuery()) {
+        List<IContactDto> contactList = new ArrayList<>();
+
+        while (rs.next()) {
+          contactList.add(makeContactFromSet(rs));
+        }
+        return contactList.toArray(new IContactDto[contactList.size()]);
+      }
+
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
+    return null;
   }
 
   @Override
   public IContactDto[] fetchContactsByCompany(int companyId) {
-    throw new UnsupportedOperationException("Not yet implemented.");
+    String query = "SELECT * FROM business_days.contacts WHERE company = ?";
+    try {
+      if (psFetchContactsByCompany == null) {
+        psFetchContactsByCompany = dalBackend.fetchPreparedStatement(query);
+      }
+      try (ResultSet rs = psFetchContactsByCompany.executeQuery()) {
+        List<IContactDto> contactList = new ArrayList<>();
+
+        while (rs.next()) {
+          contactList.add(makeContactFromSet(rs));
+        }
+        return contactList.toArray(new IContactDto[contactList.size()]);
+      }
+
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
+    return null;
   }
 
   private IContactDto makeContactFromSet(ResultSet rs) throws SQLException {
@@ -98,7 +165,6 @@ class ContactDao implements IContactDao {
       throw new IllegalArgumentException(
           "One of the fields failed to insert due to constraint violations.");
     }
-
     throw new FatalException("Database error", exception);
   }
 }

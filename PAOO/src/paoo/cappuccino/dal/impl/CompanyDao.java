@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
@@ -23,11 +24,10 @@ import paoo.cappuccino.util.exception.FatalException;
  */
 class CompanyDao implements ICompanyDao {
 
+
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;
-
-  private PreparedStatement psCreateCompany;
-  private PreparedStatement psFetchAll;
+  private PreparedStatement psCreateCompany, psFetchAll, psUpdateCompany, psSearchCompanies;
 
   @Inject
   public CompanyDao(IEntityFactory entityFactory, IDalBackend dalBackend) {
@@ -73,12 +73,61 @@ class CompanyDao implements ICompanyDao {
 
   @Override
   public void updateCompany(ICompanyDto company) {
-    throw new FatalException("Method not yet supported");
+    ValidationUtil.ensureNotNull(company, "company");
+
+    String query = "UPDATE business_days.companies "
+                   + "SET creator = ?, name = ?, register_date = ?, adress_street = ?, "
+                   + "adress_num = ?, adresse_mailbox = ?, adresse_postcode = ?, "
+                   + "adresse_town = ?, version = version + 1 "
+                   + "WHERE company_id = ? AND version = ?";
+
+    try {
+      if (psUpdateCompany == null) {
+        psUpdateCompany = dalBackend.fetchPreparedStatement(query);
+      }
+      psUpdateCompany.setInt(1, company.getCreator());
+      psUpdateCompany.setString(2, company.getName());
+      psUpdateCompany.setString(3, company.getRegisterDate().toString());
+      psUpdateCompany.setString(4, company.getAddressStreet());
+      psUpdateCompany.setString(5, company.getAddressNum());
+      psUpdateCompany.setString(6, company.getAddressMailbox());
+      psUpdateCompany.setString(7, company.getAddressPostcode());
+      psUpdateCompany.setString(8, company.getAddressTown());
+
+      int affectedRows = psUpdateCompany.executeUpdate();
+      if (affectedRows == 0) {
+        throw new ConcurrentModificationException(
+            "The company with id " + company.getId() + " and version " + company.getVersion()
+            + " was not found in the database. "
+            + "Either it was deleted or modified by another thread.");
+      }
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
   }
 
   @Override
   public ICompanyDto[] searchCompanies(String name, String postcode, String street, String town) {
-    throw new FatalException("Method not yet supported");
+    String query = "SELECT * FROM business_days.companies WHERE name LIKE '%?%'AND adress_street "
+                   + "LIKE '%?%' AND adresse_town LIKE '%?% "
+                   + "AND CAST(adresse_postcode AS TEXT) LIKE '?%''";
+    try {
+      if (psSearchCompanies == null) {
+        psSearchCompanies = dalBackend.fetchPreparedStatement(query);
+      }
+      try (ResultSet rs = psSearchCompanies.executeQuery()) {
+        List<ICompanyDto> companiesList = new ArrayList<>();
+
+        while (rs.next()) {
+          companiesList.add(makeCompanyFromSet(rs));
+        }
+        return companiesList.toArray(new ICompanyDto[companiesList.size()]);
+
+      }
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
+    return null;
   }
 
   @Override
@@ -90,7 +139,6 @@ class CompanyDao implements ICompanyDao {
       if (psFetchAll == null) {
         psFetchAll = dalBackend.fetchPreparedStatement(query);
       }
-
       try (ResultSet rs = psFetchAll.executeQuery()) {
         List<ICompanyDto> companiesList = new ArrayList<>();
 
@@ -132,7 +180,7 @@ class CompanyDao implements ICompanyDao {
     int version = rs.getInt(10);
 
     return entityFactory.createCompany(companyId, version, creator, name, addressStreet, addressNum,
-                       addressMailbox, addressPostcode, addressTown, registerDate);
+                                       addressMailbox, addressPostcode, addressTown, registerDate);
   }
 
   private void rethrowSqlException(SQLException exception) {

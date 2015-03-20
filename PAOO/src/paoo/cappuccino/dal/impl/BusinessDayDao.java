@@ -19,7 +19,7 @@ import paoo.cappuccino.util.ValidationUtil;
 import paoo.cappuccino.util.exception.FatalException;
 
 /**
- * IUserDao implementation.
+ * IBusinessDayDao implementation.
  *
  * @author Kevin Bavay
  */
@@ -63,7 +63,6 @@ class BusinessDayDao implements IBusinessDayDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-
     return null;
   }
 

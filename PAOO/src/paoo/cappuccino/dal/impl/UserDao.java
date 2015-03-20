@@ -29,7 +29,7 @@ class UserDao implements IUserDao {
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;
   private final IStringHasher hasher;
-  private PreparedStatement psFetchUserByUsername, psCreateUser, psUpdateUser;
+  private PreparedStatement psFetchUserByUsername, psCreateUser, psUpdateUser, psGetCompanyCreator;
 
   @Inject
   public UserDao(IEntityFactory entityFactory, IDalBackend dalBackend, IStringHasher hasher) {
@@ -51,19 +51,6 @@ class UserDao implements IUserDao {
 
     return entityFactory.createUser(id, version, username, password, lastName,
                                     firstName, email, role, registerDate);
-  }
-
-  private void rethrowSqlException(SQLException exception) {
-    if (exception.getMessage().contains("users_username_key")) {
-      throw new NonUniqueFieldException("The user's username already exists.");
-    }
-
-    if (exception.getMessage().contains("violates")) {
-      throw new IllegalArgumentException(
-          "One of the fields failed to insert due to constraint violations.");
-    }
-
-    throw new FatalException("Database error", exception);
   }
 
   @Override
@@ -134,7 +121,7 @@ class UserDao implements IUserDao {
 
     try {
       if (psUpdateUser == null) {
-        psCreateUser = dalBackend.fetchPreparedStatement(query);
+        psUpdateUser = dalBackend.fetchPreparedStatement(query);
       }
       psUpdateUser.setString(1, hasher.serialize(user.getPassword()));
       psUpdateUser.setString(2, user.getEmail());
@@ -159,6 +146,32 @@ class UserDao implements IUserDao {
 
   @Override
   public IUser getCompanyCreator(int company) {
+    String query = "SELECT user_id, role, password, email, username, first_name, last_name, "
+                   + "u.register_date, u.version FROM business_days.users u, "
+                   + "business_days.companies WHERE creator = 1 AND creator = user_id";
+    try {
+      if (psGetCompanyCreator == null) {
+        psGetCompanyCreator = dalBackend.fetchPreparedStatement(query);
+      }
+      try (ResultSet rs = psGetCompanyCreator.executeQuery()) {
+        if (rs.next()) {
+          return makeUserFromSet(rs);
+        }
+      }
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
     return null;
+  }
+
+  private void rethrowSqlException(SQLException exception) {
+    if (exception.getMessage().contains("users_username_key")) {
+      throw new NonUniqueFieldException("The user's username already exists.");
+    }
+    if (exception.getMessage().contains("violates")) {
+      throw new IllegalArgumentException(
+          "One of the fields failed to insert due to constraint violations.");
+    }
+    throw new FatalException("Database error", exception);
   }
 }
