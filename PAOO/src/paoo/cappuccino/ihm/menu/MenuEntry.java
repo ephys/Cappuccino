@@ -1,31 +1,27 @@
 package paoo.cappuccino.ihm.menu;
 
-import paoo.cappuccino.ihm.accueil.AccueilViewController;
-import paoo.cappuccino.ihm.companySelection.CompanySelectionViewController;
-
 /**
  * List of entries of the main menu.
  *
  * @author Opsomer Mathias
  */
 public enum MenuEntry {
-  HOME("Accueil", AccueilViewController.class), SEARCH_PARTICIPATION("Recherche - Participation",
-      null), SEARCH_CONTACT("Recherche - Personne de contact", null), SEARCH_COMPANY(
-      "Recherche - Entreprise", null), SELEC_COMPANY("Sélectionner des entreprises",
-      CompanySelectionViewController.class), CREATE_BDAY("Créer une journée des entreprises", null), CREATE_COMPANY(
-      "créer une entreprise", null), CREATE_CONTACT("Créer une personne de contact", null);
+  HOME("Accueil"),
+  SEARCH_PARTICIPATION("Recherche - Participation"),
+  SEARCH_CONTACT("Recherche - Personne de contact"),
+  SEARCH_COMPANY("Recherche - Entreprise"),
+  SELECT_COMPANY("Sélectionner des entreprises"),
+  CREATE_BDAY("Créer une journée des entreprises"),
+  CREATE_COMPANY("créer une entreprise"),
+  CREATE_CONTACT("Créer une personne de contact");
 
   private final String title;
-  private final Class<?> viewController;
-  private Object model;
 
   /**
    * @param title the menu entry's title.
-   * @param viewController The ViewController of the page attached to that entry.
    */
-  private MenuEntry(String title, Class<?> viewController) {
+  private MenuEntry(String title) {
     this.title = title;
-    this.viewController = viewController;
   }
 
   /**
@@ -35,17 +31,5 @@ public enum MenuEntry {
    */
   public String getTitle() {
     return title;
-  }
-
-  Class<?> getViewController() {
-    return viewController;
-  }
-
-  Object getModel() {
-    return model;
-  }
-
-  void setModel(Object model) {
-    this.model = model;
   }
 }

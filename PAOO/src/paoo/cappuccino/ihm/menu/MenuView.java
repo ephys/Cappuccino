@@ -23,14 +23,17 @@ import paoo.cappuccino.ihm.util.JLabelFont;
 
 public class MenuView extends JPanel implements ChangeListener {
 
+  private final MenuModel menuModel;
+  private final ViewControllerFactory viewFactory;
+
   private JPanel mainPanel;
   private JLabel title = new JLabelFont("/aucune page chargée/", 20);
-  private MenuModel menuModel;
 
-  public MenuView(MenuModel menuModel, IGuiManager guiManager) {
+  public MenuView(MenuModel menuModel, IGuiManager guiManager, ViewControllerFactory viewFactory) {
     super(new BorderLayout());
 
     this.menuModel = menuModel;
+    this.viewFactory = viewFactory;
     this.menuModel.addChangeListener(this);
 
     // header
@@ -78,11 +81,14 @@ public class MenuView extends JPanel implements ChangeListener {
 
     this.add(body, BorderLayout.CENTER);
     // end body
+
+    stateChanged(null);
   }
 
   @Override
   public void stateChanged(ChangeEvent event) {
-    title.setText(menuModel.getCurrentPageEntry().getTitle());
-    mainPanel.add(menuModel.getCurrentPageInstance(), BorderLayout.CENTER);
+    title.setText(menuModel.getCurrentPage().getTitle());
+    mainPanel.add(viewFactory.createViewController(menuModel.getCurrentPage()),
+                  BorderLayout.CENTER);
   }
 }

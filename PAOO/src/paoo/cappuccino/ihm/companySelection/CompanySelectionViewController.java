@@ -10,42 +10,31 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
-import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
-import paoo.cappuccino.ihm.menu.MenuModel;
-import paoo.cappuccino.ihm.menu.MenuViewController;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
-import paoo.cappuccino.ucc.ICompanyUcc;
-
-
 
 public class CompanySelectionViewController extends JPanel {
 
-  private CompanySelectionModel model;
-  private MenuModel menu;
-  private IGuiManager guiManager;
+  private final CompanySelectionModel model;
+  private final IGuiManager guiManager;
+  private final CompanySelectionView view;
   private File directory;
-  private MenuViewController controller;
-  private CompanySelectionView view;
 
-
-  public CompanySelectionViewController(CompanySelectionModel model, MenuModel menu,
-      IGuiManager guiManager, MenuViewController controller) {
-
+  public CompanySelectionViewController(CompanySelectionModel model, IGuiManager guiManager,
+                                        IBusinessDayUcc businessDayUcc) {
     super(new BorderLayout());
+
     this.model = model;
-    this.menu = menu;
     this.guiManager = guiManager;
-    this.controller = controller;
+
     this.view = new CompanySelectionView(model);
-    // log message dans console et fichier pour frame courant
+
     this.guiManager.getLogger().info("[SelectionCompanyFrame]");
 
     // a voir
@@ -59,19 +48,13 @@ public class CompanySelectionViewController extends JPanel {
     JButton saveButton = new JButton("Valider");
 
     saveButton.addActionListener(e -> {
-
       // recuperer tous les personnes de contact par entreprise selectionnée + les sauver dans
       // fichier .csv
-
-      });
+    });
 
     saveButton.setEnabled(false);
 
-    IBusinessDayUcc businessDayUcc = this.controller.getBusinessDayUcc();
-    ICompanyUcc companyUcc = this.controller.getCompanyUcc();
-
     IBusinessDayDto[] businessDayDto = businessDayUcc.getInvitationlessDays();
-
 
     JCheckBox selectAll = new JCheckBox("Tout cocher");
 
@@ -86,8 +69,9 @@ public class CompanySelectionViewController extends JPanel {
       }
     });
 
-    if (businessDayDto == null)
+    if (businessDayDto == null) {
       selectAll.setEnabled(false);
+    }
     // a changer
     this.model.setCompanyDto(null);
     // JComboBox<IBusinessDayDto> comboBox = new JComboBox<IBusinessDayDto>(businessDayDto);
@@ -117,7 +101,6 @@ public class CompanySelectionViewController extends JPanel {
         return;
       }
     });
-
 
     savePanel.add(directorySaveButton);
 

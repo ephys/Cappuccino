@@ -13,11 +13,9 @@ import paoo.cappuccino.ucc.IUserUcc;
 @NoCache
 public class MenuFrame extends BaseFrame {
 
-  private final IUserUcc userUcc;
-  private final IBusinessDayUcc businessDayUcc;
-  private final ICompanyUcc companyUcc;
-  private final IContactUcc contactUcc;
   private final IGuiManager guiManager;
+  private final ViewControllerFactory guiFactory;
+  private final MenuModel menuModel;
   private IUserDto loggedUser;
 
   /**
@@ -25,13 +23,13 @@ public class MenuFrame extends BaseFrame {
    */
   @Inject
   public MenuFrame(IUserUcc userUcc, IBusinessDayUcc businessDayUcc, ICompanyUcc companyUcc,
-      IContactUcc contactUcc, IGuiManager guiManager) {
+                   IContactUcc contactUcc, IGuiManager guiManager) {
     super("Cappuccino", 950, 600, guiManager);
-    this.userUcc = userUcc;
-    this.businessDayUcc = businessDayUcc;
-    this.companyUcc = companyUcc;
-    this.contactUcc = contactUcc;
+
+    this.menuModel = new MenuModel(this);
     this.guiManager = guiManager;
+    this.guiFactory = new ViewControllerFactory(userUcc, businessDayUcc, companyUcc,
+                                                contactUcc, menuModel, guiManager);
   }
 
   IUserDto getLoggedUser() {
@@ -51,14 +49,7 @@ public class MenuFrame extends BaseFrame {
   }
 
   private void setupDisplay() {
-
-    MenuModel model = new MenuModel(this);
-    MenuViewController controller =
-        new MenuViewController(userUcc, businessDayUcc, companyUcc, contactUcc, guiManager, model,
-            guiManager);
-
-    this.add(controller);
-
+    this.add(new MenuViewController(guiManager, menuModel, guiFactory));
     this.setVisible(true);
   }
 }
