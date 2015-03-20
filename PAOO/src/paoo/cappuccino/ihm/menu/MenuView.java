@@ -2,6 +2,7 @@ package paoo.cappuccino.ihm.menu;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,6 +30,12 @@ public class MenuView extends JPanel implements ChangeListener {
   private JPanel mainPanel;
   private JLabel title = new JLabelFont("/aucune page chargée/", 20);
 
+  /**
+   * Creates a new Menu View.
+   * @param menuModel The view model.
+   * @param guiManager The manager which opened this gui.
+   * @param viewFactory The factory used to create the main view.
+   */
   public MenuView(MenuModel menuModel, IGuiManager guiManager, ViewControllerFactory viewFactory) {
     super(new BorderLayout());
 
@@ -87,8 +94,14 @@ public class MenuView extends JPanel implements ChangeListener {
 
   @Override
   public void stateChanged(ChangeEvent event) {
+    Component newVc = viewFactory.createViewController(menuModel.getCurrentPage());
+    Component previousVc = ((BorderLayout)mainPanel.getLayout())
+        .getLayoutComponent(BorderLayout.CENTER);
+    if (previousVc != null) {
+      mainPanel.remove(previousVc);
+    }
+
     title.setText(menuModel.getCurrentPage().getTitle());
-    mainPanel.add(viewFactory.createViewController(menuModel.getCurrentPage()),
-                  BorderLayout.CENTER);
+    mainPanel.add(newVc, BorderLayout.CENTER);
   }
 }

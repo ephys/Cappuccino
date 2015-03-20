@@ -55,9 +55,9 @@ public class ViewControllerFactory {
       // TODO: add ViewControllers.
 
       default:
-        throw new UnsupportedOperationException("Could not open page "
+        throw new UnsupportedOperationException("Could not open page \""
                                                 + page.getTitle()
-                                                + ": Not yet implemented.");
+                                                + "\": Not yet implemented.");
     }
   }
 }

@@ -32,6 +32,9 @@ public class MenuFrame extends BaseFrame {
                                                 contactUcc, menuModel, guiManager);
   }
 
+  /**
+   * Returns the user currently logged in.
+   */
   IUserDto getLoggedUser() {
     return loggedUser;
   }
@@ -48,6 +51,9 @@ public class MenuFrame extends BaseFrame {
     setupDisplay();
   }
 
+  /**
+   * Creates the frame's primary view.
+   */
   private void setupDisplay() {
     this.add(new MenuViewController(guiManager, menuModel, guiFactory));
     this.setVisible(true);

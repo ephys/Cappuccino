@@ -38,6 +38,9 @@ public class MenuModel extends BaseModel {
     return true;
   }
 
+  /**
+   * Returns the currently open page.
+   */
   public MenuEntry getCurrentPage() {
     return currentPage;
   }

@@ -18,6 +18,12 @@ import paoo.cappuccino.ihm.util.JLabelFont;
 
 public class MenuViewController extends MenuView {
 
+  /**
+   * Creates a new Menu View Controller.
+   * @param model The view model.
+   * @param guiManager The manager which opened this gui.
+   * @param viewFactory The factory used to create the main view.
+   */
   public MenuViewController(IGuiManager guiManager, MenuModel model,
                             ViewControllerFactory viewFactory) {
     super(model, guiManager, viewFactory);

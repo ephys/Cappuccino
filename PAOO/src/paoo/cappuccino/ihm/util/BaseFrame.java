@@ -33,6 +33,7 @@ public abstract class BaseFrame extends JFrame {
     setIconImage(guiManager.getResourceManager().fetchImage(IhmConstants.PATH_LOGO));
 
     setSize(width, height);
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
     setLocationRelativeTo(null);
 
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
