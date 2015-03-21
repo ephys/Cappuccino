@@ -48,6 +48,13 @@ public interface IUserDto extends IBaseDto {
   IUserDto.Role getRole();
 
   /**
+   * Compares the given password to the one stored by the user entity.
+   * @param password The password to compare.
+   * @return The password matches.
+   */
+  boolean isPassword(char[] password);
+
+  /**
    * Defines the list of roles an user can hold.
    */
   public static enum Role {

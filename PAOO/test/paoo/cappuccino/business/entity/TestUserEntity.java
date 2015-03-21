@@ -12,6 +12,7 @@ import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
 import paoo.cappuccino.util.hasher.IStringHasher;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -47,8 +48,7 @@ public class TestUserEntity {
   public void createUser() throws Exception {
     injector.populate(this);
 
-    user = entityFactory.createUser(username, hasher.hash(password), lastName, firstName, email,
-                                    role);
+    user = entityFactory.createUser(username, password, lastName, firstName, email, role);
   }
 
   @Test

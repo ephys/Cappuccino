@@ -9,8 +9,6 @@ import paoo.cappuccino.dal.dao.IUserDao;
 import paoo.cappuccino.ucc.IUserUcc;
 import paoo.cappuccino.util.StringUtils;
 import paoo.cappuccino.util.ValidationUtil;
-import paoo.cappuccino.util.hasher.IHashHolderDto;
-import paoo.cappuccino.util.hasher.IStringHasher;
 
 /**
  * Legit implementation of the User use case controller.
@@ -21,14 +19,11 @@ class UserUcc implements IUserUcc {
 
   private final IEntityFactory entityFactory;
   private final IUserDao userDao;
-  private final IStringHasher hasher;
 
   @Inject
-  public UserUcc(IEntityFactory entityFactory, IDalService dalService, IUserDao userDao,
-      IStringHasher hasher) {
+  public UserUcc(IEntityFactory entityFactory, IDalService dalService, IUserDao userDao) {
     this.entityFactory = entityFactory;
     this.userDao = userDao;
-    this.hasher = hasher;
   }
 
   @Override
@@ -53,9 +48,8 @@ class UserUcc implements IUserUcc {
 
     firstName = firstName.trim();
     lastName = lastName.trim();
-    IUser registeredUser =
-        entityFactory.createUser(username, hasher.hash(password), lastName, firstName, email,
-            IUserDto.Role.USER);
+    IUser registeredUser = entityFactory.createUser(username, password, lastName,
+                                                    firstName, email, IUserDto.Role.USER);
 
     return userDao.createUser(registeredUser);
   }
@@ -66,19 +60,11 @@ class UserUcc implements IUserUcc {
     ValidationUtil.ensureFilled(password, "password");
 
     IUser user = (IUser) userDao.fetchUserByUsername(username.trim());
-    if (user == null) {
+    if (user == null || !user.isPassword(password)) {
       return null;
     }
 
-    IHashHolderDto realPassword = user.getPassword();
-    if (!hasher.matchHash(password, realPassword)) {
-      return null;
-    }
-
-    // update the hash algorithm used to store the password if we changed
-    // it.
-    if (hasher.isHashOutdated(realPassword)) {
-      user.setPassword(hasher.hash(password));
+    if (user.updatePasswordHashAlgorithm(password)) {
       userDao.updateUser(user);
     }
 

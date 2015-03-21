@@ -29,7 +29,11 @@ class UserDao implements IUserDao {
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;
   private final IStringHasher hasher;
-  private PreparedStatement psFetchUserByUsername, psCreateUser, psUpdateUser, psGetCompanyCreator;
+
+  private PreparedStatement psFetchUserByUsername;
+  private PreparedStatement psCreateUser;
+  private PreparedStatement psUpdateUser;
+  private PreparedStatement psGetCompanyCreator;
 
   @Inject
   public UserDao(IEntityFactory entityFactory, IDalBackend dalBackend, IStringHasher hasher) {
@@ -111,7 +115,7 @@ class UserDao implements IUserDao {
   }
 
   @Override
-  public void updateUser(IUser user) {
+  public void updateUser(IUserDto user) {
     ValidationUtil.ensureNotNull(user, "user");
 
     String query =
@@ -138,7 +142,9 @@ class UserDao implements IUserDao {
             + "Either it was deleted or modified by another thread.");
       }
 
-      user.incrementVersion();
+      if (user instanceof IUser) {
+        ((IUser) user).incrementVersion();
+      }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }

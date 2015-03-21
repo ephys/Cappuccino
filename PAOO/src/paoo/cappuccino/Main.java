@@ -1,6 +1,7 @@
 package paoo.cappuccino;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.core.AppContext;
@@ -74,6 +75,11 @@ public class Main extends BaseMain {
       @Override
       public Role getRole() {
         return Role.USER;
+      }
+
+      @Override
+      public boolean isPassword(char[] password) {
+        return Arrays.equals(password, "pomme".toCharArray());
       }
 
       @Override

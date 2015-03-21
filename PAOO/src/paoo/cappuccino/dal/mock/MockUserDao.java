@@ -19,7 +19,7 @@ class MockUserDao implements IUserDao {
   public MockUserDao(IEntityFactory factory) {
     this.factory = factory;
   }
-  
+
   @Override
   public IUser createUser(IUserDto user) {
     IUser userEntity = factory.createUser(++entityCount, 1, user.getUsername(), user.getPassword(),
@@ -36,8 +36,8 @@ class MockUserDao implements IUserDao {
   }
 
   @Override
-  public void updateUser(IUser user) {
-    // do nothing
+  public void updateUser(IUserDto user) {
+    // TODO
   }
 
   @Override

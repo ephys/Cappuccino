@@ -15,4 +15,12 @@ public interface IUser extends IUserDto, IBaseEntity {
    * @param password A password, hashed.
    */
   void setPassword(IHashHolderDto password);
+
+  /**
+   * updates the hash algorithm used to store the password if a newer version is available.
+   * @param plainPassword The user password in plain text, used to re-hash if the hash
+   *                      is outdated.
+   * @return The hash has been updated.
+   */
+  boolean updatePasswordHashAlgorithm(char[] plainPassword);
 }

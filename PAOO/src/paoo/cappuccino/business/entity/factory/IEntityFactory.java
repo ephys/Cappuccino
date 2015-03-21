@@ -28,7 +28,7 @@ public interface IEntityFactory {
    * @param email The user's email, must be a valid email.
    * @param role The user's role.
    */
-  IUser createUser(String username, IHashHolderDto password, String lastName, String firstName,
+  IUser createUser(String username, char[] password, String lastName, String firstName,
       String email, IUserDto.Role role);
 
   /**
@@ -110,7 +110,7 @@ public interface IEntityFactory {
 
   /**
    * Creates a new businessDay entity (as in not yet stored), for the UCC.
-   * 
+   *
    * @param eventDate The date of the businessDay will take place.
    */
   IBusinessDay createBusinessDay(LocalDateTime eventDate);
@@ -129,7 +129,7 @@ public interface IEntityFactory {
 
   /**
    * Creates a new participation entity (as in not yet stored), for the UCC.
-   * 
+   *
    * @param companyId Refer the company's identifier of a participation.
    * @param businessDayId Refer the businessDay's identifier of a participation.
    */
@@ -137,7 +137,7 @@ public interface IEntityFactory {
 
   /**
    * Creates an already existing businessDay entity, for the DAL.
-   * 
+   *
    * @param companyId Refer the company's identifier of a participation.
    * @param businessDayId Refer the businessDay's identifier of a participation.
    * @param version The participation version in the database.

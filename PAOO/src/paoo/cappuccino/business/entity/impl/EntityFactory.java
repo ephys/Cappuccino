@@ -10,7 +10,9 @@ import paoo.cappuccino.business.entity.IContact;
 import paoo.cappuccino.business.entity.IParticipation;
 import paoo.cappuccino.business.entity.IUser;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
+import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
+import paoo.cappuccino.util.hasher.IStringHasher;
 
 /**
  * IEntityFactory implementation.
@@ -19,10 +21,17 @@ import paoo.cappuccino.util.hasher.IHashHolderDto;
  */
 final class EntityFactory implements IEntityFactory {
 
+  private final IStringHasher stringHasher;
+
+  @Inject
+  public EntityFactory(IStringHasher stringHasher) {
+    this.stringHasher = stringHasher;
+  }
+
   @Override
-  public IUser createUser(String username, IHashHolderDto password, String lastName,
+  public IUser createUser(String username, char[] password, String lastName,
       String firstName, String email, IUserDto.Role role) {
-    return new UserEntity(username, password, lastName, firstName, email, role);
+    return new UserEntity(stringHasher, username, password, lastName, firstName, email, role);
   }
 
   @Override
@@ -30,7 +39,7 @@ final class EntityFactory implements IEntityFactory {
       String lastName, String firstName, String email, IUserDto.Role role,
       LocalDateTime registerDate) {
 
-    return new UserEntity(id, version, username, password, lastName, firstName, email, registerDate, role);
+    return new UserEntity(stringHasher, id, version, username, password, lastName, firstName, email, registerDate, role);
   }
 
   @Override
