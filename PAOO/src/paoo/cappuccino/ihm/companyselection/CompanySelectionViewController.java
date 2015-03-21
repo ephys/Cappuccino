@@ -10,35 +10,42 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
-import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
-import paoo.cappuccino.ucc.IBusinessDayUcc;
+import paoo.cappuccino.ihm.menu.MenuModel;
 
+/**
+ * ViewController for company selection gui.
+ *
+ * @author Maduka Junior
+ */
+@SuppressWarnings("serial")
 public class CompanySelectionViewController extends JPanel {
 
-  private final CompanySelectionModel model;
-  private final IGuiManager guiManager;
-  private final CompanySelectionView view;
+  private CompanySelectionModel model;
+  private MenuModel menu;
+  private IGuiManager guiManager;
   private File directory;
+  private CompanySelectionView view;
 
-  public CompanySelectionViewController(CompanySelectionModel model, IGuiManager guiManager,
-                                        IBusinessDayUcc businessDayUcc) {
+
+  public CompanySelectionViewController(CompanySelectionModel model, MenuModel menu,
+      IGuiManager guiManager) {
+
     super(new BorderLayout());
-
     this.model = model;
+    this.menu = menu;
     this.guiManager = guiManager;
-
     this.view = new CompanySelectionView(model);
-
+    // log message dans console et fichier pour frame courant
     this.guiManager.getLogger().info("[SelectionCompanyFrame]");
 
-    // a voir
-    JPanel viewWrapper = new JPanel();
+
     JPanel southPanel = new JPanel(new GridLayout(2, 1));
     JPanel savePanel = new JPanel();
     JPanel validatePanel = new JPanel();
@@ -48,13 +55,20 @@ public class CompanySelectionViewController extends JPanel {
     JButton saveButton = new JButton("Valider");
 
     saveButton.addActionListener(e -> {
+
       // recuperer tous les personnes de contact par entreprise selectionnée + les sauver dans
       // fichier .csv
-    });
+
+      });
 
     saveButton.setEnabled(false);
 
-    IBusinessDayDto[] businessDayDto = businessDayUcc.getInvitationlessDays();
+    // IBusinessDayUcc businessDayUcc = this.controller.getBusinessDayUcc();
+    // ICompanyUcc companyUcc = this.controller.getCompanyUcc();
+
+    // verifier si c'est pas null, sinon afficher message aucun business day
+    // IBusinessDayDto[] businessDayDto = businessDayUcc.getInvitationlessDays();
+
 
     JCheckBox selectAll = new JCheckBox("Tout cocher");
 
@@ -69,9 +83,11 @@ public class CompanySelectionViewController extends JPanel {
       }
     });
 
-    if (businessDayDto == null) {
-      selectAll.setEnabled(false);
-    }
+
+    // if (businessDayDto == null)
+    // selectAll.setEnabled(false);
+
+
     // a changer
     this.model.setCompanyDto(null);
     // JComboBox<IBusinessDayDto> comboBox = new JComboBox<IBusinessDayDto>(businessDayDto);
@@ -80,7 +96,8 @@ public class CompanySelectionViewController extends JPanel {
 
     // String businessDaySelection = (String)comboBox.getSelectedItem();
 
-    // ICompanyDto[] companyDto = companyUcc.getInvitableCompanies(businessDaySelection); ???
+    // ICompanyDto[] companyDto = companyUcc.getInvitableCompanies();
+    // if(companyDto == null) selectAll.setEnabled(false);
     // this.model.setCompanyDto(companyDto);
 
     // });
@@ -102,10 +119,16 @@ public class CompanySelectionViewController extends JPanel {
       }
     });
 
+
     savePanel.add(directorySaveButton);
 
     validatePanel.add(new JLabel("Journée : "));
-    // validatePanel.add(comboBox);
+
+    // a enlever
+    String[] string = {"dsdq", "dqsdqs", "dsqd", "dsqd", "dsqdsdqs"};
+    JComboBox<String> comboBox = new JComboBox<String>(string);
+
+    validatePanel.add(comboBox);
     validatePanel.add(saveButton);
 
     southPanel.add(savePanel);
@@ -114,11 +137,11 @@ public class CompanySelectionViewController extends JPanel {
     JPanel leftPadding = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     leftPadding.add(selectAll);
     this.add(leftPadding, BorderLayout.NORTH);
-    viewWrapper.addMouseListener(new MouseAdapter() {
+
+    JTable table = this.view.getTable();
+    table.addMouseListener(new MouseAdapter() {
 
       public void mouseClicked(MouseEvent e) {
-
-        JTable table = CompanySelectionViewController.this.view.getTable();
 
         for (int i = 0; i < table.getRowCount(); i++) {
 
@@ -128,10 +151,11 @@ public class CompanySelectionViewController extends JPanel {
           }
 
         }
-
+        // a voir
+        saveButton.setEnabled(false);
       }
     });
-    viewWrapper.add(this.view);
+
     this.add(this.view);
     this.add(southPanel, BorderLayout.SOUTH);
 
