@@ -23,17 +23,19 @@ public abstract class BaseFrame extends JFrame {
   /**
    * Creates a new frame.
    *
-   * @param title  The frame title.
-   * @param width  The frame width.
+   * @param title The frame title.
+   * @param width The frame width.
    * @param height The frame height.
    */
-  public BaseFrame(String title, int width, int height, IGuiManager guiManager) {
+  public BaseFrame(String title, int width, int height,
+      IGuiManager guiManager) {
     super(title);
 
-    setIconImage(guiManager.getResourceManager().fetchImage(IhmConstants.PATH_LOGO));
+    setIconImage(guiManager.getResourceManager().fetchImage(
+        IhmConstants.PATH_LOGO));
 
     setSize(width, height);
-    setExtendedState(JFrame.MAXIMIZED_BOTH);
+    // setExtendedState(JFrame.MAXIMIZED_BOTH);
     setLocationRelativeTo(null);
 
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

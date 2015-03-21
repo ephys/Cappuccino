@@ -39,6 +39,7 @@ public class TableCompaniesModel extends AbstractTableModel implements
     return (data == null) ? null : data[rowIndex][columnIndex];
   }
 
+
   @Override
   public boolean isCellEditable(int row, int col) {
     return true;

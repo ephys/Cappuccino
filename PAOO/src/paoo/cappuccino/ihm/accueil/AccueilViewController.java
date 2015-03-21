@@ -16,7 +16,6 @@ import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
@@ -38,7 +37,6 @@ public class AccueilViewController extends JPanel implements
 
   private static final long serialVersionUID = 3071496812344175953L;
   private final AccueilModel model;
-  private TableModel dataModel;
 
   /**
    * Creates a new ViewController for the Login gui.
@@ -77,9 +75,12 @@ public class AccueilViewController extends JPanel implements
         new JTable(new TableCompaniesModel(buildMockData(), titles));
     table.getColumn("Annuler participation").setCellRenderer(
         new ButtonRenderer());
-    table.getColumn("État").setCellRenderer(new ComboRenderer());
     table.getColumn("Annuler participation").setCellEditor(
         new ButtonEditor(new JCheckBox()));
+    table.getColumn("État").setCellRenderer(new ComboRenderer());
+    table.getColumn("État").setCellEditor(
+        new JComboEditor(new JComboBox<IParticipationDto.State>()));
+
 
     // gestion affichage table
     table.getColumn("Nom entreprise").setMinWidth(
@@ -115,9 +116,7 @@ public class AccueilViewController extends JPanel implements
               (State[]) states.toArray());
       data[i][1] = possibleState;
 
-      JButton cancel = new JButton("Annuler");
-
-      data[i][2] = cancel;
+      data[i][2] = "Annuler";
       i++;
     }
     return data;
@@ -131,8 +130,7 @@ public class AccueilViewController extends JPanel implements
 
       JComboBox<String> possibleState =
           new JComboBox<String>(new String[] {"un", "deux", "trois"});
-      data[i][1] = possibleState;
-
+      data[i][1] = "combobox";
       data[i][2] = "annuler";
     }
     return data;
@@ -165,11 +163,13 @@ public class AccueilViewController extends JPanel implements
       return this;
     }
   }
-  class ComboRenderer extends JComboBox implements TableCellRenderer {
+  class ComboRenderer extends JComboBox<State> implements
+      TableCellRenderer {
 
     public Component getTableCellRendererComponent(JTable table,
         Object value, boolean isSelected, boolean isFocus, int row, int col) {
-      return (JComboBox<State>) value;
+      setEnabled(true);
+      return this;
     }
   }
 }

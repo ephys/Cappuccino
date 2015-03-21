@@ -33,7 +33,8 @@ public class Main extends BaseMain {
   }
 
   private void createGui() {
-    IGuiManager guiManager = getInjector().buildDependency(IGuiManager.class);
+    IGuiManager guiManager =
+        getInjector().buildDependency(IGuiManager.class);
 
     if (getContext().getProfileType() != Profile.DEV) {
       guiManager.openFrame(LoginFrame.class);
