@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 
 import paoo.cappuccino.ihm.core.IGuiManager;
-import paoo.cappuccino.ihm.menu.MenuModel;
+import paoo.cappuccino.ucc.IBusinessDayUcc;
 
 /**
  * ViewController for company selection gui.
@@ -28,18 +28,17 @@ import paoo.cappuccino.ihm.menu.MenuModel;
 public class CompanySelectionViewController extends JPanel {
 
   private CompanySelectionModel model;
-  private MenuModel menu;
   private IGuiManager guiManager;
   private File directory;
   private CompanySelectionView view;
+  private IBusinessDayUcc businessDayUcc;
 
 
-  public CompanySelectionViewController(CompanySelectionModel model, MenuModel menu,
-      IGuiManager guiManager) {
+  public CompanySelectionViewController(CompanySelectionModel model, IGuiManager guiManager, IBusinessDayUcc businessDayUcc) {
 
     super(new BorderLayout());
     this.model = model;
-    this.menu = menu;
+    this.businessDayUcc = businessDayUcc;
     this.guiManager = guiManager;
     this.view = new CompanySelectionView(model);
     // log message dans console et fichier pour frame courant
