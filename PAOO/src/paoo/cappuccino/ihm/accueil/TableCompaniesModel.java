@@ -1,25 +1,27 @@
 package paoo.cappuccino.ihm.accueil;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 public class TableCompaniesModel extends AbstractTableModel implements TableModel {
-  String[] companies;
+  Object[][] data;
   String[] titles;
 
   public TableCompaniesModel(String[] companies, String[] titles) {
-    this.companies = companies;
+    data = new Object[titles.length][companies.length];
+    for (int i = 0; i < companies.length; i++) {
+      data[i][0] = companies[i];
+      data[i][1] = new JComboBox<String>(new String[] {"un", "deux", "trois"});
+      data[i][2] = new JButton("Annuler");
+    }
     this.titles = titles;
   }
 
   @Override
-  public Class<?> getColumnClass(int columnIndex) {
-    switch (columnIndex) {
-      case 1:
-        return JComboButtonCell.class;
-      default:
-        return String.class;
-    }
+  public Class getColumnClass(int col) {
+    return data[0][col].getClass();
   }
 
   @Override
@@ -34,12 +36,12 @@ public class TableCompaniesModel extends AbstractTableModel implements TableMode
 
   @Override
   public int getRowCount() {
-    return (companies == null) ? 0 : companies.length;
+    return (data == null) ? 0 : data.length;
   }
 
   @Override
   public Object getValueAt(int rowIndex, int columnIndex) {
-    return (companies == null) ? null : companies[rowIndex];
+    return (data == null) ? null : data[rowIndex][columnIndex];
   }
 
   @Override

@@ -35,7 +35,7 @@ public class AccueilViewController extends JPanel implements ChangeListener {
    * @param model The ViewController's model.
    */
   public AccueilViewController(AccueilModel model, MenuModel menu, IGuiManager guiManager,
-                               IBusinessDayUcc dayUcc) {
+      IBusinessDayUcc dayUcc) {
     super(new BorderLayout());
 
     this.model = model;
@@ -58,10 +58,8 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
     // center
     String[] companies = new String[] {"entreprise 1", "entreprise 2", "entreprise 3"};
-    String[] titles = new String[] {"Nom entreprise", "État"};
+    String[] titles = new String[] {"Nom entreprise", "État", "Annuler participation"};
     JTable table = new JTable(new TableCompaniesModel(companies, titles));
-    table.setDefaultRenderer(JComboButtonCell.class, new JComboButtonCell());
-    table.setDefaultEditor(JComboButtonCell.class, new JComboButtonCell());
     table.setRowHeight(35);
     this.add(new JScrollPane(table));
   }
