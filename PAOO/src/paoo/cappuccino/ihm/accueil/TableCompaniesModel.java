@@ -1,22 +1,17 @@
 package paoo.cappuccino.ihm.accueil;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-public class TableCompaniesModel extends AbstractTableModel implements TableModel {
-  Object[][] data;
+public class TableCompaniesModel extends AbstractTableModel implements
+    TableModel {
   String[] titles;
+  Object[][] data;
 
-  public TableCompaniesModel(String[] companies, String[] titles) {
-    data = new Object[titles.length][companies.length];
-    for (int i = 0; i < companies.length; i++) {
-      data[i][0] = companies[i];
-      data[i][1] = new JComboBox<String>(new String[] {"un", "deux", "trois"});
-      data[i][2] = new JButton("Annuler");
-    }
+
+  public TableCompaniesModel(Object[][] data, String[] titles) {
     this.titles = titles;
+    this.data = data;
   }
 
   @Override
@@ -45,7 +40,7 @@ public class TableCompaniesModel extends AbstractTableModel implements TableMode
   }
 
   @Override
-  public boolean isCellEditable(int arg0, int arg1) {
-    return false;
+  public boolean isCellEditable(int row, int col) {
+    return true;
   }
 }
