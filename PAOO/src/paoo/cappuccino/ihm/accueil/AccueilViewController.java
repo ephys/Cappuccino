@@ -35,8 +35,10 @@ import paoo.cappuccino.util.ParticipationUtils;
 public class AccueilViewController extends JPanel implements
     ChangeListener {
 
+
   private static final long serialVersionUID = 3071496812344175953L;
   private final AccueilModel model;
+  private JTable table;
 
   /**
    * Creates a new ViewController for the Login gui.
@@ -71,8 +73,7 @@ public class AccueilViewController extends JPanel implements
     String[] titles =
         new String[] {"Nom entreprise", "État", "Annuler participation"};
     model.setParticipations(getParticipations());
-    JTable table =
-        new JTable(new TableCompaniesModel(buildMockData(), titles));
+    table = new JTable(new TableCompaniesModel(buildMockData(), titles));
     table.getColumn("Annuler participation").setCellRenderer(
         new ButtonRenderer());
     table.getColumn("Annuler participation").setCellEditor(
@@ -128,9 +129,10 @@ public class AccueilViewController extends JPanel implements
     for (int i = 0; i < companies.length; i++) {
       data[i][0] = companies[i];
 
-      JComboBox<String> possibleState =
-          new JComboBox<String>(new String[] {"un", "deux", "trois"});
-      data[i][1] = "combobox";
+      JComboBox<State> possibleState =
+          new JComboBox<State>(new State[] {State.BILLED, State.CANCELLED,
+              State.DECLINED});
+      data[i][1] = possibleState;
       data[i][2] = "annuler";
     }
     return data;
@@ -168,8 +170,7 @@ public class AccueilViewController extends JPanel implements
 
     public Component getTableCellRendererComponent(JTable table,
         Object value, boolean isSelected, boolean isFocus, int row, int col) {
-      setEnabled(true);
-      return this;
+      return (JComboBox<State>) value;
     }
   }
 }
