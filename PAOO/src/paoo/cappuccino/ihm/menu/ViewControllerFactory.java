@@ -4,9 +4,11 @@ import java.awt.Component;
 
 import paoo.cappuccino.ihm.accueil.AccueilModel;
 import paoo.cappuccino.ihm.accueil.AccueilViewController;
-import paoo.cappuccino.ihm.companyselection.CompanySelectionModel;
-import paoo.cappuccino.ihm.companyselection.CompanySelectionViewController;
+import paoo.cappuccino.ihm.companySelection.CompanySelectionModel;
+import paoo.cappuccino.ihm.companySelection.CompanySelectionViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.newCompany.NewCompanyModel;
+import paoo.cappuccino.ihm.newCompany.NewCompanyViewController;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.ucc.IContactUcc;
@@ -28,8 +30,7 @@ public class ViewControllerFactory {
    * Creates the view factory with all the dependencies required by the views.
    */
   public ViewControllerFactory(IUserUcc userUcc, IBusinessDayUcc businessDayUcc,
-                               ICompanyUcc companyUcc, IContactUcc contactUcc, MenuModel menuModel,
-                               IGuiManager guiManager) {
+      ICompanyUcc companyUcc, IContactUcc contactUcc, MenuModel menuModel, IGuiManager guiManager) {
     this.userUcc = userUcc;
     this.businessDayUcc = businessDayUcc;
     this.companyUcc = companyUcc;
@@ -40,6 +41,7 @@ public class ViewControllerFactory {
 
   /**
    * Creates the view controller related to a given page.
+   * 
    * @param page The page to create a view controller for.
    * @return The new view controller.
    */
@@ -50,14 +52,14 @@ public class ViewControllerFactory {
 
       case SELECT_COMPANY:
         return new CompanySelectionViewController(new CompanySelectionModel(), guiManager,
-                                                  businessDayUcc);
-
-      // TODO: add ViewControllers.
+            businessDayUcc);
+      case CREATE_COMPANY:
+        return new NewCompanyViewController(new NewCompanyModel(), menuModel, guiManager);
+        // TODO: add ViewControllers.
 
       default:
-        throw new UnsupportedOperationException("Could not open page \""
-                                                + page.getTitle()
-                                                + "\": Not yet implemented.");
+        throw new UnsupportedOperationException("Could not open page \"" + page.getTitle()
+            + "\": Not yet implemented.");
     }
   }
 }

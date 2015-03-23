@@ -19,6 +19,7 @@ public interface IhmConstants {
    */
   static final int L_GAP = 30;
 
+  static final int XL_GAP = 100;
   /**
    * error if empty textarea.
    */
@@ -52,4 +53,6 @@ public interface IhmConstants {
   static final Color LIGHT_BLUE = new Color(155, 178, 247);
 
   static final String PATH_LOGO = "lib/logo.png";
+
+
 }

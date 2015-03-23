@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.companyselection;
+package paoo.cappuccino.ihm.companySelection;
 
 import java.awt.BorderLayout;
 
