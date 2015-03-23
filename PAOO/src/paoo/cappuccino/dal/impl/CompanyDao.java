@@ -39,12 +39,11 @@ class CompanyDao implements ICompanyDao {
   public ICompanyDto createCompany(ICompanyDto company) {
     ValidationUtil.ensureNotNull(company, "company");
 
-    String query = "INSERT INTO business_days.companies "
-                   + "(creator, name, address_street, address_num, "
-                   + "address_mailbox, address_postcode, address_town) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?) "
-                   + "RETURNING (company_id, creator, name, register_date, address_street, "
-                   + "address_num, address_mailbox, address_postcode, address_town,version)";
+    String query =
+        "INSERT INTO business_days.companies " + "(creator, name, address_street, address_num, "
+            + "address_mailbox, address_postcode, address_town) " + "VALUES (?, ?, ?, ?, ?, ?, ?) "
+            + "RETURNING (company_id, creator, name, register_date, address_street, "
+            + "address_num, address_mailbox, address_postcode, address_town,version)";
 
     try {
       if (psCreateCompany == null) {
@@ -75,11 +74,11 @@ class CompanyDao implements ICompanyDao {
   public void updateCompany(ICompanyDto company) {
     ValidationUtil.ensureNotNull(company, "company");
 
-    String query = "UPDATE business_days.companies "
-                   + "SET creator = ?, name = ?, register_date = ?, adress_street = ?, "
-                   + "adress_num = ?, adresse_mailbox = ?, adresse_postcode = ?, "
-                   + "adresse_town = ?, version = version + 1 "
-                   + "WHERE company_id = ? AND version = ?";
+    String query =
+        "UPDATE business_days.companies "
+            + "SET creator = ?, name = ?, register_date = ?, adress_street = ?, "
+            + "adress_num = ?, adresse_mailbox = ?, adresse_postcode = ?, "
+            + "adresse_town = ?, version = version + 1 " + "WHERE company_id = ? AND version = ?";
 
     try {
       if (psUpdateCompany == null) {
@@ -96,9 +95,8 @@ class CompanyDao implements ICompanyDao {
 
       int affectedRows = psUpdateCompany.executeUpdate();
       if (affectedRows == 0) {
-        throw new ConcurrentModificationException(
-            "The company with id " + company.getId() + " and version " + company.getVersion()
-            + " was not found in the database. "
+        throw new ConcurrentModificationException("The company with id " + company.getId()
+            + " and version " + company.getVersion() + " was not found in the database. "
             + "Either it was deleted or modified by another thread.");
       }
     } catch (SQLException e) {
@@ -108,9 +106,10 @@ class CompanyDao implements ICompanyDao {
 
   @Override
   public ICompanyDto[] searchCompanies(String name, String postcode, String street, String town) {
-    String query = "SELECT * FROM business_days.companies WHERE name LIKE '%?%'AND adress_street "
-                   + "LIKE '%?%' AND adresse_town LIKE '%?% "
-                   + "AND CAST(adresse_postcode AS TEXT) LIKE '?%''";
+    String query =
+        "SELECT * FROM business_days.companies WHERE name LIKE '%?%'AND adress_street "
+            + "LIKE '%?%' AND adresse_town LIKE '%?% "
+            + "AND CAST(adresse_postcode AS TEXT) LIKE '?%''";
     try {
       if (psSearchCompanies == null) {
         psSearchCompanies = dalBackend.fetchPreparedStatement(query);
@@ -132,9 +131,10 @@ class CompanyDao implements ICompanyDao {
 
   @Override
   public ICompanyDto[] fetchAll() {
-    String query = "SELECT company_id, creator, name, register_date, address_street, "
-                   + "address_num, address_mailbox, address_postcode, address_town, version "
-                   + "FROM business_days.companies";
+    String query =
+        "SELECT company_id, creator, name, register_date, address_street, "
+            + "address_num, address_mailbox, address_postcode, address_town, version "
+            + "FROM business_days.companies";
     try {
       if (psFetchAll == null) {
         psFetchAll = dalBackend.fetchPreparedStatement(query);
@@ -157,13 +157,13 @@ class CompanyDao implements ICompanyDao {
 
   @Override
   public ICompanyDto[] fetchInvitableCompanies() {
-    //TODO
+    // TODO
     throw new FatalException("Method not supported yet");
   }
 
   @Override
   public ICompanyDto[] fetchCompaniesByDay(int businessDayId) {
-    //TODO
+    // TODO
     throw new FatalException("Method not supported yet");
   }
 
@@ -181,8 +181,8 @@ class CompanyDao implements ICompanyDao {
 
     int version = rs.getInt(10);
 
-    return entityFactory.createCompany(companyId, version, creator, name, addressStreet, addressNum,
-                                       addressMailbox, addressPostcode, addressTown, registerDate);
+    return entityFactory.createCompany(companyId, version, creator, name, addressStreet,
+        addressNum, addressMailbox, addressPostcode, addressTown, registerDate);
   }
 
   private void rethrowSqlException(SQLException exception) {
@@ -196,5 +196,11 @@ class CompanyDao implements ICompanyDao {
     }
 
     throw new FatalException("Database error", exception);
+  }
+
+  @Override
+  public ICompanyDto fetchCompanyById(int id) {
+    // TODO Auto-generated method stub
+    return null;
   }
 }
