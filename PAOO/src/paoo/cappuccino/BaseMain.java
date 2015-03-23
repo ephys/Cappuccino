@@ -57,8 +57,7 @@ public class BaseMain {
    */
   private DependencyInjector createDependencies(AppContext appContext) {
     IAppConfig appConfig =
-        makeConfig(appContext.getProfile() + ".properties",
-            appContext.getProfileType() == AppContext.Profile.DEV);
+        makeConfig(appContext.getProfile() + ".properties");
 
     DependencyInjector injector = new DependencyInjector(appConfig, appContext);
     injector.setDependency(AppContext.class, appContext);
@@ -84,7 +83,7 @@ public class BaseMain {
    * @return The newly created config handler.
    * @throws paoo.cappuccino.util.exception.FatalException The config file could not be loaded
    */
-  private IAppConfig makeConfig(final String filename, final boolean debug) {
+  private IAppConfig makeConfig(final String filename) {
     if (!RESOURCES_FOLDER.exists() && !RESOURCES_FOLDER.mkdirs()) {
       throw new FatalException("Could not make config directory "
           + RESOURCES_FOLDER.getAbsolutePath());
@@ -93,7 +92,7 @@ public class BaseMain {
     final File configFile = new File(RESOURCES_FOLDER, filename);
 
     try {
-      return new PropertiesConfig(configFile, debug);
+      return new PropertiesConfig(configFile);
     } catch (IOException e) {
       throw new FatalException("Could not load the config file " + configFile.getAbsolutePath(), e);
     }

@@ -10,8 +10,6 @@ import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.dao.IUserDao;
 
 class MockUserDao implements IUserDao {
-
-  private int entityCount = 0;
   private HashMap<String, IUser> users = new HashMap<>();
 
   private IEntityFactory factory;
@@ -24,7 +22,7 @@ class MockUserDao implements IUserDao {
   @Override
   public IUser createUser(IUserDto user) {
     IUser userEntity =
-        factory.createUser(++entityCount, 1, user.getUsername(), user.getPassword(),
+        factory.createUser(users.size() + 1, 1, user.getUsername(), user.getPassword(),
             user.getLastName(), user.getFirstName(), user.getEmail(), user.getRole(),
             user.getRegisterDate());
 
@@ -37,7 +35,6 @@ class MockUserDao implements IUserDao {
     return users.get(username.toLowerCase());
   }
 
-  //A VERIFIER
   @Override
   public void updateUser(IUserDto user) {
     if (users.size() > user.getId()
@@ -53,9 +50,13 @@ class MockUserDao implements IUserDao {
   }
 
   @Override
-  public IUser getCompanyCreator(int company) {
-    //TODO
-    //piste
+  public IUser getUserById(int id) {
+    for (IUser user : users.values()) {
+      if (user.getId() == id) {
+        return user;
+      }
+    }
+    
     return null;
   }
 }

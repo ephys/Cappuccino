@@ -38,4 +38,7 @@ public interface IBusinessDayDao {
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error
    */
   IBusinessDayDto fetchBusinessDaysByDate(int year);
+  
+  // TODO
+  IBusinessDayDto fetchBusinessDayById(int id);
 }

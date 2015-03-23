@@ -2,7 +2,6 @@ package paoo.cappuccino.core.config;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -15,7 +14,6 @@ public final class PropertiesConfig implements IAppConfig {
 
   private final File configFile;
   private final Properties properties = new Properties();
-  private final boolean debug;
 
   /**
    * Creates a application config handler using java properties files.
@@ -25,9 +23,8 @@ public final class PropertiesConfig implements IAppConfig {
    *              (like add the missing entry to the config file).
    * @throws IOException the file could not be read.
    */
-  public PropertiesConfig(File configFile, boolean debug) throws IOException {
+  public PropertiesConfig(File configFile) throws IOException {
     this.configFile = configFile;
-    this.debug = debug;
 
     loadProperties();
   }
@@ -53,16 +50,6 @@ public final class PropertiesConfig implements IAppConfig {
   public String getString(String key) {
     String returnValue = properties.getProperty(key);
     if (returnValue == null) {
-      if (debug) {
-        properties.setProperty(key, "TODO: set me.");
-
-        try {
-          properties.store(new FileOutputStream(configFile), "hello !");
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
-
       throw new IllegalArgumentException("Could not find " + key + " in "
                                          + configFile.getAbsolutePath());
     }

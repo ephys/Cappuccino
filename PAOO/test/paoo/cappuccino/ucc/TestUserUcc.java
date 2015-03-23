@@ -37,7 +37,7 @@ public class TestUserUcc {
 
   @BeforeClass
   public static void systemInit() {
-    BaseMain main = new BaseMain(new AppContext("UserUccTest", "0.1.0", "test_ucc"));
+    BaseMain main = new BaseMain(new AppContext("UserUccTest", "0.1.0", "test"));
     injector = main.getInjector();
   }
 

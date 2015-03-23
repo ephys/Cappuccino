@@ -54,7 +54,7 @@ class BusinessDayDao implements IBusinessDayDao {
       }
 
       psCreateBusinessDay.setTimestamp(1, Timestamp.valueOf(businessDay.getEventDate()));
-      psCreateBusinessDay.setString(2, DateUtils.getAcademicYear(businessDay.getEventDate()));
+      psCreateBusinessDay.setString(2, DateUtils.getAcademicYearStr(businessDay.getEventDate()));
 
       try (ResultSet rs = psCreateBusinessDay.executeQuery()) {
         rs.next();
@@ -142,5 +142,11 @@ class BusinessDayDao implements IBusinessDayDao {
           "One of the fields failed to insert due to constraint violations.");
     }
     throw new FatalException("Database error", exception);
+  }
+
+  @Override
+  public IBusinessDayDto fetchBusinessDayById(int id) {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

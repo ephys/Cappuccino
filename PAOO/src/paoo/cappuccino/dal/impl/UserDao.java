@@ -33,7 +33,7 @@ class UserDao implements IUserDao {
   private PreparedStatement psFetchUserByUsername;
   private PreparedStatement psCreateUser;
   private PreparedStatement psUpdateUser;
-  private PreparedStatement psGetCompanyCreator;
+  private PreparedStatement psGetUserById;
 
   @Inject
   public UserDao(IEntityFactory entityFactory, IDalBackend dalBackend, IStringHasher hasher) {
@@ -53,8 +53,8 @@ class UserDao implements IUserDao {
     LocalDateTime registerDate = Timestamp.valueOf(set.getString(8)).toLocalDateTime();
     int version = set.getInt(9);
 
-    return entityFactory.createUser(id, version, username, password, lastName,
-                                    firstName, email, role, registerDate);
+    return entityFactory.createUser(id, version, username, password, lastName, firstName, email,
+        role, registerDate);
   }
 
   @Override
@@ -63,10 +63,10 @@ class UserDao implements IUserDao {
 
     String query =
         "INSERT INTO business_days.users(user_id, role, password, email, username,"
-        + " first_name, last_name, register_date, version) "
-        + "VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, DEFAULT, DEFAULT) "
-        + "RETURNING (user_id, role, password, email, username,"
-        + " first_name, last_name, register_date, version)";
+            + " first_name, last_name, register_date, version) "
+            + "VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, DEFAULT, DEFAULT) "
+            + "RETURNING (user_id, role, password, email, username,"
+            + " first_name, last_name, register_date, version)";
 
     try {
       if (psCreateUser == null) {
@@ -93,8 +93,9 @@ class UserDao implements IUserDao {
   public IUser fetchUserByUsername(String username) {
     ValidationUtil.ensureFilled(username, "username");
 
-    String query = "SELECT user_id, role, password, email, username, first_name, last_name, "
-                   + "register_date, version FROM business_days.users WHERE LOWER(username) = ?";
+    String query =
+        "SELECT user_id, role, password, email, username, first_name, last_name, "
+            + "register_date, version FROM business_days.users WHERE LOWER(username) = ? LIMIT 1";
 
     try {
       if (psFetchUserByUsername == null) {
@@ -120,8 +121,8 @@ class UserDao implements IUserDao {
 
     String query =
         "UPDATE business_days.users SET password = ?, email = ?, first_name = ?, last_name = ?,"
-        + " version = version + 1"
-        + "WHERE user_id = ? AND version = ?";
+            + " version = version + 1" 
+            + "WHERE user_id = ? AND version = ? LIMIT 1";
 
     try {
       if (psUpdateUser == null) {
@@ -136,9 +137,8 @@ class UserDao implements IUserDao {
 
       int affectedRows = psUpdateUser.executeUpdate();
       if (affectedRows == 0) {
-        throw new ConcurrentModificationException(
-            "The user with id " + user.getId() + " and version " + user.getVersion()
-            + " was not found in the database. "
+        throw new ConcurrentModificationException("The user with id " + user.getId()
+            + " and version " + user.getVersion() + " was not found in the database. "
             + "Either it was deleted or modified by another thread.");
       }
 
@@ -151,15 +151,19 @@ class UserDao implements IUserDao {
   }
 
   @Override
-  public IUser getCompanyCreator(int company) {
-    String query = "SELECT user_id, role, password, email, username, first_name, last_name, "
-                   + "u.register_date, u.version FROM business_days.users u, "
-                   + "business_days.companies WHERE creator = 1 AND creator = user_id";
+  public IUserDto getUserById(int id) {
+    String query =
+        "SELECT user_id, role, password, email, username, first_name, last_name, register_date, version "
+        + "FROM business_days.users WHERE user_id = ? LIMIT 1";
+
     try {
-      if (psGetCompanyCreator == null) {
-        psGetCompanyCreator = dalBackend.fetchPreparedStatement(query);
+      if (psGetUserById == null) {
+        psGetUserById = dalBackend.fetchPreparedStatement(query);
       }
-      try (ResultSet rs = psGetCompanyCreator.executeQuery()) {
+      
+      psGetUserById.setInt(1, id);
+      
+      try (ResultSet rs = psGetUserById.executeQuery()) {
         if (rs.next()) {
           return makeUserFromSet(rs);
         }
@@ -167,6 +171,7 @@ class UserDao implements IUserDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
+    
     return null;
   }
 

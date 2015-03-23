@@ -1,26 +1,33 @@
 package paoo.cappuccino.dal.mock;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
+import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.dto.IParticipationDto.State;
 import paoo.cappuccino.business.entity.ICompany;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
+import paoo.cappuccino.dal.dao.IBusinessDayDao;
 import paoo.cappuccino.dal.dao.ICompanyDao;
+import paoo.cappuccino.dal.dao.IParticipationDao;
 
 class MockCompanyDao implements ICompanyDao {
   private List<ICompany> companyList = new ArrayList<>();
   private final IEntityFactory factory;
-  private final IParticipationDto participation;
+  private final IParticipationDao participationDao;
+  private final IBusinessDayDao businessDayDao;
 
   @Inject
-  public MockCompanyDao(IEntityFactory factory, IParticipationDto participation) {
+  public MockCompanyDao(IEntityFactory factory, IParticipationDao participationDao,
+      IBusinessDayDao businessDayDao) {
     this.factory = factory;
-    this.participation = participation;
+    this.participationDao = participationDao;
+    this.businessDayDao = businessDayDao;
 
     createCompany(factory.createCompany(1, "Coca-cola", "rue du coca", "5", null, "1020",
         "Ville de la boisson"));
@@ -34,13 +41,14 @@ class MockCompanyDao implements ICompanyDao {
 
   @Override
   public ICompanyDto createCompany(ICompanyDto company) {
-    ICompany companyEntity =
+    ICompany newCompany =
         factory.createCompany(companyList.size() + 1, 1, company.getCreator(), company.getName(),
             company.getAddressStreet(), company.getAddressNum(), company.getAddressMailbox(),
             company.getAddressPostcode(), company.getAddressTown(), company.getRegisterDate());
 
-    companyList.add(companyEntity);
-    return companyEntity;
+    companyList.add(newCompany);
+
+    return newCompany;
   }
 
   @Override
@@ -64,23 +72,27 @@ class MockCompanyDao implements ICompanyDao {
   public ICompanyDto[] searchCompanies(String name, String postcode, String street, String town) {
     List<ICompany> toReturn = new ArrayList<>();
 
-    for (ICompany searchee : companyList) {
-      if (name != null && !name.equalsIgnoreCase(name))
+    for (ICompany company : companyList) {
+      if (name != null && !company.getName().equalsIgnoreCase(name)) {
         continue;
+      }
 
-      if (postcode != null && !postcode.equalsIgnoreCase(searchee.getAddressPostcode()))
+      if (postcode != null && !company.getAddressPostcode().equalsIgnoreCase(postcode)) {
         continue;
+      }
 
-      if (street != null && !street.equalsIgnoreCase(searchee.getAddressStreet()))
+      if (street != null && !company.getAddressStreet().equalsIgnoreCase(street)) {
         continue;
+      }
 
-      if (town != null && !town.equalsIgnoreCase(searchee.getAddressTown()))
+      if (town != null && !company.getAddressTown().equalsIgnoreCase(town)) {
         continue;
+      }
 
-      toReturn.add(searchee);
+      toReturn.add(company);
     }
 
-    return toReturn.toArray(new ICompanyDto[toReturn.size()]);
+    return toReturn.toArray(new ICompany[toReturn.size()]);
   }
 
 
@@ -93,25 +105,49 @@ class MockCompanyDao implements ICompanyDao {
   public ICompanyDto[] fetchInvitableCompanies() {
     List<ICompany> toReturn = new ArrayList<>();
     for (ICompany searchee : companyList) {
-      if (participation.getCompany() == searchee.getId()
-          && participation.getState().equals(State.PAID)) {
+      if (searchee.getRegisterDate().isAfter(LocalDateTime.now().minusYears(1))) {
         toReturn.add(searchee);
+        continue;
       }
-    }
-    return null;
-  }
 
-  @Override
-  public ICompanyDto[] fetchCompaniesByDay(int businessDayId) {
-    // TODO
-    List<ICompany> toReturn = new ArrayList<>();
+      IParticipationDto[] participationList =
+          participationDao.fetchParticipationsByCompany(searchee.getId());
 
-    for (ICompany searchee : companyList) {
-      if (true)
-        toReturn.add(searchee);
+      for (IParticipationDto participation : participationList) {
+        if (participation.getState() != State.PAID) {
+          continue;
+        }
+
+        IBusinessDayDto businessDay =
+            businessDayDao.fetchBusinessDaysByDate(participation.getBusinessDay());
+
+        if (businessDay.getEventDate().isAfter(LocalDateTime.now().minusYears(4))) {
+          toReturn.add(searchee);
+          break;
+        }
+      }
     }
 
     return toReturn.toArray(new ICompanyDto[toReturn.size()]);
   }
 
+  @Override
+  public ICompanyDto[] fetchCompaniesByDay(int businessDayId) {
+    List<ICompany> toReturn = new ArrayList<>();
+
+    for (ICompany company : companyList) {
+      IParticipationDto[] companyParticipations =
+          participationDao.fetchParticipationsByCompany(company.getId());
+
+      for (IParticipationDto participation : companyParticipations) {
+        if (participation.getBusinessDay() == businessDayId) {
+          toReturn.add(company);
+          break;
+        }
+      }
+    }
+
+
+    return toReturn.toArray(new ICompany[toReturn.size()]);
+  }
 }

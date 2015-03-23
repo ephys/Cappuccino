@@ -42,11 +42,10 @@ public interface IUserDao {
   void updateUser(IUserDto user);
 
   /**
-   * Fetch the user who discover the company
+   * Returns the user identified by a given id.
    *
-   * @param companyId The id of a company
-   * @return A user entity
-   * @throws paoo.cappuccino.util.exception.FatalException Database connection error
+   * @param id The id of the user.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
-  IUserDto getCompanyCreator(int companyId);
+  IUserDto getUserById(int id);
 }
