@@ -1,5 +1,6 @@
 package paoo.cappuccino.dal.mock;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 
 import paoo.cappuccino.business.dto.IUserDto;
@@ -22,9 +23,10 @@ class MockUserDao implements IUserDao {
 
   @Override
   public IUser createUser(IUserDto user) {
-    IUser userEntity = factory.createUser(++entityCount, 1, user.getUsername(), user.getPassword(),
-                                          user.getLastName(), user.getFirstName(), user.getEmail(),
-                                          user.getRole(), user.getRegisterDate());
+    IUser userEntity =
+        factory.createUser(++entityCount, 1, user.getUsername(), user.getPassword(),
+            user.getLastName(), user.getFirstName(), user.getEmail(), user.getRole(),
+            user.getRegisterDate());
 
     users.put(user.getUsername().toLowerCase(), userEntity);
     return userEntity;
@@ -35,13 +37,25 @@ class MockUserDao implements IUserDao {
     return users.get(username.toLowerCase());
   }
 
+  //A VERIFIER
   @Override
   public void updateUser(IUserDto user) {
-    // TODO
+    if (users.size() > user.getId()
+        || users.get(user.getId() - 1).getVersion() != user.getVersion())
+      throw new ConcurrentModificationException();
+
+    IUser userEntity =
+        factory.createUser(user.getId(), user.getVersion() + 1, user.getUsername(),
+            user.getPassword(), user.getLastName(), user.getFirstName(), user.getEmail(),
+            user.getRole(), user.getRegisterDate());
+
+    users.replace(user.getUsername().toLowerCase(), userEntity);
   }
 
   @Override
   public IUser getCompanyCreator(int company) {
+    //TODO
+    //piste
     return null;
   }
 }
