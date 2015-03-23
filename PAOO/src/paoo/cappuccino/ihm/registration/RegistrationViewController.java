@@ -30,14 +30,14 @@ public class RegistrationViewController extends JPanel {
   /**
    * Creates a new ViewController for the registration gui.
    *
-   * @param model   The ViewController's model.
+   * @param model The ViewController's model.
    * @param manager The manager responsible for the opening/closing this frame.
    */
   public RegistrationViewController(RegistrationModel model, IGuiManager manager) {
     super(new BorderLayout());
-    this.setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(80, 80, 80)),
-        new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0, IhmConstants.M_GAP)));
+    this.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(2, 2, 2, 2,
+        new Color(80, 80, 80)), new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0,
+        IhmConstants.M_GAP)));
 
     JTextField usernameField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
@@ -46,17 +46,15 @@ public class RegistrationViewController extends JPanel {
     JTextField firstNameField = new JTextField();
     JTextField emailField = new JTextField();
 
-    JPanel controls = new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP,
-                                                IhmConstants.M_GAP));
+    JPanel controls =
+        new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
 
     JButton validateButton = new JButton("Valider");
     validateButton.addActionListener(e -> {
-      IUserDto user = model.attemptRegistration(usernameField.getText(),
-                                                passwordField.getPassword(),
-                                                confirmPasswordField.getPassword(),
-                                                lastNameField.getText(),
-                                                firstNameField.getText(),
-                                                emailField.getText());
+      IUserDto user =
+          model.attemptRegistration(usernameField.getText(), passwordField.getPassword(),
+              confirmPasswordField.getPassword(), lastNameField.getText(),
+              firstNameField.getText(), emailField.getText());
       if (user != null) {
         manager.openFrame(MenuFrame.class).setLoggedUser(user);
       }
@@ -65,8 +63,9 @@ public class RegistrationViewController extends JPanel {
     JButton cancelButton = new JButton("Annuler");
     cancelButton.addActionListener(e -> manager.openFrame(LoginFrame.class));
 
-    controls.add(validateButton);
+
     controls.add(cancelButton);
+    controls.add(validateButton);
 
     JLabel titleLabel = new JLabelFont("Inscription", 20);
     titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, IhmConstants.L_GAP, 0));
@@ -77,6 +76,6 @@ public class RegistrationViewController extends JPanel {
     // end buttons //
 
     this.add(new RegistrationView(model, usernameField, passwordField, confirmPasswordField,
-                                  lastNameField, firstNameField, emailField));
+        lastNameField, firstNameField, emailField));
   }
 }
