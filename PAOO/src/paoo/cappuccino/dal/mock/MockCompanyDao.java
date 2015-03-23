@@ -150,4 +150,10 @@ class MockCompanyDao implements ICompanyDao {
 
     return toReturn.toArray(new ICompany[toReturn.size()]);
   }
+
+  @Override
+  public ICompanyDto fetchCompanyById(int id) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }
