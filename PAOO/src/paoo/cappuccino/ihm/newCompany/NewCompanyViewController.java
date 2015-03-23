@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.IhmConstants;
+import paoo.cappuccino.util.StringUtils;
 
 /**
  * ViewController for the registration Gui.
@@ -43,12 +44,45 @@ public class NewCompanyViewController extends JPanel {
         new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
 
     JButton createButton = new JButton("Créer");
-    createButton.addActionListener(e -> {
-      if (companyNameField.getText().isEmpty())
-        model.setCompanyNameError(IhmConstants.ERROR_FIELD_EMPTY);
-      // test input
-        JOptionPane.showMessageDialog(this, "entreprise crée");
-      });
+    createButton
+        .addActionListener(e -> {
+          // test input
+          model.setCompanyNameError(StringUtils.isEmpty(companyNameField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+              : (!StringUtils.isAlphaString(companyNameField.getText()) ? IhmConstants.ERROR_ALPHA_INPUT
+                  : null));
+
+          model.setStreetError(StringUtils.isEmpty(streetField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+              : null);
+
+          model.setCityError(StringUtils.isEmpty(cityField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+              : null);
+
+          model.setBoxError(StringUtils.isEmpty(boxField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+              : (!StringUtils.isAlphaString(boxField.getText()) ? IhmConstants.ERROR_ALPHA_INPUT
+                  : null));
+
+          model.setNumerError(StringUtils.isEmpty(numerField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+              : null);
+
+          model.setPostCodeError(StringUtils.isEmpty(postCodeField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+              : null);
+          if (!model.hasError()) {
+            // TODO ucc.createCompany(mlkqdsjfqmlksdjf);
+            // TODO check nom non encore utiliser
+
+            model.clearError();
+            JOptionPane.showMessageDialog(this, "Entreprise créée");
+
+            // clear les champs
+            companyNameField.setText(null);
+            streetField.setText(null);
+            cityField.setText(null);
+            boxField.setText(null);
+            numerField.setText(null);
+            postCodeField.setText(null);
+
+          }
+        });
 
 
     controls.add(createButton);

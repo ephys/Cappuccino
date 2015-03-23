@@ -41,7 +41,7 @@ public class RegistrationModel extends BaseModel {
 
     usernameError =
         StringUtils.isEmpty(username) ? IhmConstants.ERROR_FIELD_EMPTY : (!StringUtils
-            .isAlphaString(username) ? IhmConstants.ERROR_ALPHANUM_INPUT : null);
+            .isAlphaString(username) ? IhmConstants.ERROR_ALPHA_INPUT : null);
 
     lastNameError = StringUtils.isEmpty(lastName) ? IhmConstants.ERROR_FIELD_EMPTY : null;
 

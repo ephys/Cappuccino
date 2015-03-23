@@ -2,7 +2,6 @@ package paoo.cappuccino.ihm.newCompany;
 
 import java.awt.GridLayout;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -11,6 +10,7 @@ import javax.swing.event.ChangeListener;
 
 import paoo.cappuccino.ihm.util.ErrorableTextField;
 import paoo.cappuccino.ihm.util.IhmConstants;
+import paoo.cappuccino.ihm.util.JLabelFont;
 
 /**
  * View for the registration Gui.
@@ -37,24 +37,24 @@ public class NewCompanyView extends JPanel implements ChangeListener {
 
     this.model = model;
 
-    this.CompanyNamePanel = new ErrorableTextField(companyNameField, "Nom : ");
+    this.CompanyNamePanel = new ErrorableTextField(companyNameField, "Nom", 16);
     this.add(this.CompanyNamePanel);
 
-    this.add(new JLabel("Adresse : "));
+    this.add(new JLabelFont("Adresse", 16));
 
-    this.streetPanel = new ErrorableTextField(streetField, "Rue : ");
+    this.streetPanel = new ErrorableTextField(streetField, "Rue", 16);
     this.add(this.streetPanel);
 
-    this.cityPanel = new ErrorableTextField(cityField, "Ville : ");
+    this.cityPanel = new ErrorableTextField(cityField, "Ville", 16);
     this.add(this.cityPanel);
 
-    this.boxPanel = new ErrorableTextField(boxField, "Boite : ");
+    this.boxPanel = new ErrorableTextField(boxField, "Boite", 16);
     this.add(this.boxPanel);
 
-    this.numerPanel = new ErrorableTextField(numerField, "Numéro : ");
+    this.numerPanel = new ErrorableTextField(numerField, "Numéro", 16);
     this.add(this.numerPanel);
 
-    this.postCodePanel = new ErrorableTextField(postCodeField, "Code postal : ");
+    this.postCodePanel = new ErrorableTextField(postCodeField, "Code postal", 16);
     this.add(this.postCodePanel);
 
 

@@ -26,7 +26,7 @@ public class ErrorableTextField extends JPanel {
    * @param label The field's description.
    * @param errorMessage The error to display.
    */
-  public ErrorableTextField(JTextField field, String label, String errorMessage) {
+  public ErrorableTextField(JTextField field, String label, String errorMessage, int taille) {
     super(new GridLayout(2, 2, IhmConstants.M_GAP, 0));
 
     this.error = new JLabelFont(errorMessage, 12);
@@ -35,7 +35,7 @@ public class ErrorableTextField extends JPanel {
     field.setBorder(BorderFactory.createCompoundBorder(field.getBorder(),
         BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
-    this.add(new JLabel(label));
+    this.add(new JLabelFont(label, taille));
     this.add(field);
     this.add(new JLabel());
     this.add(this.error);
@@ -48,7 +48,11 @@ public class ErrorableTextField extends JPanel {
    * @param label The field's description.
    */
   public ErrorableTextField(JTextField field, String label) {
-    this(field, label, null);
+    this(field, label, null, 12);
+  }
+
+  public ErrorableTextField(JTextField field, String label, int taille) {
+    this(field, label, null, taille);
   }
 
   public void setError(String error) {

@@ -9,8 +9,8 @@ import java.util.Random;
  */
 public class StringUtils {
 
-  //private static final String PHONE_NUM_REGEX =
-  //    "^(([0-9]{4})[ -_/.]((([0-9]{2}){3})|([0-9]{3}[ -_/.]?[0-9]{3})|([0-9][0-9][ -_/.]?[0-9][0-9][ -_/.]?[0-9][0-9])))||([0-9]{10})$";
+  // private static final String PHONE_NUM_REGEX =
+  // "^(([0-9]{4})[ -_/.]((([0-9]{2}){3})|([0-9]{3}[ -_/.]?[0-9]{3})|([0-9][0-9][ -_/.]?[0-9][0-9][ -_/.]?[0-9][0-9])))||([0-9]{10})$";
   private static final String EMAIL_REGEX =
       "^([a-zA-Z0-9][+a-zA-Z0-9_.-]*)+@([a-zA-Z0-9][a-zA-Z0-9_.-]*)+\\.[a-zA-Z]{2,3}$";
 
@@ -24,6 +24,16 @@ public class StringUtils {
    */
   public static boolean isAlphaString(String str) {
     return str.matches("^[a-zA-Z]*$");
+  }
+
+  /**
+   * Verifies if a string contains only numbers
+   *
+   * @param str The string to check.
+   * @return true if the string contains only numbers, false otherwise.
+   */
+  public static boolean isNumeriC(String str) {
+    return str.matches("^[0-9]*$");
   }
 
   /**

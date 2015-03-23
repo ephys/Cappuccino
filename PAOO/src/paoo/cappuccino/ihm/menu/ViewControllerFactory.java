@@ -53,6 +53,7 @@ public class ViewControllerFactory {
       case SELECT_COMPANY:
         return new CompanySelectionViewController(new CompanySelectionModel(), guiManager,
             businessDayUcc);
+
       case CREATE_COMPANY:
         return new NewCompanyViewController(new NewCompanyModel(), menuModel, guiManager);
         // TODO: add ViewControllers.

@@ -47,12 +47,14 @@ public interface IhmConstants {
   /**
    * error invalid input string.
    */
-  static final String ERROR_ALPHANUM_INPUT =
-      "Ce champ ne peut contenir que des caractères alphanumériques.";
+  static final String ERROR_ALPHA_INPUT = "Ce champ ne peut contenir que des lettres.";
+
+  static final String ERROR_NUMERICAL_INPUT = "Ce champ ne peut contenir que des chiffres";
 
   static final Color LIGHT_BLUE = new Color(155, 178, 247);
 
   static final String PATH_LOGO = "lib/logo.png";
+
 
 
 }
