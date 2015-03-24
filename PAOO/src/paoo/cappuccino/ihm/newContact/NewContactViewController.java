@@ -84,11 +84,11 @@ public class NewContactViewController extends JPanel {
 
           if (!model.hasError()) {
             IContactDto contact =
-                contactUcc.create((int) comboCompanies.getSelectedItem(),
-                    contactMailField.getText(),
-                    contactFirstNameField.getText(),
-                    contactLastNameField.getText(),
-                    contactPhoneField.getText());
+                contactUcc.create(((ICompanyDto) comboCompanies
+                    .getSelectedItem()).getId(), contactMailField
+                    .getText(), contactFirstNameField.getText(),
+                    contactLastNameField.getText(), contactPhoneField
+                        .getText());
 
             if (contact != null) {
               model.clearError();
@@ -131,6 +131,8 @@ public class NewContactViewController extends JPanel {
     public Component getListCellRendererComponent(
         JList<? extends ICompanyDto> arg0, ICompanyDto value, int arg2,
         boolean arg3, boolean arg4) {
+      if (value == null)
+        return new JLabel();
       return new JLabel(value.getName());
     }
   }
