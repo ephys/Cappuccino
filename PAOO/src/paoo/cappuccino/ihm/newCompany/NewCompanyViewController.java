@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.util.StringUtils;
@@ -17,7 +18,7 @@ import paoo.cappuccino.util.StringUtils;
 /**
  * ViewController for the registration Gui.
  *
- * @author Maduka Junior
+ * @author Opsomer Mathias
  */
 @SuppressWarnings("serial")
 public class NewCompanyViewController extends JPanel {
@@ -28,9 +29,11 @@ public class NewCompanyViewController extends JPanel {
    * @param model The ViewController's model.
    * @param manager The manager responsible for the opening/closing this frame.
    */
-  public NewCompanyViewController(NewCompanyModel model, MenuModel menu, IGuiManager manager) {
+  public NewCompanyViewController(NewCompanyModel model, MenuModel menu,
+      IGuiManager manager) {
     super(new BorderLayout());
-    this.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0, IhmConstants.M_GAP));
+    this.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP,
+        0, IhmConstants.M_GAP));
 
     JTextField companyNameField = new JTextField();
     JTextField streetField = new JTextField();
@@ -41,13 +44,15 @@ public class NewCompanyViewController extends JPanel {
 
 
     JPanel controls =
-        new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
+        new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP,
+            IhmConstants.M_GAP));
 
     JButton createButton = new JButton("Créer");
     createButton
         .addActionListener(e -> {
           // test input
-          model.setCompanyNameError(StringUtils.isEmpty(companyNameField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+          model.setCompanyNameError(StringUtils.isEmpty(companyNameField
+              .getText()) ? IhmConstants.ERROR_FIELD_EMPTY
               : (!StringUtils.isAlphaString(companyNameField.getText()) ? IhmConstants.ERROR_ALPHA_INPUT
                   : null));
 
@@ -64,14 +69,14 @@ public class NewCompanyViewController extends JPanel {
           model.setNumerError(StringUtils.isEmpty(numerField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
               : null);
 
-          model.setPostCodeError(StringUtils.isEmpty(postCodeField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
-              : null);
+          model.setPostCodeError(StringUtils.isEmpty(postCodeField
+              .getText()) ? IhmConstants.ERROR_FIELD_EMPTY : null);
           if (!model.hasError()) {
             // TODO ucc.createCompany(mlkqdsjfqmlksdjf);
             // TODO check nom non encore utiliser
 
             model.clearError();
-            JOptionPane.showMessageDialog(this, "Entreprise créée");
+            JOptionPane.showMessageDialog(null, "Entreprise créée");
 
             // clear les champs
             companyNameField.setText(null);
@@ -81,6 +86,8 @@ public class NewCompanyViewController extends JPanel {
             numerField.setText(null);
             postCodeField.setText(null);
 
+            // redirection utilisateur
+            menu.setCurrentPage(MenuEntry.CREATE_CONTACT);
           }
         });
 
@@ -90,7 +97,7 @@ public class NewCompanyViewController extends JPanel {
     this.add(controls, BorderLayout.SOUTH);
     // end buttons //
 
-    this.add(new NewCompanyView(model, companyNameField, numerField, postCodeField, streetField,
-        cityField, boxField));
+    this.add(new NewCompanyView(model, companyNameField, numerField,
+        postCodeField, streetField, cityField, boxField));
   }
 }

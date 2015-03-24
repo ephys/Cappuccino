@@ -9,6 +9,8 @@ import paoo.cappuccino.ihm.companySelection.CompanySelectionViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.newCompany.NewCompanyModel;
 import paoo.cappuccino.ihm.newCompany.NewCompanyViewController;
+import paoo.cappuccino.ihm.newContact.NewContactModel;
+import paoo.cappuccino.ihm.newContact.NewContactViewController;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.ucc.IContactUcc;
@@ -26,17 +28,27 @@ public class ViewControllerFactory {
   private final MenuModel menuModel;
   private final IGuiManager guiManager;
 
+  // models
+  private final NewCompanyModel modelNewCompany;
+  private final NewContactModel modelNewContact;
+
+
   /**
    * Creates the view factory with all the dependencies required by the views.
    */
-  public ViewControllerFactory(IUserUcc userUcc, IBusinessDayUcc businessDayUcc,
-      ICompanyUcc companyUcc, IContactUcc contactUcc, MenuModel menuModel, IGuiManager guiManager) {
+  public ViewControllerFactory(IUserUcc userUcc,
+      IBusinessDayUcc businessDayUcc, ICompanyUcc companyUcc,
+      IContactUcc contactUcc, MenuModel menuModel, IGuiManager guiManager) {
     this.userUcc = userUcc;
     this.businessDayUcc = businessDayUcc;
     this.companyUcc = companyUcc;
     this.contactUcc = contactUcc;
     this.menuModel = menuModel;
     this.guiManager = guiManager;
+
+    // initialiation Models
+    this.modelNewCompany = new NewCompanyModel();
+    this.modelNewContact = new NewContactModel();
   }
 
   /**
@@ -48,19 +60,25 @@ public class ViewControllerFactory {
   public Component createViewController(MenuEntry page) {
     switch (page) {
       case HOME:
-        return new AccueilViewController(new AccueilModel(), menuModel, guiManager, businessDayUcc);
+        return new AccueilViewController(new AccueilModel(), menuModel,
+            guiManager, businessDayUcc);
 
       case SELECT_COMPANY:
-        return new CompanySelectionViewController(new CompanySelectionModel(), guiManager,
-            businessDayUcc);
+        return new CompanySelectionViewController(
+            new CompanySelectionModel(), guiManager, businessDayUcc);
 
       case CREATE_COMPANY:
-        return new NewCompanyViewController(new NewCompanyModel(), menuModel, guiManager);
+        return new NewCompanyViewController(modelNewCompany, menuModel,
+            guiManager);
+
+      case CREATE_CONTACT:
+        return new NewContactViewController(modelNewContact, menuModel,
+            guiManager, contactUcc, companyUcc);
         // TODO: add ViewControllers.
 
       default:
-        throw new UnsupportedOperationException("Could not open page \"" + page.getTitle()
-            + "\": Not yet implemented.");
+        throw new UnsupportedOperationException("Could not open page \""
+            + page.getTitle() + "\": Not yet implemented.");
     }
   }
 }

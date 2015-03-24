@@ -42,7 +42,8 @@ import paoo.cappuccino.util.ParticipationUtils;
  *
  * @author Opsomer Mathias
  */
-public class AccueilViewController extends JPanel implements ChangeListener {
+public class AccueilViewController extends JPanel implements
+    ChangeListener {
 
   private static final long serialVersionUID = 3071496812344175953L;
   private final AccueilModel model;
@@ -57,8 +58,8 @@ public class AccueilViewController extends JPanel implements ChangeListener {
    *
    * @param model The ViewController's model.
    */
-  public AccueilViewController(AccueilModel model, MenuModel menu, IGuiManager guiManager,
-      IBusinessDayUcc dayUcc) {
+  public AccueilViewController(AccueilModel model, MenuModel menu,
+      IGuiManager guiManager, IBusinessDayUcc dayUcc) {
     super(new BorderLayout());
     guiManager.getLogger().info("AcceuilFrame");
 
@@ -67,7 +68,8 @@ public class AccueilViewController extends JPanel implements ChangeListener {
     if (businessDays.length == 0) {
       JPanel errorPanel = new JPanel(new GridLayout(2, 1, 10, 10));
 
-      JLabel errorMessage = new JLabelFont("Aucune journée disponible.", 20);
+      JLabel errorMessage =
+          new JLabelFont("Aucune journée disponible.", 20);
       errorMessage.setHorizontalAlignment(JLabel.CENTER);
       errorPanel.add(errorMessage);
 
@@ -92,15 +94,18 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
     dayList = new JComboBox<>(businessDays);
     dayList.setRenderer(new dayRenderer());
-    dayList.addActionListener(e -> {
-      IBusinessDayDto selectedDay = (IBusinessDayDto) dayList.getSelectedItem();
-      model.setSelectedDay(selectedDay);
+    dayList
+        .addActionListener(e -> {
+          IBusinessDayDto selectedDay =
+              (IBusinessDayDto) dayList.getSelectedItem();
+          model.setSelectedDay(selectedDay);
 
 
-      guiManager.getLogger().info(
-          "Home screen: selected day is "
-              + (selectedDay == null ? null : selectedDay.getEventDate()));
-    });
+          guiManager.getLogger().info(
+              "Home screen: selected day is "
+                  + (selectedDay == null ? null : selectedDay
+                      .getEventDate()));
+        });
     dayList.setSelectedIndex(0);
 
     daylistPanel.add(dayList);
@@ -108,7 +113,8 @@ public class AccueilViewController extends JPanel implements ChangeListener {
     this.add(daylistPanel, BorderLayout.NORTH);
 
     // center
-    titles = new String[] {"Nom entreprise", "État", "Annuler participation"};
+    titles =
+        new String[] {"Nom entreprise", "État", "Annuler participation"};
     tableModel = new DefaultTableModel(titles, 0);
 
     table = new JTable(tableModel);
@@ -119,7 +125,8 @@ public class AccueilViewController extends JPanel implements ChangeListener {
     cancelCol.setCellRenderer(new ButtonRenderer());
     cancelCol.setCellEditor(new ButtonEditor(new JCheckBox()));
     stateCol.setCellRenderer(new ComboRenderer());
-    stateCol.setCellEditor(new JComboEditor(new JComboBox<IParticipationDto.State>()));
+    stateCol.setCellEditor(new JComboEditor(
+        new JComboBox<IParticipationDto.State>()));
 
     // gestion affichage table
     nameCol.setMinWidth(nameCol.getWidth() * 6);
@@ -142,7 +149,8 @@ public class AccueilViewController extends JPanel implements ChangeListener {
     IParticipationDto[] participations = new IParticipationDto[0];
     // TODO: fetch from bday ucc (getAttendingCompanies, returns an array of participation <- TOFIX)
 
-    Object[][] data = new Object[model.getParticipations().keySet().size()][3];
+    Object[][] data =
+        new Object[model.getParticipations().keySet().size()][3];
     for (int i = 0; i < participations.length; i++) {
       ICompanyDto company = null; // TODO: companyUcc.getCompanyById(participation[i].getId());
       data[i][0] = company;
@@ -151,12 +159,14 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
       // possibleStates
       State[] followingStates =
-          ParticipationUtils.getFollowingStates(model.getParticipations().get(company).getState());
+          ParticipationUtils.getFollowingStates(model.getParticipations()
+              .get(company).getState());
       for (int j = 0; j < followingStates.length; j++)
         states.add(followingStates[i]);
 
       JComboBox<State> possibleState =
-          new JComboBox<IParticipationDto.State>((State[]) states.toArray());
+          new JComboBox<IParticipationDto.State>(
+              (State[]) states.toArray());
       data[i][1] = possibleState;
 
       data[i][2] = "Annuler";
@@ -170,8 +180,10 @@ public class AccueilViewController extends JPanel implements ChangeListener {
    * @return
    */
   private HashMap<String, IParticipationDto> getParticipations() {
-    HashMap<String, IParticipationDto> map = new HashMap<String, IParticipationDto>();
-    List<IParticipationDto> participations = new ArrayList<IParticipationDto>();
+    HashMap<String, IParticipationDto> map =
+        new HashMap<String, IParticipationDto>();
+    List<IParticipationDto> participations =
+        new ArrayList<IParticipationDto>();
     // TODO participations = IParticipationUcc.getParticipationFor(model.getSelectedDay());
     for (IParticipationDto iParticipationDto : participations) {
       // TODO map.put(EntrepriseUcc.getById(iParticipationDto.getCompany()), iParticipationDto)
@@ -192,25 +204,27 @@ public class AccueilViewController extends JPanel implements ChangeListener {
   class ButtonRenderer extends JButton implements TableCellRenderer {
 
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-        boolean isFocus, int row, int col) {
+    public Component getTableCellRendererComponent(JTable table,
+        Object value, boolean isSelected, boolean isFocus, int row, int col) {
       setText((value != null) ? value.toString() : "");
       return this;
     }
   }
-  class ComboRenderer extends JComboBox<State> implements TableCellRenderer {
+  class ComboRenderer extends JComboBox<State> implements
+      TableCellRenderer {
 
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-        boolean isFocus, int row, int col) {
+    public Component getTableCellRendererComponent(JTable table,
+        Object value, boolean isSelected, boolean isFocus, int row, int col) {
       return (JComboBox<State>) value;
     }
   }
   class dayRenderer implements ListCellRenderer<IBusinessDayDto> {
 
     @Override
-    public Component getListCellRendererComponent(JList<? extends IBusinessDayDto> list,
-        IBusinessDayDto value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getListCellRendererComponent(
+        JList<? extends IBusinessDayDto> list, IBusinessDayDto value,
+        int index, boolean isSelected, boolean cellHasFocus) {
       if (value == null)
         return new JLabel();
       return new JLabel(value.getEventDate().toString());
