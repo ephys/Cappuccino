@@ -3,6 +3,9 @@ package paoo.cappuccino.ihm.accueil;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,17 +13,22 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
+import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.dto.IParticipationDto.State;
 import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.JLabelFont;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
@@ -35,10 +43,13 @@ import paoo.cappuccino.util.ParticipationUtils;
 public class AccueilViewController extends JPanel implements
     ChangeListener {
 
-
   private static final long serialVersionUID = 3071496812344175953L;
   private final AccueilModel model;
   private JTable table;
+  private DefaultTableModel tableModel;
+  private String[] titles;
+  
+  private JComboBox<IBusinessDayDto> dayList;
 
   /**
    * Creates a new ViewController for the Login gui.
@@ -51,58 +62,87 @@ public class AccueilViewController extends JPanel implements
     guiManager.getLogger().info("AcceuilFrame");
 
     this.model = model;
+    IBusinessDayDto[] businessDays = dayUcc.getBusinessDays();
+    if (businessDays.length == 0) {
+      JPanel errorPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+      
+      JLabel errorMessage = new JLabelFont("Aucune journée disponible.", 20);
+      errorMessage.setHorizontalAlignment(JLabel.CENTER);
+      errorPanel.add(errorMessage);
+      
+      JButton redirectionButton = new JButton("Créer une journée");
+      redirectionButton.addActionListener(e -> {
+        menu.setCurrentPage(MenuEntry.CREATE_BDAY);
+      });
+      errorPanel.add(redirectionButton);
+      
+      JPanel errorWrapper = new JPanel(new GridBagLayout());
+      errorWrapper.add(errorPanel, new GridBagConstraints());
+      this.add(errorWrapper);
+      return;
+    }
+
     model.addChangeListener(this);
 
     // north
     JPanel daylistPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    JComboBox<IBusinessDayDto> dayList =
-        new JComboBox<>(dayUcc.getBusinessDays());
-    dayList.addActionListener(e -> {
-      model.setSelectedDay((IBusinessDayDto) dayList.getSelectedItem());
-      guiManager.getLogger().info(
-          "Accueil changement journée : "
-              + model.getSelectedDay().getEventDate().toString());
 
+    daylistPanel.add(new JLabelFont("journée du "));
+
+    dayList = new JComboBox<>(businessDays);
+    dayList.addActionListener(e -> {
+      IBusinessDayDto selectedDay = (IBusinessDayDto) dayList.getSelectedItem();
+      model.setSelectedDay(selectedDay);
+      
+      guiManager.getLogger().info("Home screen: selected day is " 
+          + (selectedDay == null 
+          ? null : selectedDay.getEventDate()));
     });
-    daylistPanel.add(new JLabelFont("journée du : "));
+
     daylistPanel.add(dayList);
 
     this.add(daylistPanel, BorderLayout.NORTH);
 
     // center
-    String[] titles =
-        new String[] {"Nom entreprise", "État", "Annuler participation"};
-    model.setParticipations(getParticipations());
-    table = new JTable(new TableCompaniesModel(buildMockData(), titles));
-    table.getColumn("Annuler participation").setCellRenderer(
-        new ButtonRenderer());
-    table.getColumn("Annuler participation").setCellEditor(
-        new ButtonEditor(new JCheckBox()));
-    table.getColumn("État").setCellRenderer(new ComboRenderer());
-    table.getColumn("État").setCellEditor(
-        new JComboEditor(new JComboBox<IParticipationDto.State>()));
+    titles = new String[] {"Nom entreprise", "État", "Annuler participation"};
+    tableModel = new DefaultTableModel(titles, 0);
 
+    table = new JTable(tableModel);
+    TableColumn nameCol = table.getColumn(titles[0]);
+    TableColumn stateCol = table.getColumn(titles[1]);
+    TableColumn cancelCol = table.getColumn(titles[2]);
+    
+    cancelCol.setCellRenderer(new ButtonRenderer());
+    cancelCol.setCellEditor(new ButtonEditor(new JCheckBox()));
+    stateCol.setCellRenderer(new ComboRenderer());
+    stateCol.setCellEditor(new JComboEditor(new JComboBox<IParticipationDto.State>()));
 
     // gestion affichage table
-    table.getColumn("Nom entreprise").setMinWidth(
-        table.getColumn("Nom entreprise").getWidth() * 6);
-    table.getColumn("État").setMinWidth(
-        table.getColumn("État").getWidth() * 2);
+    nameCol.setMinWidth(nameCol.getWidth() * 6);
+    stateCol.setMinWidth(stateCol.getWidth() * 2);
     table.setRowHeight(35);
+    
     this.add(new JScrollPane(table));
-
+    
+    stateChanged(null);
   }
 
   /**
    * build data from accueilModel
    */
   private Object[][] buildData() {
-    Object[][] data =
-        new Object[model.getParticipations().keySet().size()][3];
-    int i = 0;
-    for (String company : model.getParticipations().keySet()) {
+    if (model.getSelectedDay() == null) {
+      return new Object[0][0];
+    }
+    
+    IParticipationDto[] participations = new IParticipationDto[0];
+    // TODO: fetch from bday ucc (getAttendingCompanies, returns an array of participation <- TOFIX)
+
+    Object[][] data = new Object[model.getParticipations().keySet().size()][3];
+    for (int i = 0; i < participations.length; i++) {
+      ICompanyDto company = null; // TODO: companyUcc.getCompanyById(participation[i].getId());
       data[i][0] = company;
-      ArrayList<State> states = new ArrayList<State>();
+      List<State> states = new ArrayList<State>();
       states.add(model.getParticipations().get(company).getState());
 
       // possibleStates
@@ -119,21 +159,6 @@ public class AccueilViewController extends JPanel implements
 
       data[i][2] = "Annuler";
       i++;
-    }
-    return data;
-  }
-
-  private Object[][] buildMockData() {
-    Object[] companies = {"asbl", "sa", "me"};
-    Object[][] data = new Object[companies.length][3];
-    for (int i = 0; i < companies.length; i++) {
-      data[i][0] = companies[i];
-
-      JComboBox<State> possibleState =
-          new JComboBox<State>(new State[] {State.BILLED, State.CANCELLED,
-              State.DECLINED});
-      data[i][1] = possibleState;
-      data[i][2] = "annuler";
     }
     return data;
   }
@@ -155,7 +180,14 @@ public class AccueilViewController extends JPanel implements
   }
 
   @Override
-  public void stateChanged(ChangeEvent event) {}
+  public void stateChanged(ChangeEvent event) {
+    if ( model.getSelectedDay() == dayList.getSelectedItem()) {
+      return;
+    }
+
+    dayList.setSelectedItem(model.getSelectedDay());
+    tableModel.setDataVector(buildData(), titles);
+  }
 
   class ButtonRenderer extends JButton implements TableCellRenderer {
 

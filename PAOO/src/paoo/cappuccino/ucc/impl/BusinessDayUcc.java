@@ -63,8 +63,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
   @Override
   public IBusinessDayDto[] getBusinessDays() {
-    // TODO Auto-generated method stub
-    return new IBusinessDayDto[0];
+    return dao.fetchAll();
   }
 
   @Override
