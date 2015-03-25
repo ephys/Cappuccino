@@ -19,13 +19,13 @@ final class ContactEntity extends BaseEntity implements IContact {
 
 
   public ContactEntity(int companyId, String email, boolean emailValid, String firstName,
-                 String lastName, String phone) {
+      String lastName, String phone) {
     this(-1, 0, companyId, email, emailValid, firstName, lastName, phone);
   }
 
 
   public ContactEntity(int id, int version, int companyId, String email, boolean emailValid,
-                 String firstName, String lastName, String phone) {
+      String firstName, String lastName, String phone) {
     super(id, version);
     this.companyId = companyId;
     this.emailValid = emailValid;
@@ -48,11 +48,12 @@ final class ContactEntity extends BaseEntity implements IContact {
 
   @Override
   public void setEmail(String email) {
-    if (!StringUtils.isEmail(email)) {
+    if (email != null && !StringUtils.isEmail(email)) {
       throw new IllegalArgumentException("Invalid email " + email);
     }
 
     this.email = email;
+    this.setEmailValid(true);
   }
 
   @Override
