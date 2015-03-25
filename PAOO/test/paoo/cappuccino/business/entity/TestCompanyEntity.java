@@ -17,16 +17,15 @@ public class TestCompanyEntity {
   private static DependencyInjector injector;
   @Inject
   private IEntityFactory entityFactory;
-  int creatorId = 1;
-  String name = "Coca-Cola";
-  String addressStreet = "rue du coca";
-  String addressNum = "5";
-  String addressMailbox = "b";
-  String addressMailboxNull = null;
-  String addressPostcode = "1020";
-  String addressTown = "Ville de la boisson";
-  ICompany company;
-  ICompany company2;
+
+  private final int creatorId = 1;
+  private final String name = "Coca-Cola";
+  private final String addressStreet = "rue du coca";
+  private final String addressNum = "5";
+  private final String addressMailbox = "b";
+  private final String addressPostcode = "1020";
+  private final String addressTown = "Ville de la boisson";
+  private ICompany company;
 
   @BeforeClass
   public static void systemInit() {
@@ -35,15 +34,13 @@ public class TestCompanyEntity {
   }
 
   @Before
-  public void createCompany() throws Exception {
+  public void createCompany() {
     injector.populate(this);
 
     company =
         entityFactory.createCompany(creatorId, name, addressStreet, addressNum, addressMailbox,
             addressPostcode, addressTown);
-    company2 =
-        entityFactory.createCompany(creatorId, name, addressStreet, addressNum, addressMailboxNull,
-            addressPostcode, addressTown);
+
   }
 
   @Test
@@ -74,8 +71,11 @@ public class TestCompanyEntity {
   }
 
   @Test
-  public void testGetAddressMailbox2() {
-    assertEquals(addressMailboxNull, company2.getAddressMailbox());
+  public void testGetAddressMailboxNull() {
+    ICompany company2 =
+        entityFactory.createCompany(creatorId, name, addressStreet, addressNum, null,
+            addressPostcode, addressTown);
+    assertEquals(null, company2.getAddressMailbox());
   }
 
   @Test

@@ -21,11 +21,11 @@ public class TestContactEntity {
   private IEntityFactory entityFactory;
 
 
-  private int idCompany = 1;
-  private String email = "George@gmail.com";
-  private String firstName = "Nicolas";
-  private String lastName = "Fischer";
-  private String phone = "0478878594";
+  private final int idCompany = 1;
+  private final String email = "George@gmail.com";
+  private final String firstName = "Nicolas";
+  private final String lastName = "Fischer";
+  private final String phone = "0478878594";
   private IContact contact;
 
   @BeforeClass
@@ -35,7 +35,7 @@ public class TestContactEntity {
   }
 
   @Before
-  public void createContact() throws Exception {
+  public void createContact() {
     injector.populate(this);
 
     contact = entityFactory.createContact(idCompany, email, firstName, lastName, phone);
@@ -58,7 +58,7 @@ public class TestContactEntity {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testSetEmail2() {
+  public void testSetEmailInvalid() {
     contact.setEmail("testgmail.com");
   }
 
@@ -71,6 +71,13 @@ public class TestContactEntity {
   public void testSetEmailValid() {
     contact.setEmailValid(false);
     assertFalse(contact.isEmailValid());
+  }
+
+  @Test
+  public void testEmailReset() {
+    contact.setEmailValid(false);
+    contact.setEmail("pomme@john.net");
+    assertTrue("An email should be marked as valid when changed", contact.isEmailValid());
   }
 
   @Test
@@ -91,7 +98,19 @@ public class TestContactEntity {
   @Test
   public void testSetPhone() {
     contact.setPhone("0499999999");
-    assertEquals("0499999999", contact.getPhone());;
+    assertEquals("0499999999", contact.getPhone());
+  }
+
+  @Test
+  public void testSetPhoneNull() {
+    contact.setPhone(null);
+    assertEquals(null, contact.getPhone());
+  }
+
+  @Test
+  public void testSetEmailNull() {
+    contact.setEmail(null);
+    assertEquals(null, contact.getEmail());
   }
 
 }

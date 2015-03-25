@@ -19,23 +19,22 @@ public class TestBusinessDayEntity {
 
   @Inject
   private IEntityFactory entityFactory;
-  private LocalDateTime eventDate = LocalDateTime.of(2015, 5, 15, 15, 30);
   private IBusinessDay businessDay;
+  
+  private final LocalDateTime eventDate = LocalDateTime.of(2015, 5, 15, 15, 30);
 
   @BeforeClass
   public static void systemInit() {
-    BaseMain main = new BaseMain(new AppContext("UserEntityTest", "0.1.0", "test"));
+    BaseMain main = new BaseMain(new AppContext("BusinessDayEntityTest", "0.1.0", "test"));
     injector = main.getInjector();
   }
 
   @Before
-  public void createBusinessDay() throws Exception {
+  public void createBusinessDay() {
     injector.populate(this);
 
     businessDay = entityFactory.createBusinessDay(eventDate);
   }
-
-
 
   @Test
   public void testGetEventDate() {
