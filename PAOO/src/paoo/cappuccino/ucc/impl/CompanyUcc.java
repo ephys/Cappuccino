@@ -58,7 +58,6 @@ class CompanyUcc implements ICompanyUcc {
 
   @Override
   public ICompanyDto[] getAllCompanies() {
-    // TODO Auto-generated method stub
-    return null;
+    return companyDao.fetchAll();
   }
 }
