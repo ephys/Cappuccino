@@ -23,7 +23,7 @@ class CompanyUcc implements ICompanyUcc {
 
   @Override
   public ICompanyDto create(IUserDto creator, String name, String street, String numAddress,
-                            String mailBox, String postCode, String town) {
+      String mailBox, String postCode, String town) {
     ValidationUtil.ensureNotNull(creator, "creator");
 
     ValidationUtil.ensureFilled(name, "name");
@@ -36,8 +36,8 @@ class CompanyUcc implements ICompanyUcc {
       mailBox = null;
     }
 
-    ICompanyDto dto = factory.createCompany(creator.getId(), name, street,
-                                            numAddress, mailBox, postCode, town);
+    ICompanyDto dto =
+        factory.createCompany(creator.getId(), name, street, numAddress, mailBox, postCode, town);
 
     try {
       return companyDao.createCompany(dto);
@@ -53,6 +53,6 @@ class CompanyUcc implements ICompanyUcc {
 
   @Override
   public ICompanyDto[] getInvitableCompanies() {
-    return null; // TODO Auto-generated method stub
+    return companyDao.fetchInvitableCompanies();
   }
 }
