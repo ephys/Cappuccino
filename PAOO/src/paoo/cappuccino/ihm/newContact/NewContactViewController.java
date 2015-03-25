@@ -39,11 +39,10 @@ public class NewContactViewController extends JPanel {
    * @param contactUcc
    * @param companyUcc
    */
-  public NewContactViewController(NewContactModel model, MenuModel menu,
-      IGuiManager manager, IContactUcc contactUcc, ICompanyUcc companyUcc) {
+  public NewContactViewController(NewContactModel model, MenuModel menu, IGuiManager manager,
+      IContactUcc contactUcc, ICompanyUcc companyUcc) {
     super(new BorderLayout());
-    this.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP,
-        0, IhmConstants.M_GAP));
+    this.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0, IhmConstants.M_GAP));
 
     JTextField contactFirstNameField = new JTextField();
     JTextField contactLastNameField = new JTextField();
@@ -51,62 +50,55 @@ public class NewContactViewController extends JPanel {
     JTextField contactPhoneField = new JTextField();
 
     JComboBox<ICompanyDto> comboCompanies =
-        new JComboBox<ICompanyDto>(/* companyUcc.getAllCompanies() */);
+        new JComboBox<ICompanyDto>(companyUcc.getAllCompanies());
     comboCompanies.setRenderer(new ComboEntrepriseRenderer());
 
 
     JPanel controls =
-        new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP,
-            IhmConstants.M_GAP));
+        new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
 
     JButton createButton = new JButton("Créer");
     createButton
-        .addActionListener(e -> {
-          // test input
-          model.setFirstNameError(StringUtils
-              .isEmpty(contactFirstNameField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
-              : (!StringUtils.isAlphaString(contactFirstNameField
-                  .getText()) ? IhmConstants.ERROR_ALPHA_INPUT : null));
+    .addActionListener(e -> {
+      // test input
+      model.setFirstNameError(StringUtils.isEmpty(contactFirstNameField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+              : (!StringUtils.isAlphaString(contactFirstNameField.getText()) ? IhmConstants.ERROR_ALPHA_INPUT
+                  : null));
 
-          model.setLastNameError(StringUtils.isEmpty(contactLastNameField
-              .getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+      model.setLastNameError(StringUtils.isEmpty(contactLastNameField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
               : (!StringUtils.isAlphaString(contactLastNameField.getText()) ? IhmConstants.ERROR_ALPHA_INPUT
                   : null));
 
-          model.setMailError(StringUtils.isEmpty(contactMailField
-              .getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+      model.setMailError(StringUtils.isEmpty(contactMailField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
               : (!StringUtils.isEmail(contactMailField.getText()) ? IhmConstants.ERROR_INVALID_EMAIL
                   : null));
 
-          model.setPhoneError(StringUtils.isEmpty(contactPhoneField
-              .getText()) ? IhmConstants.ERROR_FIELD_EMPTY : null);
+      model.setPhoneError(StringUtils.isEmpty(contactPhoneField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+              : null);
 
 
-          if (!model.hasError()) {
-            IContactDto contact =
-                contactUcc.create(((ICompanyDto) comboCompanies
-                    .getSelectedItem()).getId(), contactMailField
-                    .getText(), contactFirstNameField.getText(),
-                    contactLastNameField.getText(), contactPhoneField
-                        .getText());
+      if (!model.hasError()) {
+        IContactDto contact =
+            contactUcc.create(((ICompanyDto) comboCompanies.getSelectedItem()).getId(),
+                    contactMailField.getText(), contactFirstNameField.getText(),
+                contactLastNameField.getText(), contactPhoneField.getText());
 
-            if (contact != null) {
-              model.clearError();
-              JOptionPane.showMessageDialog(null, "Contact créer");
+        if (contact != null) {
+          model.clearError();
+          JOptionPane.showMessageDialog(null, "Contact créer");
 
-              // clear les champs
-              contactFirstNameField.setText(null);
-              contactLastNameField.setText(null);
-              contactMailField.setText(null);
-              contactPhoneField.setText(null);
-            } else {
-              JOptionPane
-                  .showMessageDialog(null,
-                      "Erreure survenue lors de la création du contact. Veuillez réessayer.");
-            }
-          }
+          // clear les champs
+          contactFirstNameField.setText(null);
+          contactLastNameField.setText(null);
+          contactMailField.setText(null);
+          contactPhoneField.setText(null);
+        } else {
+          JOptionPane.showMessageDialog(null,
+                  "Erreure survenue lors de la création du contact. Veuillez réessayer.");
+        }
+      }
 
-        });
+    });
 
 
     controls.add(createButton);
@@ -114,23 +106,21 @@ public class NewContactViewController extends JPanel {
     this.add(controls, BorderLayout.SOUTH);
     // end buttons //
 
-    this.add(new NewContactView(model, contactFirstNameField,
-        contactLastNameField, contactMailField, contactPhoneField,
-        comboCompanies));
+    this.add(new NewContactView(model, contactFirstNameField, contactLastNameField,
+        contactMailField, contactPhoneField, comboCompanies));
   }
 
   class ComboEntrepriseRenderer implements ListCellRenderer<ICompanyDto> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.swing.ListCellRenderer#getListCellRendererComponent(javax.swing.JList,
      * java.lang.Object, int, boolean, boolean)
      */
     @Override
-    public Component getListCellRendererComponent(
-        JList<? extends ICompanyDto> arg0, ICompanyDto value, int arg2,
-        boolean arg3, boolean arg4) {
+    public Component getListCellRendererComponent(JList<? extends ICompanyDto> arg0,
+        ICompanyDto value, int arg2, boolean arg3, boolean arg4) {
       if (value == null)
         return new JLabel();
       return new JLabel(value.getName());

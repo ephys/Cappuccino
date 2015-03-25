@@ -7,6 +7,8 @@ import paoo.cappuccino.ihm.accueil.AccueilViewController;
 import paoo.cappuccino.ihm.companySelection.CompanySelectionModel;
 import paoo.cappuccino.ihm.companySelection.CompanySelectionViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.newBusinessDay.NewBusinessDayController;
+import paoo.cappuccino.ihm.newBusinessDay.NewBusinessDayModel;
 import paoo.cappuccino.ihm.newCompany.NewCompanyModel;
 import paoo.cappuccino.ihm.newCompany.NewCompanyViewController;
 import paoo.cappuccino.ihm.newContact.NewContactModel;
@@ -31,14 +33,14 @@ public class ViewControllerFactory {
   // models
   private final NewCompanyModel modelNewCompany;
   private final NewContactModel modelNewContact;
+  private final NewBusinessDayModel modelNewBusinessDay;
 
 
   /**
    * Creates the view factory with all the dependencies required by the views.
    */
-  public ViewControllerFactory(IUserUcc userUcc,
-      IBusinessDayUcc businessDayUcc, ICompanyUcc companyUcc,
-      IContactUcc contactUcc, MenuModel menuModel, IGuiManager guiManager) {
+  public ViewControllerFactory(IUserUcc userUcc, IBusinessDayUcc businessDayUcc,
+      ICompanyUcc companyUcc, IContactUcc contactUcc, MenuModel menuModel, IGuiManager guiManager) {
     this.userUcc = userUcc;
     this.businessDayUcc = businessDayUcc;
     this.companyUcc = companyUcc;
@@ -47,38 +49,41 @@ public class ViewControllerFactory {
     this.guiManager = guiManager;
 
     // initialiation Models
-    this.modelNewCompany = new NewCompanyModel();
-    this.modelNewContact = new NewContactModel();
+    modelNewCompany = new NewCompanyModel();
+    modelNewContact = new NewContactModel();
+    modelNewBusinessDay = new NewBusinessDayModel();
   }
 
   /**
    * Creates the view controller related to a given page.
-   * 
+   *
    * @param page The page to create a view controller for.
    * @return The new view controller.
    */
   public Component createViewController(MenuEntry page) {
     switch (page) {
       case HOME:
-        return new AccueilViewController(new AccueilModel(), menuModel,
-            guiManager, businessDayUcc);
+        return new AccueilViewController(new AccueilModel(), menuModel, guiManager, businessDayUcc);
 
       case SELECT_COMPANY:
-        return new CompanySelectionViewController(
-            new CompanySelectionModel(), guiManager, businessDayUcc);
+        return new CompanySelectionViewController(new CompanySelectionModel(), guiManager,
+            businessDayUcc);
 
       case CREATE_COMPANY:
-        return new NewCompanyViewController(modelNewCompany, menuModel,
-            guiManager);
+        return new NewCompanyViewController(modelNewCompany, menuModel, guiManager);
 
       case CREATE_CONTACT:
-        return new NewContactViewController(modelNewContact, menuModel,
-            guiManager, contactUcc, companyUcc);
+        return new NewContactViewController(modelNewContact, menuModel, guiManager, contactUcc,
+            companyUcc);
+
+      case CREATE_BDAY:
+        return new NewBusinessDayController(modelNewBusinessDay, menuModel, guiManager,
+            businessDayUcc);
         // TODO: add ViewControllers.
 
       default:
-        throw new UnsupportedOperationException("Could not open page \""
-            + page.getTitle() + "\": Not yet implemented.");
+        throw new UnsupportedOperationException("Could not open page \"" + page.getTitle()
+            + "\": Not yet implemented.");
     }
   }
 }
