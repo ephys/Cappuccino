@@ -14,7 +14,7 @@ public enum MenuEntry {
   CREATE_BDAY("Créer une journée des entreprises"),
   CREATE_COMPANY("Créer une entreprise"),
   CREATE_CONTACT("Créer une personne de contact"),
-  ATTENDANCE("Inscrire présences");
+  ATTENDANCE("Enregistrer présences");
 
   private final String title;
 

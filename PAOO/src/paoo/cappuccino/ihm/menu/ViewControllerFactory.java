@@ -4,6 +4,8 @@ import java.awt.Component;
 
 import paoo.cappuccino.ihm.accueil.AccueilModel;
 import paoo.cappuccino.ihm.accueil.AccueilViewController;
+import paoo.cappuccino.ihm.attendence.AttendanceController;
+import paoo.cappuccino.ihm.attendence.AttendanceModel;
 import paoo.cappuccino.ihm.companySelection.CompanySelectionModel;
 import paoo.cappuccino.ihm.companySelection.CompanySelectionViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
@@ -34,6 +36,7 @@ public class ViewControllerFactory {
   private final NewCompanyModel modelNewCompany;
   private final NewContactModel modelNewContact;
   private final NewBusinessDayModel modelNewBusinessDay;
+  private final AttendanceModel modelAttendance;
 
 
   /**
@@ -52,6 +55,7 @@ public class ViewControllerFactory {
     modelNewCompany = new NewCompanyModel();
     modelNewContact = new NewContactModel();
     modelNewBusinessDay = new NewBusinessDayModel();
+    modelAttendance = new AttendanceModel();
   }
 
   /**
@@ -80,6 +84,11 @@ public class ViewControllerFactory {
       case CREATE_BDAY:
         return new NewBusinessDayController(modelNewBusinessDay, menuModel, guiManager,
             businessDayUcc);
+
+      case ATTENDANCE:
+        return new AttendanceController(modelAttendance, menuModel, guiManager, companyUcc,
+            businessDayUcc);
+
         // TODO: add ViewControllers.
 
       default:

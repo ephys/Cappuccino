@@ -19,7 +19,7 @@ public class JComboDay extends JPanel {
     super(new FlowLayout(FlowLayout.CENTER));
     label = new JLabel("Journée du");
     combo = new JComboBox<IBusinessDayDto>(businessDays);
-    combo.setRenderer(new dayRenderer());
+    combo.setRenderer(new DayRenderer());
     combo.setSelectedIndex(0);
     this.add(label);
     this.add(combo);
@@ -29,7 +29,7 @@ public class JComboDay extends JPanel {
     return combo;
   }
 
-  class dayRenderer implements ListCellRenderer<IBusinessDayDto> {
+  class DayRenderer implements ListCellRenderer<IBusinessDayDto> {
 
     @Override
     public Component getListCellRendererComponent(JList<? extends IBusinessDayDto> list,

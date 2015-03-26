@@ -20,7 +20,7 @@ public class MenuViewController extends MenuView {
 
   /**
    * Creates a new Menu View Controller.
-   * 
+   *
    * @param model The view model.
    * @param guiManager The manager which opened this gui.
    * @param viewFactory The factory used to create the main view.
@@ -48,6 +48,9 @@ public class MenuViewController extends MenuView {
 
     JButton newDayButton = new JButton("Créer journée");
     newDayButton.addActionListener(e -> model.setCurrentPage(MenuEntry.CREATE_BDAY));
+
+    JButton registerAttendanceButton = new JButton("Enregistrer présence");
+    registerAttendanceButton.addActionListener(e -> model.setCurrentPage(MenuEntry.ATTENDANCE));
 
     // JPanel
     JPanel searchLabelPanel = new JPanel();
@@ -77,9 +80,10 @@ public class MenuViewController extends MenuView {
     search.add(searchLabelPanel, BorderLayout.NORTH);
     search.add(searchCenter);
 
-    JPanel dayCenter = new JPanel(new GridLayout(2, 0));
+    JPanel dayCenter = new JPanel(new GridLayout(3, 0));
     dayCenter.add(companiesSelectButton);
     dayCenter.add(newDayButton);
+    dayCenter.add(registerAttendanceButton);
 
     JPanel day = new JPanel(new BorderLayout());
     day.add(dayCenter);
