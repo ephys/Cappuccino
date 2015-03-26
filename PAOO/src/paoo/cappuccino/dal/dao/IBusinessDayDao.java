@@ -26,7 +26,12 @@ public interface IBusinessDayDao {
    */
   IBusinessDayDto[] fetchAll();
 
-  //TODO Javadoc
+  /**
+   * Fetch alle the business days whos no companies where invited yet
+   *
+   * @return All the business day found in the database or null if non was found
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
+   */
   IBusinessDayDto[] fetchInvitationlessDays();
 
   /**
@@ -38,7 +43,13 @@ public interface IBusinessDayDao {
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error
    */
   IBusinessDayDto fetchBusinessDaysByDate(int year);
-  
-  // TODO
+
+  /**
+   * Fetch the business day by its id
+   *
+   * @param id The id of a business day
+   * @return The business day matching the id
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error
+   */
   IBusinessDayDto fetchBusinessDayById(int id);
 }

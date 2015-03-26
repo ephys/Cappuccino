@@ -31,6 +31,8 @@ class BusinessDayDao implements IBusinessDayDao {
   private PreparedStatement psCreateBusinessDay;
   private PreparedStatement psFetchAll;
   private PreparedStatement psFetchByDate;
+  private PreparedStatement psFetchInvitationlessDays;
+  private PreparedStatement psFetchBusinessDayById;
 
   @Inject
   public BusinessDayDao(IEntityFactory entityFactory, IDalBackend dalBackend) {
@@ -94,8 +96,25 @@ class BusinessDayDao implements IBusinessDayDao {
 
   @Override
   public IBusinessDayDto[] fetchInvitationlessDays() {
-    // TODO
-    throw new FatalException("Not yet implemented");
+    String query = "SELECT DISTINCT business_day_id, event_date, creation_date, academic_year, "
+                   + "business_days.version FROM business_days.business_days, "
+                   + "business_days.participations WHERE business_day_id != business_day";
+    try {
+      if (psFetchInvitationlessDays == null) {
+        psFetchInvitationlessDays = dalBackend.fetchPreparedStatement(query);
+      }
+      try (ResultSet rs = psFetchInvitationlessDays.executeQuery()) {
+        List<IBusinessDayDto> businessDayList = new ArrayList<>();
+        while (rs.next()) {
+          businessDayList.add(makeBusinessDaysFromSet(rs));
+        }
+        return businessDayList.toArray(new IBusinessDayDto[businessDayList.size()]);
+      }
+
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
+    return null;
   }
 
   @Override
@@ -120,7 +139,6 @@ class BusinessDayDao implements IBusinessDayDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-
     return null;
   }
 
@@ -146,7 +164,22 @@ class BusinessDayDao implements IBusinessDayDao {
 
   @Override
   public IBusinessDayDto fetchBusinessDayById(int id) {
-    // TODO Auto-generated method stub
+    String query = "SELECT * FROM business_days.business_days WHERE business_day_id = ?";
+    try {
+      if (psFetchBusinessDayById == null) {
+        psFetchBusinessDayById = dalBackend.fetchPreparedStatement(query);
+      }
+
+      psFetchBusinessDayById.setInt(1, id);
+
+      try (ResultSet rs = psFetchBusinessDayById.executeQuery()) {
+        if (rs.next()) {
+          return makeBusinessDaysFromSet(rs);
+        }
+      }
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
     return null;
   }
 }

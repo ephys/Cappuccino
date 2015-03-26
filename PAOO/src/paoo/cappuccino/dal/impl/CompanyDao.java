@@ -27,7 +27,13 @@ class CompanyDao implements ICompanyDao {
 
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;
-  private PreparedStatement psCreateCompany, psFetchAll, psUpdateCompany, psSearchCompanies;
+
+  private PreparedStatement psCreateCompany;
+  private PreparedStatement psFetchAll;
+  private PreparedStatement psUpdateCompany;
+  private PreparedStatement psSearchCompanies;
+  private PreparedStatement psFetchCompaniesByDay;
+  private PreparedStatement psFetchInvitableCompanies;
 
   @Inject
   public CompanyDao(IEntityFactory entityFactory, IDalBackend dalBackend) {
@@ -157,14 +163,67 @@ class CompanyDao implements ICompanyDao {
 
   @Override
   public ICompanyDto[] fetchInvitableCompanies() {
-    // TODO
-    throw new FatalException("Method not supported yet");
+    //Dont touch this SELECT plz...
+    /** TODO add "soit entreprise ayant participé, au moins 1 x,
+     *  dans les 4 années précédentes et ayant payé sa participation"
+     */
+    String query = "SELECT DISTINCT company_id, creator, name, register_date, address_street, "
+                   + "address_num, address_mailbox, address_postcode, address_town, "
+                   + "companies.version"
+                   + "FROM business_days.participations, business_days.companies"
+                   + "WHERE company != company_id"
+                   + "AND date_part('month', now()) between 1 AND 6"
+                   + "AND date_part('year', register_date) =  date_part('year', now() - INTERVAL '1 year')"
+                   + "AND date_part('month', register_date) between 9 AND 12"
+                   + "OR date_part('month', now()) between 1 AND 6"
+                   + "AND date_part('year', register_date) =  date_part('year', now())"
+                   + "AND date_part('month', register_date) between 1 AND 6"
+                   + "OR date_part('month', now()) between 9 AND 12"
+                   + "AND date_part('year', register_date) =  date_part('year', now())"
+                   + "AND date_part('month', register_date) between 9 AND 12";
+
+    try {
+      if (psFetchInvitableCompanies == null) {
+        psFetchInvitableCompanies = dalBackend.fetchPreparedStatement(query);
+      }
+      try (ResultSet rs = psFetchInvitableCompanies.executeQuery()) {
+        List<ICompanyDto> companiesList = new ArrayList<>();
+        while (rs.next()) {
+          companiesList.add(makeCompanyFromSet(rs));
+        }
+        return companiesList.toArray(new ICompanyDto[companiesList.size()]);
+      }
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
+    return null;
   }
 
   @Override
   public ICompanyDto[] fetchCompaniesByDay(int businessDayId) {
-    // TODO
-    throw new FatalException("Method not supported yet");
+    String query = "SELECT company_id, creator, name, register_date, address_street, "
+                   + "address_num, address_mailbox, address_postcode, address_town, "
+                   + "companies.version FROM business_days.participations, business_days.companies "
+                   + "WHERE participations.business_day = ? AND state = 'INVITED' "
+                   + "AND company = company_id";
+
+    try {
+      if (psFetchCompaniesByDay == null) {
+        psFetchCompaniesByDay = dalBackend.fetchPreparedStatement(query);
+      }
+      psFetchCompaniesByDay.setInt(1, businessDayId);
+
+      try (ResultSet rs = psFetchCompaniesByDay.executeQuery()) {
+        List<ICompanyDto> companiesList = new ArrayList<>();
+        while (rs.next()) {
+          companiesList.add(makeCompanyFromSet(rs));
+        }
+        return companiesList.toArray(new ICompanyDto[companiesList.size()]);
+      }
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
+    return null;
   }
 
   private ICompanyDto makeCompanyFromSet(ResultSet rs) throws SQLException {
