@@ -9,10 +9,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.IhmConstants;
+import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.util.StringUtils;
 
 /**
@@ -28,9 +30,10 @@ public class NewCompanyViewController extends JPanel {
    *
    * @param model The ViewController's model.
    * @param manager The manager responsible for the opening/closing this frame.
+   * @param companyUcc
    */
   public NewCompanyViewController(NewCompanyModel model, MenuModel menu,
-      IGuiManager manager) {
+      IGuiManager manager, ICompanyUcc companyUcc) {
     super(new BorderLayout());
     this.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP,
         0, IhmConstants.M_GAP));
@@ -72,22 +75,31 @@ public class NewCompanyViewController extends JPanel {
           model.setPostCodeError(StringUtils.isEmpty(postCodeField
               .getText()) ? IhmConstants.ERROR_FIELD_EMPTY : null);
           if (!model.hasError()) {
-            // TODO ucc.createCompany(mlkqdsjfqmlksdjf);
-            // TODO check nom non encore utiliser
+            try {
+              ICompanyDto company =
+                  companyUcc.create(menu.getLoggedUser(),
+                      companyNameField.getText(), streetField.getText(),
+                      numerField.getText(), boxField.getText(),
+                      postCodeField.getText(), cityField.getText());
 
-            model.clearError();
-            JOptionPane.showMessageDialog(null, "Entreprise créée");
 
-            // clear les champs
-            companyNameField.setText(null);
-            streetField.setText(null);
-            cityField.setText(null);
-            boxField.setText(null);
-            numerField.setText(null);
-            postCodeField.setText(null);
+              model.clearError();
+              JOptionPane.showMessageDialog(null, "Entreprise créée");
 
-            // redirection utilisateur
-            menu.setCurrentPage(MenuEntry.CREATE_CONTACT);
+              // clear les champs
+              companyNameField.setText(null);
+              streetField.setText(null);
+              cityField.setText(null);
+              boxField.setText(null);
+              numerField.setText(null);
+              postCodeField.setText(null);
+
+              // redirection utilisateur
+              menu.setTransitionObject(company);
+              menu.setCurrentPage(MenuEntry.CREATE_CONTACT);
+            } catch (IllegalArgumentException ex) {
+              model.setNameError(IhmConstants.NAME_ALREADY_TAKEN);
+            }
           }
         });
 

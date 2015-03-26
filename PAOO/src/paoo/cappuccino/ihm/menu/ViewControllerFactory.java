@@ -70,7 +70,9 @@ public class ViewControllerFactory {
             businessDayUcc);
 
       case CREATE_COMPANY:
-        return new NewCompanyViewController(modelNewCompany, menuModel, guiManager);
+        return new NewCompanyViewController(modelNewCompany, menuModel,
+            guiManager, companyUcc);
+
 
       case CREATE_CONTACT:
         return new NewContactViewController(modelNewContact, menuModel, guiManager, contactUcc,

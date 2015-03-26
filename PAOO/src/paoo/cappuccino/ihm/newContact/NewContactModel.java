@@ -14,6 +14,7 @@ public class NewContactModel extends BaseModel {
   private String mailError;
   private String phoneError;
 
+
   public String getFirstNameError() {
     return firstNameError;
   }
@@ -67,5 +68,4 @@ public class NewContactModel extends BaseModel {
     lastNameError = null;
     dispatchChangeEvent();
   }
-
 }

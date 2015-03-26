@@ -10,6 +10,8 @@ public class MenuModel extends BaseModel {
 
   private final MenuFrame containingFrame;
   private MenuEntry currentPage = MenuEntry.HOME;
+  private Object transitionObject;
+  private boolean hasTransitionObject = false;
 
   public MenuModel(MenuFrame containingFrame) {
     this.containingFrame = containingFrame;
@@ -43,5 +45,29 @@ public class MenuModel extends BaseModel {
    */
   public MenuEntry getCurrentPage() {
     return currentPage;
+  }
+
+  /**
+   * @return the transitionObject
+   */
+  public Object getTransitionObject() {
+    hasTransitionObject = false;
+    return transitionObject;
+  }
+
+  /**
+   * @param transitionObject the transitionObject to set
+   */
+  public void setTransitionObject(Object transitionObject) {
+    hasTransitionObject = true;
+    this.transitionObject = transitionObject;
+  }
+
+  /**
+   *
+   * @return
+   */
+  public boolean hasTransitionObject() {
+    return hasTransitionObject;
   }
 }

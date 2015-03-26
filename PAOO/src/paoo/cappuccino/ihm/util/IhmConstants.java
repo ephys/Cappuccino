@@ -44,6 +44,8 @@ public interface IhmConstants {
    */
   static final String ERROR_INVALID_PASSWORD = "Le mot de passe spécifié est invalide.";
 
+  static final String NAME_ALREADY_TAKEN = "Nom déjà pris";
+
   /**
    * error invalid input string.
    */
@@ -54,6 +56,7 @@ public interface IhmConstants {
   static final Color LIGHT_BLUE = new Color(155, 178, 247);
 
   static final String PATH_LOGO = "lib/logo.png";
+
 
 
 

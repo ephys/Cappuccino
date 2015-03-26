@@ -54,6 +54,9 @@ public class NewContactViewController extends JPanel {
     comboCompanies.setRenderer(new ComboEntrepriseRenderer());
 
 
+    if (menu.hasTransitionObject())
+      comboCompanies.setSelectedItem(menu.getTransitionObject());
+
     JPanel controls =
         new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
 
