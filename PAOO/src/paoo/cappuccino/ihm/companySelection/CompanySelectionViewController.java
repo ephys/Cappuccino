@@ -16,7 +16,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
+import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.menu.MenuModel;
+import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 
 /**
@@ -34,15 +37,16 @@ public class CompanySelectionViewController extends JPanel {
   private IBusinessDayUcc businessDayUcc;
 
 
-  public CompanySelectionViewController(CompanySelectionModel model, IGuiManager guiManager, IBusinessDayUcc businessDayUcc) {
+  public CompanySelectionViewController(CompanySelectionModel model, MenuModel menuModel,
+      IGuiManager guiManager, IBusinessDayUcc businessDayUcc) {
 
     super(new BorderLayout());
     this.model = model;
     this.businessDayUcc = businessDayUcc;
     this.guiManager = guiManager;
-    this.view = new CompanySelectionView(model);
+    view = new CompanySelectionView(model);
     // log message dans console et fichier pour frame courant
-    this.guiManager.getLogger().info("[SelectionCompanyFrame]");
+    this.guiManager.getLogger().info("SelectionCompany Frame");
 
 
     JPanel southPanel = new JPanel(new GridLayout(2, 1));
@@ -58,7 +62,7 @@ public class CompanySelectionViewController extends JPanel {
       // recuperer tous les personnes de contact par entreprise selectionnée + les sauver dans
       // fichier .csv
 
-      });
+    });
 
     saveButton.setEnabled(false);
 
@@ -121,11 +125,14 @@ public class CompanySelectionViewController extends JPanel {
 
     savePanel.add(directorySaveButton);
 
-    validatePanel.add(new JLabel("Journée : "));
+    validatePanel.add(new JLabel("Journée du  "));
 
-    // a enlever
-    String[] string = {"dsdq", "dqsdqs", "dsqd", "dsqd", "dsqdsdqs"};
-    JComboBox<String> comboBox = new JComboBox<String>(string);
+    JComboBox<IBusinessDayDto> comboBox = new JComboDay(businessDayUcc.getInvitationlessDays());
+    comboBox.addActionListener(e -> {
+      // TODO
+    });
+    if (menuModel.hasTransitionObject())
+      comboBox.setSelectedItem(menuModel.getTransitionObject());
 
     validatePanel.add(comboBox);
     validatePanel.add(saveButton);
@@ -137,9 +144,10 @@ public class CompanySelectionViewController extends JPanel {
     leftPadding.add(selectAll);
     this.add(leftPadding, BorderLayout.NORTH);
 
-    JTable table = this.view.getTable();
+    JTable table = view.getTable();
     table.addMouseListener(new MouseAdapter() {
 
+      @Override
       public void mouseClicked(MouseEvent e) {
 
         for (int i = 0; i < table.getRowCount(); i++) {
@@ -155,7 +163,7 @@ public class CompanySelectionViewController extends JPanel {
       }
     });
 
-    this.add(this.view);
+    this.add(view);
     this.add(southPanel, BorderLayout.SOUTH);
 
 

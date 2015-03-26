@@ -19,6 +19,7 @@ import javax.swing.ListCellRenderer;
 import javax.swing.SpinnerDateModel;
 import javax.swing.border.EmptyBorder;
 
+import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
@@ -68,8 +69,8 @@ public class NewBusinessDayController extends JPanel {
       Date input = (Date) spinnerDate.getValue();
       LocalDateTime date = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
       try {
-        businessDayUcc.create(date);
-        // redirection TODO with date
+        IBusinessDayDto createdDate = businessDayUcc.create(date);
+        menu.setTransitionObject(createdDate);
         manager.getLogger().info("new BusinessDay created : " + date.toString());
         JOptionPane.showMessageDialog(null, "Journée crée");
         menu.setCurrentPage(MenuEntry.SELECT_COMPANY);
@@ -91,7 +92,7 @@ public class NewBusinessDayController extends JPanel {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see javax.swing.ListCellRenderer#getListCellRendererComponent(javax.swing.JList,
      * java.lang.Object, int, boolean, boolean)
      */

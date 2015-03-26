@@ -1,5 +1,7 @@
 package paoo.cappuccino.ihm.newBusinessDay;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
@@ -28,14 +30,15 @@ public class NewBusinessDayView extends JPanel implements ChangeListener {
    * @param spinnerDate
    */
   public NewBusinessDayView(NewBusinessDayModel model, JSpinner spinnerDate) {
-    super(new GridLayout(1, 2));
+    super(new GridBagLayout());
     this.setBorder(new EmptyBorder(0, IhmConstants.XL_GAP, 0, IhmConstants.XL_GAP));
 
     this.model = model;
-    this.add(new JLabelFont("Date de la nouvelle journée", 16));
-    JPanel spinnerPanel = new JPanel();
+    JPanel spinnerPanel = new JPanel(new GridLayout(1, 2));
+    GridBagConstraints gbc = new GridBagConstraints();
+    spinnerPanel.add(new JLabelFont("Date de la nouvelle journée", 16));
     spinnerPanel.add(spinnerDate);// TODO centrer verticalement
-    this.add(spinnerPanel);
+    this.add(spinnerPanel, gbc);
 
 
     model.addChangeListener(this);

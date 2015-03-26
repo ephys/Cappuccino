@@ -66,12 +66,11 @@ public class ViewControllerFactory {
         return new AccueilViewController(new AccueilModel(), menuModel, guiManager, businessDayUcc);
 
       case SELECT_COMPANY:
-        return new CompanySelectionViewController(new CompanySelectionModel(), guiManager,
-            businessDayUcc);
+        return new CompanySelectionViewController(new CompanySelectionModel(), menuModel,
+            guiManager, businessDayUcc);
 
       case CREATE_COMPANY:
-        return new NewCompanyViewController(modelNewCompany, menuModel,
-            guiManager, companyUcc);
+        return new NewCompanyViewController(modelNewCompany, menuModel, guiManager, companyUcc);
 
 
       case CREATE_CONTACT:

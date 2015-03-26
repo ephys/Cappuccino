@@ -20,12 +20,13 @@ public class MenuViewController extends MenuView {
 
   /**
    * Creates a new Menu View Controller.
+   * 
    * @param model The view model.
    * @param guiManager The manager which opened this gui.
    * @param viewFactory The factory used to create the main view.
    */
   public MenuViewController(IGuiManager guiManager, MenuModel model,
-                            ViewControllerFactory viewFactory) {
+      ViewControllerFactory viewFactory) {
     super(model, guiManager, viewFactory);
 
     // buttons //
@@ -33,8 +34,8 @@ public class MenuViewController extends MenuView {
     home.addActionListener(e -> model.setCurrentPage(MenuEntry.HOME));
 
     JButton participationButton = new JButton("Participations");
-    participationButton.addActionListener(
-        e -> model.setCurrentPage(MenuEntry.SEARCH_PARTICIPATION));
+    participationButton
+        .addActionListener(e -> model.setCurrentPage(MenuEntry.SEARCH_PARTICIPATION));
 
     JButton contactButton = new JButton("Contacts");
     contactButton.addActionListener(e -> model.setCurrentPage(MenuEntry.SEARCH_CONTACT));
