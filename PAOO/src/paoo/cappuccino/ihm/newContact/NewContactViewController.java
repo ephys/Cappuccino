@@ -44,6 +44,9 @@ public class NewContactViewController extends JPanel {
     super(new BorderLayout());
     this.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0, IhmConstants.M_GAP));
 
+    // log
+    manager.getLogger().info("NewContact Frame");
+
     JTextField contactFirstNameField = new JTextField();
     JTextField contactLastNameField = new JTextField();
     JTextField contactMailField = new JTextField();
@@ -88,6 +91,9 @@ public class NewContactViewController extends JPanel {
 
         if (contact != null) {
           model.clearError();
+          manager.getLogger().info(
+              "new Contact created : " + contact.getFirstName() + " " + contact.getLastName()
+                      + "  ( " + ((ICompanyDto) comboCompanies.getSelectedItem()).getName() + " )");
           JOptionPane.showMessageDialog(null, "Contact créer");
 
           // clear les champs

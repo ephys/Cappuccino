@@ -48,7 +48,7 @@ public class NewBusinessDayController extends JPanel {
     this.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0, IhmConstants.M_GAP));
 
     // log
-    manager.getLogger().info("NewBusinessDayFrame");
+    manager.getLogger().info("NewBusinessDay Frame");
 
     GregorianCalendar calendar = new GregorianCalendar();
     Date initDate = calendar.getTime();
@@ -92,7 +92,7 @@ public class NewBusinessDayController extends JPanel {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.swing.ListCellRenderer#getListCellRendererComponent(javax.swing.JList,
      * java.lang.Object, int, boolean, boolean)
      */

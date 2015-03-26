@@ -2,7 +2,6 @@ package paoo.cappuccino.ihm.accueil;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -49,7 +48,7 @@ public class AccueilViewController extends JPanel implements ChangeListener {
   private DefaultTableModel tableModel;
   private String[] titles;
 
-  private JComboBox<IBusinessDayDto> dayList;
+  private JComboDay dayListPanel;
 
   /**
    * Creates a new ViewController for the Login gui.
@@ -85,22 +84,20 @@ public class AccueilViewController extends JPanel implements ChangeListener {
     model.addChangeListener(this);
 
     // north
-    JPanel daylistPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    dayListPanel = new JComboDay(businessDays);
+    model.setSelectedDay((IBusinessDayDto) dayListPanel.getCombo().getSelectedItem());
 
-    daylistPanel.add(new JLabelFont("Journée du "));
-
-
-    dayList = new JComboDay(businessDays);
-    dayList.addActionListener(e -> {
-      IBusinessDayDto selectedDay = (IBusinessDayDto) dayList.getSelectedItem();
-      model.setSelectedDay(selectedDay);
-      guiManager.getLogger().info(
-          "home screen : selected day is "
-              + (selectedDay == null ? null : selectedDay.getEventDate()));
-    });
-    daylistPanel.add(dayList);
-
-    this.add(daylistPanel, BorderLayout.NORTH);
+    dayListPanel.getCombo()
+    .addActionListener(
+        e -> {
+          IBusinessDayDto selectedDay =
+              (IBusinessDayDto) dayListPanel.getCombo().getSelectedItem();
+          model.setSelectedDay(selectedDay);
+          guiManager.getLogger().info(
+              "home screen : selected day is "
+                  + (selectedDay == null ? null : selectedDay.getEventDate()));
+        });
+    this.add(dayListPanel, BorderLayout.NORTH);
 
     // center
     titles = new String[] {"Nom entreprise", "État", "Annuler participation"};
@@ -176,11 +173,11 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
   @Override
   public void stateChanged(ChangeEvent event) {
-    if (model.getSelectedDay() == dayList.getSelectedItem()) {
+    if (model.getSelectedDay() == dayListPanel.getCombo().getSelectedItem()) {
       return;
     }
 
-    dayList.setSelectedItem(model.getSelectedDay());
+    // daylistPanel.getCombo().setSelectedItem(model.getSelectedDay());
     tableModel.setDataVector(buildData(), titles);
   }
 

@@ -10,13 +10,11 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
-import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.JComboDay;
@@ -62,7 +60,7 @@ public class CompanySelectionViewController extends JPanel {
       // recuperer tous les personnes de contact par entreprise selectionnée + les sauver dans
       // fichier .csv
 
-    });
+      });
 
     saveButton.setEnabled(false);
 
@@ -125,16 +123,15 @@ public class CompanySelectionViewController extends JPanel {
 
     savePanel.add(directorySaveButton);
 
-    validatePanel.add(new JLabel("Journée du  "));
 
-    JComboBox<IBusinessDayDto> comboBox = new JComboDay(businessDayUcc.getInvitationlessDays());
-    comboBox.addActionListener(e -> {
+    JComboDay comboDay = new JComboDay(businessDayUcc.getInvitationlessDays());// TODO test argument
+    comboDay.getCombo().addActionListener(e -> {
       // TODO
-    });
+      });
     if (menuModel.hasTransitionObject())
-      comboBox.setSelectedItem(menuModel.getTransitionObject());
+      comboDay.getCombo().setSelectedItem(menuModel.getTransitionObject());
 
-    validatePanel.add(comboBox);
+    validatePanel.add(comboDay);
     validatePanel.add(saveButton);
 
     southPanel.add(savePanel);

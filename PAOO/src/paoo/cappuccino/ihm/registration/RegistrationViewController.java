@@ -37,7 +37,10 @@ public class RegistrationViewController extends JPanel {
     super(new BorderLayout());
     this.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(2, 2, 2, 2,
         new Color(80, 80, 80)), new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0,
-        IhmConstants.M_GAP)));
+            IhmConstants.M_GAP)));
+
+    // log
+    manager.getLogger().info("Registration Frame");
 
     JTextField usernameField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
