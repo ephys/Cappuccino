@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.companyselection;
+package paoo.cappuccino.ihm.companySelection;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.ihm.util.BaseModel;
@@ -19,37 +19,37 @@ public class CompanySelectionModel extends BaseModel {
   public void setCompanyDto(ICompanyDto[] companyDto) {
 
     this.companyDto = companyDto;
-    this.selectAll = false;
+    selectAll = false;
     dispatchChangeEvent();
 
   }
 
   public ICompanyDto[] getCompanyDto() {
 
-    return this.companyDto;
+    return companyDto;
   }
 
   public void setSelectAll(boolean b) {
 
 
-    this.selectAll = b;
+    selectAll = b;
     if (!notDeselectAll)
       dispatchChangeEvent();
   }
 
   public boolean getSelectAll() {
 
-    return this.selectAll;
+    return selectAll;
   }
 
   public void setNotDeselectAll(boolean b) {
 
-    this.notDeselectAll = b;
+    notDeselectAll = b;
   }
 
   public boolean getNotDeselectAll() {
 
-    return this.notDeselectAll;
+    return notDeselectAll;
   }
 
 

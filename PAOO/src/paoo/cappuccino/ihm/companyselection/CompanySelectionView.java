@@ -1,7 +1,6 @@
-package paoo.cappuccino.ihm.companyselection;
+package paoo.cappuccino.ihm.companySelection;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.FlowLayout;
 
 import javax.swing.JLabel;
@@ -11,8 +10,6 @@ import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 
@@ -31,7 +28,7 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
 
     setLayout(new BorderLayout());
     this.model = model;
-    this.table = new JTable();
+    table = new JTable();
     this.add(new JScrollPane(table));
     this.model.addChangeListener(this);
   }
@@ -41,11 +38,11 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
   public void stateChanged(ChangeEvent event) {
 
 
-    if (model.getCompanyDto() != null && this.table.getRowCount() == 0) {
+    if (model.getCompanyDto() != null && table.getRowCount() == 0) {
 
-      this.table.setModel(new tableModel(model.getCompanyDto()));
+      table.setModel(new tableModel(model.getCompanyDto()));
 
-      this.table.getColumnModel().getColumn(this.table.getColumnCount() - 1).setPreferredWidth(1);
+      table.getColumnModel().getColumn(table.getColumnCount() - 1).setPreferredWidth(1);
       return;
 
     } else if (model.getCompanyDto() == null) {
@@ -61,10 +58,10 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
 
     boolean selectAll = model.getSelectAll();
 
-    for (int i = 0; i < this.table.getRowCount(); i++) {
+    for (int i = 0; i < table.getRowCount(); i++) {
 
-      this.table.setValueAt(selectAll, i, this.table.getColumnCount() - 1);
-      this.table.repaint();
+      table.setValueAt(selectAll, i, table.getColumnCount() - 1);
+      table.repaint();
     }
 
 
@@ -73,44 +70,49 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
 
   public JTable getTable() {
 
-    return this.table;
+    return table;
   }
 
   class tableModel extends AbstractTableModel {
 
     String[] columns = {"Nom entreprise", "Adresse entreprise", "Date de l'enregistrement",
-        "Selectionner"};
+    "Selectionner"};
     Object[][] data;
 
     public tableModel(ICompanyDto[] companyDto) {
 
-      this.data = new Object[companyDto.length][];
+      data = new Object[companyDto.length][];
 
       for (int i = 0; i < companyDto.length; i++) {
 
-        this.data[i] =
+        data[i] =
             new Object[] {companyDto[i].getName(), companyDto[i].getAddressTown(),
-                companyDto[i].getRegisterDate().toString(), false};
+            companyDto[i].getRegisterDate().toString(), false};
       }
 
     }
 
+    @Override
     public int getRowCount() {
       return data.length;
     }
 
+    @Override
     public int getColumnCount() {
       return columns.length;
     }
 
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
       return data[rowIndex][columnIndex];
     }
 
+    @Override
     public String getColumnName(int column) {
       return columns[column];
     }
 
+    @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
 
       if (columnIndex == data[0].length - 1)
@@ -118,11 +120,13 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
       return false;
     }
 
+    @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 
       data[rowIndex][columnIndex] = aValue;
     }
 
+    @Override
     public Class<?> getColumnClass(int columnIndex) {
       return data[0][columnIndex].getClass();
     }

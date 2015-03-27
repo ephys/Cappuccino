@@ -13,42 +13,43 @@ public class CompanySelectionModel extends BaseModel {
 
   private ICompanyDto[] companyDto;
   boolean selectAll;
-  boolean resetTable;
+  boolean notDeselectAll;
 
 
   public void setCompanyDto(ICompanyDto[] companyDto) {
 
     this.companyDto = companyDto;
-    this.selectAll = false;
-    this.resetTable = true;
+    selectAll = false;
     dispatchChangeEvent();
 
   }
 
   public ICompanyDto[] getCompanyDto() {
 
-    return this.companyDto;
+    return companyDto;
   }
 
   public void setSelectAll(boolean b) {
 
-    this.selectAll = b;
-    dispatchChangeEvent();
+
+    selectAll = b;
+    if (!notDeselectAll)
+      dispatchChangeEvent();
   }
 
   public boolean getSelectAll() {
 
-    return this.selectAll;
+    return selectAll;
   }
 
-  public boolean getResetTable() {
+  public void setNotDeselectAll(boolean b) {
 
-    return this.resetTable;
+    notDeselectAll = b;
   }
 
-  public void setResetTable(boolean b) {
+  public boolean getNotDeselectAll() {
 
-    this.resetTable = b;
+    return notDeselectAll;
   }
 
 

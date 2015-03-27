@@ -1,7 +1,9 @@
 package paoo.cappuccino.ihm.companySelection;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,7 +28,7 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
 
     setLayout(new BorderLayout());
     this.model = model;
-    this.table = new JTable();
+    table = new JTable();
     this.add(new JScrollPane(table));
     this.model.addChangeListener(this);
   }
@@ -35,100 +37,98 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
   @Override
   public void stateChanged(ChangeEvent event) {
 
-    if (model.getCompanyDto() != null && model.getResetTable()) {
 
-      this.table.setModel(resetTableModel(model.getCompanyDto()));
-      model.setResetTable(false);
+    if (model.getCompanyDto() != null && table.getRowCount() == 0) {
+
+      table.setModel(new tableModel(model.getCompanyDto()));
+
+      table.getColumnModel().getColumn(table.getColumnCount() - 1).setPreferredWidth(1);
       return;
+
     } else if (model.getCompanyDto() == null) {
 
-      this.table.setModel(new tableModel());
-      // JPanel centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
-      // centerPadding.add(new JLabel("Il n'y a aucune entreprise disponible."));
+      JPanel centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
+      centerPadding.add(new JLabel(
+          "Ce message vous est affiché : soit parce qu'il n'y a plus d'entreprise disponible, soit parce "
+              + "qu'il n'y a plus de journée d'enteprise."));
 
-      // this.add(centerPadding);
-      // return;
+      this.add(centerPadding);
+      return;
     }
 
     boolean selectAll = model.getSelectAll();
 
-    for (int i = 0; i < this.table.getRowCount(); i++) {
+    for (int i = 0; i < table.getRowCount(); i++) {
 
-      this.table.setValueAt(selectAll, i, this.table.getColumnCount() - 1);
+      table.setValueAt(selectAll, i, table.getColumnCount() - 1);
+      table.repaint();
     }
 
 
   }
 
-  public AbstractTableModel resetTableModel(ICompanyDto[] companyDto) {
-
-    return new tableModel(companyDto);
-
-  }
 
   public JTable getTable() {
 
-    return this.table;
+    return table;
   }
 
   class tableModel extends AbstractTableModel {
 
     String[] columns = {"Nom entreprise", "Adresse entreprise", "Date de l'enregistrement",
-        "Selectionner"};
+    "Selectionner"};
     Object[][] data;
-    Object[][] data1 = { {"E001", "DSQD", 1 / 10 / 20, false},
-        {"E002", "DQSD", 1 / 10 / 20, false}, {"E003", "CDSQDQ", 1 / 10 / 20, false},
-        {"E004", "DSQDQ", 1 / 10 / 20, false}};
-
-    // a enlever
-    public tableModel() {
-
-    }
 
     public tableModel(ICompanyDto[] companyDto) {
 
-      this.data = new Object[companyDto.length][];
+      data = new Object[companyDto.length][];
 
       for (int i = 0; i < companyDto.length; i++) {
 
-        this.data[i] =
+        data[i] =
             new Object[] {companyDto[i].getName(), companyDto[i].getAddressTown(),
-                companyDto[i].getRegisterDate().toString(), false};
+            companyDto[i].getRegisterDate().toString(), false};
       }
 
     }
 
-    // changer data1 par data
+    @Override
     public int getRowCount() {
-      return data1.length;
+      return data.length;
     }
 
+    @Override
     public int getColumnCount() {
       return columns.length;
     }
 
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-      return data1[rowIndex][columnIndex];
+      return data[rowIndex][columnIndex];
     }
 
+    @Override
     public String getColumnName(int column) {
       return columns[column];
     }
 
+    @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
 
-      if (columnIndex == data1[0].length - 1)
+      if (columnIndex == data[0].length - 1)
         return true;
       return false;
     }
 
+    @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 
-      data1[rowIndex][columnIndex] = aValue;
+      data[rowIndex][columnIndex] = aValue;
     }
 
+    @Override
     public Class<?> getColumnClass(int columnIndex) {
-      return data1[0][columnIndex].getClass();
+      return data[0][columnIndex].getClass();
     }
   }
 }
