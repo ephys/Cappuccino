@@ -15,6 +15,8 @@ import paoo.cappuccino.ihm.newCompany.NewCompanyModel;
 import paoo.cappuccino.ihm.newCompany.NewCompanyViewController;
 import paoo.cappuccino.ihm.newContact.NewContactModel;
 import paoo.cappuccino.ihm.newContact.NewContactViewController;
+import paoo.cappuccino.ihm.participationsearching.ParticipationSearchingModel;
+import paoo.cappuccino.ihm.participationsearching.ParticipationSearchingViewController;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.ucc.IContactUcc;
@@ -37,7 +39,8 @@ public class ViewControllerFactory {
   private final NewContactModel modelNewContact;
   private final NewBusinessDayModel modelNewBusinessDay;
   private final AttendanceModel modelAttendance;
-
+  private final CompanySelectionModel modelCompanySelection;
+  private final ParticipationSearchingModel modelParticipationSearching;
 
   /**
    * Creates the view factory with all the dependencies required by the views.
@@ -56,6 +59,8 @@ public class ViewControllerFactory {
     modelNewContact = new NewContactModel();
     modelNewBusinessDay = new NewBusinessDayModel();
     modelAttendance = new AttendanceModel();
+    modelCompanySelection = new CompanySelectionModel();
+    modelParticipationSearching = new ParticipationSearchingModel();
   }
 
   /**
@@ -70,12 +75,11 @@ public class ViewControllerFactory {
         return new AccueilViewController(new AccueilModel(), menuModel, guiManager, businessDayUcc);
 
       case SELECT_COMPANY:
-        return new CompanySelectionViewController(new CompanySelectionModel(),menuModel,
+        return new CompanySelectionViewController(modelCompanySelection,menuModel,
             guiManager,businessDayUcc,companyUcc);
 
       case CREATE_COMPANY:
         return new NewCompanyViewController(modelNewCompany, menuModel, guiManager, companyUcc);
-
 
       case CREATE_CONTACT:
         return new NewContactViewController(modelNewContact, menuModel, guiManager, contactUcc,
@@ -88,6 +92,9 @@ public class ViewControllerFactory {
       case ATTENDANCE:
         return new AttendanceController(modelAttendance, menuModel, guiManager, companyUcc,
             businessDayUcc);
+        
+      case SEARCH_PARTICIPATION:
+        return new ParticipationSearchingViewController(modelParticipationSearching,menuModel,guiManager,businessDayUcc);
 
         // TODO: add ViewControllers.
 
