@@ -69,8 +69,7 @@ public class ParticipationSearchingViewController extends JPanel{
 
     } else {
       
-      //TODO rajouter un getId dans businessDto
-      ICompanyDto[] companyDto =  businessDayUcc.getAttendingCompanies(1);
+      ICompanyDto[] companyDto =  businessDayUcc.getAttendingCompanies(this.businessDayDto[0].getId());
       this.model.setCompanyDto(companyDto);
     }
 
@@ -86,8 +85,7 @@ public class ParticipationSearchingViewController extends JPanel{
       String selectedItem = (String)((JComboBox<String>)e.getSource()).getSelectedItem();
       matchingBusinessDay(selectedItem);
       
-    //TODO rajouter un getId dans businessDto
-      ICompanyDto[] companyDto =  businessDayUcc.getAttendingCompanies(2);
+      ICompanyDto[] companyDto =  businessDayUcc.getAttendingCompanies(this.selectedBusinessDay.getId());
       this.model.setCompanyDto(companyDto);
       
     });
