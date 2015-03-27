@@ -6,8 +6,8 @@ import paoo.cappuccino.ihm.accueil.AccueilModel;
 import paoo.cappuccino.ihm.accueil.AccueilViewController;
 import paoo.cappuccino.ihm.attendence.AttendanceController;
 import paoo.cappuccino.ihm.attendence.AttendanceModel;
-import paoo.cappuccino.ihm.companySelection.CompanySelectionModel;
-import paoo.cappuccino.ihm.companySelection.CompanySelectionViewController;
+import paoo.cappuccino.ihm.companyselection.CompanySelectionModel;
+import paoo.cappuccino.ihm.companyselection.CompanySelectionViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.newBusinessDay.NewBusinessDayController;
 import paoo.cappuccino.ihm.newBusinessDay.NewBusinessDayModel;
@@ -70,8 +70,8 @@ public class ViewControllerFactory {
         return new AccueilViewController(new AccueilModel(), menuModel, guiManager, businessDayUcc);
 
       case SELECT_COMPANY:
-        return new CompanySelectionViewController(new CompanySelectionModel(), menuModel,
-            guiManager, businessDayUcc);
+        return new CompanySelectionViewController(new CompanySelectionModel(),menuModel,
+            guiManager,businessDayUcc,companyUcc);
 
       case CREATE_COMPANY:
         return new NewCompanyViewController(modelNewCompany, menuModel, guiManager, companyUcc);
