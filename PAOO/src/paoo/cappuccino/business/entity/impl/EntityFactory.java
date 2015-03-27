@@ -86,8 +86,8 @@ final class EntityFactory implements IEntityFactory {
   }
 
   @Override
-  public IParticipation createParticipation(int companyId, int businessDayId, int version,
-      State state) {
-    return new ParticipationEntity(version, state, businessDayId, companyId);
+  public IParticipation createParticipation(int companyId, int businessDayId, boolean cancelled,
+                                            int version, State state) {
+    return new ParticipationEntity(version, state, cancelled, businessDayId, companyId);
   }
 }

@@ -9,7 +9,21 @@ import paoo.cappuccino.business.dto.IParticipationDto;
  */
 public interface IParticipation extends IParticipationDto {
 
+  /**
+   * Changes the state of the participation. See {@link paoo.cappuccino.util.ParticipationUtils#getFollowingStates(paoo.cappuccino.business.dto.IParticipationDto.State)}
+   * to know which states are valid.
+   *
+   * @param state The new state.
+   * @throws java.lang.IllegalStateException Cannot change the state to the given one.
+   */
   void setState(State state);
+
+  /**
+   * Cancels the participation.
+   *
+   * @throws java.lang.IllegalStateException The participation cannot be cancelled (yet).
+   */
+  void setCancelled(boolean cancelled);
 
   /**
    * Increments and returns the entity version.

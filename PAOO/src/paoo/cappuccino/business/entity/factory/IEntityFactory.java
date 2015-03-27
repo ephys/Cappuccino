@@ -142,7 +142,8 @@ public interface IEntityFactory {
    * @param businessDayId Refer the businessDay's identifier of a participation.
    * @param version The participation version in the database.
    * @param state The participation's state.
+   * @param cancelled The participation has been cancelled.
    */
-  IParticipation createParticipation(int companyId, int businessDayId, int version,
-      IParticipationDto.State state);
+  public IParticipation createParticipation(int companyId, int businessDayId, boolean cancelled,
+                                            int version, IParticipationDto.State state);
 }

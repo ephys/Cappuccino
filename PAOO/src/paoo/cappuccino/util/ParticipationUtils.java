@@ -1,11 +1,11 @@
 package paoo.cappuccino.util;
 
+import paoo.cappuccino.business.dto.IParticipationDto.State;
+
 import static paoo.cappuccino.business.dto.IParticipationDto.State.BILLED;
-import static paoo.cappuccino.business.dto.IParticipationDto.State.CANCELLED;
 import static paoo.cappuccino.business.dto.IParticipationDto.State.CONFIRMED;
 import static paoo.cappuccino.business.dto.IParticipationDto.State.DECLINED;
 import static paoo.cappuccino.business.dto.IParticipationDto.State.PAID;
-import paoo.cappuccino.business.dto.IParticipationDto.State;
 
 public class ParticipationUtils {
 
@@ -20,11 +20,10 @@ public class ParticipationUtils {
       case INVITED:
         return new State[] {CONFIRMED, DECLINED};
       case CONFIRMED:
-        return new State[] {BILLED, CANCELLED};
+        return new State[] {BILLED};
       case BILLED:
-        return new State[] {PAID, CANCELLED};
+        return new State[] {PAID};
       case PAID:
-        return new State[] {CANCELLED};
       default:
         return new State[0];
     }

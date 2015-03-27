@@ -43,4 +43,6 @@ public interface ICompanyUcc {
   public ICompanyDto[] getInvitableCompanies();
 
   public ICompanyDto[] getAllCompanies();
+
+  ICompanyDto getCompanyById(int company);
 }

@@ -60,4 +60,9 @@ class CompanyUcc implements ICompanyUcc {
   public ICompanyDto[] getAllCompanies() {
     return companyDao.fetchAll();
   }
+
+  @Override
+  public ICompanyDto getCompanyById(int company) {
+    return companyDao.fetchCompanyById(company);
+  }
 }

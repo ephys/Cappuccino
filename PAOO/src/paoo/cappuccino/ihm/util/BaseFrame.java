@@ -35,7 +35,7 @@ public abstract class BaseFrame extends JFrame {
         IhmConstants.PATH_LOGO));
 
     setSize(width, height);
-    // setExtendedState(JFrame.MAXIMIZED_BOTH);
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
     setLocationRelativeTo(null);
 
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

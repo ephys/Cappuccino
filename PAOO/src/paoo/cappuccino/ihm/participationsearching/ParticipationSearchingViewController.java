@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
-import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
@@ -52,9 +51,9 @@ public class ParticipationSearchingViewController extends JPanel {
       this.model.setCompanyDto(null);
 
     } else {
-
-      ICompanyDto[] companyDto = businessDayUcc.getAttendingCompanies(businessDayDto[0].getId());
-      this.model.setCompanyDto(companyDto);
+    //TODO
+     // ICompanyDto[] companyDto = businessDayUcc.getAttendingCompanies(businessDayDto[0].getId());
+      this.model.setCompanyDto(null);
     }
 
 
@@ -69,8 +68,9 @@ public class ParticipationSearchingViewController extends JPanel {
       String selectedItem = (String) ((JComboBox<String>) e.getSource()).getSelectedItem();
       matchingBusinessDay(selectedItem);
 
-      ICompanyDto[] companyDto = businessDayUcc.getAttendingCompanies(selectedBusinessDay.getId());
-      this.model.setCompanyDto(companyDto);
+      //TODO
+     // ICompanyDto[] companyDto = businessDayUcc.getAttendingCompanies(selectedBusinessDay.getId());
+      this.model.setCompanyDto(null);
 
     });
 

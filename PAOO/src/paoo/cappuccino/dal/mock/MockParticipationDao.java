@@ -16,17 +16,21 @@ public class MockParticipationDao implements IParticipationDao {
   @Inject
   public MockParticipationDao(IEntityFactory factory) {
     this.factory = factory;
-    createParticipation(factory.createParticipation(1, 1));
-    createParticipation(factory.createParticipation(2, 1));
-    createParticipation(factory.createParticipation(3, 2));
-    createParticipation(factory.createParticipation(4, 1));
+    createParticipation(factory.createParticipation(1, 1, false, 2,
+                                                    IParticipationDto.State.INVITED));
+    createParticipation(factory.createParticipation(2, 1, false, 2,
+                                                    IParticipationDto.State.BILLED));
+    createParticipation(factory.createParticipation(3, 2, false, 2,
+                                                    IParticipationDto.State.BILLED));
+    createParticipation(factory.createParticipation(4, 1, false, 2,
+                                                    IParticipationDto.State.DECLINED));
   }
 
   @Override
   public IParticipationDto createParticipation(IParticipationDto participation) {
     IParticipation participationEntity =
-        factory.createParticipation(participation.getCompany(), participation.getBusinessDay(), 1,
-            participation.getState());
+        factory.createParticipation(participation.getCompany(), participation.getBusinessDay(),
+            participation.isCancelled(), 1, participation.getState());
     participationList.add(participationEntity);
     return participationEntity;
   }

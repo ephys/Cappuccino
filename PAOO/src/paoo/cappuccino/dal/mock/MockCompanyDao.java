@@ -153,7 +153,12 @@ class MockCompanyDao implements ICompanyDao {
 
   @Override
   public ICompanyDto fetchCompanyById(int id) {
-    // TODO Auto-generated method stub
+    for (ICompanyDto company : companyList) {
+      if (company.getId() == id) {
+        return company;
+      }
+    }
+
     return null;
   }
 }

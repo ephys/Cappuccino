@@ -1,7 +1,5 @@
 package paoo.cappuccino.business.entity;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -12,6 +10,9 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestParticipationEntity {
 
@@ -75,8 +76,8 @@ public class TestParticipationEntity {
   @Test
   public void testSetState5() {
     participation.setState(State.CONFIRMED);
-    participation.setState(State.CANCELLED);
-    assertEquals(State.CANCELLED, participation.getState());
+    participation.setCancelled(true);
+    assertTrue(participation.isCancelled());
   }
 
   @Test
@@ -91,21 +92,21 @@ public class TestParticipationEntity {
   public void testSetState7() {
     participation.setState(State.CONFIRMED);
     participation.setState(State.BILLED);
-    participation.setState(State.CANCELLED);
-    assertEquals(State.CANCELLED, participation.getState());
+    participation.setCancelled(true);
+    assertTrue(participation.isCancelled());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalStateException.class)
   public void testSetState8() {
     participation.setState(State.BILLED);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalStateException.class)
   public void testSetState9() {
-    participation.setState(State.CANCELLED);
+    participation.setCancelled(true);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalStateException.class)
   public void testSetState10() {
     participation.setState(State.PAID);
   }

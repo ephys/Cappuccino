@@ -41,6 +41,8 @@ public interface IBusinessDayUcc {
    */
   public boolean changeState(IParticipationDto participation, IParticipationDto.State state);
 
+  public boolean cancelParticipation(IParticipationDto participation);
+
   /**
    * Returns all the business day that haven't any participation yet.
    */
@@ -56,5 +58,5 @@ public interface IBusinessDayUcc {
    *
    * @param businessDayId The identifier of the business day.
    */
-  public ICompanyDto[] getAttendingCompanies(int businessDayId);
+  public IParticipationDto[] getParticipations(int businessDayId);
 }

@@ -28,9 +28,14 @@ public interface IParticipationDto {
   int getVersion();
 
   /**
+   * Returns whether or not the company cancelled its participation.
+   */
+  boolean isCancelled();
+
+  /**
    * Defines the list of states a participation can take.
    */
   public static enum State {
-    INVITED, CONFIRMED, DECLINED, BILLED, PAID, CANCELLED
+    INVITED, CONFIRMED, DECLINED, BILLED, PAID
   }
 }

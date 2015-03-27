@@ -60,9 +60,7 @@ public interface ICompanyDao {
 
 
   /**
-   * 
-   * @param id
-   * @return
+   * Returns the company registered using the given id.
    */
   ICompanyDto fetchCompanyById(int id);
 

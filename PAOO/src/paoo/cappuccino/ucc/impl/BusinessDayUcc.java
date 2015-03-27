@@ -85,6 +85,15 @@ class BusinessDayUcc implements IBusinessDayUcc {
   }
 
   @Override
+  public boolean cancelParticipation(IParticipationDto participation) {
+    if (participation instanceof IParticipation) {
+      ((IParticipation) participation).setCancelled(true);
+    }
+
+    return false;
+  }
+
+  @Override
   public IBusinessDayDto[] getInvitationlessDays() {
     return businessDayDao.fetchInvitationlessDays();
   }
@@ -95,8 +104,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
   }
 
   @Override
-  public ICompanyDto[] getAttendingCompanies(int businessDayId) {
-    // TODO Auto-generated method stub
-    return null;
+  public IParticipationDto[] getParticipations(int businessDayId) {
+    return participationDao.fetchParticipationsByDate(businessDayId);
   }
 }

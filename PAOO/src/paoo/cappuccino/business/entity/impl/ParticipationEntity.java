@@ -13,14 +13,16 @@ final class ParticipationEntity implements IParticipation {
   private int businessDay;
   private int company;
   private int version;
+  private boolean cancelled;
 
 
   public ParticipationEntity(int businessDayId, int companyId) {
-    this(0, State.INVITED, businessDayId, companyId);
+    this(0, State.INVITED, false, businessDayId, companyId);
   }
 
-  public ParticipationEntity(int version, State state, int businessDayId, int companyId) {
+  public ParticipationEntity(int version, State state, boolean cancelled, int businessDayId, int companyId) {
     this.state = state;
+    this.cancelled = cancelled;
     this.businessDay = businessDayId;
     this.company = companyId;
     this.version = version;
@@ -51,13 +53,31 @@ final class ParticipationEntity implements IParticipation {
       }
     }
 
-    throw new IllegalArgumentException("Invalid state " + newState.name()
+    throw new IllegalStateException("Invalid state " + newState.name()
         + " cannot be transitioned directly from " + state.name());
+  }
+
+  @Override
+  public void setCancelled(boolean cancelled) {
+    if (state == State.INVITED || state == State.DECLINED) {
+      throw new IllegalStateException("Cannot cancel this participation, it hasn't been accepted.");
+    }
+
+    if (cancelled && this.cancelled) {
+      throw new IllegalStateException("This participation is already cancelled.");
+    }
+
+    this.cancelled = cancelled;
   }
 
   @Override
   public int getVersion() {
     return this.version;
+  }
+
+  @Override
+  public boolean isCancelled() {
+    return cancelled;
   }
 
   @Override

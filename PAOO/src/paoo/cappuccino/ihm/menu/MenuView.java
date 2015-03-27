@@ -94,14 +94,28 @@ public class MenuView extends JPanel implements ChangeListener {
 
   @Override
   public void stateChanged(ChangeEvent event) {
-    Component newVc = viewFactory.createViewController(menuModel.getCurrentPage());
-    Component previousVc = ((BorderLayout)mainPanel.getLayout())
-        .getLayoutComponent(BorderLayout.CENTER);
-    if (previousVc != null) {
-      mainPanel.remove(previousVc);
-    }
+    try {
+      Component previousVc = ((BorderLayout)mainPanel.getLayout())
+          .getLayoutComponent(BorderLayout.CENTER);
+      if (previousVc != null) {
+        mainPanel.remove(previousVc);
+      }
 
-    title.setText(menuModel.getCurrentPage().getTitle());
-    mainPanel.add(newVc, BorderLayout.CENTER);
+      if (menuModel.getCurrentPage() != null) {
+        Component newVc = viewFactory.createViewController(menuModel.getCurrentPage());
+
+        title.setText(menuModel.getCurrentPage().getTitle());
+        mainPanel.add(newVc, BorderLayout.CENTER);
+      } else {
+        title.setText("/aucune page chargée/");
+        mainPanel.repaint();
+      }
+    } catch (UnsupportedOperationException e) {
+      if (menuModel.getCurrentPage() != null) {
+        menuModel.setCurrentPage(null);
+      }
+
+      throw e;
+    }
   }
 }
