@@ -75,83 +75,81 @@ public class CompanySelectionViewController extends JPanel {
     JCheckBox selectAll = new JCheckBox("Tout cocher");
     JButton directorySaveButton = new JButton("Parcourir");
 
-    businessDayDto = businessDayUcc.getInvitationlessDays();
-    companyDto = companyUcc.getInvitableCompanies();
+    businessDayDto = this.businessDayUcc.getInvitationlessDays();
+    companyDto = this.companyUcc.getInvitableCompanies();
 
-    saveButton
-        .addActionListener(e -> {
-
-
-          String selectedItem = (String) comboBox.getSelectedItem();
-   
-          matchingBusinessDay(selectedItem);
-          
-
-          ArrayList<Integer> list = new ArrayList<Integer>();
+    saveButton.addActionListener(e -> {
 
 
-          JTable table = this.view.getTable();
-          for (int i = 0; i < table.getRowCount(); i++) {
-            if ((boolean) table.getValueAt(i, table.getColumnCount() - 1)) {
+      String selectedItem = (String) comboBox.getSelectedItem();
 
-              list.add(i);
-            }
+      matchingBusinessDay(selectedItem);
+
+
+      ArrayList<Integer> list = new ArrayList<Integer>();
+
+
+      JTable table = this.view.getTable();
+      for (int i = 0; i < table.getRowCount(); i++) {
+        if ((boolean) table.getValueAt(i, table.getColumnCount() - 1)) {
+
+          list.add(i);
+        }
+
+      }
+      if (list.isEmpty()) {
+
+        JOptionPane.showMessageDialog(CompanySelectionViewController.this,
+            "Vous devez au moins selectionner une entreprise !", "Erreur",
+            JOptionPane.ERROR_MESSAGE);
+      } else {
+        ICompanyDto[] companyDtoArray = new ICompanyDto[list.size()];
+
+        BufferedWriter fileWriter = null;
+        if (!directory.exists())
+          throw new GuiException(
+              "Le fichier csv n'a pas pu être enregistré, le repertoire spécifié n'existe pas !");
+        try {
+
+          File saveDirectory =
+              new File(this.directory, this.selectedBusinessDay.getEventDate()
+                  .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
+                  + ".csv");
+          if (!saveDirectory.exists())
+            saveDirectory.createNewFile();
+
+          fileWriter = new BufferedWriter(new FileWriter(saveDirectory));
+
+          fileWriter.write("Nom entreprise");
+          fileWriter.newLine();
+          fileWriter.newLine();
+
+          for (int i = 0; i < companyDtoArray.length; i++) {
+
+            companyDtoArray[i] = companyDto[list.get(i)];
+            fileWriter.write(companyDto[list.get(i)].getName());
+            fileWriter.newLine();
 
           }
-          if (list.isEmpty()) {
+          this.businessDayUcc.addInvitedCompanies(companyDtoArray, this.selectedBusinessDay);
 
-            JOptionPane.showMessageDialog(CompanySelectionViewController.this,
-                "Vous devez au moins selectionner une entreprise !", "Erreur",
-                JOptionPane.ERROR_MESSAGE);
-          } else {
-            ICompanyDto[] companyDtoArray = new ICompanyDto[list.size()];
+          JOptionPane.showMessageDialog(CompanySelectionViewController.this,
+              "Le fichier a bien pu être sauvé.");
+          this.menu.setCurrentPage(MenuEntry.HOME);
+        } catch (Exception exception) {
 
-            BufferedWriter fileWriter = null;
-            if (!directory.exists())
-              throw new GuiException(
-                  "Le fichier csv n'a pas pu être enregistré, le repertoire spécifié n'existe pas !");
-            try {
+          throw new GuiException("Une erreur s'est produite lors de l'écriture dans le fichier !");
+        } finally {
+          try {
+            fileWriter.close();
+          } catch (Exception e1) {
 
-              File saveDirectory =
-                  new File(this.directory, this.selectedBusinessDay.getEventDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
-                      + ".csv");
-              if (!saveDirectory.exists())
-                saveDirectory.createNewFile();
-
-              fileWriter = new BufferedWriter(new FileWriter(saveDirectory));
-
-              fileWriter.write("Nom entreprise");
-              fileWriter.newLine();
-              fileWriter.newLine();
-
-              for (int i = 0; i < companyDtoArray.length; i++) {
-
-                companyDtoArray[i] = companyDto[list.get(i)];
-                fileWriter.write(companyDto[list.get(i)].getName());
-                fileWriter.newLine();
-
-              }
-              businessDayUcc.addInvitedCompanies(companyDtoArray, this.selectedBusinessDay);
-              
-              JOptionPane.showMessageDialog(CompanySelectionViewController.this,
-                  "Le fichier a bien pu être sauvé.");
-              menu.setCurrentPage(MenuEntry.HOME);
-            } catch (Exception exception) {
-
-              throw new GuiException(
-                  "Une erreur s'est produite lors de l'écriture dans le fichier !");
-            } finally {
-              try {
-                fileWriter.close();
-              } catch (Exception e1) {
-
-                throw new GuiException(
-                    "Une erreur s'est produite lors de la fermeture du fichier !");
-              }
-            }
+            throw new GuiException("Une erreur s'est produite lors de la fermeture du fichier !");
           }
+        }
+      }
 
-        });
+    });
 
 
 
@@ -240,7 +238,7 @@ public class CompanySelectionViewController extends JPanel {
         }
 
         if (model.getSelectAll() && checkBoxCounter == (table.getRowCount() - 1)) {
-          
+
           model.setNotDeselectAll(true);
           selectAll.setSelected(false);
           return;
@@ -259,9 +257,9 @@ public class CompanySelectionViewController extends JPanel {
 
 
   }
-  
-  public void matchingBusinessDay(String selectedItem){
-    
+
+  public void matchingBusinessDay(String selectedItem) {
+
     for (int i = 0; i < businessDayDto.length; i++) {
 
       if (businessDayDto[i].getEventDate().toString().equals(selectedItem)) {
