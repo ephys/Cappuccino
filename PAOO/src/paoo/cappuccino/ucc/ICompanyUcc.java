@@ -39,10 +39,23 @@ public interface ICompanyUcc {
 
   /**
    * Returns all the companies that can be invite to a business days.
+   * 
+   * @return An array of CompanyDto which can be currently invited.
    */
   public ICompanyDto[] getInvitableCompanies();
 
+  /**
+   * Returns all the company existing in the database.
+   * 
+   * @return An array of all the CompanyDto.
+   */
   public ICompanyDto[] getAllCompanies();
 
-  ICompanyDto getCompanyById(int company);
+  /**
+   * Returns the company matching the Id given.
+   * 
+   * @param company The id of the researched company.
+   * @return An ICompanyDto of the company having the id given.
+   */
+  public ICompanyDto getCompanyById(int company);
 }

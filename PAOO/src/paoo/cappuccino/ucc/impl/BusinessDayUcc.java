@@ -86,8 +86,12 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
   @Override
   public boolean cancelParticipation(IParticipationDto participation) {
+    if (participation.isCancelled()) {
+      return false;
+    }
     if (participation instanceof IParticipation) {
       ((IParticipation) participation).setCancelled(true);
+      return true;
     }
 
     return false;

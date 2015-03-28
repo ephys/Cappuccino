@@ -22,8 +22,8 @@ class ContactUcc implements IContactUcc {
   }
 
   @Override
-  public IContactDto create(int companyId, String email, String firstName,
-                            String lastName, String phone) {
+  public IContactDto create(int companyId, String email, String firstName, String lastName,
+      String phone) {
     ValidationUtil.ensureFilled(lastName, "lastName");
     ValidationUtil.ensureFilled(firstName, "firstName");
 
@@ -52,9 +52,9 @@ class ContactUcc implements IContactUcc {
     if (dto instanceof IContact) {
       contact = (IContact) dto;
     } else {
-      contact = factory.createContact(dto.getId(), dto.getVersion(), dto.getCompany(),
-                                      dto.getEmail(), dto.isEmailValid(), dto.getFirstName(),
-                                      dto.getLastName(), dto.getPhone());
+      contact =
+          factory.createContact(dto.getId(), dto.getVersion(), dto.getCompany(), dto.getEmail(),
+              dto.isEmailValid(), dto.getFirstName(), dto.getLastName(), dto.getPhone());
     }
 
     contact.setEmailValid(false);
@@ -65,8 +65,9 @@ class ContactUcc implements IContactUcc {
 
   @Override
   public IContactDto[] searchContact(String firstName, String lastName) {
-    // TODO Auto-generated method stub
-    return null;
+    ValidationUtil.ensureNotNull(firstName, "firstName");
+    ValidationUtil.ensureNotNull(lastName, "lastName");
+    return dao.fetchContactByName(firstName, lastName);
   }
 
 }

@@ -48,7 +48,11 @@ class CompanyUcc implements ICompanyUcc {
 
   @Override
   public ICompanyDto[] searchCompanies(String name, String postCode, String town, String street) {
-    return null; // TODO Auto-generated method stub
+    ValidationUtil.ensureNotNull(street, "street");
+    ValidationUtil.ensureNotNull(town, "town");
+    ValidationUtil.ensureNotNull(postCode, "postCode");
+    ValidationUtil.ensureNotNull(name, "name");
+    return companyDao.searchCompanies(name, postCode, street, town);
   }
 
   @Override
