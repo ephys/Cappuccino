@@ -33,5 +33,4 @@ public class AttendanceModel extends BaseModel {
     dispatchChangeEvent();
   }
 
-
 }

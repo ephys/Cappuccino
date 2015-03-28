@@ -4,11 +4,17 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
@@ -18,6 +24,7 @@ import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
+import paoo.cappuccino.ucc.IContactUcc;
 
 /**
  * ViewController for the registration Gui.
@@ -25,7 +32,7 @@ import paoo.cappuccino.ucc.ICompanyUcc;
  * @author Opsomer Mathias
  */
 @SuppressWarnings("serial")
-public class AttendanceController extends JPanel {
+public class AttendanceController extends JPanel implements ChangeListener {
 
   /**
    * Creates a new ViewController for the new attendance gui.
@@ -34,12 +41,14 @@ public class AttendanceController extends JPanel {
    * @param manager The manager responsible for the opening/closing this frame.
    * @param companyUcc
    * @param businessDayUcc
+   * @param contactUcc
    */
-  public AttendanceController(AttendanceModel model, MenuModel menu, IGuiManager manager,
-      ICompanyUcc companyUcc, IBusinessDayUcc businessDayUcc) {
+  public AttendanceController(AttendanceModel model, MenuModel menu,
+      IGuiManager manager, ICompanyUcc companyUcc,
+      IBusinessDayUcc businessDayUcc, IContactUcc contactUcc) {
     super(new BorderLayout());
-    this.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, IhmConstants.M_GAP,
-        IhmConstants.M_GAP));
+    this.setBorder(new EmptyBorder(IhmConstants.M_GAP, 0,
+        IhmConstants.M_GAP, 0));
     // Log
     manager.getLogger().info("Attendance Frame");
 
@@ -50,9 +59,11 @@ public class AttendanceController extends JPanel {
 
     });
 
-    JPanel comboCompanyPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    JPanel comboCompanyPanel =
+        new JPanel(new FlowLayout(FlowLayout.CENTER));
     comboCompanyPanel.add(new JLabel("Entreprise"));
-    JComboBox<ICompanyDto> companiesList = new JComboBox<ICompanyDto>(companyUcc.getAllCompanies()); // TODO
+    JComboBox<ICompanyDto> companiesList =
+        new JComboBox<ICompanyDto>(companyUcc.getAllCompanies()); // TODO
     companiesList.addActionListener(e -> {
 
     });
@@ -67,9 +78,28 @@ public class AttendanceController extends JPanel {
 
 
     // center
+    JPanel center = new JPanel(new BorderLayout());
+
+    // tous
+
+    JCheckBox allSelect = new JCheckBox();
+    JPanel allSelectPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    allSelectPanel.add(allSelect);
+    allSelectPanel.add(new JLabel("Tous"));
+    center.add(allSelectPanel, BorderLayout.NORTH);
+
+    // table
+    String[] titles = {"nom", "selec"};
+    Object[][] data = { {"albert", true}, {"jean", false}};// TODO change it
+    TableContactModel modelTable = new TableContactModel(titles, data);
+    JTable table = new JTable(modelTable);
+    table.getColumn("selec").setCellEditor(
+        new DefaultCellEditor(new JCheckBox()));
+
+    center.add(new JScrollPane(table));
 
 
-
+    this.add(center);
     JPanel controls = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     JButton validate = new JButton("Valider");
     validate.addActionListener(e -> {
@@ -79,7 +109,16 @@ public class AttendanceController extends JPanel {
 
     this.add(controls, BorderLayout.SOUTH);
     // end buttons //
+  }
 
-    this.add(new AttendanceView(model));
+  /*
+   * (non-Javadoc)
+   * 
+   * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+   */
+  @Override
+  public void stateChanged(ChangeEvent arg0) {
+    // TODO
+
   }
 }
