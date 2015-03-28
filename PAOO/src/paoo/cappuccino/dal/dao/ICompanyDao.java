@@ -10,9 +10,10 @@ public interface ICompanyDao {
    * @param company The company to insert.
    * @return The company entity with its information updated from the database.
    * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The company name is not unique.
-   * @throws java.lang.IllegalArgumentException One of the fields failed to insert due to constraint
-   *         violations.
-   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
+   * @throws java.lang.IllegalArgumentException                    One of the fields failed to
+   *                                                               insert due to constraint
+   *                                                               violations.
+   * @throws paoo.cappuccino.util.exception.FatalException         Database connection error.
    */
   ICompanyDto createCompany(ICompanyDto company);
 
@@ -20,22 +21,25 @@ public interface ICompanyDao {
    * Update a company in the database
    *
    * @param company A company entity
-   * @throws java.util.ConcurrentModificationException the entity version did not match or the
-   *         entity has been deleted.
-   * @throws java.lang.IllegalArgumentException the entity hasn't been inserted in the database yet.
-   *         Or one of the fields failed to insert to to constraint violations.
+   * @throws java.util.ConcurrentModificationException             the entity version did not match
+   *                                                               or the entity has been deleted.
+   * @throws java.lang.IllegalArgumentException                    the entity hasn't been inserted
+   *                                                               in the database yet. Or one of
+   *                                                               the fields failed to insert to to
+   *                                                               constraint violations.
    * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The name is not unique.
-   * @throws paoo.cappuccino.util.exception.FatalException a database connection error occurred.
+   * @throws paoo.cappuccino.util.exception.FatalException         a database connection error
+   *                                                               occurred.
    */
   void updateCompany(ICompanyDto company);
 
   /**
    * Fetches the companies matching all the non-null parameters.
    *
-   * @param name The name of the company, nullable.
+   * @param name     The name of the company, nullable.
    * @param postcode The postcode part of the address of the company, nullable.
-   * @param street The street part of the address of the company, nullable.
-   * @param town The town part of the address of the company, nullable.
+   * @param street   The street part of the address of the company, nullable.
+   * @param town     The town part of the address of the company, nullable.
    * @return Every companies matching the fields.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
@@ -60,7 +64,11 @@ public interface ICompanyDao {
 
 
   /**
-   * Returns the company registered using the given id.
+   * Fetch the company matching the id
+   *
+   * @param id The id of the company
+   * @return The id's company or null if none was found
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error
    */
   ICompanyDto fetchCompanyById(int id);
 

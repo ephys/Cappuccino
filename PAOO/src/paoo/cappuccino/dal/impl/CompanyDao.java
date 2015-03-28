@@ -34,6 +34,7 @@ class CompanyDao implements ICompanyDao {
   private PreparedStatement psSearchCompanies;
   private PreparedStatement psFetchCompaniesByDay;
   private PreparedStatement psFetchInvitableCompanies;
+  private PreparedStatement psFetchCompanyById;
 
   @Inject
   public CompanyDao(IEntityFactory entityFactory, IDalBackend dalBackend) {
@@ -47,9 +48,9 @@ class CompanyDao implements ICompanyDao {
 
     String query =
         "INSERT INTO business_days.companies " + "(creator, name, address_street, address_num, "
-            + "address_mailbox, address_postcode, address_town) " + "VALUES (?, ?, ?, ?, ?, ?, ?) "
-            + "RETURNING (company_id, creator, name, register_date, address_street, "
-            + "address_num, address_mailbox, address_postcode, address_town,version)";
+        + "address_mailbox, address_postcode, address_town) " + "VALUES (?, ?, ?, ?, ?, ?, ?) "
+        + "RETURNING (company_id, creator, name, register_date, address_street, "
+        + "address_num, address_mailbox, address_postcode, address_town,version)";
 
     try {
       if (psCreateCompany == null) {
@@ -82,9 +83,9 @@ class CompanyDao implements ICompanyDao {
 
     String query =
         "UPDATE business_days.companies "
-            + "SET creator = ?, name = ?, register_date = ?, adress_street = ?, "
-            + "adress_num = ?, adresse_mailbox = ?, adresse_postcode = ?, "
-            + "adresse_town = ?, version = version + 1 " + "WHERE company_id = ? AND version = ?";
+        + "SET creator = ?, name = ?, register_date = ?, adress_street = ?, "
+        + "adress_num = ?, adresse_mailbox = ?, adresse_postcode = ?, "
+        + "adresse_town = ?, version = version + 1 " + "WHERE company_id = ? AND version = ?";
 
     try {
       if (psUpdateCompany == null) {
@@ -102,8 +103,9 @@ class CompanyDao implements ICompanyDao {
       int affectedRows = psUpdateCompany.executeUpdate();
       if (affectedRows == 0) {
         throw new ConcurrentModificationException("The company with id " + company.getId()
-            + " and version " + company.getVersion() + " was not found in the database. "
-            + "Either it was deleted or modified by another thread.");
+                                                  + " and version " + company.getVersion()
+                                                  + " was not found in the database. "
+                                                  + "Either it was deleted or modified by another thread.");
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
@@ -114,8 +116,8 @@ class CompanyDao implements ICompanyDao {
   public ICompanyDto[] searchCompanies(String name, String postcode, String street, String town) {
     String query =
         "SELECT * FROM business_days.companies WHERE name LIKE '%?%'AND adress_street "
-            + "LIKE '%?%' AND adresse_town LIKE '%?% "
-            + "AND CAST(adresse_postcode AS TEXT) LIKE '?%''";
+        + "LIKE '%?%' AND adresse_town LIKE '%?% "
+        + "AND CAST(adresse_postcode AS TEXT) LIKE '?%''";
     try {
       if (psSearchCompanies == null) {
         psSearchCompanies = dalBackend.fetchPreparedStatement(query);
@@ -139,8 +141,8 @@ class CompanyDao implements ICompanyDao {
   public ICompanyDto[] fetchAll() {
     String query =
         "SELECT company_id, creator, name, register_date, address_street, "
-            + "address_num, address_mailbox, address_postcode, address_town, version "
-            + "FROM business_days.companies";
+        + "address_num, address_mailbox, address_postcode, address_town, version "
+        + "FROM business_days.companies";
     try {
       if (psFetchAll == null) {
         psFetchAll = dalBackend.fetchPreparedStatement(query);
@@ -163,24 +165,44 @@ class CompanyDao implements ICompanyDao {
 
   @Override
   public ICompanyDto[] fetchInvitableCompanies() {
-    //Dont touch this SELECT plz...
-    /** TODO add "soit entreprise ayant participé, au moins 1 x,
-     *  dans les 4 années précédentes et ayant payé sa participation"
+    /**
+     * Le SELECT utilise le système d'année academique
+     *
+     * Premier SELECT : soit entreprise ayant participé, au moins 1 x,
+     *                  dans les 4 années précédentes et ayant payé sa participation
+     * Second SELECT : soit entreprise enregistrée comme nouvelle entreprise dans l’année écoulée.
      */
-    String query = "SELECT DISTINCT company_id, creator, name, register_date, address_street, "
-                   + "address_num, address_mailbox, address_postcode, address_town, "
-                   + "companies.version"
-                   + "FROM business_days.participations, business_days.companies"
-                   + "WHERE company != company_id"
-                   + "AND date_part('month', now()) between 1 AND 6"
-                   + "AND date_part('year', register_date) =  date_part('year', now() - INTERVAL '1 year')"
-                   + "AND date_part('month', register_date) between 9 AND 12"
-                   + "OR date_part('month', now()) between 1 AND 6"
-                   + "AND date_part('year', register_date) =  date_part('year', now())"
-                   + "AND date_part('month', register_date) between 1 AND 6"
-                   + "OR date_part('month', now()) between 9 AND 12"
-                   + "AND date_part('year', register_date) =  date_part('year', now())"
-                   + "AND date_part('month', register_date) between 9 AND 12";
+    String query = "SELECT company_id, creator, name, register_date,"
+                   + "  address_street, address_num, address_mailbox, address_postcode, "
+                   + "address_town, companies.version \n"
+                   + "FROM business_days.participations, business_days.business_days, "
+                   + "business_days.companies \n"
+                   + "WHERE participations.state = 'PAID'\n"
+                   + "AND business_day = business_days.business_day_id\n"
+                   + "AND companies.company_id = company\n"
+                   + "AND date_part('month', now()) between 1 AND 6 \n"
+                   + "AND date_part('years', now() - INTERVAL '4 year' ) < "
+                   + "date_part('year', event_date)\n"
+                   + "OR date_part('month', now()) between 9 AND 12\n"
+                   + "AND date_part('years', now() - INTERVAL '4 year' ) "
+                   + "< date_part('year', event_date)\n"
+                   + "AND date_part('month', register_date) between 9 AND 12\n"
+                   + "UNION \n"
+                   + "SELECT DISTINCT company_id, creator, name, register_date, address_street,\n"
+                   + "address_num, address_mailbox, address_postcode, "
+                   + "address_town, companies.version\n"
+                   + "FROM business_days.participations, business_days.companies\n"
+                   + "WHERE company_id NOT IN (SELECT company FROM business_days.participations)\n"
+                   + "AND ( date_part('month', now()) between 1 AND 6\n"
+                   + "AND date_part('year', register_date) =  "
+                   + "date_part('year', now() - INTERVAL '1 year')\n"
+                   + "AND date_part('month', register_date) between 9 AND 12\n"
+                   + "OR date_part('month', now()) between 1  AND 6\n"
+                   + "AND date_part('year', register_date) =  date_part('year', now())\n"
+                   + "AND date_part('month', register_date) between 1 AND 6\n"
+                   + "OR date_part('month', now()) between 9 AND 12\n"
+                   + "AND date_part('year', register_date) =  date_part('year', now())\n"
+                   + "AND date_part('month', register_date) between 9 AND 12 );";
 
     try {
       if (psFetchInvitableCompanies == null) {
@@ -226,6 +248,27 @@ class CompanyDao implements ICompanyDao {
     return null;
   }
 
+  @Override
+  public ICompanyDto fetchCompanyById(int id) {
+    String query = "SELECT * FROM business_days.companies WHERE company_id = ?  ";
+
+    try {
+      if (psFetchCompanyById == null) {
+        psFetchCompanyById = dalBackend.fetchPreparedStatement(query);
+      }
+      psFetchCompanyById.setInt(1, id);
+
+      try (ResultSet rs = psFetchCompanyById.executeQuery()) {
+        if (rs.next()) {
+          return makeCompanyFromSet(rs);
+        }
+      }
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
+    return null;
+  }
+
   private ICompanyDto makeCompanyFromSet(ResultSet rs) throws SQLException {
     int companyId = rs.getInt(1);
     int creator = rs.getInt(2);
@@ -241,25 +284,18 @@ class CompanyDao implements ICompanyDao {
     int version = rs.getInt(10);
 
     return entityFactory.createCompany(companyId, version, creator, name, addressStreet,
-        addressNum, addressMailbox, addressPostcode, addressTown, registerDate);
+                                       addressNum, addressMailbox, addressPostcode, addressTown,
+                                       registerDate);
   }
 
   private void rethrowSqlException(SQLException exception) {
     if (exception.getMessage().contains("name_key")) {
       throw new NonUniqueFieldException("There is already a company with that name.");
     }
-
     if (exception.getMessage().contains("violates")) {
       throw new IllegalArgumentException(
           "One of the fields failed to insert due to constraint violations.");
     }
-
     throw new FatalException("Database error", exception);
-  }
-
-  @Override
-  public ICompanyDto fetchCompanyById(int id) {
-    // TODO Auto-generated method stub
-    return null;
   }
 }

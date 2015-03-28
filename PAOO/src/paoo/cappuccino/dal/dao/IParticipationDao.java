@@ -4,7 +4,15 @@ import paoo.cappuccino.business.dto.IParticipationDto;
 
 public interface IParticipationDao {
 
-  //TODO JavaDoc
+  /**
+   * Inserts a new participation in the database.
+   *
+   * @param participation The participation to insert
+   * @return The participation entity with its information updated from the database.
+   * @throws java.lang.IllegalArgumentException            One of the fields failed to insert due to
+   *                                                       constraint violations.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
+   */
   IParticipationDto createParticipation(IParticipationDto participation);
 
   /**
