@@ -108,10 +108,10 @@ public class ParticipationDao implements IParticipationDao {
     int company = rs.getInt(1);
     int businessDay = rs.getInt(2);
     IParticipationDto.State state = IParticipationDto.State.valueOf(rs.getString(3));
-    //boolean concelled = rs.getBoolean(4);
+    boolean concelled = rs.getBoolean(4);
     int version = rs.getInt(5);
 
-    return entityFactory.createParticipation(company, businessDay, version, state);
+    return entityFactory.createParticipation(company, businessDay, concelled, version, state);
   }
 
   private void rethrowSqlException(SQLException exception) {
