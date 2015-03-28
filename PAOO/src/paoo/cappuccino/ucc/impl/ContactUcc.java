@@ -24,6 +24,10 @@ class ContactUcc implements IContactUcc {
   @Override
   public IContactDto create(int companyId, String email, String firstName, String lastName,
       String phone) {
+    ValidationUtil.ensureNotNull(lastName, "lastName");
+    ValidationUtil.ensureNotNull(firstName, "firstName");
+    ValidationUtil.ensureNotNull(email, "email");
+    ValidationUtil.ensureNotNull(phone, "phone");
     ValidationUtil.ensureFilled(lastName, "lastName");
     ValidationUtil.ensureFilled(firstName, "firstName");
 
