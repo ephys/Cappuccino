@@ -23,20 +23,22 @@ public class TestContactUcc {
 
   private static DependencyInjector injector;
 
-  @Inject
-  private IContactUcc contactUcc;
-
-  @Inject
-  private IEntityFactory factory;
-
   private int companyId = 1;
   private String emailCorrect = "thisis@email.com";
   private String emailIncorrect = "fail.mail@oups";
   private String firstName = "FirstName";
   private String lastName = "LastName";
   private String phone = "00/000 00 00";
-  private IContactDto dto = factory.createContact(1, emailCorrect, firstName, lastName, phone);
+  private IContactDto dto = null;
   private String emptyString = "";
+
+
+
+  @Inject
+  private IContactUcc contactUcc;
+
+  @Inject
+  private IEntityFactory factory;
 
   @BeforeClass
   public static void systemInit() {
@@ -47,6 +49,7 @@ public class TestContactUcc {
   @Before
   public void inject() {
     injector.populate(this);
+    dto = factory.createContact(1, emailCorrect, firstName, lastName, phone);
   }
 
   // ====================== CREATE
