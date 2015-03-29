@@ -1,8 +1,5 @@
 package paoo.cappuccino.ucc;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -106,14 +103,14 @@ public class TestContactUcc {
 
   // ====================== SETMAILVALID
 
-  @Test()
-  public void testSetMailInvalidReturn() {
-    assertTrue(contactUcc.setMailInvalid(dto));
-    IContactDto cdto = factory.createContact(2, emptyString, firstName, lastName, phone);
-    assertFalse(contactUcc.setMailInvalid(cdto));
-    contactUcc.setMailInvalid(dto);
-    assertFalse(contactUcc.setMailInvalid(dto));
-  }
+  // @Test()
+  // public void testSetMailInvalidReturn() {
+  // assertTrue(contactUcc.setMailInvalid(dto));
+  // IContactDto cdto = factory.createContact(2, emptyString, firstName, lastName, phone);
+  // assertFalse(contactUcc.setMailInvalid(cdto));
+  // contactUcc.setMailInvalid(dto);
+  // assertFalse(contactUcc.setMailInvalid(dto));
+  // }
 
   // ====================== SEARCHCONTACT
 
