@@ -1,11 +1,15 @@
 package paoo.cappuccino.ucc;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.IContactDto;
+import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
@@ -19,18 +23,20 @@ public class TestContactUcc {
 
   private static DependencyInjector injector;
 
+  @Inject
+  private IContactUcc contactUcc;
+
+  @Inject
+  private IEntityFactory factory;
+
   private int companyId = 1;
   private String emailCorrect = "thisis@email.com";
   private String emailIncorrect = "fail.mail@oups";
   private String firstName = "FirstName";
   private String lastName = "LastName";
   private String phone = "00/000 00 00";
-  private IContactDto dto = null;
+  private IContactDto dto = factory.createContact(1, emailCorrect, firstName, lastName, phone);
   private String emptyString = "";
-
-  @Inject
-  private IContactUcc contactUcc;
-
 
   @BeforeClass
   public static void systemInit() {
@@ -96,6 +102,15 @@ public class TestContactUcc {
   }
 
   // ====================== SETMAILVALID
+
+  @Test()
+  public void testSetMailInvalidReturn() {
+    assertTrue(contactUcc.setMailInvalid(dto));
+    IContactDto cdto = factory.createContact(2, emptyString, firstName, lastName, phone);
+    assertFalse(contactUcc.setMailInvalid(cdto));
+    contactUcc.setMailInvalid(dto);
+    assertFalse(contactUcc.setMailInvalid(dto));
+  }
 
   // ====================== SEARCHCONTACT
 
