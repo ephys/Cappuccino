@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -49,7 +50,7 @@ public class ParticipationSearchingViewController extends JPanel {
     JComboBox<String> comboBox = new JComboBox<String>();
 
 
-    businessDayDto = businessDayUcc.getBusinessDays();
+    businessDayDto = this.businessDayUcc.getBusinessDays();
 
 
     if (businessDayDto.length == 0) {
@@ -67,7 +68,7 @@ public class ParticipationSearchingViewController extends JPanel {
 
     for (int i = 0; i < businessDayDto.length; i++) {
 
-      comboBox.addItem(businessDayDto[i].getEventDate().toString());
+      comboBox.addItem(businessDayDto[i].getEventDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString());
     }
 
 
@@ -76,7 +77,7 @@ public class ParticipationSearchingViewController extends JPanel {
       this.selectedBusinessDay = businessDayDto[(int)comboBox.getSelectedIndex()];
 
       IParticipationDto[] participationDto =
-          businessDayUcc.getParticipations(selectedBusinessDay.getId());
+          businessDayUcc.getParticipations(this.selectedBusinessDay.getId());
       this.model.setCompanyDto(participationDto);
 
     });
