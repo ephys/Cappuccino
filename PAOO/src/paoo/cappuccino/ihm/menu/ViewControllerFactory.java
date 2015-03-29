@@ -41,6 +41,7 @@ public class ViewControllerFactory {
   private final AttendanceModel modelAttendance;
   private final CompanySelectionModel modelCompanySelection;
   private final ParticipationSearchingModel modelParticipationSearching;
+  private final AccueilModel modelAccueil;
 
   /**
    * Creates the view factory with all the dependencies required by the views.
@@ -61,6 +62,7 @@ public class ViewControllerFactory {
     modelAttendance = new AttendanceModel();
     modelCompanySelection = new CompanySelectionModel();
     modelParticipationSearching = new ParticipationSearchingModel();
+    modelAccueil = new AccueilModel();
   }
 
   /**
@@ -72,7 +74,7 @@ public class ViewControllerFactory {
   public Component createViewController(MenuEntry page) {
     switch (page) {
       case HOME:
-        return new AccueilViewController(new AccueilModel(), menuModel, guiManager, businessDayUcc,
+        return new AccueilViewController(modelAccueil, menuModel, guiManager, businessDayUcc,
                                          companyUcc);
 
       case SELECT_COMPANY:
@@ -96,7 +98,7 @@ public class ViewControllerFactory {
 
       case SEARCH_PARTICIPATION:
         return new ParticipationSearchingViewController(modelParticipationSearching, menuModel,
-            guiManager, businessDayUcc);
+            guiManager, businessDayUcc,companyUcc);
 
         // TODO: add ViewControllers.
 
