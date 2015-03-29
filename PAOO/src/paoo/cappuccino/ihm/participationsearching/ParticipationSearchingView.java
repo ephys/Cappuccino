@@ -12,19 +12,27 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.business.dto.IParticipationDto;
+import paoo.cappuccino.ucc.ICompanyUcc;
 
 @SuppressWarnings("serial")
-public class ParticipationSearchingView extends JPanel implements ChangeListener{
+public class ParticipationSearchingView extends JPanel implements ChangeListener {
 
   private ParticipationSearchingModel model;
+  private ICompanyUcc companyUcc;
   private JTable table;
+  private JScrollPane scrollPane;
+  private boolean removedWidget;
+  private JPanel centerPadding;
 
-  public ParticipationSearchingView(ParticipationSearchingModel model) {
+  public ParticipationSearchingView(ParticipationSearchingModel model, ICompanyUcc companyUcc) {
 
     setLayout(new BorderLayout());
     this.model = model;
+    this.companyUcc = companyUcc;
     this.table = new JTable();
-    this.add(new JScrollPane(table));
+    this.scrollPane = new JScrollPane(table);
+    this.add(scrollPane);
     this.model.addChangeListener(this);
   }
 
@@ -32,19 +40,35 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
   @Override
   public void stateChanged(ChangeEvent event) {
 
+    if (model.getParticipationDto() != null && model.getParticipationDto().length > 0) {
 
-    if (model.getCompanyDto() != null) {
+      if (this.removedWidget) {
+        this.remove(this.centerPadding);
+        this.add(this.scrollPane);
+        this.removedWidget = false;
+        this.revalidate();
+        this.repaint();
+      }
 
-      this.table.setModel(new tableModel(model.getCompanyDto()));
-
+      this.table.setModel(new tableModel(model.getParticipationDto()));
       return;
 
-    } else{
+    } else {
 
-      JPanel centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
-      centerPadding.add(new JLabel("Il n'y a aucune journée d'entreprise de disponible."));
+      if (!this.removedWidget) {
+        this.centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        // TODO customiser message erreur
+        centerPadding.add(new JLabel(
+            "Ce message vous est affiché : soit parce qu'il n'y a aucune journée d'entreprise disponible, soit"
+                + " parce qu'il n'y a aucune participation correspondante."));
 
-      this.add(centerPadding);
+        this.remove(this.scrollPane);
+        this.add(centerPadding);
+        this.removedWidget = true;
+        this.revalidate();
+        this.repaint();
+      }
+
     }
 
   }
@@ -57,19 +81,22 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
 
   class tableModel extends AbstractTableModel {
 
-    String[] columns = {"Nom entreprise", "Adresse entreprise", "Date de l'enregistrement",
-        "Selectionner"};
+    String[] columns = {"Nom entreprise", "Adresse entreprise", "Date de l'enregistrement", "Etat"};
     Object[][] data;
 
-    public tableModel(ICompanyDto[] companyDto) {
+    public tableModel(IParticipationDto[] participationDto) {
 
-      this.data = new Object[companyDto.length][];
+      this.data = new Object[participationDto.length][];
 
-      for (int i = 0; i < companyDto.length; i++) {
+      for (int i = 0; i < participationDto.length; i++) {
 
+        ICompanyDto companyDto =
+            ParticipationSearchingView.this.companyUcc.getCompanyById(participationDto[i]
+                .getCompany());
         this.data[i] =
-            new Object[] {companyDto[i].getName(), companyDto[i].getAddressTown(),
-                companyDto[i].getRegisterDate().toString()};
+            new Object[] {companyDto.getName(), companyDto.getAddressTown(),
+                companyDto.getRegisterDate().toString(), participationDto[i].getState().toString(),
+                companyDto.getId()};
       }
 
     }
@@ -83,6 +110,7 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
     }
 
     public Object getValueAt(int rowIndex, int columnIndex) {
+
       return data[rowIndex][columnIndex];
     }
 
