@@ -148,8 +148,7 @@ public class CompanySelectionViewController extends JPanel {
 
     });
 
-
-
+    
     selectAll.addItemListener(e -> {
 
       if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -181,7 +180,7 @@ public class CompanySelectionViewController extends JPanel {
 
     for (int i = 0; i < businessDayDto.length; i++) {
 
-      comboBox.addItem(businessDayDto[i].getEventDate().toString());
+      comboBox.addItem(businessDayDto[i].getEventDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString());
     }
 
 
