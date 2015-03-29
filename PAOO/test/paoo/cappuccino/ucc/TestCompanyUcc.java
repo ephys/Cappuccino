@@ -39,7 +39,7 @@ public class TestCompanyUcc {
   }
 
   @Before
-  public void inject() {
+  public void before() throws Exception {
     injector.populate(this);
     dto = factory.createUser(full, tableauChar, full, full, full, IUserDto.Role.USER);
   }
