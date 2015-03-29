@@ -51,6 +51,11 @@ public class TestCompanyUcc {
     companyUcc.create(dto, full, full, full, full, full, full);
   }
 
+  @Test()
+  public void testCreateCompanytCorrectWithMailEmpty() {
+    companyUcc.create(dto, full, full, full, emptyString, full, full);
+  }
+
   @Test(expected = IllegalArgumentException.class)
   public void testCreateCompanyCreatorNull() {
     companyUcc.create(null, full, full, full, full, full, full);
