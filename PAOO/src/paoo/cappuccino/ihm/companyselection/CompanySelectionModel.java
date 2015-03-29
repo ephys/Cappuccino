@@ -8,8 +8,7 @@ import paoo.cappuccino.ihm.util.BaseModel;
  *
  * @author Maduka Junior
  */
-public class
-    CompanySelectionModel extends BaseModel {
+public class CompanySelectionModel extends BaseModel {
 
 
   private ICompanyDto[] companyDto;

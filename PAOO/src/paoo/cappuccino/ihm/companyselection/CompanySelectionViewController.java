@@ -202,7 +202,7 @@ public class CompanySelectionViewController extends JPanel {
         strDirectory =
             strDirectory.length() > MAX_STRING_DIRECTORY ? strDirectory.substring(0,
                 MAX_STRING_DIRECTORY) + "..." : strDirectory;
-            directoryLocation.setText(strDirectory);
+        directoryLocation.setText(strDirectory);
 
       }
     });
@@ -231,7 +231,7 @@ public class CompanySelectionViewController extends JPanel {
         int checkBoxCounter = 0;
         for (int i = 0; i < table.getRowCount(); i++) {
 
-          if ((boolean) table.getValueAt(i, table.getColumnCount() - 1)) {
+          if ((boolean) table.getModel().getValueAt(i, table.getColumnCount() - 1)) {
 
             checkBoxCounter++;
           }

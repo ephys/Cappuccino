@@ -42,14 +42,14 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
 
       table.setModel(new tableModel(model.getCompanyDto()));
 
-      table.getColumnModel().getColumn(table.getColumnCount() - 1).setPreferredWidth(1);
       return;
 
     } else if (model.getCompanyDto() == null) {
 
       JPanel centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
+      // TODO customiser message erreur
       centerPadding.add(new JLabel(
-          "Ce message vous est affiché : soit parce qu'il n'y a plus d'entreprise disponible, soit parce "
+          "Ce message vous est affiché : soit parce qu'il n'y a pas d'entreprise disponible, soit parce "
               + "qu'il n'y a plus de journée d'enteprise."));
 
       this.add(centerPadding);
@@ -60,10 +60,10 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
 
     for (int i = 0; i < table.getRowCount(); i++) {
 
-      table.setValueAt(selectAll, i, table.getColumnCount() - 1);
-      table.repaint();
-    }
+      table.getModel().setValueAt(selectAll, i, table.getColumnCount() - 1);
 
+    }
+    table.repaint();
 
   }
 
@@ -76,7 +76,7 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
   class tableModel extends AbstractTableModel {
 
     String[] columns = {"Nom entreprise", "Adresse entreprise", "Date de l'enregistrement",
-    "Selectionner"};
+        "Selectionner"};
     Object[][] data;
 
     public tableModel(ICompanyDto[] companyDto) {
@@ -87,7 +87,7 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
 
         data[i] =
             new Object[] {companyDto[i].getName(), companyDto[i].getAddressTown(),
-            companyDto[i].getRegisterDate().toString(), false};
+                companyDto[i].getRegisterDate().toString(), false};
       }
 
     }
