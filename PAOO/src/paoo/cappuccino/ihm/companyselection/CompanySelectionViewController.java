@@ -81,10 +81,7 @@ public class CompanySelectionViewController extends JPanel {
     saveButton.addActionListener(e -> {
 
 
-      String selectedItem = (String) comboBox.getSelectedItem();
-
-      matchingBusinessDay(selectedItem);
-
+      this.selectedBusinessDay = businessDayDto[(int)comboBox.getSelectedIndex()];
 
       ArrayList<Integer> list = new ArrayList<Integer>();
 
@@ -258,19 +255,5 @@ public class CompanySelectionViewController extends JPanel {
 
 
   }
-
-  public void matchingBusinessDay(String selectedItem) {
-
-    for (int i = 0; i < businessDayDto.length; i++) {
-
-      if (businessDayDto[i].getEventDate().toString().equals(selectedItem)) {
-
-        selectedBusinessDay = businessDayDto[i];
-        break;
-      }
-
-    }
-  }
-
 
 }
