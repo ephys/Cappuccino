@@ -52,7 +52,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
     ValidationUtil.ensureNotNull(businessDay, "businessDay");
     ValidationUtil.ensureNotNull(companies, "companies");
 
-    // check siil y a effectivement des entreprises dans la liste à rajouter
+    // check s'il y a effectivement des entreprises dans la liste à rajouter
     if (companies.length == 0) {
       throw new IllegalArgumentException("No companies found in the parameter companies");
     }
