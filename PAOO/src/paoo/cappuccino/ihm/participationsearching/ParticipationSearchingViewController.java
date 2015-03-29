@@ -73,8 +73,7 @@ public class ParticipationSearchingViewController extends JPanel {
 
     comboBox.addActionListener(e -> {
 
-      String selectedItem = (String) ((JComboBox<String>) e.getSource()).getSelectedItem();
-      matchingBusinessDay(selectedItem);
+      this.selectedBusinessDay = businessDayDto[(int)comboBox.getSelectedIndex()];
 
       IParticipationDto[] participationDto =
           businessDayUcc.getParticipations(selectedBusinessDay.getId());
@@ -114,18 +113,5 @@ public class ParticipationSearchingViewController extends JPanel {
     this.add(panelWrapper);
 
 
-  }
-
-  public void matchingBusinessDay(String selectedItem) {
-
-    for (int i = 0; i < businessDayDto.length; i++) {
-
-      if (businessDayDto[i].getEventDate().toString().equals(selectedItem)) {
-
-        selectedBusinessDay = businessDayDto[i];
-        break;
-      }
-
-    }
   }
 }
