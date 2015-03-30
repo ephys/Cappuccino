@@ -23,6 +23,13 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestUserEntity {
 
+  private final static String username = "Nicolas";
+  private final static char[] password = "pomme".toCharArray();
+  private final static String lastName = "Fischer";
+  private final static String firstName = "Benoit";
+  private final static String email = "nicolas@gmail.com";
+  private final static IUserDto.Role role = IUserDto.Role.USER;
+
   private static DependencyInjector injector;
 
   @Inject
@@ -30,12 +37,6 @@ public class TestUserEntity {
   @Inject
   private IStringHasher hasher;
 
-  private final String username = "Nicolas";
-  private final char[] password = "pomme".toCharArray();
-  private final String lastName = "Fischer";
-  private final String firstName = "Benoit";
-  private final String email = "nicolas@gmail.com";
-  private final IUserDto.Role role = IUserDto.Role.USER;
   private IUser user;
 
   @BeforeClass
@@ -83,7 +84,7 @@ public class TestUserEntity {
     user.setPassword(newPassword);
 
     assertEquals("user.getPassword() did not return the password set by user.setPassword()",
-        newPassword, user.getPassword());
+                 newPassword, user.getPassword());
   }
 
   @Test
@@ -101,11 +102,11 @@ public class TestUserEntity {
     // the hell ?
 
     assertEquals("There somehow is more than 2 values in enum IUserDto.Role",
-        IUserDto.Role.values().length, 2);
+                 IUserDto.Role.values().length, 2);
 
     assertEquals("IUserDto.Role.valueOf did not return the right value (ADMIN)",
-        IUserDto.Role.ADMIN, IUserDto.Role.valueOf("ADMIN"));
+                 IUserDto.Role.ADMIN, IUserDto.Role.valueOf("ADMIN"));
     assertEquals("IUserDto.Role.valueOf did not return the right value (USER)", IUserDto.Role.USER,
-        IUserDto.Role.valueOf("USER"));
+                 IUserDto.Role.valueOf("USER"));
   }
 }

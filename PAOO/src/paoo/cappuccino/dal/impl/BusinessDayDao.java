@@ -96,24 +96,31 @@ class BusinessDayDao implements IBusinessDayDao {
 
   @Override
   public IBusinessDayDto[] fetchInvitationlessDays() {
-    String query = "SELECT DISTINCT business_day_id, event_date, creation_date, academic_year, "
-                   + "business_days.version FROM business_days.business_days, "
-                   + "business_days.participations WHERE business_day_id != business_day";
+    String query = "SELECT DISTINCT d.business_day_id, d.event_date, d.creation_date, "
+                   + "d.academic_year, d.version "
+                   + "FROM business_days.business_days d"
+                   + "WHERE (SELECT COUNT(p.*) FROM business_days.participations p"
+                   + "WHERE p.business_day = d.business_day_id)";
+
     try {
       if (psFetchInvitationlessDays == null) {
         psFetchInvitationlessDays = dalBackend.fetchPreparedStatement(query);
       }
+
       try (ResultSet rs = psFetchInvitationlessDays.executeQuery()) {
         List<IBusinessDayDto> businessDayList = new ArrayList<>();
+
         while (rs.next()) {
           businessDayList.add(makeBusinessDaysFromSet(rs));
         }
+
         return businessDayList.toArray(new IBusinessDayDto[businessDayList.size()]);
       }
 
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
+
     return null;
   }
 

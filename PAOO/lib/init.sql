@@ -60,7 +60,7 @@ CREATE TYPE participation_state AS ENUM ('INVITED', 'CONFIRMED', 'DECLINED', 'BI
 CREATE TABLE IF NOT EXISTS business_days.participations (
   company      INTEGER REFERENCES business_days.companies (company_id)           NOT NULL,
   business_day INTEGER REFERENCES business_days.business_days (business_day_id)  NOT NULL,
-  state        participation_state                                               NOT NULL,
+  state        participation_state                                               NOT NULL DEFAULT 'INVITED',
   cancelled    BOOLEAN                                                           NOT NULL DEFAULT FALSE,
   version      INTEGER                                                           NOT NULL DEFAULT 1,
 

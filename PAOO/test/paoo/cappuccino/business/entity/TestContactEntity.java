@@ -1,9 +1,5 @@
 package paoo.cappuccino.business.entity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -14,18 +10,22 @@ import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 public class TestContactEntity {
+
+  private final static int idCompany = 1;
+  private final static String email = "George@gmail.com";
+  private final static String firstName = "Nicolas";
+  private final static String lastName = "Fischer";
+  private final static String phone = "0478878594";
+
   private static DependencyInjector injector;
 
   @Inject
   private IEntityFactory entityFactory;
-
-
-  private final int idCompany = 1;
-  private final String email = "George@gmail.com";
-  private final String firstName = "Nicolas";
-  private final String lastName = "Fischer";
-  private final String phone = "0478878594";
   private IContact contact;
 
   @BeforeClass

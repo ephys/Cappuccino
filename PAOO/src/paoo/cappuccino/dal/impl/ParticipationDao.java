@@ -35,16 +35,17 @@ public class ParticipationDao implements IParticipationDao {
 
   @Override
   public IParticipationDto createParticipation(IParticipationDto participation) {
-    String query = "INSERT INTO business_days.participations (company, business_day, state, "
-                   + "cancelled, version) VALUES (?,?,?, DEFAULT, DEFAULT) "
+    String query = "INSERT INTO business_days.participations (company, business_day) "
+                   + "VALUES (?, ?) "
                    + "RETURNING (company, business_day, state, cancelled, version);";
     try {
       if (psCreateParticipation == null) {
         psCreateParticipation = dalBackend.fetchPreparedStatement(query);
       }
+
       psCreateParticipation.setInt(1, participation.getCompany());
       psCreateParticipation.setInt(2, participation.getBusinessDay());
-      psCreateParticipation.setString(1, participation.getState().toString());
+
       try (ResultSet rs = psCreateParticipation.executeQuery()) {
         if (rs.next()) {
           return makeParticipationFromSet(rs);
@@ -117,12 +118,13 @@ public class ParticipationDao implements IParticipationDao {
   private void rethrowSqlException(SQLException exception) {
     if (exception.getMessage().contains("participations_pkey")) {
       throw new NonUniqueFieldException(
-          "There is already a participation of this company at this business day.");
+          "There is already a participation of this company at that business day.");
     }
     if (exception.getMessage().contains("violates")) {
       throw new IllegalArgumentException(
           "One of the fields failed to insert due to constraint violations.");
     }
+
     throw new FatalException("Database error", exception);
   }
 }

@@ -1,8 +1,5 @@
 package paoo.cappuccino.business.entity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,18 +10,23 @@ import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 public class TestCompanyEntity {
+
+  private final static int creatorId = 1;
+  private final static String name = "Coca-Cola";
+  private final static String addressStreet = "rue du coca";
+  private final static String addressNum = "5";
+  private final static String addressMailbox = "b";
+  private final static String addressPostcode = "1020";
+  private final static String addressTown = "Ville de la boisson";
+
   private static DependencyInjector injector;
+
   @Inject
   private IEntityFactory entityFactory;
-
-  private final int creatorId = 1;
-  private final String name = "Coca-Cola";
-  private final String addressStreet = "rue du coca";
-  private final String addressNum = "5";
-  private final String addressMailbox = "b";
-  private final String addressPostcode = "1020";
-  private final String addressTown = "Ville de la boisson";
   private ICompany company;
 
   @BeforeClass
@@ -39,7 +41,7 @@ public class TestCompanyEntity {
 
     company =
         entityFactory.createCompany(creatorId, name, addressStreet, addressNum, addressMailbox,
-            addressPostcode, addressTown);
+                                    addressPostcode, addressTown);
 
   }
 
@@ -74,7 +76,7 @@ public class TestCompanyEntity {
   public void testGetAddressMailboxNull() {
     ICompany company2 =
         entityFactory.createCompany(creatorId, name, addressStreet, addressNum, null,
-            addressPostcode, addressTown);
+                                    addressPostcode, addressTown);
     assertEquals(null, company2.getAddressMailbox());
   }
 

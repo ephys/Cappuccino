@@ -16,12 +16,13 @@ import static org.junit.Assert.assertTrue;
 
 public class TestParticipationEntity {
 
-  @Inject
-  private IEntityFactory entityFactory;
+  private final static int companyId = 1;
+  private final static int businessDayId = 1;
 
   private static DependencyInjector injector;
-  private final int companyId = 1;
-  private final int businessDayId = 1;
+
+  @Inject
+  private IEntityFactory entityFactory;
   private IParticipation participation;
 
   @BeforeClass
@@ -122,10 +123,10 @@ public class TestParticipationEntity {
     int incrementedVersion = participation.incrementVersion();
 
     assertEquals("user.incrementVersion() (" + incrementedVersion
-        + ") dit not match the older version (" + version + ") + 1", version + 1,
-        incrementedVersion);
+                 + ") dit not match the older version (" + version + ") + 1", version + 1,
+                 incrementedVersion);
     assertEquals("user.getVersion() did not match the value returned by user.incrementVersion()",
-        participation.getVersion(), incrementedVersion);
+                 participation.getVersion(), incrementedVersion);
   }
 
 }

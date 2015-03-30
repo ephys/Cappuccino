@@ -10,6 +10,7 @@ import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.dao.IUserDao;
 
 class MockUserDao implements IUserDao {
+
   private HashMap<String, IUser> users = new HashMap<>();
 
   private IEntityFactory factory;
@@ -23,8 +24,8 @@ class MockUserDao implements IUserDao {
   public IUser createUser(IUserDto user) {
     IUser userEntity =
         factory.createUser(users.size() + 1, 1, user.getUsername(), user.getPassword(),
-            user.getLastName(), user.getFirstName(), user.getEmail(), user.getRole(),
-            user.getRegisterDate());
+                           user.getLastName(), user.getFirstName(), user.getEmail(), user.getRole(),
+                           user.getRegisterDate());
 
     users.put(user.getUsername().toLowerCase(), userEntity);
     return userEntity;
@@ -38,13 +39,15 @@ class MockUserDao implements IUserDao {
   @Override
   public void updateUser(IUserDto user) {
     if (users.size() > user.getId()
-        || users.get(user.getId() - 1).getVersion() != user.getVersion())
+        || users.get(user.getUsername().toLowerCase()).getVersion() != user.getVersion()) {
       throw new ConcurrentModificationException();
+    }
 
     IUser userEntity =
         factory.createUser(user.getId(), user.getVersion() + 1, user.getUsername(),
-            user.getPassword(), user.getLastName(), user.getFirstName(), user.getEmail(),
-            user.getRole(), user.getRegisterDate());
+                           user.getPassword(), user.getLastName(), user.getFirstName(),
+                           user.getEmail(),
+                           user.getRole(), user.getRegisterDate());
 
     users.replace(user.getUsername().toLowerCase(), userEntity);
   }
@@ -56,7 +59,7 @@ class MockUserDao implements IUserDao {
         return user;
       }
     }
-    
+
     return null;
   }
 }

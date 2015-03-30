@@ -1,7 +1,5 @@
 package paoo.cappuccino.business.entity;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,6 +11,8 @@ import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
 
+import static org.junit.Assert.assertEquals;
+
 public class TestBaseEntity {
 
   private static DependencyInjector injector;
@@ -20,12 +20,6 @@ public class TestBaseEntity {
   @Inject
   private IEntityFactory entityFactory;
 
-  private final String username = "Nicolas";
-  private final char[] password = "pomme".toCharArray();
-  private final String lastName = "Fischer";
-  private final String firstName = "Benoit";
-  private final String email = "nicolas@gmail.com";
-  private final IUserDto.Role role = IUserDto.Role.USER;
   private IUser user;
 
   @BeforeClass
@@ -38,6 +32,12 @@ public class TestBaseEntity {
   public void createUser() {
     injector.populate(this);
 
+    String email = "nicolas@gmail.com";
+    String firstName = "Benoit";
+    String username = "Nicolas";
+    String lastName = "Fischer";
+    char[] password = "pomme".toCharArray();
+    IUserDto.Role role = IUserDto.Role.USER;
     user = entityFactory.createUser(username, password, lastName, firstName, email, role);
   }
 
