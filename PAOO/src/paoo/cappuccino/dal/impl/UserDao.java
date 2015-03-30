@@ -42,21 +42,6 @@ class UserDao implements IUserDao {
     this.hasher = hasher;
   }
 
-  private IUser makeUserFromSet(ResultSet set) throws SQLException {
-    int id = set.getInt(1);
-    IUserDto.Role role = IUserDto.Role.valueOf(set.getString(2));
-    IHashHolderDto password = hasher.deserialize(set.getString(3));
-    String email = set.getString(4);
-    String username = set.getString(5);
-    String firstName = set.getString(6);
-    String lastName = set.getString(7);
-    LocalDateTime registerDate = Timestamp.valueOf(set.getString(8)).toLocalDateTime();
-    int version = set.getInt(9);
-
-    return entityFactory.createUser(id, version, username, password, lastName, firstName, email,
-                                    role, registerDate);
-  }
-
   @Override
   public IUserDto createUser(IUserDto user) {
     ValidationUtil.ensureNotNull(user, "user");
@@ -94,8 +79,9 @@ class UserDao implements IUserDao {
     ValidationUtil.ensureFilled(username, "username");
 
     String query =
-        "SELECT user_id, role, password, email, username, first_name, last_name, "
-        + "register_date, version FROM business_days.users WHERE LOWER(username) = ? LIMIT 1";
+        "SELECT u.user_id, u.role, u.password, u.email, u.username, u.first_name, u.last_name, "
+        + "u.register_date, u.version FROM business_days.users u "
+        + "WHERE LOWER(u.username) = ? LIMIT 1";
 
     try {
       if (psFetchUserByUsername == null) {
@@ -121,7 +107,7 @@ class UserDao implements IUserDao {
 
     String query =
         "UPDATE business_days.users SET password = ?, email = ?, first_name = ?, last_name = ?,"
-        + " version = version + 1"
+        + "version = version + 1"
         + "WHERE user_id = ? AND version = ? LIMIT 1";
 
     try {
@@ -155,9 +141,9 @@ class UserDao implements IUserDao {
   @Override
   public IUserDto getUserById(int id) {
     String query =
-        "SELECT user_id, role, password, email, username, first_name, "
-        + "last_name, register_date, version "
-        + "FROM business_days.users WHERE user_id = ? LIMIT 1";
+        "SELECT u.user_id, u.role, u.password, u.email, u.username, u.first_name, "
+        + "u.last_name, u.register_date, u.version "
+        + "FROM business_days.users u WHERE u.user_id = ? LIMIT 1";
 
     try {
       if (psGetUserById == null) {
@@ -176,6 +162,21 @@ class UserDao implements IUserDao {
     }
 
     return null;
+  }
+
+  private IUser makeUserFromSet(ResultSet set) throws SQLException {
+    int id = set.getInt(1);
+    IUserDto.Role role = IUserDto.Role.valueOf(set.getString(2));
+    IHashHolderDto password = hasher.deserialize(set.getString(3));
+    String email = set.getString(4);
+    String username = set.getString(5);
+    String firstName = set.getString(6);
+    String lastName = set.getString(7);
+    LocalDateTime registerDate = Timestamp.valueOf(set.getString(8)).toLocalDateTime();
+    int version = set.getInt(9);
+
+    return entityFactory.createUser(id, version, username, password, lastName, firstName, email,
+                                    role, registerDate);
   }
 
   private void rethrowSqlException(SQLException exception) {

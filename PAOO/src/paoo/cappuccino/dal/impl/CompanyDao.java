@@ -130,20 +130,19 @@ class CompanyDao implements ICompanyDao {
           companiesList.add(makeCompanyFromSet(rs));
         }
         return companiesList.toArray(new ICompanyDto[companiesList.size()]);
-
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return null;
+    return new ICompanyDto[0];
   }
 
   @Override
   public ICompanyDto[] fetchAll() {
     String query =
-        "SELECT company_id, creator, name, register_date, address_street, "
-        + "address_num, address_mailbox, address_postcode, address_town, version "
-        + "FROM business_days.companies";
+        "SELECT c.company_id, c.creator, c.name, c.register_date, c.address_street, "
+        + "c.address_num, c.address_mailbox, c.address_postcode, c.address_town, c.version "
+        + "FROM business_days.companies c";
     try {
       if (psFetchAll == null) {
         psFetchAll = dalBackend.fetchPreparedStatement(query);
@@ -160,16 +159,15 @@ class CompanyDao implements ICompanyDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-
-    return null;
+    return new ICompanyDto[0];
   }
 
   @Override
   public ICompanyDto[] fetchInvitableCompanies() {
     /**
-     * Le SELECT utilise le système d'année academique
+     * Le SELECT utilise le système d'année academique.
      * Premier SELECT : soit entreprise ayant participé, au moins 1 x,
-     *                  dans les 4 années précédentes et ayant payé sa participation
+     *                  dans les 4 années précédentes et ayant payé sa participation.
      * Second SELECT : soit entreprise enregistrée comme nouvelle entreprise dans l’année écoulée.
      */
     //TODO replace the academic year field by an int to simplify calculations
@@ -224,16 +222,17 @@ class CompanyDao implements ICompanyDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return null;
+    return new ICompanyDto[0];
   }
 
   @Override
   public ICompanyDto[] fetchCompaniesByDay(int businessDayId) {
-    String query = "SELECT company_id, creator, name, register_date, address_street, "
-                   + "address_num, address_mailbox, address_postcode, address_town, "
-                   + "companies.version FROM business_days.participations, business_days.companies "
-                   + "WHERE participations.business_day = ? AND state = 'INVITED' "
-                   + "AND company = company_id";
+    String query = "SELECT c.company_id, c.creator, c.name, c.register_date, c.address_street, "
+                   + "c.address_num, c.address_mailbox, c.address_postcode, c.address_town, "
+                   + "c.version "
+                   + "FROM business_days.participations p, business_days.companies c"
+                   + "WHERE p.business_day = ? AND p.state = 'INVITED' "
+                   + "AND p.company = c.company_id";
 
     try {
       if (psFetchCompaniesByDay == null) {
@@ -251,7 +250,7 @@ class CompanyDao implements ICompanyDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return null;
+    return new ICompanyDto[0];
   }
 
   @Override

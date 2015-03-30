@@ -36,7 +36,6 @@ class ContactDao implements IContactDao {
     this.dalBackend = dalBackend;
   }
 
-
   @Override
   public IContactDto createContact(IContactDto contact) {
     String query = "INSERT INTO business_days.contacts (company, email, email_valid, "
@@ -120,11 +119,10 @@ class ContactDao implements IContactDao {
         }
         return contactList.toArray(new IContactDto[contactList.size()]);
       }
-
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return null;
+    return new IContactDto[0];
   }
 
   @Override
@@ -146,7 +144,7 @@ class ContactDao implements IContactDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return null;
+    return new IContactDto[0];
   }
 
   private IContactDto makeContactFromSet(ResultSet rs) throws SQLException {

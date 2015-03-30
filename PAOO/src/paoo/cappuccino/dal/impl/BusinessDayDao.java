@@ -70,8 +70,9 @@ class BusinessDayDao implements IBusinessDayDao {
 
   @Override
   public IBusinessDayDto[] fetchAll() {
-    String query = "SELECT business_day_id, event_date, creation_date, version"
-                   + " FROM business_days.business_days";
+    String query = "SELECT d.business_day_id, d.event_date, d.creation_date, "
+                   + "d.academic_year, d.version "
+                   + "FROM business_days.business_days d";
 
     try {
       if (psFetchAll == null) {
@@ -90,8 +91,7 @@ class BusinessDayDao implements IBusinessDayDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-
-    return null;
+    return new IBusinessDayDto[0];
   }
 
   @Override
@@ -116,19 +116,17 @@ class BusinessDayDao implements IBusinessDayDao {
 
         return businessDayList.toArray(new IBusinessDayDto[businessDayList.size()]);
       }
-
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-
-    return null;
+    return new IBusinessDayDto[0];
   }
 
   @Override
   public IBusinessDayDto fetchBusinessDaysByDate(int year) {
     String query =
-        "SELECT business_day_id, event_date, creation_date, version"
-        + " FROM business_days.business_days WHERE academic_year = ?";
+        "SELECT d.business_day_id, d.event_date, d.creation_date, d.academic_year, d.version"
+        + " FROM business_days.business_days d WHERE academic_year = ?";
 
     try {
       if (psFetchByDate == null) {
@@ -142,6 +140,27 @@ class BusinessDayDao implements IBusinessDayDao {
           return makeBusinessDaysFromSet(rs);
         }
         return null;
+      }
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
+    return null;
+  }
+
+  @Override
+  public IBusinessDayDto fetchBusinessDayById(int id) {
+    String query = "SELECT * FROM business_days.business_days WHERE business_day_id = ?";
+    try {
+      if (psFetchBusinessDayById == null) {
+        psFetchBusinessDayById = dalBackend.fetchPreparedStatement(query);
+      }
+
+      psFetchBusinessDayById.setInt(1, id);
+
+      try (ResultSet rs = psFetchBusinessDayById.executeQuery()) {
+        if (rs.next()) {
+          return makeBusinessDaysFromSet(rs);
+        }
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
@@ -167,26 +186,5 @@ class BusinessDayDao implements IBusinessDayDao {
           "One of the fields failed to insert due to constraint violations.");
     }
     throw new FatalException("Database error", exception);
-  }
-
-  @Override
-  public IBusinessDayDto fetchBusinessDayById(int id) {
-    String query = "SELECT * FROM business_days.business_days WHERE business_day_id = ?";
-    try {
-      if (psFetchBusinessDayById == null) {
-        psFetchBusinessDayById = dalBackend.fetchPreparedStatement(query);
-      }
-
-      psFetchBusinessDayById.setInt(1, id);
-
-      try (ResultSet rs = psFetchBusinessDayById.executeQuery()) {
-        if (rs.next()) {
-          return makeBusinessDaysFromSet(rs);
-        }
-      }
-    } catch (SQLException e) {
-      rethrowSqlException(e);
-    }
-    return null;
   }
 }

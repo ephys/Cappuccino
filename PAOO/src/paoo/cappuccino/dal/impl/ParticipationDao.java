@@ -74,11 +74,10 @@ public class ParticipationDao implements IParticipationDao {
         }
         return participationList.toArray(new IParticipationDto[participationList.size()]);
       }
-
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return null;
+    return new IParticipationDto[0];
   }
 
   @Override
@@ -98,11 +97,10 @@ public class ParticipationDao implements IParticipationDao {
         }
         return participationList.toArray(new IParticipationDto[participationList.size()]);
       }
-
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return null;
+    return new IParticipationDto[0];
   }
 
   private IParticipationDto makeParticipationFromSet(ResultSet rs) throws SQLException {
