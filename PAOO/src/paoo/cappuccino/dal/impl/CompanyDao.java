@@ -105,7 +105,8 @@ class CompanyDao implements ICompanyDao {
         throw new ConcurrentModificationException("The company with id " + company.getId()
                                                   + " and version " + company.getVersion()
                                                   + " was not found in the database. "
-                                                  + "Either it was deleted or modified by another thread.");
+                                                  + "Either it was deleted or "
+                                                  + "modified by another thread.");
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
@@ -167,7 +168,6 @@ class CompanyDao implements ICompanyDao {
   public ICompanyDto[] fetchInvitableCompanies() {
     /**
      * Le SELECT utilise le système d'année academique
-     *
      * Premier SELECT : soit entreprise ayant participé, au moins 1 x,
      *                  dans les 4 années précédentes et ayant payé sa participation
      * Second SELECT : soit entreprise enregistrée comme nouvelle entreprise dans l’année écoulée.

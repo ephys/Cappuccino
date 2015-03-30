@@ -24,8 +24,11 @@ class ContactDao implements IContactDao {
 
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;
-  private PreparedStatement psCreateContact, psFetchContactByName, psFetchContactsByCompany,
-      psUpdateContact;
+
+  private PreparedStatement psCreateContact;
+  private PreparedStatement psFetchContactByName;
+  private PreparedStatement psFetchContactsByCompany;
+  private PreparedStatement psUpdateContact;
 
   @Inject
   public ContactDao(IEntityFactory entityFactory, IDalBackend dalBackend) {
