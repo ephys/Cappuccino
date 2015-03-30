@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.newCompany;
+package paoo.cappuccino.ihm.newcompany;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

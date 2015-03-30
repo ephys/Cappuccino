@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.newContact;
+package paoo.cappuccino.ihm.newcontact;
 
 import paoo.cappuccino.ihm.util.BaseModel;
 

@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.newBusinessDay;
+package paoo.cappuccino.ihm.newbusinessday;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

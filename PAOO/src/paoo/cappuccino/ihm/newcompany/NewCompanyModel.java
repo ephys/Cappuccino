@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.newCompany;
+package paoo.cappuccino.ihm.newcompany;
 
 import paoo.cappuccino.ihm.util.BaseModel;
 

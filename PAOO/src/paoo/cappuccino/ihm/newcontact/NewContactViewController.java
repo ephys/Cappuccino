@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.newContact;
+package paoo.cappuccino.ihm.newcontact;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
