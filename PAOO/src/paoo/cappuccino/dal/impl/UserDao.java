@@ -64,7 +64,7 @@ class UserDao implements IUserDao {
     String query =
         "INSERT INTO business_days.users(user_id, role, password, email, username,"
         + " first_name, last_name, register_date, version) "
-        + "VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, DEFAULT, DEFAULT) "
+        + "VALUES (DEFAULT, DEFAULT, ?, ?, ?, ?, ?, DEFAULT, DEFAULT) "
         + "RETURNING (user_id, role, password, email, username,"
         + " first_name, last_name, register_date, version)";
 
@@ -72,12 +72,12 @@ class UserDao implements IUserDao {
       if (psCreateUser == null) {
         psCreateUser = dalBackend.fetchPreparedStatement(query);
       }
-      psCreateUser.setString(1, user.getRole().toString());
-      psCreateUser.setString(2, hasher.serialize(user.getPassword()));
-      psCreateUser.setString(3, user.getEmail());
-      psCreateUser.setString(4, user.getUsername());
-      psCreateUser.setString(5, user.getFirstName());
-      psCreateUser.setString(6, user.getLastName());
+
+      psCreateUser.setString(1, hasher.serialize(user.getPassword()));
+      psCreateUser.setString(2, user.getEmail());
+      psCreateUser.setString(3, user.getUsername());
+      psCreateUser.setString(4, user.getFirstName());
+      psCreateUser.setString(5, user.getLastName());
 
       try (ResultSet set = psCreateUser.executeQuery()) {
         set.next();

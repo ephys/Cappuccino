@@ -8,7 +8,7 @@ CREATE TYPE user_role AS ENUM ('USER', 'ADMIN');
 CREATE TABLE IF NOT EXISTS business_days.users (
   user_id       INTEGER PRIMARY KEY
     DEFAULT NEXTVAL('business_days.users_id_seq'),
-  role          user_role                   NOT NULL,
+  role user_role NOT NULL DEFAULT USER,
   password      VARCHAR(256)                NOT NULL,
   email         VARCHAR(50)                 NOT NULL,
   username      VARCHAR(25)                 NOT NULL UNIQUE,
