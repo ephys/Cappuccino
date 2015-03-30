@@ -6,7 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,13 +13,11 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -29,10 +26,10 @@ import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.dto.IParticipationDto.State;
-import paoo.cappuccino.business.entity.IBusinessDay;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
+import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ihm.util.JLabelFont;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
@@ -55,16 +52,15 @@ public class AccueilViewController extends JPanel implements ChangeListener {
   private ErrorPanel viewError = new ErrorPanel();
   private JScrollPane tablePanel;
   private DefaultTableModel tableModel;
-  private JComboBox<IBusinessDayDto> dayList;
+  private JComboDay dayList;
 
   /**
    * Creates a new ViewController for the Login gui.
    *
    * @param model The ViewController's model.
    */
-  public AccueilViewController(AccueilModel model, MenuModel menu,
-                               IGuiManager guiManager, IBusinessDayUcc dayUcc,
-                               ICompanyUcc companyUcc) {
+  public AccueilViewController(AccueilModel model, MenuModel menu, IGuiManager guiManager,
+      IBusinessDayUcc dayUcc, ICompanyUcc companyUcc) {
     super(new BorderLayout());
     this.menu = menu;
     this.dayUcc = dayUcc;
@@ -88,25 +84,25 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
     daylistPanel.add(new JLabelFont("journée du "));
 
-    dayList = new JComboBox<>(businessDays);
-    dayList.setRenderer(new DayRenderer());
+    dayList = new JComboDay(businessDays);
 
-    dayList.addActionListener(e -> {
-      IBusinessDayDto selectedDay = (IBusinessDayDto) dayList.getSelectedItem();
-      model.setSelectedDay(selectedDay);
 
-      guiManager.getLogger().info("Home screen: selected day is "
-                                  + (selectedDay == null ? null : selectedDay.getEventDate()));
-    });
+    dayList.getCombo().addActionListener(
+        e -> {
+          IBusinessDayDto selectedDay = (IBusinessDayDto) dayList.getCombo().getSelectedItem();
+          model.setSelectedDay(selectedDay);
+
+          guiManager.getLogger().info(
+              "Home screen: selected day is "
+                  + (selectedDay == null ? null : selectedDay.getEventDate()));
+        });
 
     daylistPanel.add(dayList);
 
     this.add(daylistPanel, BorderLayout.NORTH);
 
     // center
-    String[] tableTitles = new String[] {
-        "Nom entreprise", "État", "Annuler participation"
-    };
+    String[] tableTitles = new String[] {"Nom entreprise", "État", "Annuler participation"};
     tableModel = new DefaultTableModel(tableTitles, 0);
 
     JTable table = new JTable(tableModel);
@@ -121,14 +117,13 @@ public class AccueilViewController extends JPanel implements ChangeListener {
     stateCol.setMinWidth(stateCol.getWidth() * 2);
     JComboBox<IParticipationDto.State> stateCombo = new JComboBox<>();
     stateCol.setCellEditor(new JComboEditor(stateCombo));
-    stateCol.setCellRenderer((table1, value, isSelected, hasFocus, row, column)
-                                 -> (JComboBox) value);
+    stateCol
+        .setCellRenderer((table1, value, isSelected, hasFocus, row, column) -> (JComboBox) value);
     stateCombo.addActionListener(e -> {
       int row = table.getSelectedRow();
 
       IParticipationDto participation = (IParticipationDto) tableModel.getValueAt(row, 2);
-      JComboBox<State> stateList =
-          (JComboBox<State>) tableModel.getValueAt(row, 1);
+      JComboBox<State> stateList = (JComboBox<State>) tableModel.getValueAt(row, 1);
 
       dayUcc.changeState(participation, (State) stateList.getSelectedItem());
     });
@@ -155,8 +150,8 @@ public class AccueilViewController extends JPanel implements ChangeListener {
    * build data from accueilModel.
    */
   private void buildTable() {
-    IParticipationDto[] participations = dayUcc.getParticipations(
-        viewModel.getSelectedDay().getId());
+    IParticipationDto[] participations =
+        dayUcc.getParticipations(viewModel.getSelectedDay().getId());
 
     tableModel.setRowCount(participations.length);
     for (int i = 0; i < participations.length; i++) {
@@ -168,7 +163,7 @@ public class AccueilViewController extends JPanel implements ChangeListener {
       List<State> validStates = new ArrayList<>();
       validStates.add(participation.getState());
       Collections.addAll(validStates,
-                         ParticipationUtils.getFollowingStates(participation.getState()));
+          ParticipationUtils.getFollowingStates(participation.getState()));
 
       JComboBox<State> boxState =
           new JComboBox<>(validStates.toArray(new State[validStates.size()]));
@@ -198,8 +193,8 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
   @Override
   public void stateChanged(ChangeEvent event) {
-    if (viewModel.getSelectedDay() != dayList.getSelectedItem()) {
-      dayList.setSelectedItem(viewModel.getSelectedDay());
+    if (viewModel.getSelectedDay() != dayList.getCombo().getSelectedItem()) {
+      dayList.getCombo().setSelectedItem(viewModel.getSelectedDay());
     }
 
     if (viewModel.getSelectedDay() == null) {
@@ -218,12 +213,12 @@ public class AccueilViewController extends JPanel implements ChangeListener {
   private static class ButtonRenderer extends JButton implements TableCellRenderer {
 
     @Override
-    public Component getTableCellRendererComponent(JTable table,
-        Object value, boolean isSelected, boolean isFocus, int row, int col) {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+        boolean isFocus, int row, int col) {
       IParticipationDto participation = (IParticipationDto) value;
 
       setEnabled(participation.getState() != State.DECLINED
-                 && participation.getState() != State.INVITED && !participation.isCancelled());
+          && participation.getState() != State.INVITED && !participation.isCancelled());
 
       setText(participation.isCancelled() ? "Annulé" : "Annuler");
       return this;
@@ -236,25 +231,11 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                   boolean hasFocus, int row, int column) {
+        boolean hasFocus, int row, int column) {
 
       label.setText(((ICompanyDto) value).getName());
 
       return label;
-    }
-  }
-
-  private static class DayRenderer extends BasicComboBoxRenderer {
-
-    @Override
-    public Component getListCellRendererComponent(JList list, Object value, int index,
-                                                  boolean isSelected, boolean cellHasFocus) {
-      super.getListCellRendererComponent(list, null, index, isSelected, cellHasFocus);
-
-      setText(value == null ? null : ((IBusinessDay) value).getEventDate().format(
-          DateTimeFormatter.ofPattern("dd MMM yyyy")));
-
-      return this;
     }
   }
 
@@ -273,10 +254,9 @@ public class AccueilViewController extends JPanel implements ChangeListener {
     public ErrorPanel() {
       super(new GridBagLayout());
 
-      createDayButton.addActionListener(
-          e -> menu.setCurrentPage(MenuEntry.CREATE_BDAY));
-      createParticipationButton.addActionListener(
-          e -> menu.setCurrentPage(MenuEntry.SELECT_COMPANY));
+      createDayButton.addActionListener(e -> menu.setCurrentPage(MenuEntry.CREATE_BDAY));
+      createParticipationButton.addActionListener(e -> menu
+          .setCurrentPage(MenuEntry.SELECT_COMPANY));
 
       this.add(contents, new GridBagConstraints());
       contents.add(errorMessage);
