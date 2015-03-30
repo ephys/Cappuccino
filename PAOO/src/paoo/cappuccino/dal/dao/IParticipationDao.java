@@ -2,12 +2,15 @@ package paoo.cappuccino.dal.dao;
 
 import paoo.cappuccino.business.dto.IParticipationDto;
 
+/**
+ * Data access object used to fetch or persist participations.
+ */
 public interface IParticipationDao {
 
   /**
    * Inserts a new participation in the database.
    *
-   * @param participation The participation to insert
+   * @param participation The participation to insert.
    * @return The participation entity with its information updated from the database.
    * @throws java.lang.IllegalArgumentException            One of the fields failed to insert due to
    *                                                       constraint violations.
@@ -25,11 +28,11 @@ public interface IParticipationDao {
   IParticipationDto[] fetchParticipationsByDate(int businessDayId);
 
   /**
-   * Fetch all the participation of the company
+   * Fetches the list of participations of a company.
    *
-   * @param companyId The id of a company
-   * @return All the participation or null if none was found
-   * @throws paoo.cappuccino.util.exception.FatalException Database connection error
+   * @param companyId The id of the company.
+   * @return The list of participations.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   IParticipationDto[] fetchParticipationsByCompany(int companyId);
 }

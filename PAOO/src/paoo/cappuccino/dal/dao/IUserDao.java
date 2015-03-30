@@ -2,6 +2,9 @@ package paoo.cappuccino.dal.dao;
 
 import paoo.cappuccino.business.dto.IUserDto;
 
+/**
+ * Data access object used to fetch or persist users.
+ */
 public interface IUserDao {
 
   /**
@@ -13,7 +16,7 @@ public interface IUserDao {
    * @throws java.lang.IllegalArgumentException                    One of the fields failed to
    *                                                               insert due to constraint
    *                                                               violations.
-   * @throws paoo.cappuccino.util.exception.FatalException         Database connection error
+   * @throws paoo.cappuccino.util.exception.FatalException         Database connection error.
    */
   IUserDto createUser(IUserDto user);
 
@@ -37,7 +40,7 @@ public interface IUserDao {
    *                                                               the fields failed to insert to to
    *                                                               constraint violations.
    * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The username is not unique.
-   * @throws paoo.cappuccino.util.exception.FatalException         Database connection error
+   * @throws paoo.cappuccino.util.exception.FatalException         Database connection error.
    */
   void updateUser(IUserDto user);
 

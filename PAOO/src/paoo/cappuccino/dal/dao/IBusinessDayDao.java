@@ -2,6 +2,9 @@ package paoo.cappuccino.dal.dao;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 
+/**
+ * Data access object used to fetch or persist business days.
+ */
 public interface IBusinessDayDao {
 
   /**
@@ -19,37 +22,37 @@ public interface IBusinessDayDao {
   IBusinessDayDto createBusinessDay(IBusinessDayDto businessDay);
 
   /**
-   * Fetch all the business day
+   * Fetches all the business day.
    *
-   * @return All the business day found in the database or null if non was found
+   * @return The list of persisted business days.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   IBusinessDayDto[] fetchAll();
 
   /**
-   * Fetch alle the business days whos no companies where invited yet
+   * Fetches the business days which no companies have been invited to yet.
    *
-   * @return All the business day found in the database or null if non was found
+   * @return The list of matching business days.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   IBusinessDayDto[] fetchInvitationlessDays();
 
   /**
-   * Fetch the BusinessDay corresponding at the date.
+   * Fetches the business day that occurred during an academic year.
    *
    * @param year The first year of the academic year of the business day (ex; in "2012-2013" it
-   *             would be 2012)
+   *             would be 2012).
    * @return The business day or null if none was found.
-   * @throws paoo.cappuccino.util.exception.FatalException Database connection error
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   IBusinessDayDto fetchBusinessDaysByDate(int year);
 
   /**
-   * Fetch the business day by its id
+   * Fetches the business day by its identifier.
    *
-   * @param id The id of a business day
-   * @return The business day matching the id
-   * @throws paoo.cappuccino.util.exception.FatalException Database connection error
+   * @param id The identifier of a business day.
+   * @return The business day matching the id or null if none was found.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   IBusinessDayDto fetchBusinessDayById(int id);
 }
