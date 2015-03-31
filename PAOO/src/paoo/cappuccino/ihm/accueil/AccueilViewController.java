@@ -1,21 +1,11 @@
 package paoo.cappuccino.ihm.accueil;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -81,8 +71,6 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
     // north
     JPanel daylistPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-    daylistPanel.add(new JLabelFont("journée du "));
 
     dayList = new JComboDay(businessDays);
 
