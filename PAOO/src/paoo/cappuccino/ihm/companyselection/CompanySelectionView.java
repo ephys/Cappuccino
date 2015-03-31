@@ -1,12 +1,8 @@
 package paoo.cappuccino.ihm.companyselection;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.*;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
@@ -33,10 +29,8 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
     this.model.addChangeListener(this);
   }
 
-
   @Override
   public void stateChanged(ChangeEvent event) {
-
 
     if (model.getCompanyDto() != null && table.getRowCount() == 0) {
 
@@ -49,8 +43,8 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
       JPanel centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
       // TODO customiser message erreur
       centerPadding.add(new JLabel(
-          "Ce message vous est affiché : soit parce qu'il n'y a pas d'entreprise disponible, soit parce "
-              + "qu'il n'y a plus de journée d'enteprise."));
+          "Ce message vous est affiché : soit parce qu'il n'y a pas d'entreprise disponible, "
+          + "soit parce qu'il n'y a plus de journée d'enteprise."));
 
       this.add(centerPadding);
       return;
@@ -76,7 +70,7 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
   class tableModel extends AbstractTableModel {
 
     String[] columns = {"Nom entreprise", "Adresse entreprise", "Date de l'enregistrement",
-        "Selectionner"};
+                        "Selectionner"};
     Object[][] data;
 
     public tableModel(ICompanyDto[] companyDto) {
@@ -86,8 +80,8 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
       for (int i = 0; i < companyDto.length; i++) {
 
         data[i] =
-            new Object[] {companyDto[i].getName(), companyDto[i].getAddressTown(),
-                companyDto[i].getRegisterDate().toString(), false};
+            new Object[]{companyDto[i].getName(), companyDto[i].getAddressTown(),
+                         companyDto[i].getRegisterDate().toString(), false};
       }
 
     }
@@ -115,8 +109,9 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
 
-      if (columnIndex == data[0].length - 1)
+      if (columnIndex == data[0].length - 1) {
         return true;
+      }
       return false;
     }
 

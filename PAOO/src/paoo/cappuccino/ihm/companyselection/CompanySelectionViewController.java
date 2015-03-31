@@ -1,8 +1,6 @@
 package paoo.cappuccino.ihm.companyselection;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -12,14 +10,7 @@ import java.io.FileWriter;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTable;
+import javax.swing.*;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
@@ -42,7 +33,7 @@ public class CompanySelectionViewController extends JPanel {
   private CompanySelectionModel model;
   private IGuiManager guiManager;
   private File directory = new File(new JFileChooser().getFileSystemView().getDefaultDirectory()
-      .toString());
+                                        .toString());
   private CompanySelectionView view;
   private MenuModel menu;
   private IBusinessDayUcc businessDayUcc;
@@ -52,7 +43,8 @@ public class CompanySelectionViewController extends JPanel {
   private ICompanyDto[] companyDto;
 
   public CompanySelectionViewController(CompanySelectionModel model, MenuModel menu,
-      IGuiManager guiManager, IBusinessDayUcc businessDayUcc, ICompanyUcc companyUcc) {
+                                        IGuiManager guiManager, IBusinessDayUcc businessDayUcc,
+                                        ICompanyUcc companyUcc) {
 
     super(new BorderLayout());
     this.model = model;
@@ -80,11 +72,9 @@ public class CompanySelectionViewController extends JPanel {
 
     saveButton.addActionListener(e -> {
 
-
-      this.selectedBusinessDay = businessDayDto[(int)comboBox.getSelectedIndex()];
+      this.selectedBusinessDay = businessDayDto[(int) comboBox.getSelectedIndex()];
 
       ArrayList<Integer> list = new ArrayList<Integer>();
-
 
       JTable table = view.getTable();
       for (int i = 0; i < table.getRowCount(); i++) {
@@ -97,23 +87,25 @@ public class CompanySelectionViewController extends JPanel {
       if (list.isEmpty()) {
 
         JOptionPane.showMessageDialog(CompanySelectionViewController.this,
-            "Vous devez au moins selectionner une entreprise !", "Erreur",
-            JOptionPane.ERROR_MESSAGE);
+                                      "Vous devez au moins selectionner une entreprise !", "Erreur",
+                                      JOptionPane.ERROR_MESSAGE);
       } else {
         ICompanyDto[] companyDtoArray = new ICompanyDto[list.size()];
 
         BufferedWriter fileWriter = null;
-        if (!directory.exists())
+        if (!directory.exists()) {
           throw new GuiException(
               "Le fichier csv n'a pas pu être enregistré, le repertoire spécifié n'existe pas !");
+        }
         try {
 
           File saveDirectory =
               new File(directory, selectedBusinessDay.getEventDate()
-                  .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
-                  + ".csv");
-          if (!saveDirectory.exists())
+                                      .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
+                                  + ".csv");
+          if (!saveDirectory.exists()) {
             saveDirectory.createNewFile();
+          }
 
           fileWriter = new BufferedWriter(new FileWriter(saveDirectory));
 
@@ -131,7 +123,7 @@ public class CompanySelectionViewController extends JPanel {
           this.businessDayUcc.addInvitedCompanies(companyDtoArray, selectedBusinessDay);
 
           JOptionPane.showMessageDialog(CompanySelectionViewController.this,
-              "Le fichier a bien pu être sauvé.");
+                                        "Le fichier a bien pu être sauvé.");
           this.menu.setCurrentPage(MenuEntry.HOME);
         } catch (Exception exception) {
 
@@ -148,7 +140,6 @@ public class CompanySelectionViewController extends JPanel {
 
     });
 
-    
     selectAll.addItemListener(e -> {
 
       if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -164,7 +155,6 @@ public class CompanySelectionViewController extends JPanel {
       }
     });
 
-
     if (companyDto.length == 0 || businessDayDto.length == 0) {
 
       selectAll.setEnabled(false);
@@ -176,13 +166,12 @@ public class CompanySelectionViewController extends JPanel {
       this.model.setCompanyDto(companyDto);
     }
 
-
-
     for (int i = 0; i < businessDayDto.length; i++) {
 
-      comboBox.addItem(businessDayDto[i].getEventDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString());
+      comboBox.addItem(
+          businessDayDto[i].getEventDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+              .toString());
     }
-
 
     savePanel.add(new JLabel("Emplacement de sauvegarde : "));
     savePanel.add(directoryLocation);
@@ -196,13 +185,12 @@ public class CompanySelectionViewController extends JPanel {
         directory = fc.getSelectedFile();
         String strDirectory = directory.getAbsolutePath();
         strDirectory =
-            strDirectory.length() > MAX_STRING_DIRECTORY ? strDirectory.substring(0,
-                MAX_STRING_DIRECTORY) + "..." : strDirectory;
+            strDirectory.length() > MAX_STRING_DIRECTORY ?
+            strDirectory.substring(0, MAX_STRING_DIRECTORY) + "..." : strDirectory;
         directoryLocation.setText(strDirectory);
 
       }
     });
-
 
     savePanel.add(directorySaveButton);
 

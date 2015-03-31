@@ -1,17 +1,8 @@
 package paoo.cappuccino.ihm.newcontact;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.FlowLayout;
+import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
@@ -34,13 +25,11 @@ public class NewContactViewController extends JPanel {
   /**
    * Creates a new ViewController for the new company gui.
    *
-   * @param model The ViewController's model.
+   * @param model   The ViewController's model.
    * @param manager The manager responsible for the opening/closing this frame.
-   * @param contactUcc
-   * @param companyUcc
    */
   public NewContactViewController(NewContactModel model, MenuModel menu, IGuiManager manager,
-      IContactUcc contactUcc, ICompanyUcc companyUcc) {
+                                  IContactUcc contactUcc, ICompanyUcc companyUcc) {
     super(new BorderLayout());
     this.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0, IhmConstants.M_GAP));
 
@@ -56,59 +45,67 @@ public class NewContactViewController extends JPanel {
         new JComboBox<ICompanyDto>(companyUcc.getAllCompanies());
     comboCompanies.setRenderer(new ComboEntrepriseRenderer());
 
-
-    if (menu.hasTransitionObject())
+    if (menu.hasTransitionObject()) {
       comboCompanies.setSelectedItem(menu.getTransitionObject());
+    }
 
     JPanel controls =
         new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
 
     JButton createButton = new JButton("Créer");
     createButton
-    .addActionListener(e -> {
-      // test input
-      model.setFirstNameError(StringUtils.isEmpty(contactFirstNameField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
-              : (!StringUtils.isAlphaString(contactFirstNameField.getText()) ? IhmConstants.ERROR_ALPHA_INPUT
+        .addActionListener(e -> {
+          // test input
+          model.setFirstNameError(
+              StringUtils.isEmpty(contactFirstNameField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+                                                                   : (
+                  !StringUtils.isAlphaString(contactFirstNameField.getText())
+                  ? IhmConstants.ERROR_ALPHA_INPUT
                   : null));
 
-      model.setLastNameError(StringUtils.isEmpty(contactLastNameField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
-              : (!StringUtils.isAlphaString(contactLastNameField.getText()) ? IhmConstants.ERROR_ALPHA_INPUT
+          model.setLastNameError(
+              StringUtils.isEmpty(contactLastNameField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+                                                                  : (
+                  !StringUtils.isAlphaString(contactLastNameField.getText())
+                  ? IhmConstants.ERROR_ALPHA_INPUT
                   : null));
 
-      model.setMailError(StringUtils.isEmpty(contactMailField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
-              : (!StringUtils.isEmail(contactMailField.getText()) ? IhmConstants.ERROR_INVALID_EMAIL
+          model.setMailError(
+              StringUtils.isEmpty(contactMailField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+                                                              : (
+                  !StringUtils.isEmail(contactMailField.getText())
+                  ? IhmConstants.ERROR_INVALID_EMAIL
                   : null));
 
-      model.setPhoneError(StringUtils.isEmpty(contactPhoneField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
-              : null);
+          model.setPhoneError(
+              StringUtils.isEmpty(contactPhoneField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+                                                               : null);
 
+          if (!model.hasError()) {
+            IContactDto contact =
+                contactUcc.create(((ICompanyDto) comboCompanies.getSelectedItem()).getId(),
+                                  contactMailField.getText(), contactFirstNameField.getText(),
+                                  contactLastNameField.getText(), contactPhoneField.getText());
 
-      if (!model.hasError()) {
-        IContactDto contact =
-            contactUcc.create(((ICompanyDto) comboCompanies.getSelectedItem()).getId(),
-                    contactMailField.getText(), contactFirstNameField.getText(),
-                contactLastNameField.getText(), contactPhoneField.getText());
+            if (contact != null) {
+              model.clearError();
+              manager.getLogger().info(
+                  "new Contact created : " + contact.getFirstName() + " " + contact.getLastName()
+                  + "  ( " + ((ICompanyDto) comboCompanies.getSelectedItem()).getName() + " )");
+              JOptionPane.showMessageDialog(null, "Contact créer");
 
-        if (contact != null) {
-          model.clearError();
-          manager.getLogger().info(
-              "new Contact created : " + contact.getFirstName() + " " + contact.getLastName()
-                      + "  ( " + ((ICompanyDto) comboCompanies.getSelectedItem()).getName() + " )");
-          JOptionPane.showMessageDialog(null, "Contact créer");
+              // clear les champs
+              contactFirstNameField.setText(null);
+              contactLastNameField.setText(null);
+              contactMailField.setText(null);
+              contactPhoneField.setText(null);
+            } else {
+              JOptionPane.showMessageDialog(null, "Erreure survenue lors de la création du contact."
+                                                  + " Veuillez réessayer.");
+            }
+          }
 
-          // clear les champs
-          contactFirstNameField.setText(null);
-          contactLastNameField.setText(null);
-          contactMailField.setText(null);
-          contactPhoneField.setText(null);
-        } else {
-          JOptionPane.showMessageDialog(null,
-                  "Erreure survenue lors de la création du contact. Veuillez réessayer.");
-        }
-      }
-
-    });
-
+        });
 
     controls.add(createButton);
 
@@ -116,7 +113,7 @@ public class NewContactViewController extends JPanel {
     // end buttons //
 
     this.add(new NewContactView(model, contactFirstNameField, contactLastNameField,
-        contactMailField, contactPhoneField, comboCompanies));
+                                contactMailField, contactPhoneField, comboCompanies));
   }
 
   class ComboEntrepriseRenderer implements ListCellRenderer<ICompanyDto> {
@@ -129,9 +126,11 @@ public class NewContactViewController extends JPanel {
      */
     @Override
     public Component getListCellRendererComponent(JList<? extends ICompanyDto> arg0,
-        ICompanyDto value, int arg2, boolean arg3, boolean arg4) {
-      if (value == null)
+                                                  ICompanyDto value, int arg2, boolean arg3,
+                                                  boolean arg4) {
+      if (value == null) {
         return new JLabel();
+      }
       return new JLabel(value.getName());
     }
   }

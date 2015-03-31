@@ -46,7 +46,7 @@ class BusinessDayDao implements IBusinessDayDao {
 
     String query =
         "INSERT INTO business_days.business_days(business_day_id, event_date, creation_date, "
-        + "academic_year, version) "
+        + "version) "
         + "VALUES (DEFAULT, ?, DEFAULT, ?, DEFAULT)"
         + "RETURNING (business_day_id, event_date, creation_date, version)";
 
@@ -71,7 +71,7 @@ class BusinessDayDao implements IBusinessDayDao {
   @Override
   public IBusinessDayDto[] fetchAll() {
     String query = "SELECT d.business_day_id, d.event_date, d.creation_date, "
-                   + "d.academic_year, d.version "
+                   + "d.version "
                    + "FROM business_days.business_days d";
 
     try {
@@ -96,11 +96,10 @@ class BusinessDayDao implements IBusinessDayDao {
 
   @Override
   public IBusinessDayDto[] fetchInvitationlessDays() {
-    String query = "SELECT DISTINCT d.business_day_id, d.event_date, d.creation_date, "
-                   + "d.academic_year, d.version "
-                   + "FROM business_days.business_days d"
-                   + "WHERE (SELECT COUNT(p.*) FROM business_days.participations p"
-                   + "WHERE p.business_day = d.business_day_id)";
+    String query = "SELECT DISTINCT d.business_day_id, d.event_date, d.creation_date, d.version \n"
+                   + "FROM business_days.business_days d\n"
+                   + "WHERE d.business_day_id NOT IN (SELECT p.business_day "
+                   + "FROM business_days.participations p)";
 
     try {
       if (psFetchInvitationlessDays == null) {
@@ -125,7 +124,7 @@ class BusinessDayDao implements IBusinessDayDao {
   @Override
   public IBusinessDayDto fetchBusinessDaysByDate(int year) {
     String query =
-        "SELECT d.business_day_id, d.event_date, d.creation_date, d.academic_year, d.version"
+        "SELECT d.business_day_id, d.event_date, d.creation_date, d.version"
         + " FROM business_days.business_days d WHERE academic_year = ?";
 
     try {

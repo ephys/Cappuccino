@@ -4,10 +4,9 @@ import javax.swing.table.AbstractTableModel;
 
 /**
  * @author Opsomer Mathias
- *
- *
  */
 public class TableContactModel extends AbstractTableModel {
+
   private String[] titles;
   private Object[][] data;
 

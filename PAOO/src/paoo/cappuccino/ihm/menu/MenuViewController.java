@@ -1,16 +1,8 @@
 package paoo.cappuccino.ihm.menu;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import java.awt.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.util.IhmConstants;
@@ -43,7 +35,7 @@ public class MenuViewController extends MenuView {
     JButton companyButton = new JButton("Entreprises");
     companyButton.addActionListener(e -> model.setCurrentPage(MenuEntry.SEARCH_COMPANY));
 
-    JButton companiesSelectButton = new JButton("Sélèc. entreprises");
+    JButton companiesSelectButton = new JButton("Sélec. entreprises");
     companiesSelectButton.addActionListener(e -> model.setCurrentPage(MenuEntry.SELECT_COMPANY));
 
     JButton newDayButton = new JButton("Créer journée");

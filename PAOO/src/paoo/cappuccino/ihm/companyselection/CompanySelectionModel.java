@@ -10,46 +10,41 @@ import paoo.cappuccino.ihm.util.BaseModel;
  */
 public class CompanySelectionModel extends BaseModel {
 
-
-  private ICompanyDto[] companyDto;
   boolean selectAll;
   boolean notDeselectAll;
-
-
-  public void setCompanyDto(ICompanyDto[] companyDto) {
-
-    this.companyDto = companyDto;
-    selectAll = false;
-    dispatchChangeEvent();
-
-  }
+  private ICompanyDto[] companyDto;
 
   public ICompanyDto[] getCompanyDto() {
 
     return companyDto;
   }
 
-  public void setSelectAll(boolean b) {
+  public void setCompanyDto(ICompanyDto[] companyDto) {
+    this.companyDto = companyDto;
+    selectAll = false;
+    dispatchChangeEvent();
 
-
-    selectAll = b;
-    if (!notDeselectAll)
-      dispatchChangeEvent();
   }
 
   public boolean getSelectAll() {
-
     return selectAll;
+  }
+
+  public void setSelectAll(boolean b) {
+
+    selectAll = b;
+    if (!notDeselectAll) {
+      dispatchChangeEvent();
+    }
+  }
+
+  public boolean getNotDeselectAll() {
+    return notDeselectAll;
   }
 
   public void setNotDeselectAll(boolean b) {
 
     notDeselectAll = b;
-  }
-
-  public boolean getNotDeselectAll() {
-
-    return notDeselectAll;
   }
 
 
