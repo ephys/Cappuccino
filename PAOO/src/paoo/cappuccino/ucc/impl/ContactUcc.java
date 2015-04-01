@@ -74,4 +74,12 @@ class ContactUcc implements IContactUcc {
     return dao.fetchContactByName(firstName, lastName);
   }
 
+  @Override
+  public IContactDto[] getContactByCompany(int id) {
+    if (id <= 0) {
+      throw new IllegalArgumentException("Id invalide");
+    }
+    return dao.fetchContactsByCompany(id);
+  }
+
 }
