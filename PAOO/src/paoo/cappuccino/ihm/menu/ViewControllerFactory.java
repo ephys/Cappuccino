@@ -6,6 +6,8 @@ import paoo.cappuccino.ihm.accueil.AccueilModel;
 import paoo.cappuccino.ihm.accueil.AccueilViewController;
 import paoo.cappuccino.ihm.attendence.AttendanceController;
 import paoo.cappuccino.ihm.attendence.AttendanceModel;
+import paoo.cappuccino.ihm.companydetails.CompanyDetailsModel;
+import paoo.cappuccino.ihm.companydetails.CompanyDetailsViewController;
 import paoo.cappuccino.ihm.companyselection.CompanySelectionModel;
 import paoo.cappuccino.ihm.companyselection.CompanySelectionViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
@@ -42,6 +44,7 @@ public class ViewControllerFactory {
   private final CompanySelectionModel modelCompanySelection;
   private final ParticipationSearchingModel modelParticipationSearching;
   private final AccueilModel modelAccueil;
+  private final CompanyDetailsModel modelCompanyDetails;
 
   /**
    * Creates the view factory with all the dependencies required by the views.
@@ -63,6 +66,7 @@ public class ViewControllerFactory {
     modelCompanySelection = new CompanySelectionModel();
     modelParticipationSearching = new ParticipationSearchingModel();
     modelAccueil = new AccueilModel();
+    modelCompanyDetails = new CompanyDetailsModel();
   }
 
   /**
@@ -99,7 +103,9 @@ public class ViewControllerFactory {
       case SEARCH_PARTICIPATION:
         return new ParticipationSearchingViewController(modelParticipationSearching, menuModel,
             guiManager, businessDayUcc,companyUcc);
-
+        
+      case COMPANY_DETAILS:
+        return new CompanyDetailsViewController(modelCompanyDetails,menuModel,userUcc,contactUcc,guiManager);
         // TODO: add ViewControllers.
 
       default:
