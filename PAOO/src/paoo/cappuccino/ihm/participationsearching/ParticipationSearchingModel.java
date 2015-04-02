@@ -8,7 +8,7 @@ public class ParticipationSearchingModel extends BaseModel {
   private IParticipationDto[] participationDto;
 
 
-  public void setCompanyDto(IParticipationDto[] participationDto) {
+  public void setParticipationDto(IParticipationDto[] participationDto) {
 
     this.participationDto = participationDto;
 

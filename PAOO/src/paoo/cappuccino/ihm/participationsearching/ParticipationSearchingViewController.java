@@ -14,9 +14,11 @@ import javax.swing.JTable;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
-import paoo.cappuccino.ihm.companydetails.CompanyDetailsView;
+import paoo.cappuccino.ihm.companydetails.CompanyDetailsViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
+import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
 
@@ -37,6 +39,7 @@ public class ParticipationSearchingViewController extends JPanel {
 
     super(new BorderLayout());
     this.model = model;
+    this.menu = menu;
     this.businessDayUcc = businessDayUcc;
     this.companyUcc = companyUcc;
     this.guiManager = guiManager;
@@ -47,42 +50,34 @@ public class ParticipationSearchingViewController extends JPanel {
 
 
     JPanel searchingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    JComboBox<String> comboBox = new JComboBox<String>();
-
-
+    
     businessDayDto = this.businessDayUcc.getBusinessDays();
-
+    
+    JComboDay comboBox = new JComboDay(businessDayDto);
 
     if (businessDayDto.length == 0) {
 
       comboBox.setEnabled(false);
-      this.model.setCompanyDto(null);
+      this.model.setParticipationDto(null);
 
     } else {
 
       IParticipationDto[] participationDto =
           businessDayUcc.getParticipations(businessDayDto[0].getId());
-      this.model.setCompanyDto(participationDto);
+      this.model.setParticipationDto(participationDto);
     }
 
 
-    for (int i = 0; i < businessDayDto.length; i++) {
+    comboBox.getCombo().addActionListener(e -> {
 
-      comboBox.addItem(businessDayDto[i].getEventDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString());
-    }
-
-
-    comboBox.addActionListener(e -> {
-
-      this.selectedBusinessDay = businessDayDto[(int)comboBox.getSelectedIndex()];
+      this.selectedBusinessDay = businessDayDto[(int)comboBox.getCombo().getSelectedIndex()];
 
       IParticipationDto[] participationDto =
           businessDayUcc.getParticipations(this.selectedBusinessDay.getId());
-      this.model.setCompanyDto(participationDto);
+      this.model.setParticipationDto(participationDto);
 
     });
 
-    searchingPanel.add(new JLabel("Journée : "));
     searchingPanel.add(comboBox);
 
 
@@ -93,17 +88,14 @@ public class ParticipationSearchingViewController extends JPanel {
       public void mouseClicked(MouseEvent e) {
 
         if (e.getClickCount() == 2) {
-
-          System.out.println(table.getModel().getValueAt(0, table.getColumnCount()));
+          
           int companyId =
               (int) table.getModel().getValueAt(table.getSelectedRow(), table.getColumnCount());
           ICompanyDto companyDto =
               ParticipationSearchingViewController.this.companyUcc.getCompanyById(companyId);
 
-          ParticipationSearchingViewController.this.remove(panelWrapper);
-          ParticipationSearchingViewController.this.add(new CompanyDetailsView(companyDto));
-          ParticipationSearchingViewController.this.revalidate();
-          ParticipationSearchingViewController.this.repaint();
+          ParticipationSearchingViewController.this.menu.setTransitionObject(companyDto);
+          ParticipationSearchingViewController.this.menu.setCurrentPage(MenuEntry.COMPANY_DETAILS);
         }
 
       }

@@ -2,6 +2,7 @@ package paoo.cappuccino.ihm.participationsearching;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -57,10 +58,8 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
 
       if (!this.removedWidget) {
         this.centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        // TODO customiser message erreur
-        centerPadding.add(new JLabel(
-            "Ce message vous est affiché : soit parce qu'il n'y a aucune journée d'entreprise disponible, soit"
-                + " parce qu'il n'y a aucune participation correspondante."));
+        
+        centerPadding.add(new JLabel(errorMessage(model.getParticipationDto())));
 
         this.remove(this.scrollPane);
         this.add(centerPadding);
@@ -95,7 +94,7 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
                 .getCompany());
         this.data[i] =
             new Object[] {companyDto.getName(), companyDto.getAddressTown(),
-                companyDto.getRegisterDate().toString(), participationDto[i].getState().toString(),
+                companyDto.getRegisterDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy à hh:mm:ss")), participationDto[i].getState().toString(),
                 companyDto.getId()};
       }
 
@@ -126,6 +125,12 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
     public Class<?> getColumnClass(int columnIndex) {
       return data[0][columnIndex].getClass();
     }
+  }
+  
+  public String errorMessage(IParticipationDto[] participationDto){
+    
+      if(participationDto == null) return "Il n'y a aucune journée d'entreprise disponible.";
+      else return "Il n'y a aucune participation correspondante.";
   }
 
 }
