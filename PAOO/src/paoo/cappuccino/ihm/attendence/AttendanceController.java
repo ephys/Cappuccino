@@ -15,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuModel;
@@ -32,6 +33,9 @@ import paoo.cappuccino.ucc.IContactUcc;
  */
 @SuppressWarnings("serial")
 public class AttendanceController extends JPanel implements ChangeListener {
+  private final TableContactModel modelTable = new TableContactModel();
+  private final AttendanceModel model;
+  private final IContactUcc contactUcc;
 
   /**
    * Creates a new ViewController for the new attendance gui.
@@ -46,6 +50,8 @@ public class AttendanceController extends JPanel implements ChangeListener {
       IGuiManager manager, ICompanyUcc companyUcc,
       IBusinessDayUcc businessDayUcc, IContactUcc contactUcc) {
     super(new BorderLayout());
+    this.model = model;
+    this.contactUcc = contactUcc;
     this.setBorder(new EmptyBorder(IhmConstants.M_GAP, 0,
         IhmConstants.M_GAP, 0));
     // Log
@@ -54,9 +60,11 @@ public class AttendanceController extends JPanel implements ChangeListener {
     // top
     JPanel top = new JPanel(new GridLayout(1, 0));
     JComboDay daysList = new JComboDay(businessDayUcc.getBusinessDays());// TODO verifier argument
-    daysList.getCombo().addActionListener(e -> {
-
-    });
+    daysList.getCombo().addActionListener(
+        e -> {
+          model.setSelectedDay((IBusinessDayDto) daysList.getCombo()
+              .getSelectedItem());
+        });
 
     JPanel comboCompanyPanel =
         new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -64,7 +72,8 @@ public class AttendanceController extends JPanel implements ChangeListener {
     JComboBox<ICompanyDto> companiesList =
         new JComboBox<ICompanyDto>(companyUcc.getAllCompanies()); // TODO
     companiesList.addActionListener(e -> {
-
+      model.setSelectedCompany((ICompanyDto) companiesList
+          .getSelectedItem());
     });
 
     companiesList.setRenderer(new CompanyRenderer());
@@ -88,12 +97,14 @@ public class AttendanceController extends JPanel implements ChangeListener {
     center.add(allSelectPanel, BorderLayout.NORTH);
 
     // table
-    String[] titles = {"nom", "selec"};
-    Object[][] data = { {"albert", true}, {"jean", Boolean.FALSE}};// TODO change it
-    TableContactModel modelTable = new TableContactModel(titles, data);
-    JTable table = new JTable(modelTable);
-    center.add(new JScrollPane(table));
+    if (model.getSelectedCompany() == null) {
+      center.add(new JLabel("aucune entreprise sélèctionnée"));
 
+    } else {
+
+      JTable table = new JTable(modelTable);
+      center.add(new JScrollPane(table));
+    }
 
     this.add(center);
     JPanel controls = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -116,7 +127,11 @@ public class AttendanceController extends JPanel implements ChangeListener {
   public void stateChanged(ChangeEvent arg0) {
     // TODO
     // check tous
-    // update model
+    // change companies TODO
+
+    // change contacts
+    modelTable.changeData(contactUcc.getContactByCompany(model
+        .getSelectedCompany().getId()));
 
   }
 }

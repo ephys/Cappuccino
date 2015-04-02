@@ -2,6 +2,8 @@ package paoo.cappuccino.ihm.attendence;
 
 import javax.swing.table.AbstractTableModel;
 
+import paoo.cappuccino.business.dto.IContactDto;
+
 /**
  * @author Opsomer Mathias
  */
@@ -11,11 +13,27 @@ public class TableContactModel extends AbstractTableModel {
   private Object[][] data;
 
 
-  public TableContactModel(String[] titles, Object[][] data) {
-    this.titles = titles;
-    this.data = data;
+  /**
+   */
+  public TableContactModel() {
+    this.titles =
+        new String[] {"Nom contact", "Prénom contact", "Email contact",
+            "Sélèctionner"};
+    this.data = new Object[0][0];
   }
 
+  public void changeData(IContactDto[] listContact) {
+    if (listContact == null) {
+      return;
+    }
+    data = new Object[titles.length][listContact.length];
+    for (int i = 0; i < listContact.length; i++) {
+      data[0][i] = listContact[i].getFirstName();
+      data[1][i] = listContact[i].getLastName();
+      data[2][i] = listContact[i].getEmail();
+      data[3][i] = Boolean.FALSE;
+    }
+  }
 
   public Class<?> getColumnClass(int col) {
     return data[0][col].getClass();
@@ -45,5 +63,10 @@ public class TableContactModel extends AbstractTableModel {
   @Override
   public boolean isCellEditable(int row, int col) {
     return col == titles.length - 1;
+  }
+
+  @Override
+  public void setValueAt(Object aValue, int row, int column) {
+    data[row][column] = aValue;
   }
 }

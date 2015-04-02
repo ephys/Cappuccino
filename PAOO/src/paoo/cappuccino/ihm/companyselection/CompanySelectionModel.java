@@ -15,7 +15,6 @@ public class CompanySelectionModel extends BaseModel {
   private ICompanyDto[] companyDto;
 
   public ICompanyDto[] getCompanyDto() {
-
     return companyDto;
   }
 
