@@ -17,7 +17,7 @@ public class TableContactModel extends AbstractTableModel {
   }
 
 
-  public Class getColumnClass(int col) {
+  public Class<?> getColumnClass(int col) {
     return data[0][col].getClass();
   }
 

@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
-import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -90,12 +89,9 @@ public class AttendanceController extends JPanel implements ChangeListener {
 
     // table
     String[] titles = {"nom", "selec"};
-    Object[][] data = { {"albert", true}, {"jean", false}};// TODO change it
+    Object[][] data = { {"albert", true}, {"jean", Boolean.FALSE}};// TODO change it
     TableContactModel modelTable = new TableContactModel(titles, data);
     JTable table = new JTable(modelTable);
-    table.getColumn("selec").setCellEditor(
-        new DefaultCellEditor(new JCheckBox()));
-
     center.add(new JScrollPane(table));
 
 
@@ -119,6 +115,8 @@ public class AttendanceController extends JPanel implements ChangeListener {
   @Override
   public void stateChanged(ChangeEvent arg0) {
     // TODO
+    // check tous
+    // update model
 
   }
 }

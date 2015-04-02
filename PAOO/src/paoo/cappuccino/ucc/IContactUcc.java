@@ -12,17 +12,17 @@ public interface IContactUcc {
   /**
    * Creates a contact and persists it.
    *
-   * @param company   The id of the company the contact is working for.
-   * @param email     The contact's email, nullable. Valid by default.
+   * @param company The id of the company the contact is working for.
+   * @param email The contact's email, nullable. Valid by default.
    * @param firstName The contact's first name.
-   * @param lastName  The contact's last name.
-   * @param phone     The contact's phone number, nullable.
+   * @param lastName The contact's last name.
+   * @param phone The contact's phone number, nullable.
    * @return The new contact's DTO.
    * @throws java.lang.IllegalArgumentException The email does not follow a valid email format or
-   *                                            one of the non-nullable fields is empty.
+   *         one of the non-nullable fields is empty.
    */
-  public IContactDto create(int company, String email, String firstName, String lastName,
-                            String phone);
+  public IContactDto create(int company, String email, String firstName,
+      String lastName, String phone);
 
   /**
    * Set a contact's email as being invalid.
@@ -36,9 +36,16 @@ public interface IContactUcc {
    * Returns a table with all the contacts which matches the research data.
    *
    * @param firstName First name of the contact search.
-   * @param lastName  Last name of the contact search.
+   * @param lastName Last name of the contact search.
    * @return A table with the contact's DTO researched.
    */
   public IContactDto[] searchContact(String firstName, String lastName);
+
+  /**
+   *
+   * @param id
+   * @return
+   */
+  public IContactDto[] getContactByCompany(int id);
 
 }
