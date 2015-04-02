@@ -17,6 +17,7 @@ import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
+import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ihm.util.exception.GuiException;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
@@ -40,7 +41,6 @@ public class CompanySelectionViewController extends JPanel {
   private ICompanyUcc companyUcc;
   private IBusinessDayDto selectedBusinessDay;
   private IBusinessDayDto[] businessDayDto;
-  private ICompanyDto[] companyDto;
 
   public CompanySelectionViewController(CompanySelectionModel model, MenuModel menu,
                                         IGuiManager guiManager, IBusinessDayUcc businessDayUcc,
@@ -63,16 +63,18 @@ public class CompanySelectionViewController extends JPanel {
     File file = fc.getCurrentDirectory();
     JLabel directoryLocation = new JLabel(file.getAbsolutePath());
     JButton saveButton = new JButton("Valider");
-    JComboBox<String> comboBox = new JComboBox<String>();
     JCheckBox selectAll = new JCheckBox("Tout cocher");
     JButton directorySaveButton = new JButton("Parcourir");
-
+  
     businessDayDto = this.businessDayUcc.getInvitationlessDays();
-    companyDto = this.companyUcc.getInvitableCompanies();
+    
+    JComboDay comboBox = new JComboDay(businessDayDto);
+    
+    ICompanyDto[] companyDto = this.companyUcc.getInvitableCompanies();
 
     saveButton.addActionListener(e -> {
 
-      this.selectedBusinessDay = businessDayDto[(int) comboBox.getSelectedIndex()];
+      this.selectedBusinessDay = businessDayDto[(int) comboBox.getCombo().getSelectedIndex()];
 
       ArrayList<Integer> list = new ArrayList<Integer>();
 
@@ -155,7 +157,7 @@ public class CompanySelectionViewController extends JPanel {
       }
     });
 
-    if (companyDto.length == 0 || businessDayDto.length == 0) {
+    if (businessDayDto.length == 0) {
 
       selectAll.setEnabled(false);
       saveButton.setEnabled(false);
@@ -164,13 +166,6 @@ public class CompanySelectionViewController extends JPanel {
 
     } else {
       this.model.setCompanyDto(companyDto);
-    }
-
-    for (int i = 0; i < businessDayDto.length; i++) {
-
-      comboBox.addItem(
-          businessDayDto[i].getEventDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-              .toString());
     }
 
     savePanel.add(new JLabel("Emplacement de sauvegarde : "));
@@ -193,8 +188,6 @@ public class CompanySelectionViewController extends JPanel {
     });
 
     savePanel.add(directorySaveButton);
-
-    validatePanel.add(new JLabel("Journée : "));
 
     validatePanel.add(comboBox);
     validatePanel.add(saveButton);
