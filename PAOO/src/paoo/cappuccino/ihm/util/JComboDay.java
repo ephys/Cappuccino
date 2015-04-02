@@ -22,7 +22,6 @@ public class JComboDay extends JPanel {
     JLabel label = new JLabel("Journée du");
     combo = new JComboBox<IBusinessDayDto>(businessDays);
     combo.setRenderer(new DayRenderer());
-    combo.setSelectedIndex(0);
     this.add(label);
     this.add(combo);
   }
@@ -34,13 +33,14 @@ public class JComboDay extends JPanel {
   private static class DayRenderer extends BasicComboBoxRenderer {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
 
+   
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index,
         boolean isSelected, boolean cellHasFocus) {
       super.getListCellRendererComponent(list, null, index, isSelected, cellHasFocus);
 
       setText(value == null ? null : ((IBusinessDay) value).getEventDate().format(formatter));
-
+      
       return this;
     }
   }
