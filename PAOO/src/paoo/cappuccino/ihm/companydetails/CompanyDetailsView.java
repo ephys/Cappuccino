@@ -1,36 +1,48 @@
 package paoo.cappuccino.ihm.companydetails;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.table.AbstractTableModel;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.business.dto.IContactDto;
 
-@SuppressWarnings("serial")
-public class CompanyDetailsView extends JPanel {
+public class CompanyDetailsView extends JPanel implements ChangeListener{
 
-  private ICompanyDto companyDto;
+  private CompanyDetailsModel model;
+  private JTable table;
 
-  // test
-  public CompanyDetailsView(ICompanyDto companyDto) {
+  public CompanyDetailsView(CompanyDetailsModel model) {
 
-    super(new GridLayout(3, 1));
-    this.companyDto = companyDto;
+    super(new BorderLayout());
+    this.model = model;
+    table = new JTable();
+    this.model.addChangeListener(this);
+   
+    JPanel gridLayoutpanel = new JPanel(new GridLayout(3,1));
     JPanel panel = new JPanel();
-    panel.add(new JLabel("Nom : " + this.companyDto.getName()));
-    panel.add(new JLabel("    "));
-    // TODO getCreator retourne une string au lieu d'un int dans le companyDto
-    panel.add(new JLabel("Enregisteur : "));
-
-    this.add(panel);
+    panel.add(new JLabel("Nom : " + model.getCompanyDto().getName()),FlowLayout.LEFT);
+    panel.add(new JLabel("    "),FlowLayout.LEFT);
+    // TODO ajouter getUserByid dans userUcc
+    panel.add(new JLabel("Enregisteur : "),FlowLayout.LEFT);
+    
+    gridLayoutpanel.add(panel);
+    
 
     panel = new JPanel();
     panel.add(new JLabel("Date de l'enregistrement : "
-        + this.companyDto.getRegisterDate().toString()));
+        +model.getCompanyDto().getRegisterDate().toString()),FlowLayout.LEFT);
 
-    this.add(panel);
+    gridLayoutpanel.add(panel);
 
     panel = new JPanel(new GridLayout(1, 2));
 
@@ -41,20 +53,98 @@ public class CompanyDetailsView extends JPanel {
 
     JPanel leftInnerPanel = new JPanel(new GridLayout(3, 1));
 
-    leftInnerPanel.add(new JLabel("Rue : " + this.companyDto.getAddressStreet()));
-    leftInnerPanel.add(new JLabel("Ville : " + this.companyDto.getAddressTown()));
-    leftInnerPanel.add(new JLabel("Boite : " + this.companyDto.getAddressMailbox()));
+    leftInnerPanel.add(new JLabel("Rue : " + model.getCompanyDto().getAddressStreet()));
+    leftInnerPanel.add(new JLabel("Ville : " + model.getCompanyDto().getAddressTown()));
+    leftInnerPanel.add(new JLabel("Boite : " + model.getCompanyDto().getAddressMailbox()));
 
     leftPanel.add(leftInnerPanel);
 
     rightPanel.add(new JLabel("Numero : "), BorderLayout.NORTH);
-    rightPanel.add(new JLabel("Code postal : " + this.companyDto.getAddressPostcode()));
+    rightPanel.add(new JLabel("Code postal : " + model.getCompanyDto().getAddressPostcode()));
 
-    panel.add(leftPanel);
-    panel.add(rightPanel);
+    gridLayoutpanel.add(leftPanel);
+    gridLayoutpanel.add(rightPanel);
 
-    this.add(panel);
+    this.add(gridLayoutpanel,BorderLayout.NORTH);
+    
+    JPanel borderLayoutPanel = new JPanel(new BorderLayout());
+    
+    borderLayoutPanel.add(new JLabel("Personne de contact : "),BorderLayout.NORTH);
+    borderLayoutPanel.add(new JScrollPane(table));
+    
+    this.add(borderLayoutPanel);
+   
+    //TODO ajouter getBusinessDaybyCompanyId
+  }
+
+  @Override
+  public void stateChanged(ChangeEvent event) {
+
+      table.setModel(new tableModel(model.getContactDto()));
 
   }
+
+
+  public JTable getTable() {
+
+    return table;
+  }
+
+  class tableModel extends AbstractTableModel {
+
+    String[] columns = {"Nom", "prenom", "Entreprise","Mail","Téléphone"};
+    Object[][] data;
+
+    public tableModel(IContactDto[] contactDto) {
+
+      data = new Object[contactDto.length][];
+
+      for (int i = 0; i < contactDto.length; i++) {
+
+        data[i] =
+            new Object[]{contactDto[i].getLastName(), contactDto[i].getFirstName(),
+            contactDto[i].getCompany(),contactDto[i].getEmail(),contactDto[i].getPhone()};
+      }
+
+    }
+
+    @Override
+    public int getRowCount() {
+      return data.length;
+    }
+
+    @Override
+    public int getColumnCount() {
+      return columns.length;
+    }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+      return data[rowIndex][columnIndex];
+    }
+
+    @Override
+    public String getColumnName(int column) {
+      return columns[column];
+    }
+
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+
+      data[rowIndex][columnIndex] = aValue;
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+      return data[0][columnIndex].getClass();
+    }
+  }
+  
+  public String errorMessage(ICompanyDto[] companyDto){
+    
+    if(companyDto == null) return "Il n'y a aucune journée d'entreprise disponible.";
+    else return "Il n'y a pas d'entreprise disponible.";
+}
 
 }
