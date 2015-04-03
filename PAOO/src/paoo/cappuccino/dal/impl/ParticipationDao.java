@@ -4,9 +4,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import paoo.cappuccino.business.dto.IParticipationDto;
+import paoo.cappuccino.business.entity.IParticipation;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalBackend;
@@ -19,13 +21,14 @@ import paoo.cappuccino.util.exception.FatalException;
  *
  * @author Kevin Bavay
  */
-public class ParticipationDao implements IParticipationDao {
+class ParticipationDao implements IParticipationDao {
 
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;
   private PreparedStatement psFetchParticipationsByCompany;
   private PreparedStatement psFetchParticipationsByDate;
   private PreparedStatement psCreateParticipation;
+  private PreparedStatement psUpdateParticipation;
 
   @Inject
   public ParticipationDao(IEntityFactory entityFactory, IDalBackend dalBackend) {
@@ -37,7 +40,7 @@ public class ParticipationDao implements IParticipationDao {
   public IParticipationDto createParticipation(IParticipationDto participation) {
     String query = "INSERT INTO business_days.participations (company, business_day) "
                    + "VALUES (?, ?) "
-                   + "RETURNING (company, business_day, state, cancelled, version);";
+                   + "RETURNING (company, business_day, state, cancelled, version)";
     try {
       if (psCreateParticipation == null) {
         psCreateParticipation = dalBackend.fetchPreparedStatement(query);
@@ -54,68 +57,111 @@ public class ParticipationDao implements IParticipationDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
+
     return null;
   }
 
   @Override
   public void updateParticipation(IParticipationDto participation) {
-    //TODO
+    String query = "UPDATE business_days.participations "
+                   + "SET state = ?, cancelled = ?, version = version + 1"
+                   + "WHERE company = ? AND business_day = ? AND version = ? LIMIT 1";
+
+    try {
+      if (psUpdateParticipation == null) {
+        psUpdateParticipation = dalBackend.fetchPreparedStatement(query);
+      }
+
+      psUpdateParticipation.setString(1, participation.getState().name());
+      psUpdateParticipation.setBoolean(2, participation.isCancelled());
+
+      psUpdateParticipation.setInt(4, participation.getCompany());
+      psUpdateParticipation.setInt(5, participation.getBusinessDay());
+      psUpdateParticipation.setInt(6, participation.getVersion());
+
+      int affectedRows = psUpdateParticipation.executeUpdate();
+      if (affectedRows == 0) {
+        throw new ConcurrentModificationException(
+            "The user with id " + participation.getCompany() + ":" + participation.getBusinessDay()
+            + " (company, businessday) and version " + participation.getVersion()
+            + " was not found in the database. "
+            + "It either was deleted or modified by another thread.");
+      }
+
+      if (participation instanceof IParticipation) {
+        ((IParticipation) participation).incrementVersion();
+      }
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
   }
 
   @Override
   public IParticipationDto[] fetchParticipationsByDate(int businessDayId) {
-    String query = "SELECT * FROM business_days.participations WHERE business_day = ?";
+    String query = "SELECT company, business_day, state, cancelled, version "
+                   + "FROM business_days.participations "
+                   + "WHERE business_day = ?";
 
     try {
       if (psFetchParticipationsByDate == null) {
         psFetchParticipationsByDate = dalBackend.fetchPreparedStatement(query);
       }
+
       psFetchParticipationsByDate.setInt(1, businessDayId);
 
       try (ResultSet rs = psFetchParticipationsByDate.executeQuery()) {
         List<IParticipationDto> participationList = new ArrayList<>();
+
         while (rs.next()) {
           participationList.add(makeParticipationFromSet(rs));
         }
+
         return participationList.toArray(new IParticipationDto[participationList.size()]);
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return new IParticipationDto[0];
+
+    return null;
   }
 
   @Override
   public IParticipationDto[] fetchParticipationsByCompany(int companyId) {
-    String query = "SELECT * FROM business_days.participations WHERE company = ?";
+    String query = "SELECT company, business_day, state, cancelled, version "
+                   + "FROM business_days.participations "
+                   + "WHERE company = ?";
 
     try {
       if (psFetchParticipationsByCompany == null) {
         psFetchParticipationsByCompany = dalBackend.fetchPreparedStatement(query);
       }
+
       psFetchParticipationsByCompany.setInt(1, companyId);
 
       try (ResultSet rs = psFetchParticipationsByCompany.executeQuery()) {
         List<IParticipationDto> participationList = new ArrayList<>();
+
         while (rs.next()) {
           participationList.add(makeParticipationFromSet(rs));
         }
+
         return participationList.toArray(new IParticipationDto[participationList.size()]);
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return new IParticipationDto[0];
+
+    return null;
   }
 
   private IParticipationDto makeParticipationFromSet(ResultSet rs) throws SQLException {
     int company = rs.getInt(1);
     int businessDay = rs.getInt(2);
     IParticipationDto.State state = IParticipationDto.State.valueOf(rs.getString(3));
-    boolean concelled = rs.getBoolean(4);
+    boolean cancelled = rs.getBoolean(4);
     int version = rs.getInt(5);
 
-    return entityFactory.createParticipation(company, businessDay, concelled, version, state);
+    return entityFactory.createParticipation(company, businessDay, cancelled, version, state);
   }
 
   private void rethrowSqlException(SQLException exception) {
