@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.TableColumn;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
@@ -36,6 +37,8 @@ public class AttendanceController extends JPanel implements ChangeListener {
   private final TableContactModel modelTable = new TableContactModel();
   private final AttendanceModel model;
   private final IContactUcc contactUcc;
+  private final JCheckBox allSelect = new JCheckBox();
+  private final JTable table = new JTable(modelTable);
 
   /**
    * Creates a new ViewController for the new attendance gui.
@@ -52,59 +55,81 @@ public class AttendanceController extends JPanel implements ChangeListener {
     super(new BorderLayout());
     this.model = model;
     this.contactUcc = contactUcc;
-    this.setBorder(new EmptyBorder(IhmConstants.M_GAP, 0,
-        IhmConstants.M_GAP, 0));
+    this.setBorder(new EmptyBorder(IhmConstants.M_GAP, IhmConstants.M_GAP,
+        IhmConstants.M_GAP, IhmConstants.M_GAP));
     // Log
     manager.getLogger().info("Attendance Frame");
 
+    // listener
+    model.addChangeListener(this);
     // top
     JPanel top = new JPanel(new GridLayout(1, 0));
-    JComboDay daysList = new JComboDay(businessDayUcc.getBusinessDays());// TODO verifier argument
-    daysList.getCombo().addActionListener(
-        e -> {
-          model.setSelectedDay((IBusinessDayDto) daysList.getCombo()
-              .getSelectedItem());
-        });
+    IBusinessDayDto[] listDay = businessDayUcc.getBusinessDays();
 
-    JPanel comboCompanyPanel =
-        new JPanel(new FlowLayout(FlowLayout.CENTER));
-    comboCompanyPanel.add(new JLabel("Entreprise"));
-    JComboBox<ICompanyDto> companiesList =
-        new JComboBox<ICompanyDto>(companyUcc.getAllCompanies()); // TODO
-    companiesList.addActionListener(e -> {
-      model.setSelectedCompany((ICompanyDto) companiesList
+    if (listDay.length == 0) {
+
+      JPanel noDay = new JPanel();
+      noDay.add(new JLabel("aucune journée des entreprises"));
+      top.add(noDay);
+
+    } else {
+
+      JComboDay daysList = new JComboDay(listDay);
+      model.setSelectedDay((IBusinessDayDto) daysList.getCombo()
           .getSelectedItem());
-    });
+      daysList.getCombo().addActionListener(
+          e -> {
+            model.setSelectedDay((IBusinessDayDto) daysList.getCombo()
+                .getSelectedItem());
+          });
+      top.add(daysList);
 
-    companiesList.setRenderer(new CompanyRenderer());
-    comboCompanyPanel.add(companiesList);
+    }
 
-    top.add(daysList);
-    top.add(comboCompanyPanel);
+    ICompanyDto[] companyList = companyUcc.getAllCompanies();// TODO chose them
 
+    if (companyList.length == 0) {
+
+      JPanel noCompany = new JPanel();
+      noCompany.add(new JLabel(
+          "Aucune entreprise inscrite pour cette journée"));
+      top.add(noCompany);
+
+    } else {
+
+      JPanel comboCompanyPanel =
+          new JPanel(new FlowLayout(FlowLayout.CENTER));
+      comboCompanyPanel.add(new JLabel("Entreprise"));
+      JComboBox<ICompanyDto> comboCompanies =
+          new JComboBox<ICompanyDto>(companyUcc.getAllCompanies());
+      model.setSelectedCompany((ICompanyDto) comboCompanies
+          .getSelectedItem());
+      comboCompanies.addActionListener(e -> {
+        model.setSelectedCompany((ICompanyDto) comboCompanies
+            .getSelectedItem());
+      });
+      comboCompanies.setRenderer(new CompanyRenderer());
+      comboCompanyPanel.add(comboCompanies);
+      top.add(comboCompanyPanel);
+
+    }
     this.add(top, BorderLayout.NORTH);
 
 
     // center
     JPanel center = new JPanel(new BorderLayout());
 
-    // tous
 
-    JCheckBox allSelect = new JCheckBox();
-    JPanel allSelectPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-    allSelectPanel.add(allSelect);
-    allSelectPanel.add(new JLabel("Tous"));
-    center.add(allSelectPanel, BorderLayout.NORTH);
 
     // table
-    if (model.getSelectedCompany() == null) {
-      center.add(new JLabel("aucune entreprise sélèctionnée"));
 
-    } else {
+    TableColumn columnCheckBox =
+        table.getColumn(table.getColumnName(table.getColumnCount() - 1));
+    columnCheckBox.setCellEditor(new CheckBoxCellEditor(new JCheckBox(),
+        model, table));
+    columnCheckBox.setMaxWidth(columnCheckBox.getMaxWidth() / 6);
+    center.add(new JScrollPane(table));
 
-      JTable table = new JTable(modelTable);
-      center.add(new JScrollPane(table));
-    }
 
     this.add(center);
     JPanel controls = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -114,8 +139,19 @@ public class AttendanceController extends JPanel implements ChangeListener {
       });
     controls.add(validate);
 
+    // tous
+
+    allSelect.addActionListener(e -> {
+      if (model.getAllSelected() != allSelect.isSelected()) {
+        model.setAllSelected(allSelect.isSelected());
+      }
+    });
+    JPanel allSelectPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    allSelectPanel.add(allSelect);
+    allSelectPanel.add(new JLabel("Tous"));
+    center.add(allSelectPanel, BorderLayout.NORTH);
+
     this.add(controls, BorderLayout.SOUTH);
-    // end buttons //
   }
 
   /*
@@ -125,13 +161,26 @@ public class AttendanceController extends JPanel implements ChangeListener {
    */
   @Override
   public void stateChanged(ChangeEvent arg0) {
-    // TODO
-    // check tous
+    System.out.println("state changed");
+    // check tous TODO
+    if (model.getAllSelected()) {
+      for (int i = 0; i < table.getRowCount(); i++) {
+        modelTable.setValueAt(true, i, table.getColumnCount() - 1);
+      }
+    }
+
+    if (allSelect.isSelected() != model.getAllSelected()) {
+      allSelect.setSelected(model.getAllSelected());
+    }
+
+
     // change companies TODO
 
     // change contacts
-    modelTable.changeData(contactUcc.getContactByCompany(model
-        .getSelectedCompany().getId()));
-
+    if (model.getSelectedCompany() != null) {
+      modelTable.changeData(contactUcc.getContactByCompany(model
+          .getSelectedCompany().getId()));
+    }
+    table.repaint();
   }
 }

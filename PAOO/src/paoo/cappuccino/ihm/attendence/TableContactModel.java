@@ -28,10 +28,10 @@ public class TableContactModel extends AbstractTableModel {
     }
     data = new Object[titles.length][listContact.length];
     for (int i = 0; i < listContact.length; i++) {
-      data[0][i] = listContact[i].getFirstName();
-      data[1][i] = listContact[i].getLastName();
-      data[2][i] = listContact[i].getEmail();
-      data[3][i] = Boolean.FALSE;
+      data[i][0] = listContact[i].getFirstName();
+      data[i][1] = listContact[i].getLastName();
+      data[i][2] = listContact[i].getEmail();
+      data[i][3] = Boolean.FALSE;
     }
   }
 

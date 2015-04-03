@@ -12,6 +12,7 @@ import paoo.cappuccino.ihm.util.BaseModel;
 public class AttendanceModel extends BaseModel {
   private ICompanyDto selectedCompany;
   private IBusinessDayDto selectedDay;
+  private boolean allSelected = false;
 
   // table
 
@@ -31,6 +32,15 @@ public class AttendanceModel extends BaseModel {
   public void setSelectedDay(IBusinessDayDto selectedDay) {
     this.selectedDay = selectedDay;
     dispatchChangeEvent();
+  }
+
+  public void setAllSelected(boolean b) {
+    allSelected = b;
+    dispatchChangeEvent();
+  }
+
+  public boolean getAllSelected() {
+    return allSelected;
   }
 
 }
