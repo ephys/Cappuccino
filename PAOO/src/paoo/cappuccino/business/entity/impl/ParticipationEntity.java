@@ -20,7 +20,8 @@ final class ParticipationEntity implements IParticipation {
     this(0, State.INVITED, false, businessDayId, companyId);
   }
 
-  public ParticipationEntity(int version, State state, boolean cancelled, int businessDayId, int companyId) {
+  public ParticipationEntity(int version, State state, boolean cancelled, int businessDayId,
+                             int companyId) {
     this.state = state;
     this.cancelled = cancelled;
     this.businessDay = businessDayId;

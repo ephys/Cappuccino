@@ -12,8 +12,8 @@ public interface IContactDao {
    *
    * @param contact The contact to insert.
    * @return the contact entity with its information updated from the database.
-   * @throws java.lang.IllegalArgumentException            One of the fields failed to insert due
-   *                                                       to constraint violations.
+   * @throws java.lang.IllegalArgumentException            One of the fields failed to insert due to
+   *                                                       constraint violations.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   IContactDto createContact(IContactDto contact);
@@ -24,9 +24,8 @@ public interface IContactDao {
    * @param contact A contact entity.
    * @throws java.util.ConcurrentModificationException     The entity version did not match or the
    *                                                       entity has been deleted.
-   * @throws java.lang.IllegalArgumentException            The entity hasn't been inserted in the
-   *                                                       database yet. Or one of the fields failed
-   *                                                       to insert to to constraint violations.
+   * @throws java.lang.IllegalArgumentException            One of the fields failed to insert to to
+   *                                                       constraint violations.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   void updateContact(IContactDto contact);

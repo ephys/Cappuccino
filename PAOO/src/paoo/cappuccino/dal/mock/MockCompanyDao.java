@@ -16,35 +16,41 @@ import paoo.cappuccino.dal.dao.IBusinessDayDao;
 import paoo.cappuccino.dal.dao.ICompanyDao;
 import paoo.cappuccino.dal.dao.IParticipationDao;
 
+/**
+ * Mock implementation of the company dao.
+ */
 class MockCompanyDao implements ICompanyDao {
-  private List<ICompany> companyList = new ArrayList<>();
+
   private final IEntityFactory factory;
   private final IParticipationDao participationDao;
   private final IBusinessDayDao businessDayDao;
+  private final List<ICompany> companyList = new ArrayList<>();
 
   @Inject
   public MockCompanyDao(IEntityFactory factory, IParticipationDao participationDao,
-      IBusinessDayDao businessDayDao) {
+                        IBusinessDayDao businessDayDao) {
     this.factory = factory;
     this.participationDao = participationDao;
     this.businessDayDao = businessDayDao;
 
     createCompany(factory.createCompany(1, "Coca-cola", "rue du coca", "5", null, "1020",
-        "Ville de la boisson"));
+                                        "Ville de la boisson"));
     createCompany(factory.createCompany(2, "Uniway", "rue du web", "4", null, "1310",
-        "Ville du réseau"));
+                                        "Ville du réseau"));
     createCompany(factory.createCompany(3, "windows", "rue des os", "25", null, "1000",
-        "Ville d'operating system"));
+                                        "Ville d'operating system"));
     createCompany(factory.createCompany(4, "appel", "rue des os", "3", "b", "1000",
-        "Ville d'operating system"));
+                                        "Ville d'operating system"));
   }
 
   @Override
   public ICompanyDto createCompany(ICompanyDto company) {
     ICompany newCompany =
         factory.createCompany(companyList.size() + 1, 1, company.getCreator(), company.getName(),
-            company.getAddressStreet(), company.getAddressNum(), company.getAddressMailbox(),
-            company.getAddressPostcode(), company.getAddressTown(), company.getRegisterDate());
+                              company.getAddressStreet(), company.getAddressNum(),
+                              company.getAddressMailbox(),
+                              company.getAddressPostcode(), company.getAddressTown(),
+                              company.getRegisterDate());
 
     companyList.add(newCompany);
 
@@ -54,15 +60,18 @@ class MockCompanyDao implements ICompanyDao {
   @Override
   public void updateCompany(ICompanyDto company) {
     if (companyList.size() > company.getId()
-        || companyList.get(company.getId() - 1).getVersion() != company.getVersion())
+        || companyList.get(company.getId() - 1).getVersion() != company.getVersion()) {
       throw new ConcurrentModificationException();
+    }
 
-    ICompany companyEntity =
-        factory.createCompany(company.getId(), company.getVersion(), company.getCreator(),
-            company.getName(), company.getAddressStreet(), company.getAddressNum(),
-            company.getAddressMailbox(), company.getAddressPostcode(), company.getAddressTown(),
-            company.getRegisterDate());
-
+    ICompany companyEntity = factory.createCompany(company.getId(), company.getVersion(),
+                                                   company.getCreator(),
+                                                   company.getName(), company.getAddressStreet(),
+                                                   company.getAddressNum(),
+                                                   company.getAddressMailbox(),
+                                                   company.getAddressPostcode(),
+                                                   company.getAddressTown(),
+                                                   company.getRegisterDate());
 
     companyList.set(company.getId() - 1, companyEntity);
 
@@ -146,7 +155,6 @@ class MockCompanyDao implements ICompanyDao {
         }
       }
     }
-
 
     return toReturn.toArray(new ICompany[toReturn.size()]);
   }

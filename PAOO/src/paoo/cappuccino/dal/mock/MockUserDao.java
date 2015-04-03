@@ -9,11 +9,13 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.dao.IUserDao;
 
+/**
+ * Mock implementation of the user dao.
+ */
 class MockUserDao implements IUserDao {
 
-  private HashMap<String, IUser> users = new HashMap<>();
-
-  private IEntityFactory factory;
+  private final HashMap<String, IUser> users = new HashMap<>();
+  private final IEntityFactory factory;
 
   @Inject
   public MockUserDao(IEntityFactory factory) {
@@ -38,16 +40,16 @@ class MockUserDao implements IUserDao {
 
   @Override
   public void updateUser(IUserDto user) {
-    if (users.size() > user.getId()
+    if (!users.containsKey(user.getUsername().toLowerCase())
         || users.get(user.getUsername().toLowerCase()).getVersion() != user.getVersion()) {
       throw new ConcurrentModificationException();
     }
 
-    IUser userEntity =
-        factory.createUser(user.getId(), user.getVersion() + 1, user.getUsername(),
-                           user.getPassword(), user.getLastName(), user.getFirstName(),
-                           user.getEmail(),
-                           user.getRole(), user.getRegisterDate());
+    IUser userEntity = factory.createUser(user.getId(), user.getVersion() + 1, user.getUsername(),
+                                          user.getPassword(), user.getLastName(),
+                                          user.getFirstName(),
+                                          user.getEmail(),
+                                          user.getRole(), user.getRegisterDate());
 
     users.replace(user.getUsername().toLowerCase(), userEntity);
   }

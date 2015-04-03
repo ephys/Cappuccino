@@ -36,8 +36,8 @@ class CompanyUcc implements ICompanyUcc {
       mailBox = null;
     }
 
-    ICompanyDto dto =
-        factory.createCompany(creator.getId(), name, street, numAddress, mailBox, postCode, town);
+    ICompanyDto dto = factory.createCompany(creator.getId(), name, street, numAddress, mailBox,
+                                            postCode, town);
 
     try {
       return companyDao.createCompany(dto);
@@ -48,10 +48,22 @@ class CompanyUcc implements ICompanyUcc {
 
   @Override
   public ICompanyDto[] searchCompanies(String name, String postCode, String town, String street) {
-    ValidationUtil.ensureNotNull(street, "street");
-    ValidationUtil.ensureNotNull(town, "town");
-    ValidationUtil.ensureNotNull(postCode, "postCode");
-    ValidationUtil.ensureNotNull(name, "name");
+    if (StringUtils.isEmpty(street)) {
+      street = null;
+    }
+
+    if (StringUtils.isEmpty(town)) {
+      town = null;
+    }
+
+    if (StringUtils.isEmpty(postCode)) {
+      postCode = null;
+    }
+
+    if (StringUtils.isEmpty(name)) {
+      name = null;
+    }
+
     return companyDao.searchCompanies(name, postCode, street, town);
   }
 

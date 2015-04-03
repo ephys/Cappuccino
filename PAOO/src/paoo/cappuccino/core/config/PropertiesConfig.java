@@ -19,8 +19,6 @@ public final class PropertiesConfig implements IAppConfig {
    * Creates a application config handler using java properties files.
    *
    * @param configFile The properties config file.
-   * @param debug whether or not the handler should debug when a problem occurs
-   *              (like add the missing entry to the config file).
    * @throws IOException the file could not be read.
    */
   public PropertiesConfig(File configFile) throws IOException {

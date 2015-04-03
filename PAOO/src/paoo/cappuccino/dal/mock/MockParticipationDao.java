@@ -1,7 +1,9 @@
 package paoo.cappuccino.dal.mock;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.entity.IParticipation;
@@ -9,9 +11,13 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.dao.IParticipationDao;
 
-public class MockParticipationDao implements IParticipationDao {
-  private List<IParticipation> participationList = new ArrayList<>();
+/**
+ * Mock implementation of the participation dao.
+ */
+class MockParticipationDao implements IParticipationDao {
+
   private final IEntityFactory factory;
+  private final List<IParticipation> participationList = new ArrayList<>();
 
   @Inject
   public MockParticipationDao(IEntityFactory factory) {
@@ -28,31 +34,54 @@ public class MockParticipationDao implements IParticipationDao {
 
   @Override
   public IParticipationDto createParticipation(IParticipationDto participation) {
-    IParticipation participationEntity =
-        factory.createParticipation(participation.getCompany(), participation.getBusinessDay(),
-            participation.isCancelled(), 1, participation.getState());
+    IParticipation participationEntity = factory.createParticipation(participation.getCompany(),
+                                                                     participation.getBusinessDay(),
+                                                                     participation.isCancelled(), 1,
+                                                                     participation.getState());
+
     participationList.add(participationEntity);
+
     return participationEntity;
   }
 
   @Override
-  public IParticipationDto[] fetchParticipationsByDate(int businessDayId) {
-    List<IParticipation> toReturn = new ArrayList<>();
-    for (IParticipation iParticipation : participationList) {
-      if (iParticipation.getBusinessDay() == businessDayId)
-        toReturn.add(iParticipation);
+  public void updateParticipation(IParticipationDto participation) {
+    for (int i = 0; i < participationList.size(); i++) {
+      final IParticipation localParticipation = participationList.get(i);
+
+      if (localParticipation.getCompany() == participation.getCompany()
+          && participation.getBusinessDay() == localParticipation.getBusinessDay()) {
+
+        if (localParticipation.getVersion() != participation.getVersion()) {
+          throw new ConcurrentModificationException("Participation version mismatch");
+        }
+
+        participationList.set(i, factory.createParticipation(participation.getCompany(),
+                                                             participation.getBusinessDay(),
+                                                             participation.isCancelled(),
+                                                             participation.getVersion(),
+                                                             participation.getState()));
+      }
     }
+
+    throw new ConcurrentModificationException("Participation does not exist");
+  }
+
+  @Override
+  public IParticipationDto[] fetchParticipationsByDate(int businessDayId) {
+    List<IParticipation> toReturn = participationList.stream()
+        .filter(participation -> participation.getBusinessDay() == businessDayId)
+        .collect(Collectors.toList());
+
     return toReturn.toArray(new IParticipation[toReturn.size()]);
   }
 
   @Override
   public IParticipationDto[] fetchParticipationsByCompany(int companyId) {
-    List<IParticipation> toReturn = new ArrayList<>();
-    for (IParticipation iParticipation : participationList) {
-      if (iParticipation.getCompany() == companyId)
-        toReturn.add(iParticipation);
-    }
+    List<IParticipation> toReturn = participationList.stream()
+        .filter(participation -> participation.getCompany() == companyId)
+        .collect(Collectors.toList());
+
     return toReturn.toArray(new IParticipation[toReturn.size()]);
   }
-
 }

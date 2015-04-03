@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import paoo.cappuccino.dal.IDalBackend;
 import paoo.cappuccino.dal.IDalService;
 
+/**
+ * Mock implementation of the DAL service & backend.
+ */
 class MockDalService implements IDalBackend, IDalService {
 
   @Override

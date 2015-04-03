@@ -58,6 +58,11 @@ public class ParticipationDao implements IParticipationDao {
   }
 
   @Override
+  public void updateParticipation(IParticipationDto participation) {
+    //TODO
+  }
+
+  @Override
   public IParticipationDto[] fetchParticipationsByDate(int businessDayId) {
     String query = "SELECT * FROM business_days.participations WHERE business_day = ?";
 

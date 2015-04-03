@@ -11,7 +11,6 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalService;
 import paoo.cappuccino.dal.dao.IBusinessDayDao;
-import paoo.cappuccino.dal.dao.ICompanyDao;
 import paoo.cappuccino.dal.dao.IParticipationDao;
 import paoo.cappuccino.dal.exception.NonUniqueFieldException;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
@@ -22,15 +21,15 @@ class BusinessDayUcc implements IBusinessDayUcc {
   private final IEntityFactory factory;
   private final IBusinessDayDao businessDayDao;
   private final IParticipationDao participationDao;
-  private final ICompanyDao companyDao;
+  private final IDalService dalService;
 
   @Inject
   public BusinessDayUcc(IEntityFactory entityFactory, IDalService dalService,
-      IBusinessDayDao businessDayDao, IParticipationDao participationDao, ICompanyDao companyDao) {
+                        IBusinessDayDao businessDayDao, IParticipationDao participationDao) {
     this.factory = entityFactory;
+    this.dalService = dalService;
     this.businessDayDao = businessDayDao;
     this.participationDao = participationDao;
-    this.companyDao = companyDao;
   }
 
   @Override
@@ -41,60 +40,53 @@ class BusinessDayUcc implements IBusinessDayUcc {
     try {
       return businessDayDao.createBusinessDay(dto);
     } catch (NonUniqueFieldException e) {
-      throw new IllegalArgumentException("A business day already exists for this year", e);
+      throw new IllegalArgumentException("A business day already exists for that academic year", e);
     }
   }
 
   @Override
-  public ICompanyDto[] addInvitedCompanies(ICompanyDto[] companies, IBusinessDayDto businessDay) {
-
-    // check si non null
+  public void addInvitedCompanies(ICompanyDto[] companies,
+                                  IBusinessDayDto businessDay) {
     ValidationUtil.ensureNotNull(businessDay, "businessDay");
     ValidationUtil.ensureNotNull(companies, "companies");
 
-    // check s'il y a effectivement des entreprises dans la liste à rajouter
-    if (companies.length == 0) {
-      throw new IllegalArgumentException("No companies found in the parameter companies");
+    dalService.startTransaction();
+
+    for (ICompanyDto company : companies) {
+      IParticipationDto participation = factory.createParticipation(company.getId(),
+                                                                    businessDay.getId());
+
+      participationDao.createParticipation(participation);
     }
 
-    // crée les participations et les sauve dans la db
-    for (int i = 0; i < companies.length; i++) {
-      participationDao.createParticipation(factory.createParticipation(companies[i].getId(),
-          businessDay.getId()));
-    }
-
-    // Récupération des ids de participations de la journée visée
-    IParticipationDto[] array = participationDao.fetchParticipationsByDate(businessDay.getId());
-
-    // Création du tableau de retour
-    ICompanyDto[] returnedValues = new ICompanyDto[array.length];
-
-    // itération du tableau des participations et récupération des entreprises liées
-    for (int i = 0; i < array.length; i++) {
-      returnedValues[i] = companyDao.fetchCompanyById(array[i].getCompany());
-    }
-
-    return returnedValues;
+    dalService.commit();
   }
 
   @Override
   public boolean changeState(IParticipationDto participation, State state) {
-    IParticipation entity = (IParticipation) participation;
-    entity.setState(state);
-    return false;
+    IParticipation participationEntity = convertParticipationDto(participation);
+
+    try {
+      participationEntity.setState(state);
+    } catch (IllegalArgumentException e) {
+      return false;
+    }
+
+    participationDao.updateParticipation(participation);
+    return true;
   }
 
   @Override
-  public boolean cancelParticipation(IParticipationDto participation) {
-    if (participation.isCancelled()) {
+  public boolean cancelParticipation(IParticipationDto participationDto) {
+    if (participationDto.isCancelled()) {
       return false;
     }
-    if (participation instanceof IParticipation) {
-      ((IParticipation) participation).setCancelled(true);
-      return true;
-    }
 
-    return false;
+    IParticipation participation = convertParticipationDto(participationDto);
+    participation.setCancelled(true);
+    participationDao.updateParticipation(participation);
+
+    return true;
   }
 
   @Override
@@ -110,5 +102,14 @@ class BusinessDayUcc implements IBusinessDayUcc {
   @Override
   public IParticipationDto[] getParticipations(int businessDayId) {
     return participationDao.fetchParticipationsByDate(businessDayId);
+  }
+
+  private IParticipation convertParticipationDto(IParticipationDto dto) {
+    if (dto instanceof IParticipation) {
+      return (IParticipation) dto;
+    } else {
+      return factory.createParticipation(dto.getCompany(), dto.getBusinessDay(), dto.isCancelled(),
+                                         dto.getVersion(), dto.getState());
+    }
   }
 }

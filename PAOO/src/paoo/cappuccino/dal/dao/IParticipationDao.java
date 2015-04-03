@@ -19,6 +19,16 @@ public interface IParticipationDao {
   IParticipationDto createParticipation(IParticipationDto participation);
 
   /**
+   * Updates a participation in the database.
+   *
+   * @param participation A participation entity.
+   * @throws java.util.ConcurrentModificationException     The entity version did not match or the
+   *                                                       entity has been deleted.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
+   */
+  void updateParticipation(IParticipationDto participation);
+
+  /**
    * Fetches the participations relative to a given business day.
    *
    * @param businessDayId The day the participations are relative to.

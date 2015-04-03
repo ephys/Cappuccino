@@ -35,10 +35,9 @@ public interface IUserDao {
    * @param user A user entity.
    * @throws java.util.ConcurrentModificationException             The entity version did not match
    *                                                               or the entity has been deleted.
-   * @throws java.lang.IllegalArgumentException                    The entity hasn't been inserted
-   *                                                               in the database yet. Or one of
-   *                                                               the fields failed to insert to to
-   *                                                               constraint violations.
+   * @throws java.lang.IllegalArgumentException                    One of the fields failed to
+   *                                                               insert to to constraint
+   *                                                               violations.
    * @throws paoo.cappuccino.dal.exception.NonUniqueFieldException The username is not unique.
    * @throws paoo.cappuccino.util.exception.FatalException         Database connection error.
    */

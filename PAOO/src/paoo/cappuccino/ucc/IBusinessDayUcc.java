@@ -19,47 +19,42 @@ public interface IBusinessDayUcc {
    * @param evenDate The date of the event.
    * @return The new Business Day DTO.
    * @throws java.lang.IllegalArgumentException There is already a business day on that academic
-   *         year, or the date is null.
+   *                                            year, or the date is null.
    */
   public IBusinessDayDto create(LocalDateTime evenDate);
 
   /**
    * Adds a list of invited companies to the business day participation list.
    *
-   * @param companies The list of companies to add.
+   * @param companies   The list of companies to add.
    * @param businessDay The business day the list must be added to.
-   * @return The complete list of invited companies.
    */
-  public ICompanyDto[] addInvitedCompanies(ICompanyDto[] companies, IBusinessDayDto businessDay);
+  public void addInvitedCompanies(ICompanyDto[] companies, IBusinessDayDto businessDay);
 
   /**
    * Changes the state of a participation.
    *
    * @param participation The participation that needs its state changed.
-   * @param state The new state of the participation.
+   * @param state         The new state of the participation.
    * @return true: the change was successful.
    */
   public boolean changeState(IParticipationDto participation, IParticipationDto.State state);
 
   /**
    * If the participation isn't cancelled, it will set it as if.
-   * 
+   *
    * @param participation The participation which need to be cancelled.
-   * @return True if cancelled and false if it was impossible.
+   * @return True if cancelled and false if it was not possible.
    */
   public boolean cancelParticipation(IParticipationDto participation);
 
   /**
-   * Returns all the business day that haven't any participation yet.
-   * 
-   * @return An array of BusinessDayDto which contains all the BusinessDay without any invitation.
+   * Returns all the business day that do not have any participation yet.
    */
   public IBusinessDayDto[] getInvitationlessDays();
 
   /**
    * Returns the table of every registered business days.
-   * 
-   * @return An array of BusinessDayDto which contains all the BusinessDay existing in the database.
    */
   public IBusinessDayDto[] getBusinessDays();
 

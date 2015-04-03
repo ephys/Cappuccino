@@ -16,11 +16,11 @@ import paoo.cappuccino.business.entity.IBusinessDay;
 public class JComboDay extends JPanel {
   private final JComboBox<IBusinessDayDto> combo;
 
-
   public JComboDay(IBusinessDayDto[] businessDays) {
     super(new FlowLayout(FlowLayout.CENTER));
     JLabel label = new JLabel("Journée du");
-    combo = new JComboBox<IBusinessDayDto>(businessDays);
+
+    combo = new JComboBox<>(businessDays);
     combo.setRenderer(new DayRenderer());
     this.add(label);
     this.add(combo);
@@ -33,14 +33,13 @@ public class JComboDay extends JPanel {
   private static class DayRenderer extends BasicComboBoxRenderer {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
 
-   
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index,
         boolean isSelected, boolean cellHasFocus) {
       super.getListCellRendererComponent(list, null, index, isSelected, cellHasFocus);
 
       setText(value == null ? null : ((IBusinessDay) value).getEventDate().format(formatter));
-      
+
       return this;
     }
   }

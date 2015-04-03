@@ -23,7 +23,7 @@ class ContactUcc implements IContactUcc {
 
   @Override
   public IContactDto create(int companyId, String email, String firstName, String lastName,
-      String phone) {
+                            String phone) {
     ValidationUtil.ensureNotNull(lastName, "lastName");
     ValidationUtil.ensureNotNull(firstName, "firstName");
     ValidationUtil.ensureNotNull(email, "email");
@@ -37,30 +37,20 @@ class ContactUcc implements IContactUcc {
 
     if (StringUtils.isEmpty(email)) {
       email = null;
-    } else {
-      if (!StringUtils.isEmail(email)) {
-        throw new IllegalArgumentException("Invalid email format for " + email);
-      }
+    } else if (!StringUtils.isEmail(email)) {
+      throw new IllegalArgumentException("Invalid email format for " + email);
     }
 
     return dao.createContact(factory.createContact(companyId, email, firstName, lastName, phone));
   }
 
   @Override
-  public boolean setMailInvalid(IContactDto dto) {
-    if (StringUtils.isEmpty(dto.getEmail()) || !dto.isEmailValid()) {
+  public boolean setMailInvalid(IContactDto contactDto) {
+    if (StringUtils.isEmpty(contactDto.getEmail()) || !contactDto.isEmailValid()) {
       return false;
     }
 
-    IContact contact;
-    if (dto instanceof IContact) {
-      contact = (IContact) dto;
-    } else {
-      contact =
-          factory.createContact(dto.getId(), dto.getVersion(), dto.getCompany(), dto.getEmail(),
-              dto.isEmailValid(), dto.getFirstName(), dto.getLastName(), dto.getPhone());
-    }
-
+    IContact contact = convertContact(contactDto);
     contact.setEmailValid(false);
     dao.updateContact(contact);
 
@@ -69,17 +59,29 @@ class ContactUcc implements IContactUcc {
 
   @Override
   public IContactDto[] searchContact(String firstName, String lastName) {
-    ValidationUtil.ensureNotNull(firstName, "firstName");
-    ValidationUtil.ensureNotNull(lastName, "lastName");
+    if (StringUtils.isEmpty(firstName)) {
+      firstName = null;
+    }
+
+    if (StringUtils.isEmpty(lastName)) {
+      lastName = null;
+    }
+
     return dao.fetchContactByName(firstName, lastName);
   }
 
   @Override
   public IContactDto[] getContactByCompany(int id) {
-    if (id <= 0) {
-      throw new IllegalArgumentException("Id invalide");
-    }
     return dao.fetchContactsByCompany(id);
   }
 
+  private IContact convertContact(IContactDto dto) {
+    if (dto instanceof IContact) {
+      return (IContact) dto;
+    } else {
+      return factory.createContact(dto.getId(), dto.getVersion(), dto.getCompany(), dto.getEmail(),
+                                      dto.isEmailValid(), dto.getFirstName(), dto.getLastName(),
+                                      dto.getPhone());
+    }
+  }
 }

@@ -14,32 +14,36 @@ import paoo.cappuccino.util.hasher.pbkdf2.Pbkdf2Hasher;
 
 /**
  * Base main, setups what is essentially required in order to have a working application.
- * 
+ *
  * @author Guylian Cox
  */
 public class BaseMain {
   private static final File RESOURCES_FOLDER = new File("lib");
-  
+
   private final AppContext appContext;
   private final DependencyInjector injector;
-  
+
+  /**
+   * Instantiates an application with the configuration stored in the given AppContext
+   * @param context The app configuration.
+   */
   public BaseMain(AppContext context) {
     this.appContext = context;
     this.injector = createDependencies(appContext);
-    
-    context.getAppLogger().info(context.getAppName() + " " + context.getVersion() 
-        + " launched using profile \"" + context.getProfile() 
+
+    context.getAppLogger().info(context.getAppName() + " " + context.getVersion()
+        + " launched using profile \"" + context.getProfile()
         + "\" (" + context.getProfileType().name() + ")");
   }
-  
+
   /**
    * Gets the application dependency injector.
    */
   public DependencyInjector getInjector() {
     return injector;
   }
-  
-  
+
+
   /**
    * Gets the application context.
    */
@@ -74,12 +78,11 @@ public class BaseMain {
 
     return injector;
   }
-  
+
   /**
    * Loads the config file or dies.
    *
    * @param filename The name of the config file.
-   * @param debug Whether or not the config handler should debug
    * @return The newly created config handler.
    * @throws paoo.cappuccino.util.exception.FatalException The config file could not be loaded
    */

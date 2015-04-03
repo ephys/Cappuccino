@@ -33,19 +33,16 @@ public interface IContactUcc {
   public boolean setMailInvalid(IContactDto contact);
 
   /**
-   * Returns a table with all the contacts which matches the research data.
+   * Searches contacts based on their names.
    *
-   * @param firstName First name of the contact search.
-   * @param lastName Last name of the contact search.
-   * @return A table with the contact's DTO researched.
+   * @param firstName First name of the contact search. Nullable.
+   * @param lastName Last name of the contact search. Nullable.
+   * @return the list of contacts matching the criteria.
    */
   public IContactDto[] searchContact(String firstName, String lastName);
 
   /**
-   *
-   * @param id
-   * @return
+   * Returns the list of contacts working for a given company.
    */
   public IContactDto[] getContactByCompany(int id);
-
 }
