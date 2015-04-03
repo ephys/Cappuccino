@@ -9,6 +9,7 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.business.entity.ICompany;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalBackend;
@@ -23,7 +24,6 @@ import paoo.cappuccino.util.exception.FatalException;
  * @author Kevin Bavay
  */
 class CompanyDao implements ICompanyDao {
-
 
   private final IEntityFactory entityFactory;
   private final IDalBackend dalBackend;
@@ -47,10 +47,11 @@ class CompanyDao implements ICompanyDao {
     ValidationUtil.ensureNotNull(company, "company");
 
     String query =
-        "INSERT INTO business_days.companies " + "(creator, name, address_street, address_num, "
-        + "address_mailbox, address_postcode, address_town) " + "VALUES (?, ?, ?, ?, ?, ?, ?) "
+        "INSERT INTO business_days.companies(creator, name, address_street, address_num, "
+        + " address_mailbox, address_postcode, address_town) "
+        + " VALUES (?, ?, ?, ?, ?, ?, ?) "
         + "RETURNING (company_id, creator, name, register_date, address_street, "
-        + "address_num, address_mailbox, address_postcode, address_town,version)";
+        + " address_num, address_mailbox, address_postcode, address_town,version)";
 
     try {
       if (psCreateCompany == null) {
@@ -58,7 +59,6 @@ class CompanyDao implements ICompanyDao {
       }
 
       psCreateCompany.setInt(1, company.getCreator());
-
       psCreateCompany.setString(2, company.getName());
       psCreateCompany.setString(3, company.getAddressStreet());
       psCreateCompany.setString(4, company.getAddressNum());
@@ -85,12 +85,14 @@ class CompanyDao implements ICompanyDao {
         "UPDATE business_days.companies "
         + "SET creator = ?, name = ?, register_date = ?, adress_street = ?, "
         + "adress_num = ?, adresse_mailbox = ?, adresse_postcode = ?, "
-        + "adresse_town = ?, version = version + 1 " + "WHERE company_id = ? AND version = ?";
+        + "adresse_town = ?, version = version + 1 "
+        + "WHERE company_id = ? AND version = ? LIMIT 1";
 
     try {
       if (psUpdateCompany == null) {
         psUpdateCompany = dalBackend.fetchPreparedStatement(query);
       }
+
       psUpdateCompany.setInt(1, company.getCreator());
       psUpdateCompany.setString(2, company.getName());
       psUpdateCompany.setString(3, company.getRegisterDate().toString());
@@ -100,6 +102,9 @@ class CompanyDao implements ICompanyDao {
       psUpdateCompany.setString(7, company.getAddressPostcode());
       psUpdateCompany.setString(8, company.getAddressTown());
 
+      psUpdateCompany.setInt(9, company.getId());
+      psUpdateCompany.setInt(10, company.getVersion());
+
       int affectedRows = psUpdateCompany.executeUpdate();
       if (affectedRows == 0) {
         throw new ConcurrentModificationException("The company with id " + company.getId()
@@ -107,6 +112,8 @@ class CompanyDao implements ICompanyDao {
                                                   + " was not found in the database. "
                                                   + "Either it was deleted or "
                                                   + "modified by another thread.");
+      } else if (company instanceof ICompany) {
+        ((ICompany) company).incrementVersion();
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
@@ -116,25 +123,59 @@ class CompanyDao implements ICompanyDao {
   @Override
   public ICompanyDto[] searchCompanies(String name, String postcode, String street, String town) {
     String query =
-        "SELECT * FROM business_days.companies WHERE name LIKE '%?%'AND adress_street "
-        + "LIKE '%?%' AND adresse_town LIKE '%?% "
-        + "AND CAST(adresse_postcode AS TEXT) LIKE '?%''";
+        "SELECT * FROM business_days.companies WHERE "
+        + " (? IS NULL OR LOWER(name) LIKE '%?%') AND "
+        + " (? IS NULL OR LOWER(adress_street) LIKE '%?%') AND "
+        + " (? IS NULL OR LOWER(adresse_town) LIKE '%?%') AND "
+        + " (? IS NULL OR LOWER(adresse_postcode) = ?)";
+
     try {
       if (psSearchCompanies == null) {
         psSearchCompanies = dalBackend.fetchPreparedStatement(query);
       }
+
+      if (name != null) {
+        name = name.toLowerCase();
+      }
+
+      if (street != null) {
+        street = street.toLowerCase();
+      }
+
+      if (town != null) {
+        town = town.toLowerCase();
+      }
+
+      if (postcode != null) {
+        postcode = postcode.toLowerCase();
+      }
+
+      // setting them twice for nullable check :/
+      psSearchCompanies.setString(1, name);
+      psSearchCompanies.setString(2, name);
+
+      psSearchCompanies.setString(3, street);
+      psSearchCompanies.setString(4, street);
+
+      psSearchCompanies.setString(5, town);
+      psSearchCompanies.setString(6, town);
+
+      psSearchCompanies.setString(7, postcode);
+      psSearchCompanies.setString(8, postcode);
+
       try (ResultSet rs = psSearchCompanies.executeQuery()) {
         List<ICompanyDto> companiesList = new ArrayList<>();
 
         while (rs.next()) {
           companiesList.add(makeCompanyFromSet(rs));
         }
+
         return companiesList.toArray(new ICompanyDto[companiesList.size()]);
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return new ICompanyDto[0];
+    return null;
   }
 
   @Override
@@ -143,10 +184,12 @@ class CompanyDao implements ICompanyDao {
         "SELECT c.company_id, c.creator, c.name, c.register_date, c.address_street, "
         + "c.address_num, c.address_mailbox, c.address_postcode, c.address_town, c.version "
         + "FROM business_days.companies c";
+
     try {
       if (psFetchAll == null) {
         psFetchAll = dalBackend.fetchPreparedStatement(query);
       }
+
       try (ResultSet rs = psFetchAll.executeQuery()) {
         List<ICompanyDto> companiesList = new ArrayList<>();
 
@@ -159,7 +202,8 @@ class CompanyDao implements ICompanyDao {
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return new ICompanyDto[0];
+
+    return null;
   }
 
   @Override
@@ -207,6 +251,7 @@ class CompanyDao implements ICompanyDao {
       if (psFetchInvitableCompanies == null) {
         psFetchInvitableCompanies = dalBackend.fetchPreparedStatement(query);
       }
+
       try (ResultSet rs = psFetchInvitableCompanies.executeQuery()) {
         List<ICompanyDto> companiesList = new ArrayList<>();
         while (rs.next()) {
@@ -223,11 +268,11 @@ class CompanyDao implements ICompanyDao {
   @Override
   public ICompanyDto[] fetchCompaniesByDay(int businessDayId) {
     String query = "SELECT c.company_id, c.creator, c.name, c.register_date, c.address_street, "
-                   + "c.address_num, c.address_mailbox, c.address_postcode, c.address_town, "
-                   + "c.version "
+                   + " c.address_num, c.address_mailbox, c.address_postcode, c.address_town, "
+                   + " c.version "
                    + "FROM business_days.participations p, business_days.companies c"
-                   + "WHERE p.business_day = ? AND p.state = 'INVITED' "
-                   + "AND p.company = c.company_id";
+                   + " WHERE p.business_day = ?"
+                   + " AND p.company = c.company_id";
 
     try {
       if (psFetchCompaniesByDay == null) {
@@ -240,22 +285,29 @@ class CompanyDao implements ICompanyDao {
         while (rs.next()) {
           companiesList.add(makeCompanyFromSet(rs));
         }
+
         return companiesList.toArray(new ICompanyDto[companiesList.size()]);
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return new ICompanyDto[0];
+
+    return null;
   }
 
   @Override
   public ICompanyDto fetchCompanyById(int id) {
-    String query = "SELECT * FROM business_days.companies WHERE company_id = ?  ";
+    String query = "SELECT c.company_id, c.creator, c.name, c.register_date, c.address_street, "
+                   + " c.address_num, c.address_mailbox, c.address_postcode, c.address_town, "
+                   + " c.version "
+                   + "FROM business_days.companies c "
+                   + "WHERE c.company_id = ? LIMIT 1";
 
     try {
       if (psFetchCompanyById == null) {
         psFetchCompanyById = dalBackend.fetchPreparedStatement(query);
       }
+
       psFetchCompanyById.setInt(1, id);
 
       try (ResultSet rs = psFetchCompanyById.executeQuery()) {

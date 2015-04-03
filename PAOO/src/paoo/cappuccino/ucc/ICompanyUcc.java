@@ -55,4 +55,11 @@ public interface ICompanyUcc {
    * @param company The id of the researched company.
    */
   public ICompanyDto getCompanyById(int company);
+
+  /**
+   * Returns the list of companies participating at a given business day.
+   *
+   * @param dayid The identifier of the business day.
+   */
+  public ICompanyDto[] getCompaniesByDay(int dayid);
 }

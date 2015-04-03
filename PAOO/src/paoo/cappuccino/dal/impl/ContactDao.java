@@ -9,6 +9,7 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import paoo.cappuccino.business.dto.IContactDto;
+import paoo.cappuccino.business.entity.IContact;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalBackend;
@@ -42,7 +43,7 @@ class ContactDao implements IContactDao {
                    + "first_name, last_name, phone) "
                    + "VALUES (?, ?, ?, ?, ?, ?)"
                    + "RETURNING contact_id, company, email, email_valid, first_name, last_name, "
-                   + "phone,version";
+                   + "phone, version";
 
     try {
       if (psCreateContact == null) {
@@ -51,11 +52,13 @@ class ContactDao implements IContactDao {
 
       psCreateContact.setInt(1, contact.getCompany());
       psCreateContact.setString(2, contact.getEmail());
+
       if (contact.getEmail() == null) {
         psCreateContact.setNull(3, Types.BOOLEAN);
       } else {
         psCreateContact.setBoolean(3, true);
       }
+
       psCreateContact.setString(4, contact.getFirstName());
       psCreateContact.setString(5, contact.getLastName());
       psCreateContact.setString(6, contact.getPhone());
@@ -73,28 +76,42 @@ class ContactDao implements IContactDao {
 
   @Override
   public void updateContact(IContactDto contact) {
-    String query = "UPDATE business_days.contacts SET company = ?, email = ?, "
-                   + "first_name = ?, last_name = ?, phone = ?, version = version + 1 "
-                   + "WHERE user_id = ? AND version = ?";
+    String query = "UPDATE business_days.contacts SET "
+                   + " company = ?, email = ?, email_valid = ?, first_name = ?, last_name = ?, "
+                   + " phone = ?, version = version + 1"
+                   + "WHERE user_id = ? AND version = ? LIMIT 1";
+
     try {
       if (psUpdateContact == null) {
         psUpdateContact = dalBackend.fetchPreparedStatement(query);
       }
       psUpdateContact.setInt(1, contact.getCompany());
       psUpdateContact.setString(2, contact.getEmail());
-      //psUpdateContact.setBoolean(3, contact.getEmailValid());
-      psUpdateContact.setString(3, contact.getFirstName());
-      psUpdateContact.setString(4, contact.getLastName());
-      psUpdateContact.setString(5, contact.getPhone());
+
+      if (contact.getEmail() == null) {
+        psCreateContact.setNull(3, Types.BOOLEAN);
+      } else {
+        psCreateContact.setBoolean(3, contact.isEmailValid());
+      }
+
+      psUpdateContact.setString(4, contact.getFirstName());
+      psUpdateContact.setString(5, contact.getLastName());
+      psUpdateContact.setString(6, contact.getPhone());
+
+      psUpdateContact.setInt(7, contact.getId());
+      psUpdateContact.setInt(8, contact.getVersion());
 
       int affectedRows = psUpdateContact.executeUpdate();
       if (affectedRows == 0) {
         throw new ConcurrentModificationException(
             "The user with id " + contact.getId() + " and version " + contact.getVersion()
             + " was not found in the database. "
-            + "Either it was deleted or modified by another thread.");
+            + "It either was deleted or modified by another thread.");
       }
 
+      if (contact instanceof IContact) {
+        ((IContact) contact).incrementVersion();
+      }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
@@ -102,14 +119,30 @@ class ContactDao implements IContactDao {
 
   @Override
   public IContactDto[] fetchContactByName(String firstName, String lastName) {
-    String query = "SELECT * FROM business_days.contacts "
-                   + "WHERE first_name LIKE '%?%' AND last_name LIKE '%?%'";
+    String query = "SELECT c.contact_id, c.company, c.email, c.email_valid, c.first_name, "
+                   + " c.last_name, c.phone, c.version "
+                   + "FROM business_days.contacts c"
+                   + "WHERE (? IS NULL OR LOWER(first_name) LIKE '%?%') "
+                   + " AND (? IS NULL OR LOWER(last_name) LIKE '%?%')";
+
     try {
       if (psFetchContactByName == null) {
         psFetchContactByName = dalBackend.fetchPreparedStatement(query);
       }
+
+      if (firstName != null) {
+        firstName = firstName.toLowerCase();
+      }
+
+      if (lastName != null) {
+        lastName = lastName.toLowerCase();
+      }
+
       psFetchContactByName.setString(1, firstName);
-      psFetchContactByName.setString(2, lastName);
+      psFetchContactByName.setString(2, firstName);
+
+      psFetchContactByName.setString(3, lastName);
+      psFetchContactByName.setString(4, lastName);
 
       try (ResultSet rs = psFetchContactByName.executeQuery()) {
         List<IContactDto> contactList = new ArrayList<>();
@@ -117,6 +150,7 @@ class ContactDao implements IContactDao {
         while (rs.next()) {
           contactList.add(makeContactFromSet(rs));
         }
+
         return contactList.toArray(new IContactDto[contactList.size()]);
       }
     } catch (SQLException e) {
@@ -127,17 +161,24 @@ class ContactDao implements IContactDao {
 
   @Override
   public IContactDto[] fetchContactsByCompany(int companyId) {
-    String query = "SELECT * FROM business_days.contacts WHERE company = ?";
+    String query = "SELECT c.contact_id, c.company, c.email, c.email_valid, c.first_name, "
+                   + " c.last_name, c.phone, c.version FROM business_days.contacts c "
+                   + "WHERE c.company = ?";
+
     try {
       if (psFetchContactsByCompany == null) {
         psFetchContactsByCompany = dalBackend.fetchPreparedStatement(query);
       }
+
+      psFetchContactsByCompany.setInt(1, companyId);
+
       try (ResultSet rs = psFetchContactsByCompany.executeQuery()) {
         List<IContactDto> contactList = new ArrayList<>();
 
         while (rs.next()) {
           contactList.add(makeContactFromSet(rs));
         }
+
         return contactList.toArray(new IContactDto[contactList.size()]);
       }
 

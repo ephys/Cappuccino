@@ -11,22 +11,11 @@ import java.time.Month;
 public class DateUtils {
 
   /**
-   * Returns the Belgian academic year of a LocalDate.
+   * Returns the first year of a Belgian academic year. (for instance, the academic year "2014-2015"
+   * would be represented by the integer 2014.
    *
    * @param date The date from which the academic year is to be extracted.
-   * @return the two years of the academic year separated by a hyphen ("year1-year2").
-   */
-  public static String getAcademicYearStr(LocalDateTime date) {
-    int year = getAcademicYear(date);
-    
-    return year + "-" + (year + 1);
-  }
-
-  /**
-   * Returns the first year of a Belgian academic year.
-   *
-   * @param date The date from which the academic year is to be extracted.
-   * @return the first year of the academic year ("year1").
+   * @return the first year of the academic year.
    */
   public static int getAcademicYear(LocalDateTime date) {
     int year = date.getYear();

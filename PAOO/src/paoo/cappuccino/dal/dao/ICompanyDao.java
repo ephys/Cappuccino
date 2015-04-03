@@ -82,6 +82,5 @@ public interface ICompanyDao {
    * @return Every companies who was present or null if none was found
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error
    */
-  //TODO: replace this by something that returns participation DTOs
   ICompanyDto[] fetchCompaniesByDay(int businessDayId);
 }

@@ -81,4 +81,9 @@ class CompanyUcc implements ICompanyUcc {
   public ICompanyDto getCompanyById(int company) {
     return companyDao.fetchCompanyById(company);
   }
+
+  @Override
+  public ICompanyDto[] getCompaniesByDay(int dayid) {
+    return companyDao.fetchCompaniesByDay(dayid);
+  }
 }

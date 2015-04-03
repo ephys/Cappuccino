@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS business_days.business_days (
     DEFAULT NEXTVAL('business_days.business_days_id_seq'),
   event_date      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   creation_date   TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
-  academic_year   CHAR(9)                     NOT NULL UNIQUE,
+  academic_year   INTEGER                     NOT NULL UNIQUE,
   version         INTEGER                     NOT NULL DEFAULT 1
 );
 
@@ -91,8 +91,8 @@ VALUES (DEFAULT, 1, 'alahackbar@isis.afriqua', DEFAULT, 'Sarah', 'Croche', '0987
 INSERT INTO business_days.contacts
 VALUES (DEFAULT, 1, 'monte@negro.swag', DEFAULT, 'Jesus', 'Christ et parle', '098765432', DEFAULT);
 
-INSERT INTO business_days.business_days VALUES (DEFAULT, '2015-04-04', DEFAULT, '2014-2015');
-INSERT INTO business_days.business_days VALUES (DEFAULT, '2015-04-04', DEFAULT, '2012-2013');
+INSERT INTO business_days.business_days VALUES (DEFAULT, '2015-04-04', DEFAULT, 2014);
+INSERT INTO business_days.business_days VALUES (DEFAULT, '2013-04-04', DEFAULT, 2012);
 
 INSERT INTO business_days.participations VALUES (1, 1, 'INVITED', DEFAULT);
 INSERT INTO business_days.participations VALUES (2, 1, 'DECLINED', DEFAULT);
