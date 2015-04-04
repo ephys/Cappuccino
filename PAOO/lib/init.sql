@@ -81,21 +81,49 @@ CREATE TABLE IF NOT EXISTS business_days.attendances (
 INSERT INTO business_days.users VALUES (DEFAULT, 'USER', 'pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000', 'email', 'UserName', 'FirstName', 'lastName', DEFAULT, DEFAULT);
 INSERT INTO business_days.users VALUES (DEFAULT, 'USER', 'pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000', 'email2', 'UserName2', 'FirstName2', 'lastName2', DEFAULT, DEFAULT);
 
+INSERT INTO business_days.business_days VALUES (DEFAULT, '2010-04-04', DEFAULT, 2009, DEFAULT);
+INSERT INTO business_days.business_days VALUES (DEFAULT, '2010-10-04', DEFAULT, 2010, DEFAULT);
+INSERT INTO business_days.business_days VALUES (DEFAULT, '2012-04-04', DEFAULT, 2011, DEFAULT);
+INSERT INTO business_days.business_days VALUES (DEFAULT, '2013-06-04', DEFAULT, 2012, DEFAULT);
+INSERT INTO business_days.business_days VALUES (DEFAULT, '2013-10-04', DEFAULT, 2013, DEFAULT);
+
 INSERT INTO business_days.companies
-VALUES (DEFAULT, 1, 'Microbrost', DEFAULT, 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
-INSERT INTO business_days.companies VALUES
-  (DEFAULT, 1, 'Pinapple', DEFAULT, 'Rue Le long couteau', 42, NULL, 10000, 'Saint-Jude', DEFAULT);
+VALUES (DEFAULT, 1, 'Company1', DEFAULT, 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
+--Participé - declined
+INSERT INTO business_days.participations VALUES (1, 2, 'DECLINED', DEFAULT, DEFAULT);
+
+INSERT INTO business_days.companies
+VALUES (DEFAULT, 1, 'Company2', DEFAULT, 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
+-- participé et payé
+INSERT INTO business_days.participations VALUES (2, 3, 'PAID', DEFAULT, DEFAULT);
+
+INSERT INTO business_days.companies
+VALUES (DEFAULT, 1, 'Company3', DEFAULT, 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
+-- participé et payé
+INSERT INTO business_days.participations VALUES (3, 4, 'PAID', DEFAULT, DEFAULT);
+
+INSERT INTO business_days.companies
+VALUES (DEFAULT, 1, 'Company4', DEFAULT, 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
+-- participé et payé  mais pas dans les 4ans
+INSERT INTO business_days.participations VALUES (4, 1, 'PAID', DEFAULT, DEFAULT);
+
+INSERT INTO business_days.companies
+VALUES (DEFAULT, 1, 'Company5', '2014-10-04', 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
+-- nouvelle entreprise créée 1q
+
+INSERT INTO business_days.companies
+VALUES (DEFAULT, 1, 'Company6', DEFAULT, 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
+-- nouvelle entreprise créée 2q
+
+-- nouvelle entreprise crée il y 2ans
+INSERT INTO business_days.companies
+VALUES (DEFAULT, 1, 'Company7', '2012-04-04', 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
 
 INSERT INTO business_days.contacts
 VALUES (DEFAULT, 1, 'alahackbar@isis.afriqua', DEFAULT, 'Sarah', 'Croche', '098765432', DEFAULT);
 INSERT INTO business_days.contacts
 VALUES (DEFAULT, 1, 'monte@negro.swag', DEFAULT, 'Jesus', 'Christ et parle', '098765432', DEFAULT);
 
-INSERT INTO business_days.business_days VALUES (DEFAULT, '2015-04-04', DEFAULT, 2014);
-INSERT INTO business_days.business_days VALUES (DEFAULT, '2013-04-04', DEFAULT, 2012);
-
-INSERT INTO business_days.participations VALUES (1, 1, 'INVITED', DEFAULT);
-INSERT INTO business_days.participations VALUES (2, 1, 'DECLINED', DEFAULT);
 
 INSERT INTO business_days.attendances VALUES (1, 1, 1);
 INSERT INTO business_days.attendances VALUES (1, 1, 2);
