@@ -10,6 +10,8 @@ import paoo.cappuccino.ihm.companydetails.CompanyDetailsModel;
 import paoo.cappuccino.ihm.companydetails.CompanyDetailsViewController;
 import paoo.cappuccino.ihm.companyselection.CompanySelectionModel;
 import paoo.cappuccino.ihm.companyselection.CompanySelectionViewController;
+import paoo.cappuccino.ihm.contactdetails.ContactDetailsModel;
+import paoo.cappuccino.ihm.contactdetails.ContactDetailsViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.newbusinessday.NewBusinessDayController;
 import paoo.cappuccino.ihm.newbusinessday.NewBusinessDayModel;
@@ -45,6 +47,7 @@ public class ViewControllerFactory {
   private final ParticipationSearchingModel modelParticipationSearching;
   private final AccueilModel modelAccueil;
   private final CompanyDetailsModel modelCompanyDetails;
+  private final ContactDetailsModel modelContactDetails;
 
   /**
    * Creates the view factory with all the dependencies required by the views.
@@ -67,6 +70,7 @@ public class ViewControllerFactory {
     modelParticipationSearching = new ParticipationSearchingModel();
     modelAccueil = new AccueilModel();
     modelCompanyDetails = new CompanyDetailsModel();
+    modelContactDetails = new ContactDetailsModel();
   }
 
   /**
@@ -83,7 +87,7 @@ public class ViewControllerFactory {
 
       case SELECT_COMPANY:
         return new CompanySelectionViewController(modelCompanySelection, menuModel, guiManager,
-            businessDayUcc, companyUcc);
+            businessDayUcc, companyUcc,contactUcc);
 
       case CREATE_COMPANY:
         return new NewCompanyViewController(modelNewCompany, menuModel, guiManager, companyUcc);
@@ -106,6 +110,9 @@ public class ViewControllerFactory {
         
       case COMPANY_DETAILS:
         return new CompanyDetailsViewController(modelCompanyDetails,menuModel,userUcc,contactUcc,guiManager);
+        
+      case CONTACT_DETAILS:
+        return new ContactDetailsViewController(modelContactDetails,menuModel,contactUcc,guiManager);
         // TODO: add ViewControllers.
 
       default:
