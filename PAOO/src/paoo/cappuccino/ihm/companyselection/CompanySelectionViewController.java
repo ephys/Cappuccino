@@ -1,6 +1,8 @@
 package paoo.cappuccino.ihm.companyselection;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -10,10 +12,17 @@ import java.io.FileWriter;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTable;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
@@ -21,6 +30,7 @@ import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ihm.util.exception.GuiException;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
+import paoo.cappuccino.ucc.IContactUcc;
 
 /**
  * ViewController for company selection gui.
@@ -39,17 +49,19 @@ public class CompanySelectionViewController extends JPanel {
   private MenuModel menu;
   private IBusinessDayUcc businessDayUcc;
   private ICompanyUcc companyUcc;
+  private IContactUcc contactUcc;
   private IBusinessDayDto selectedBusinessDay;
   private IBusinessDayDto[] businessDayDto;
 
   public CompanySelectionViewController(CompanySelectionModel model, MenuModel menu,
                                         IGuiManager guiManager, IBusinessDayUcc businessDayUcc,
-                                        ICompanyUcc companyUcc) {
+                                        ICompanyUcc companyUcc, IContactUcc contactUcc) {
 
     super(new BorderLayout());
     this.model = model;
     this.businessDayUcc = businessDayUcc;
     this.companyUcc = companyUcc;
+    this.contactUcc = contactUcc;
     this.guiManager = guiManager;
     this.menu = menu;
     view = new CompanySelectionView(model);
@@ -111,16 +123,29 @@ public class CompanySelectionViewController extends JPanel {
 
           fileWriter = new BufferedWriter(new FileWriter(saveDirectory));
 
-          fileWriter.write("Nom entreprise");
+          fileWriter.write("Nom entreprise | Nom | Prenom | Email");
           fileWriter.newLine();
           fileWriter.newLine();
 
           for (int i = 0; i < companyDtoArray.length; i++) {
-
+                 
+           
             companyDtoArray[i] = companyDto[list.get(i)];
-            fileWriter.write(companyDto[list.get(i)].getName());
+            
+            IContactDto[] contactDto = contactUcc.getContactByCompany(companyDtoArray[i].getId());
+            
+            if(contactDto.length > 0){
+              
+               for(int j = 0; j < contactDto.length; j++){
+                 
+                 fileWriter.write(companyDto[list.get(i)].getName()+" | "+contactDto[j].getLastName()+" | "+contactDto[j].getFirstName()+" | "+contactDto[j].getEmail());
+                 fileWriter.newLine();
+               }
+               continue;
+            }
+            fileWriter.write(companyDto[list.get(i)].getName()+" | Pas de personne de contact");
             fileWriter.newLine();
-
+            
           }
           this.businessDayUcc.addInvitedCompanies(companyDtoArray, selectedBusinessDay);
 
@@ -152,7 +177,7 @@ public class CompanySelectionViewController extends JPanel {
 
       }
 
-      if (this.model.getNotDeselectAll()) {
+      if (this.model.isNotDeselectAll()) {
         this.model.setNotDeselectAll(false);
       }
     });
@@ -215,13 +240,13 @@ public class CompanySelectionViewController extends JPanel {
 
         }
 
-        if (model.getSelectAll() && checkBoxCounter == (table.getRowCount() - 1)) {
+        if (model.isSelectAll() && checkBoxCounter == (table.getRowCount() - 1)) {
 
           model.setNotDeselectAll(true);
           selectAll.setSelected(false);
           return;
         }
-        if (!model.getSelectAll() && checkBoxCounter == table.getRowCount()) {
+        if (!model.isSelectAll() && checkBoxCounter == table.getRowCount()) {
 
           model.setNotDeselectAll(true);
           selectAll.setSelected(true);

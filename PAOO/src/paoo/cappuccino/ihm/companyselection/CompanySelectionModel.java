@@ -25,7 +25,7 @@ public class CompanySelectionModel extends BaseModel {
 
   }
 
-  public boolean getSelectAll() {
+  public boolean isSelectAll() {
     return selectAll;
   }
 
@@ -37,7 +37,7 @@ public class CompanySelectionModel extends BaseModel {
     }
   }
 
-  public boolean getNotDeselectAll() {
+  public boolean isNotDeselectAll() {
     return notDeselectAll;
   }
 

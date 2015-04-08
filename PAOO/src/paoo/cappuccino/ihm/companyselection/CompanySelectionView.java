@@ -50,7 +50,7 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
       return;
     }
 
-    boolean selectAll = model.getSelectAll();
+    boolean selectAll = model.isSelectAll();
 
     for (int i = 0; i < table.getRowCount(); i++) {
 
