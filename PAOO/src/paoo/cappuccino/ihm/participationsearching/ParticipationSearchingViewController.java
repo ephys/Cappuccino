@@ -50,9 +50,9 @@ public class ParticipationSearchingViewController extends JPanel {
 
 
     JPanel searchingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    
+
     businessDayDto = this.businessDayUcc.getBusinessDays();
-    
+
     JComboDay comboBox = new JComboDay(businessDayDto);
 
     if (businessDayDto.length == 0) {
@@ -68,15 +68,16 @@ public class ParticipationSearchingViewController extends JPanel {
     }
 
 
-    comboBox.getCombo().addActionListener(e -> {
+    comboBox.getCombo().addActionListener(
+        e -> {
 
-      this.selectedBusinessDay = businessDayDto[(int)comboBox.getCombo().getSelectedIndex()];
+          this.selectedBusinessDay = businessDayDto[(int) comboBox.getCombo().getSelectedIndex()];
 
-      IParticipationDto[] participationDto =
-          businessDayUcc.getParticipations(this.selectedBusinessDay.getId());
-      this.model.setParticipationDto(participationDto);
+          IParticipationDto[] participationDto =
+              businessDayUcc.getParticipations(this.selectedBusinessDay.getId());
+          this.model.setParticipationDto(participationDto);
 
-    });
+        });
 
     searchingPanel.add(comboBox);
 
@@ -88,14 +89,13 @@ public class ParticipationSearchingViewController extends JPanel {
       public void mouseClicked(MouseEvent e) {
 
         if (e.getClickCount() == 2) {
-          
+
           int companyId =
               (int) table.getModel().getValueAt(table.getSelectedRow(), table.getColumnCount());
-          ICompanyDto companyDto =
-              ParticipationSearchingViewController.this.companyUcc.getCompanyById(companyId);
+          ICompanyDto companyDto = companyUcc.getCompanyById(companyId);
 
-          ParticipationSearchingViewController.this.menu.setTransitionObject(companyDto);
-          ParticipationSearchingViewController.this.menu.setCurrentPage(MenuEntry.COMPANY_DETAILS);
+          menu.setTransitionObject(companyDto);
+          menu.setCurrentPage(MenuEntry.COMPANY_DETAILS);
         }
 
       }
