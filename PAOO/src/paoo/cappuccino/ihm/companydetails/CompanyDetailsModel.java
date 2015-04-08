@@ -19,12 +19,9 @@ public class CompanyDetailsModel extends BaseModel{
   public void setContactDto(IContactDto[] contactDto){
     
     this.contactDto = contactDto;
+   
   }
   
- public void fireDispatchChangeEvent(){ 
-   
-   dispatchChangeEvent();
- }
   public ICompanyDto getCompanyDto() {
 
     return companyDto;

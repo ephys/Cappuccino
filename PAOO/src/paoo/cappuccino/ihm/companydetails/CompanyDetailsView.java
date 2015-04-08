@@ -16,17 +16,16 @@ import javax.swing.table.AbstractTableModel;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
 
-public class CompanyDetailsView extends JPanel implements ChangeListener{
+public class CompanyDetailsView extends JPanel{
 
   private CompanyDetailsModel model;
   private JTable table;
-
+  
   public CompanyDetailsView(CompanyDetailsModel model) {
 
     super(new BorderLayout());
     this.model = model;
     table = new JTable();
-    this.model.addChangeListener(this);
    
     JPanel gridLayoutpanel = new JPanel(new GridLayout(3,1));
     JPanel panel = new JPanel();
@@ -37,7 +36,6 @@ public class CompanyDetailsView extends JPanel implements ChangeListener{
     
     gridLayoutpanel.add(panel);
     
-
     panel = new JPanel();
     panel.add(new JLabel("Date de l'enregistrement : "
         +model.getCompanyDto().getRegisterDate().toString()),FlowLayout.LEFT);
@@ -70,20 +68,17 @@ public class CompanyDetailsView extends JPanel implements ChangeListener{
     JPanel borderLayoutPanel = new JPanel(new BorderLayout());
     
     borderLayoutPanel.add(new JLabel("Personne de contact : "),BorderLayout.NORTH);
-    borderLayoutPanel.add(new JScrollPane(table));
     
+    if(model.getContactDto().length == 0){
+      borderLayoutPanel.add(new JLabel("Il n'y a aucune personne de contact pour cet entreprise."));
+    }else{
+     borderLayoutPanel.add(new JScrollPane(table));
+      table.setModel(new tableModel(model.getContactDto()));
+    }
     this.add(borderLayoutPanel);
    
     //TODO ajouter getBusinessDaybyCompanyId
   }
-
-  @Override
-  public void stateChanged(ChangeEvent event) {
-
-      table.setModel(new tableModel(model.getContactDto()));
-
-  }
-
 
   public JTable getTable() {
 
@@ -141,10 +136,5 @@ public class CompanyDetailsView extends JPanel implements ChangeListener{
     }
   }
   
-  public String errorMessage(ICompanyDto[] companyDto){
-    
-    if(companyDto == null) return "Il n'y a aucune journée d'entreprise disponible.";
-    else return "Il n'y a pas d'entreprise disponible.";
-}
 
 }
