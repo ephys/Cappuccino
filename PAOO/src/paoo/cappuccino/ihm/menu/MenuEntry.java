@@ -15,14 +15,15 @@ public enum MenuEntry {
   CREATE_COMPANY("Créer une entreprise"),
   CREATE_CONTACT("Créer une personne de contact"),
   ATTENDANCE("Enregistrer présences"),
-  COMPANY_DETAILS("Entreprise");
+  COMPANY_DETAILS("Entreprise"),
+  CONTACT_DETAILS("Contact");
 
   private final String title;
 
   /**
    * @param title the menu entry's title.
    */
-  private MenuEntry(String title) {
+  MenuEntry(String title) {
     this.title = title;
   }
 

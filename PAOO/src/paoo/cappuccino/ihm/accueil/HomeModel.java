@@ -8,7 +8,7 @@ import paoo.cappuccino.ihm.util.BaseModel;
  *
  * @author Opsomer Mathias
  */
-public class AccueilModel extends BaseModel {
+public class HomeModel extends BaseModel {
 
   private IBusinessDayDto selectedDay;
 

@@ -1,11 +1,21 @@
 package paoo.cappuccino.ihm.accueil;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -34,7 +44,7 @@ import paoo.cappuccino.util.ParticipationUtils;
 public class AccueilViewController extends JPanel implements ChangeListener {
 
   private static final long serialVersionUID = 3071496812344175953L;
-  private final AccueilModel viewModel;
+  private final HomeModel viewModel;
   private final MenuModel menu;
   private final IBusinessDayUcc dayUcc;
   private final ICompanyUcc companyUcc;
@@ -49,7 +59,7 @@ public class AccueilViewController extends JPanel implements ChangeListener {
    *
    * @param model The ViewController's model.
    */
-  public AccueilViewController(AccueilModel model, MenuModel menu, IGuiManager guiManager,
+  public AccueilViewController(HomeModel model, MenuModel menu, IGuiManager guiManager,
       IBusinessDayUcc dayUcc, ICompanyUcc companyUcc) {
     super(new BorderLayout());
     this.menu = menu;
