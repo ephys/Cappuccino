@@ -1,6 +1,7 @@
 package paoo.cappuccino.ucc.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
@@ -90,17 +91,17 @@ class BusinessDayUcc implements IBusinessDayUcc {
   }
 
   @Override
-  public IBusinessDayDto[] getInvitationlessDays() {
+  public List<IBusinessDayDto> getInvitationlessDays() {
     return businessDayDao.fetchInvitationlessDays();
   }
 
   @Override
-  public IBusinessDayDto[] getBusinessDays() {
+  public List<IBusinessDayDto> getBusinessDays() {
     return businessDayDao.fetchAll();
   }
 
   @Override
-  public IParticipationDto[] getParticipations(int businessDayId) {
+  public List<IParticipationDto> getParticipations(int businessDayId) {
     return participationDao.fetchParticipationsByDate(businessDayId);
   }
 

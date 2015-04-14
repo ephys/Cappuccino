@@ -3,6 +3,7 @@ package paoo.cappuccino.ihm.newcontact;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -52,8 +53,9 @@ public class NewContactViewController extends JPanel {
     JTextField contactMailField = new JTextField();
     JTextField contactPhoneField = new JTextField();
 
+    List<ICompanyDto> allCompanies = companyUcc.getAllCompanies();
     JComboBox<ICompanyDto> comboCompanies =
-        new JComboBox<ICompanyDto>(companyUcc.getAllCompanies());
+        new JComboBox<>(allCompanies.toArray(new ICompanyDto[allCompanies.size()]));
     comboCompanies.setRenderer(new ComboEntrepriseRenderer());
 
 

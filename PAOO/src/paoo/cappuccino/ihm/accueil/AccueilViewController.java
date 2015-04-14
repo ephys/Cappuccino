@@ -69,8 +69,8 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
     this.viewModel = model;
 
-    IBusinessDayDto[] businessDays = dayUcc.getBusinessDays();
-    if (businessDays.length == 0) {
+    List<IBusinessDayDto> businessDays = dayUcc.getBusinessDays();
+    if (businessDays.size() == 0) {
       viewError.setError(ErrorPanel.ERROR_NO_DAY);
       this.add(viewError);
 
@@ -82,7 +82,7 @@ public class AccueilViewController extends JPanel implements ChangeListener {
     // north
     JPanel daylistPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-    dayList = new JComboDay(businessDays);
+    dayList = new JComboDay(businessDays.toArray(new IBusinessDayDto[businessDays.size()]));
 
 
     dayList.getCombo().addActionListener(
@@ -148,12 +148,12 @@ public class AccueilViewController extends JPanel implements ChangeListener {
    * build data from accueilModel.
    */
   private void buildTable() {
-    IParticipationDto[] participations =
+    List<IParticipationDto> participations =
         dayUcc.getParticipations(viewModel.getSelectedDay().getId());
 
-    tableModel.setRowCount(participations.length);
-    for (int i = 0; i < participations.length; i++) {
-      IParticipationDto participation = participations[i];
+    tableModel.setRowCount(participations.size());
+    for (int i = 0; i < participations.size(); i++) {
+      IParticipationDto participation = participations.get(i);
       ICompanyDto company = companyUcc.getCompanyById(participation.getCompany());
 
       tableModel.setValueAt(company, i, 0);

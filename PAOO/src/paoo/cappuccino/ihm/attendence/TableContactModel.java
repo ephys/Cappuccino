@@ -1,5 +1,7 @@
 package paoo.cappuccino.ihm.attendence;
 
+import java.util.List;
+
 import javax.swing.table.AbstractTableModel;
 
 import paoo.cappuccino.business.dto.IContactDto;
@@ -22,15 +24,15 @@ public class TableContactModel extends AbstractTableModel {
     this.data = new Object[0][0];
   }
 
-  public void changeData(IContactDto[] listContact) {
+  public void changeData(List<IContactDto> listContact) {
     if (listContact == null) {
       return;
     }
-    data = new Object[titles.length][listContact.length];
-    for (int i = 0; i < listContact.length; i++) {
-      data[i][0] = listContact[i].getFirstName();
-      data[i][1] = listContact[i].getLastName();
-      data[i][2] = listContact[i].getEmail();
+    data = new Object[titles.length][listContact.size()];
+    for (int i = 0; i < listContact.size(); i++) {
+      data[i][0] = listContact.get(i).getFirstName();
+      data[i][1] = listContact.get(i).getLastName();
+      data[i][2] = listContact.get(i).getEmail();
       data[i][3] = Boolean.FALSE;
     }
   }

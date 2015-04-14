@@ -1,5 +1,7 @@
 package paoo.cappuccino.dal.dao;
 
+import java.util.List;
+
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 
 /**
@@ -27,7 +29,7 @@ public interface IBusinessDayDao {
    * @return The list of persisted business days.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
-  IBusinessDayDto[] fetchAll();
+  List<IBusinessDayDto> fetchAll();
 
   /**
    * Fetches the business days which no companies have been invited to yet.
@@ -35,7 +37,7 @@ public interface IBusinessDayDao {
    * @return The list of matching business days.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
-  IBusinessDayDto[] fetchInvitationlessDays();
+  List<IBusinessDayDto> fetchInvitationlessDays();
 
   /**
    * Fetches the business day that occurred during an academic year.

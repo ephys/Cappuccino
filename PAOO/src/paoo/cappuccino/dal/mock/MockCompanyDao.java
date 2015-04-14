@@ -2,6 +2,7 @@ package paoo.cappuccino.dal.mock;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
@@ -78,8 +79,9 @@ class MockCompanyDao implements ICompanyDao {
   }
 
   @Override
-  public ICompanyDto[] searchCompanies(String name, String postcode, String street, String town) {
-    List<ICompany> toReturn = new ArrayList<>();
+  public List<ICompanyDto> searchCompanies(String name, String postcode, String street,
+                                           String town) {
+    List<ICompanyDto> toReturn = new ArrayList<>();
 
     for (ICompany company : companyList) {
       if (name != null && !company.getName().equalsIgnoreCase(name)) {
@@ -101,25 +103,25 @@ class MockCompanyDao implements ICompanyDao {
       toReturn.add(company);
     }
 
-    return toReturn.toArray(new ICompany[toReturn.size()]);
+    return toReturn;
   }
 
 
   @Override
-  public ICompanyDto[] fetchAll() {
-    return companyList.toArray(new ICompanyDto[companyList.size()]);
+  public List<ICompanyDto> fetchAll() {
+    return Collections.unmodifiableList(companyList);
   }
 
   @Override
-  public ICompanyDto[] fetchInvitableCompanies() {
-    List<ICompany> toReturn = new ArrayList<>();
+  public List<ICompanyDto> fetchInvitableCompanies() {
+    List<ICompanyDto> toReturn = new ArrayList<>();
     for (ICompany searchee : companyList) {
       if (searchee.getRegisterDate().isAfter(LocalDateTime.now().minusYears(1))) {
         toReturn.add(searchee);
         continue;
       }
 
-      IParticipationDto[] participationList =
+      List<IParticipationDto> participationList =
           participationDao.fetchParticipationsByCompany(searchee.getId());
 
       for (IParticipationDto participation : participationList) {
@@ -137,15 +139,15 @@ class MockCompanyDao implements ICompanyDao {
       }
     }
 
-    return toReturn.toArray(new ICompanyDto[toReturn.size()]);
+    return toReturn;
   }
 
   @Override
-  public ICompanyDto[] fetchCompaniesByDay(int businessDayId) {
-    List<ICompany> toReturn = new ArrayList<>();
+  public List<ICompanyDto> fetchCompaniesByDay(int businessDayId) {
+    List<ICompanyDto> toReturn = new ArrayList<>();
 
     for (ICompany company : companyList) {
-      IParticipationDto[] companyParticipations =
+      List<IParticipationDto> companyParticipations =
           participationDao.fetchParticipationsByCompany(company.getId());
 
       for (IParticipationDto participation : companyParticipations) {
@@ -156,7 +158,7 @@ class MockCompanyDao implements ICompanyDao {
       }
     }
 
-    return toReturn.toArray(new ICompany[toReturn.size()]);
+    return toReturn;
   }
 
   @Override

@@ -1,5 +1,7 @@
 package paoo.cappuccino.ucc.impl;
 
+import java.util.List;
+
 import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.entity.IContact;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
@@ -58,7 +60,7 @@ class ContactUcc implements IContactUcc {
   }
 
   @Override
-  public IContactDto[] searchContact(String firstName, String lastName) {
+  public List<IContactDto> searchContact(String firstName, String lastName) {
     if (StringUtils.isEmpty(firstName)) {
       firstName = null;
     }
@@ -71,7 +73,7 @@ class ContactUcc implements IContactUcc {
   }
 
   @Override
-  public IContactDto[] getContactByCompany(int id) {
+  public List<IContactDto> getContactByCompany(int id) {
     return dao.fetchContactsByCompany(id);
   }
 

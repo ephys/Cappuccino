@@ -1,5 +1,7 @@
 package paoo.cappuccino.dal.dao;
 
+import java.util.List;
+
 import paoo.cappuccino.business.dto.IContactDto;
 
 /**
@@ -38,7 +40,7 @@ public interface IContactDao {
    * @return The list of contact matching the first name and/or the last name.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
-  IContactDto[] fetchContactByName(String firstName, String lastName);
+  List<IContactDto> fetchContactByName(String firstName, String lastName);
 
   /**
    * Fetches the list of contacts working for a given company.
@@ -47,6 +49,6 @@ public interface IContactDao {
    * @return The list of contacts working for the company.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
-  IContactDto[] fetchContactsByCompany(int companyId);
+  List<IContactDto> fetchContactsByCompany(int companyId);
 }
 

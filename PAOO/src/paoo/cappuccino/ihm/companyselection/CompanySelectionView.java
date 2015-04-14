@@ -1,15 +1,19 @@
 package paoo.cappuccino.ihm.companyselection;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
-import paoo.cappuccino.business.dto.IParticipationDto;
 
 /**
  * View for the company selection Gui.
@@ -34,16 +38,16 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
   @Override
   public void stateChanged(ChangeEvent event) {
 
-    if (model.getCompanyDto() != null && model.getCompanyDto().length > 0 && table.getRowCount() == 0) {
+    if (model.getCompanyDto() != null && model.getCompanyDto().size() > 0 && table.getRowCount() == 0) {
 
       table.setModel(new tableModel(model.getCompanyDto()));
 
       return;
 
-    } else if (model.getCompanyDto() == null || model.getCompanyDto().length == 0) {
+    } else if (model.getCompanyDto() == null || model.getCompanyDto().size() == 0) {
 
       JPanel centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
-     
+
       centerPadding.add(new JLabel(errorMessage(model.getCompanyDto())));
 
       this.add(centerPadding);
@@ -73,15 +77,15 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
                         "Selectionner"};
     Object[][] data;
 
-    public tableModel(ICompanyDto[] companyDto) {
+    public tableModel(List<ICompanyDto> companyDto) {
 
-      data = new Object[companyDto.length][];
+      data = new Object[companyDto.size()][];
 
-      for (int i = 0; i < companyDto.length; i++) {
+      for (int i = 0; i < companyDto.size(); i++) {
 
         data[i] =
-            new Object[]{companyDto[i].getName(), companyDto[i].getAddressTown(),
-                         companyDto[i].getRegisterDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy à hh-mm-ss")), false};
+            new Object[]{companyDto.get(i).getName(), companyDto.get(i).getAddressTown(),
+                         companyDto.get(i).getRegisterDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy à hh-mm-ss")), false};
       }
 
     }
@@ -126,9 +130,9 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
       return data[0][columnIndex].getClass();
     }
   }
-  
-  public String errorMessage(ICompanyDto[] companyDto){
-    
+
+  public String errorMessage(List<ICompanyDto> companyDto){
+
     if(companyDto == null) return "Il n'y a aucune journée d'entreprise disponible.";
     else return "Il n'y a pas d'entreprise disponible.";
 }

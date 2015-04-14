@@ -4,17 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
-import paoo.cappuccino.ihm.companydetails.CompanyDetailsViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
@@ -31,7 +28,7 @@ public class ParticipationSearchingViewController extends JPanel {
   private IBusinessDayUcc businessDayUcc;
   private ICompanyUcc companyUcc;
   private ParticipationSearchingView view;
-  private IBusinessDayDto[] businessDayDto;
+  private List<IBusinessDayDto> businessDayDto;
   private IBusinessDayDto selectedBusinessDay;
 
   public ParticipationSearchingViewController(ParticipationSearchingModel model, MenuModel menu,
@@ -53,17 +50,18 @@ public class ParticipationSearchingViewController extends JPanel {
 
     businessDayDto = this.businessDayUcc.getBusinessDays();
 
-    JComboDay comboBox = new JComboDay(businessDayDto);
+    JComboDay comboBox = new JComboDay(
+        businessDayDto.toArray(new IBusinessDayDto[businessDayDto.size()]));
 
-    if (businessDayDto.length == 0) {
+    if (businessDayDto.size() == 0) {
 
       comboBox.setEnabled(false);
       this.model.setParticipationDto(null);
 
     } else {
 
-      IParticipationDto[] participationDto =
-          businessDayUcc.getParticipations(businessDayDto[0].getId());
+      List<IParticipationDto> participationDto =
+          businessDayUcc.getParticipations(businessDayDto.get(0).getId());
       this.model.setParticipationDto(participationDto);
     }
 
@@ -71,9 +69,9 @@ public class ParticipationSearchingViewController extends JPanel {
     comboBox.getCombo().addActionListener(
         e -> {
 
-          this.selectedBusinessDay = businessDayDto[(int) comboBox.getCombo().getSelectedIndex()];
+          this.selectedBusinessDay = businessDayDto.get(comboBox.getCombo().getSelectedIndex());
 
-          IParticipationDto[] participationDto =
+          List<IParticipationDto> participationDto =
               businessDayUcc.getParticipations(this.selectedBusinessDay.getId());
           this.model.setParticipationDto(participationDto);
 

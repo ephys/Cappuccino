@@ -121,7 +121,8 @@ class CompanyDao implements ICompanyDao {
   }
 
   @Override
-  public ICompanyDto[] searchCompanies(String name, String postcode, String street, String town) {
+  public List<ICompanyDto> searchCompanies(String name, String postcode, String street,
+                                           String town) {
     String query =
         "SELECT * FROM business_days.companies WHERE "
         + " (? IS NULL OR LOWER(name) LIKE '%?%') AND "
@@ -170,16 +171,17 @@ class CompanyDao implements ICompanyDao {
           companiesList.add(makeCompanyFromSet(rs));
         }
 
-        return companiesList.toArray(new ICompanyDto[companiesList.size()]);
+        return companiesList;
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return null;
+
+    throw new FatalException("Unreachable statement");
   }
 
   @Override
-  public ICompanyDto[] fetchAll() {
+  public List<ICompanyDto> fetchAll() {
     String query =
         "SELECT c.company_id, c.creator, c.name, c.register_date, c.address_street, "
         + "c.address_num, c.address_mailbox, c.address_postcode, c.address_town, c.version "
@@ -197,17 +199,17 @@ class CompanyDao implements ICompanyDao {
           companiesList.add(makeCompanyFromSet(rs));
         }
 
-        return companiesList.toArray(new ICompanyDto[companiesList.size()]);
+        return companiesList;
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
 
-    return null;
+    throw new FatalException("Unreachable statement");
   }
 
   @Override
-  public ICompanyDto[] fetchInvitableCompanies() {
+  public List<ICompanyDto> fetchInvitableCompanies() {
     /**
      * Le SELECT utilise le système d'année academique.
      * Premier SELECT : soit entreprise ayant participé, au moins 1 x,
@@ -257,16 +259,17 @@ class CompanyDao implements ICompanyDao {
         while (rs.next()) {
           companiesList.add(makeCompanyFromSet(rs));
         }
-        return companiesList.toArray(new ICompanyDto[companiesList.size()]);
+        return companiesList;
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return new ICompanyDto[0];
+
+    throw new FatalException("Unreachable statement");
   }
 
   @Override
-  public ICompanyDto[] fetchCompaniesByDay(int businessDayId) {
+  public List<ICompanyDto> fetchCompaniesByDay(int businessDayId) {
     String query = "SELECT c.company_id, c.creator, c.name, c.register_date, c.address_street, "
                    + " c.address_num, c.address_mailbox, c.address_postcode, c.address_town, "
                    + " c.version "
@@ -286,13 +289,13 @@ class CompanyDao implements ICompanyDao {
           companiesList.add(makeCompanyFromSet(rs));
         }
 
-        return companiesList.toArray(new ICompanyDto[companiesList.size()]);
+        return companiesList;
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
 
-    return null;
+    throw new FatalException("Unreachable statement");
   }
 
   @Override

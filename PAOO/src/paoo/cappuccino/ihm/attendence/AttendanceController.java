@@ -3,6 +3,7 @@ package paoo.cappuccino.ihm.attendence;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -64,9 +65,9 @@ public class AttendanceController extends JPanel implements ChangeListener {
     model.addChangeListener(this);
     // top
     JPanel top = new JPanel(new GridLayout(1, 0));
-    IBusinessDayDto[] listDay = businessDayUcc.getBusinessDays();
+    List<IBusinessDayDto> listDay = businessDayUcc.getBusinessDays();
 
-    if (listDay.length == 0) {
+    if (listDay.size() == 0) {
 
       JPanel noDay = new JPanel();
       noDay.add(new JLabel("aucune journée des entreprises"));
@@ -74,21 +75,18 @@ public class AttendanceController extends JPanel implements ChangeListener {
 
     } else {
 
-      JComboDay daysList = new JComboDay(listDay);
+      JComboDay daysList = new JComboDay(listDay.toArray(new IBusinessDayDto[listDay.size()]));
       model.setSelectedDay((IBusinessDayDto) daysList.getCombo()
           .getSelectedItem());
       daysList.getCombo().addActionListener(
-          e -> {
-            model.setSelectedDay((IBusinessDayDto) daysList.getCombo()
-                .getSelectedItem());
-          });
+          e -> model.setSelectedDay((IBusinessDayDto) daysList.getCombo().getSelectedItem()));
       top.add(daysList);
 
     }
 
-    ICompanyDto[] companyList = companyUcc.getAllCompanies();// TODO chose them
+    List<ICompanyDto> companyList = companyUcc.getAllCompanies();// TODO chose them
 
-    if (companyList.length == 0) {
+    if (companyList.size() == 0) {
 
       JPanel noCompany = new JPanel();
       noCompany.add(new JLabel(
@@ -101,13 +99,11 @@ public class AttendanceController extends JPanel implements ChangeListener {
           new JPanel(new FlowLayout(FlowLayout.CENTER));
       comboCompanyPanel.add(new JLabel("Entreprise"));
       JComboBox<ICompanyDto> comboCompanies =
-          new JComboBox<ICompanyDto>(companyUcc.getAllCompanies());
+          new JComboBox<>((ICompanyDto[]) companyUcc.getAllCompanies().toArray());
       model.setSelectedCompany((ICompanyDto) comboCompanies
           .getSelectedItem());
-      comboCompanies.addActionListener(e -> {
-        model.setSelectedCompany((ICompanyDto) comboCompanies
-            .getSelectedItem());
-      });
+      comboCompanies.addActionListener(e -> model.setSelectedCompany((ICompanyDto) comboCompanies
+          .getSelectedItem()));
       comboCompanies.setRenderer(new CompanyRenderer());
       comboCompanyPanel.add(comboCompanies);
       top.add(comboCompanyPanel);
@@ -156,7 +152,7 @@ public class AttendanceController extends JPanel implements ChangeListener {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
    */
   @Override
@@ -178,8 +174,7 @@ public class AttendanceController extends JPanel implements ChangeListener {
 
     // change contacts
     if (model.getSelectedCompany() != null) {
-      modelTable.changeData(contactUcc.getContactByCompany(model
-          .getSelectedCompany().getId()));
+      modelTable.changeData(contactUcc.getContactByCompany(model.getSelectedCompany().getId()));
     }
     table.repaint();
   }

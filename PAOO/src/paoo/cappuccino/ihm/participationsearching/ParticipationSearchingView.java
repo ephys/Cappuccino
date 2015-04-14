@@ -3,6 +3,7 @@ package paoo.cappuccino.ihm.participationsearching;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -41,7 +42,7 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
   @Override
   public void stateChanged(ChangeEvent event) {
 
-    if (model.getParticipationDto() != null && model.getParticipationDto().length > 0) {
+    if (model.getParticipationDto() != null && model.getParticipationDto().size() > 0) {
 
       if (this.removedWidget) {
         this.remove(this.centerPadding);
@@ -52,13 +53,12 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
       }
 
       this.table.setModel(new tableModel(model.getParticipationDto()));
-      return;
 
     } else {
 
       if (!this.removedWidget) {
         this.centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        
+
         centerPadding.add(new JLabel(errorMessage(model.getParticipationDto())));
 
         this.remove(this.scrollPane);
@@ -83,18 +83,18 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
     String[] columns = {"Nom entreprise", "Adresse entreprise", "Date de l'enregistrement", "Etat"};
     Object[][] data;
 
-    public tableModel(IParticipationDto[] participationDto) {
+    public tableModel(List<IParticipationDto> participationDto) {
 
-      this.data = new Object[participationDto.length][];
+      this.data = new Object[participationDto.size()][];
 
-      for (int i = 0; i < participationDto.length; i++) {
+      for (int i = 0; i < participationDto.size(); i++) {
 
         ICompanyDto companyDto =
-            ParticipationSearchingView.this.companyUcc.getCompanyById(participationDto[i]
+            companyUcc.getCompanyById(participationDto.get(i)
                 .getCompany());
         this.data[i] =
             new Object[] {companyDto.getName(), companyDto.getAddressTown(),
-                companyDto.getRegisterDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy à hh:mm:ss")), participationDto[i].getState().toString(),
+                companyDto.getRegisterDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy à hh:mm:ss")), participationDto.get(i).getState().toString(),
                 companyDto.getId()};
       }
 
@@ -126,9 +126,9 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
       return data[0][columnIndex].getClass();
     }
   }
-  
-  public String errorMessage(IParticipationDto[] participationDto){
-    
+
+  public String errorMessage(List<IParticipationDto> participationDto){
+
       if(participationDto == null) return "Il n'y a aucune journée d'entreprise disponible.";
       else return "Il n'y a aucune participation correspondante.";
   }

@@ -1,14 +1,15 @@
 package paoo.cappuccino.ihm.participationsearching;
 
-import paoo.cappuccino.business.dto.ICompanyDto;
+import java.util.List;
+
 import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.ihm.util.BaseModel;
 
 public class ParticipationSearchingModel extends BaseModel {
-  private IParticipationDto[] participationDto;
+  private List<IParticipationDto> participationDto;
 
 
-  public void setParticipationDto(IParticipationDto[] participationDto) {
+  public void setParticipationDto(List<IParticipationDto> participationDto) {
 
     this.participationDto = participationDto;
 
@@ -16,7 +17,7 @@ public class ParticipationSearchingModel extends BaseModel {
 
   }
 
-  public IParticipationDto[] getParticipationDto() {
+  public List<IParticipationDto> getParticipationDto() {
 
     return this.participationDto;
   }

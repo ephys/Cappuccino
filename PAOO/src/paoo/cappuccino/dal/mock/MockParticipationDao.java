@@ -68,20 +68,16 @@ class MockParticipationDao implements IParticipationDao {
   }
 
   @Override
-  public IParticipationDto[] fetchParticipationsByDate(int businessDayId) {
-    List<IParticipation> toReturn = participationList.stream()
+  public List<IParticipationDto> fetchParticipationsByDate(int businessDayId) {
+    return participationList.stream()
         .filter(participation -> participation.getBusinessDay() == businessDayId)
         .collect(Collectors.toList());
-
-    return toReturn.toArray(new IParticipation[toReturn.size()]);
   }
 
   @Override
-  public IParticipationDto[] fetchParticipationsByCompany(int companyId) {
-    List<IParticipation> toReturn = participationList.stream()
+  public List<IParticipationDto> fetchParticipationsByCompany(int companyId) {
+    return participationList.stream()
         .filter(participation -> participation.getCompany() == companyId)
         .collect(Collectors.toList());
-
-    return toReturn.toArray(new IParticipation[toReturn.size()]);
   }
 }

@@ -118,7 +118,7 @@ class ContactDao implements IContactDao {
   }
 
   @Override
-  public IContactDto[] fetchContactByName(String firstName, String lastName) {
+  public List<IContactDto> fetchContactByName(String firstName, String lastName) {
     String query = "SELECT c.contact_id, c.company, c.email, c.email_valid, c.first_name, "
                    + " c.last_name, c.phone, c.version "
                    + "FROM business_days.contacts c"
@@ -151,16 +151,17 @@ class ContactDao implements IContactDao {
           contactList.add(makeContactFromSet(rs));
         }
 
-        return contactList.toArray(new IContactDto[contactList.size()]);
+        return contactList;
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return new IContactDto[0];
+
+    throw new FatalException("Unreachable statement");
   }
 
   @Override
-  public IContactDto[] fetchContactsByCompany(int companyId) {
+  public List<IContactDto> fetchContactsByCompany(int companyId) {
     String query = "SELECT c.contact_id, c.company, c.email, c.email_valid, c.first_name, "
                    + " c.last_name, c.phone, c.version FROM business_days.contacts c "
                    + "WHERE c.company = ?";
@@ -179,13 +180,14 @@ class ContactDao implements IContactDao {
           contactList.add(makeContactFromSet(rs));
         }
 
-        return contactList.toArray(new IContactDto[contactList.size()]);
+        return contactList;
       }
 
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return new IContactDto[0];
+
+    throw new FatalException("Unreachable statement");
   }
 
   private IContactDto makeContactFromSet(ResultSet rs) throws SQLException {

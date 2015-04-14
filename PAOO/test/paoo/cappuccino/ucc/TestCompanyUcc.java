@@ -13,18 +13,16 @@ import paoo.cappuccino.core.injector.Inject;
 
 /**
  * Company UCC Unit Test.
- * 
+ *
  * @author Laurent
  */
 public class TestCompanyUcc {
 
   private static DependencyInjector injector;
 
-  private String full = "full";
-  private IUserDto dto = null;
-  private String emptyString = "";
+  private String filled = "full";
+  private IUserDto user = null;
   private char[] tableauChar = new char[] {'a', 'b', 'c'};
-
 
   @Inject
   private ICompanyUcc companyUcc;
@@ -41,49 +39,49 @@ public class TestCompanyUcc {
   @Before
   public void before() throws Exception {
     injector.populate(this);
-    dto = factory.createUser(full, tableauChar, full, full, full, IUserDto.Role.USER);
+    user = factory.createUser(filled, tableauChar, filled, filled, filled, IUserDto.Role.USER);
   }
 
   // ====================== CREATE
 
   @Test()
-  public void testCreateCompanytCorrect() {
-    companyUcc.create(dto, full, full, full, full, full, full);
+  public void testCreateCompanyCorrect() {
+    companyUcc.create(user, filled, filled, filled, filled, filled, filled);
   }
 
   @Test()
   public void testCreateCompanytCorrectWithMailEmpty() {
-    companyUcc.create(dto, full, full, full, emptyString, full, full);
+    companyUcc.create(user, filled, filled, filled, "", filled, filled);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateCompanyCreatorNull() {
-    companyUcc.create(null, full, full, full, full, full, full);
+    companyUcc.create(null, filled, filled, filled, filled, filled, filled);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateCompanyNameEmpty() {
-    companyUcc.create(dto, emptyString, full, full, full, full, full);
+    companyUcc.create(user, "", filled, filled, filled, filled, filled);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateCompanyStreetEmpty() {
-    companyUcc.create(dto, full, emptyString, full, full, full, full);
+    companyUcc.create(user, filled, "", filled, filled, filled, filled);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateCompanyAdresseEmpty() {
-    companyUcc.create(dto, full, full, emptyString, full, full, full);
+    companyUcc.create(user, filled, filled, "", filled, filled, filled);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateCompanyPostCodeEmpty() {
-    companyUcc.create(dto, full, full, full, full, emptyString, full);
+    companyUcc.create(user, filled, filled, filled, filled, "", filled);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateCompanyTownEmpty() {
-    companyUcc.create(dto, full, full, full, full, full, emptyString);
+    companyUcc.create(user, filled, filled, filled, filled, filled, "");
   }
 
 
@@ -92,27 +90,27 @@ public class TestCompanyUcc {
 
   @Test()
   public void testSearchCompanyOk() {
-    companyUcc.searchCompanies(full, full, full, full);
+    companyUcc.searchCompanies(filled, filled, filled, filled);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testSearchCompanyNameNull() {
-    companyUcc.searchCompanies(null, full, full, full);
+    companyUcc.searchCompanies(null, filled, filled, filled);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testSearchCompanyPostCodeNull() {
-    companyUcc.searchCompanies(full, null, full, full);
+    companyUcc.searchCompanies(filled, null, filled, filled);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testSearchCompanyTownNull() {
-    companyUcc.searchCompanies(full, full, null, full);
+    companyUcc.searchCompanies(filled, filled, null, filled);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testSearchCompanyStreetNull() {
-    companyUcc.searchCompanies(full, full, full, null);
+    companyUcc.searchCompanies(filled, filled, filled, null);
   }
 
 

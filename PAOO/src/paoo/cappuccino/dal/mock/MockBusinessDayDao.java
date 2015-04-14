@@ -2,6 +2,7 @@ package paoo.cappuccino.dal.mock;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,18 +49,16 @@ class MockBusinessDayDao implements IBusinessDayDao {
   }
 
   @Override
-  public IBusinessDayDto[] fetchAll() {
-    return businessDayList.toArray(new IBusinessDayDto[businessDayList.size()]);
+  public List<IBusinessDayDto> fetchAll() {
+    return Collections.unmodifiableList(businessDayList);
   }
 
   @Override
-  public IBusinessDayDto[] fetchInvitationlessDays() {
-    List<IBusinessDay> toReturn = businessDayList.stream()
-        .filter(businessDay ->
-                    participationDao.fetchParticipationsByDate(businessDay.getId()).length == 0)
-        .collect(Collectors.toList());
-
-    return toReturn.toArray(new IBusinessDayDto[toReturn.size()]);
+  public List<IBusinessDayDto> fetchInvitationlessDays() {
+   return businessDayList.stream()
+       .filter(businessDay ->
+                   participationDao.fetchParticipationsByDate(businessDay.getId()).size() == 0)
+       .collect(Collectors.toList());
   }
 
   @Override

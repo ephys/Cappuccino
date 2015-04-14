@@ -97,7 +97,7 @@ class ParticipationDao implements IParticipationDao {
   }
 
   @Override
-  public IParticipationDto[] fetchParticipationsByDate(int businessDayId) {
+  public List<IParticipationDto> fetchParticipationsByDate(int businessDayId) {
     String query = "SELECT company, business_day, state, cancelled, version "
                    + "FROM business_days.participations "
                    + "WHERE business_day = ?";
@@ -116,7 +116,7 @@ class ParticipationDao implements IParticipationDao {
           participationList.add(makeParticipationFromSet(rs));
         }
 
-        return participationList.toArray(new IParticipationDto[participationList.size()]);
+        return participationList;
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
@@ -126,7 +126,7 @@ class ParticipationDao implements IParticipationDao {
   }
 
   @Override
-  public IParticipationDto[] fetchParticipationsByCompany(int companyId) {
+  public List<IParticipationDto> fetchParticipationsByCompany(int companyId) {
     String query = "SELECT company, business_day, state, cancelled, version "
                    + "FROM business_days.participations "
                    + "WHERE company = ?";
@@ -145,7 +145,7 @@ class ParticipationDao implements IParticipationDao {
           participationList.add(makeParticipationFromSet(rs));
         }
 
-        return participationList.toArray(new IParticipationDto[participationList.size()]);
+        return participationList;
       }
     } catch (SQLException e) {
       rethrowSqlException(e);

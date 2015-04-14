@@ -1,5 +1,7 @@
 package paoo.cappuccino.ucc;
 
+import java.util.List;
+
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IUserDto;
 
@@ -24,8 +26,8 @@ public interface ICompanyUcc {
    * @throws java.lang.IllegalArgumentException The company name is not unique or a non-nullable
    *                                            field is empty.
    */
-  public ICompanyDto create(IUserDto creator, String name, String street, String numAdress,
-                            String mailBox, String postCode, String town);
+  ICompanyDto create(IUserDto creator, String name, String street, String numAdress,
+                     String mailBox, String postCode, String town);
 
   /**
    * Searches companies based on their address.
@@ -37,29 +39,29 @@ public interface ICompanyUcc {
    * @param street   The street within the searched company is established. Nullable.
    * @return The list of companies matching the criteria.
    */
-  public ICompanyDto[] searchCompanies(String name, String postCode, String town, String street);
+  List<ICompanyDto> searchCompanies(String name, String postCode, String town, String street);
 
   /**
    * Returns the list of companies eligible to be invited for a business day.
    */
-  public ICompanyDto[] getInvitableCompanies();
+  List<ICompanyDto> getInvitableCompanies();
 
   /**
    * Returns the list of persisted companies.
    */
-  public ICompanyDto[] getAllCompanies();
+  List<ICompanyDto> getAllCompanies();
 
   /**
    * Returns the company matching the given identifier.
    *
    * @param company The id of the researched company.
    */
-  public ICompanyDto getCompanyById(int company);
+  ICompanyDto getCompanyById(int company);
 
   /**
    * Returns the list of companies participating at a given business day.
    *
    * @param dayid The identifier of the business day.
    */
-  public ICompanyDto[] getCompaniesByDay(int dayid);
+  List<ICompanyDto> getCompaniesByDay(int dayid);
 }

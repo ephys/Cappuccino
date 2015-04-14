@@ -1,5 +1,7 @@
 package paoo.cappuccino.dal.dao;
 
+import java.util.List;
+
 import paoo.cappuccino.business.dto.IParticipationDto;
 
 /**
@@ -35,7 +37,7 @@ public interface IParticipationDao {
    * @return The list of participation entities.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
-  IParticipationDto[] fetchParticipationsByDate(int businessDayId);
+  List<IParticipationDto> fetchParticipationsByDate(int businessDayId);
 
   /**
    * Fetches the list of participations of a company.
@@ -44,5 +46,5 @@ public interface IParticipationDao {
    * @return The list of participations.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
-  IParticipationDto[] fetchParticipationsByCompany(int companyId);
+  List<IParticipationDto> fetchParticipationsByCompany(int companyId);
 }

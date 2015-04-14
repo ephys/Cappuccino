@@ -1,5 +1,7 @@
 package paoo.cappuccino.ucc;
 
+import java.util.List;
+
 import paoo.cappuccino.business.dto.IContactDto;
 
 /**
@@ -21,8 +23,8 @@ public interface IContactUcc {
    * @throws java.lang.IllegalArgumentException The email does not follow a valid email format or
    *         one of the non-nullable fields is empty.
    */
-  public IContactDto create(int company, String email, String firstName,
-      String lastName, String phone);
+  IContactDto create(int company, String email, String firstName,
+                     String lastName, String phone);
 
   /**
    * Set a contact's email as being invalid.
@@ -30,7 +32,7 @@ public interface IContactUcc {
    * @param contact The contact who needs to have their email invalidated.
    * @return true: the email vas set as invalid, false: the email is not set.
    */
-  public boolean setMailInvalid(IContactDto contact);
+  boolean setMailInvalid(IContactDto contact);
 
   /**
    * Searches contacts based on their names.
@@ -39,10 +41,10 @@ public interface IContactUcc {
    * @param lastName Last name of the contact search. Nullable.
    * @return the list of contacts matching the criteria.
    */
-  public IContactDto[] searchContact(String firstName, String lastName);
+  List<IContactDto> searchContact(String firstName, String lastName);
 
   /**
    * Returns the list of contacts working for a given company.
    */
-  public IContactDto[] getContactByCompany(int id);
+  List<IContactDto> getContactByCompany(int id);
 }

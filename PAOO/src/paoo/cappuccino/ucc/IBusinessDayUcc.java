@@ -1,6 +1,7 @@
 package paoo.cappuccino.ucc;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
@@ -21,7 +22,7 @@ public interface IBusinessDayUcc {
    * @throws java.lang.IllegalArgumentException There is already a business day on that academic
    *                                            year, or the date is null.
    */
-  public IBusinessDayDto create(LocalDateTime evenDate);
+  IBusinessDayDto create(LocalDateTime evenDate);
 
   /**
    * Adds a list of invited companies to the business day participation list.
@@ -29,7 +30,7 @@ public interface IBusinessDayUcc {
    * @param companies   The list of companies to add.
    * @param businessDay The business day the list must be added to.
    */
-  public void addInvitedCompanies(ICompanyDto[] companies, IBusinessDayDto businessDay);
+  void addInvitedCompanies(ICompanyDto[] companies, IBusinessDayDto businessDay);
 
   /**
    * Changes the state of a participation.
@@ -38,7 +39,7 @@ public interface IBusinessDayUcc {
    * @param state         The new state of the participation.
    * @return true: the change was successful.
    */
-  public boolean changeState(IParticipationDto participation, IParticipationDto.State state);
+  boolean changeState(IParticipationDto participation, IParticipationDto.State state);
 
   /**
    * If the participation isn't cancelled, it will set it as if.
@@ -46,22 +47,22 @@ public interface IBusinessDayUcc {
    * @param participation The participation which need to be cancelled.
    * @return True if cancelled and false if it was not possible.
    */
-  public boolean cancelParticipation(IParticipationDto participation);
+  boolean cancelParticipation(IParticipationDto participation);
 
   /**
    * Returns all the business day that do not have any participation yet.
    */
-  public IBusinessDayDto[] getInvitationlessDays();
+  List<IBusinessDayDto> getInvitationlessDays();
 
   /**
    * Returns the table of every registered business days.
    */
-  public IBusinessDayDto[] getBusinessDays();
+  List<IBusinessDayDto> getBusinessDays();
 
   /**
    * Returns the list of companies attending the business day matching a given identifier.
    *
    * @param businessDayId The identifier of the business day.
    */
-  public IParticipationDto[] getParticipations(int businessDayId);
+  List<IParticipationDto> getParticipations(int businessDayId);
 }

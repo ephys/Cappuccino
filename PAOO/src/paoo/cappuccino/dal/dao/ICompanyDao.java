@@ -1,5 +1,7 @@
 package paoo.cappuccino.dal.dao;
 
+import java.util.List;
+
 import paoo.cappuccino.business.dto.ICompanyDto;
 
 /**
@@ -44,7 +46,7 @@ public interface ICompanyDao {
    * @return Every companies matching the fields.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
-  ICompanyDto[] searchCompanies(String name, String postcode, String street, String town);
+  List<ICompanyDto> searchCompanies(String name, String postcode, String street, String town);
 
 
   /**
@@ -53,7 +55,7 @@ public interface ICompanyDao {
    * @return The list of companies.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
-  ICompanyDto[] fetchAll();
+  List<ICompanyDto> fetchAll();
 
   /**
    * Fetches the list of companies having participated in at least one of the 4 previous years'
@@ -63,7 +65,7 @@ public interface ICompanyDao {
    * @return The list of invitable companies.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
-  ICompanyDto[] fetchInvitableCompanies();
+  List<ICompanyDto> fetchInvitableCompanies();
 
 
   /**
@@ -82,5 +84,5 @@ public interface ICompanyDao {
    * @return Every companies who was present or null if none was found
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error
    */
-  ICompanyDto[] fetchCompaniesByDay(int businessDayId);
+  List<ICompanyDto> fetchCompaniesByDay(int businessDayId);
 }

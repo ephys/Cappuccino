@@ -60,22 +60,18 @@ class MockContactDao implements IContactDao {
   }
 
   @Override
-  public IContactDto[] fetchContactByName(String firstName, String lastName) {
-    List<IContact> toReturn = contactList.stream()
+  public List<IContactDto> fetchContactByName(String firstName, String lastName) {
+    return contactList.stream()
         .filter(searched ->
                     (firstName == null || searched.getFirstName().equalsIgnoreCase(firstName))
                     && (lastName == null || searched.getLastName().equalsIgnoreCase(lastName)))
         .collect(Collectors.toList());
-
-    return toReturn.toArray(new IContactDto[toReturn.size()]);
   }
 
   @Override
-  public IContactDto[] fetchContactsByCompany(int companyId) {
-    List<IContact> toReturn = contactList.stream()
-        .filter(searchee -> searchee.getCompany() == companyId)
+  public List<IContactDto> fetchContactsByCompany(int companyId) {
+    return contactList.stream()
+        .filter(searched -> searched.getCompany() == companyId)
         .collect(Collectors.toList());
-
-    return toReturn.toArray(new IContactDto[toReturn.size()]);
   }
 }

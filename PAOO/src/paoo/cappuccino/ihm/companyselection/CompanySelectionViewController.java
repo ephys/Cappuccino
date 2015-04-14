@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -51,7 +52,7 @@ public class CompanySelectionViewController extends JPanel {
   private ICompanyUcc companyUcc;
   private IContactUcc contactUcc;
   private IBusinessDayDto selectedBusinessDay;
-  private IBusinessDayDto[] businessDayDto;
+  private List<IBusinessDayDto> businessDayDto;
 
   public CompanySelectionViewController(CompanySelectionModel model, MenuModel menu,
                                         IGuiManager guiManager, IBusinessDayUcc businessDayUcc,
@@ -77,16 +78,17 @@ public class CompanySelectionViewController extends JPanel {
     JButton saveButton = new JButton("Valider");
     JCheckBox selectAll = new JCheckBox("Tout cocher");
     JButton directorySaveButton = new JButton("Parcourir");
-  
+
     businessDayDto = this.businessDayUcc.getInvitationlessDays();
-    
-    JComboDay comboBox = new JComboDay(businessDayDto);
-    
-    ICompanyDto[] companyDto = this.companyUcc.getInvitableCompanies();
+
+    JComboDay comboBox = new JComboDay(businessDayDto.toArray(
+        new IBusinessDayDto[businessDayDto.size()]));
+
+    List<ICompanyDto> companyDto = this.companyUcc.getInvitableCompanies();
 
     saveButton.addActionListener(e -> {
 
-      this.selectedBusinessDay = businessDayDto[(int) comboBox.getCombo().getSelectedIndex()];
+      this.selectedBusinessDay = businessDayDto.get(comboBox.getCombo().getSelectedIndex());
 
       ArrayList<Integer> list = new ArrayList<Integer>();
 
@@ -128,24 +130,24 @@ public class CompanySelectionViewController extends JPanel {
           fileWriter.newLine();
 
           for (int i = 0; i < companyDtoArray.length; i++) {
-                 
-           
-            companyDtoArray[i] = companyDto[list.get(i)];
-            
-            IContactDto[] contactDto = contactUcc.getContactByCompany(companyDtoArray[i].getId());
-            
-            if(contactDto.length > 0){
-              
-               for(int j = 0; j < contactDto.length; j++){
-                 
-                 fileWriter.write(companyDto[list.get(i)].getName()+" | "+contactDto[j].getLastName()+" | "+contactDto[j].getFirstName()+" | "+contactDto[j].getEmail());
+
+
+            companyDtoArray[i] = companyDto.get(list.get(i));
+
+            List<IContactDto> contactDto = contactUcc.getContactByCompany(companyDtoArray[i].getId());
+
+            if(contactDto.size() > 0){
+
+               for(int j = 0; j < contactDto.size(); j++){
+
+                 fileWriter.write(companyDto.get(list.get(i)).getName()+" | "+contactDto.get(j).getLastName()+" | "+contactDto.get(j).getFirstName()+" | "+contactDto.get(j).getEmail());
                  fileWriter.newLine();
                }
                continue;
             }
-            fileWriter.write(companyDto[list.get(i)].getName()+" | Pas de personne de contact");
+            fileWriter.write(companyDto.get(list.get(i)).getName()+" | Pas de personne de contact");
             fileWriter.newLine();
-            
+
           }
           this.businessDayUcc.addInvitedCompanies(companyDtoArray, selectedBusinessDay);
 
@@ -182,7 +184,7 @@ public class CompanySelectionViewController extends JPanel {
       }
     });
 
-    if (businessDayDto.length == 0) {
+    if (businessDayDto.size() == 0) {
 
       selectAll.setEnabled(false);
       saveButton.setEnabled(false);

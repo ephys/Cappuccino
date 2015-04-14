@@ -1,5 +1,7 @@
 package paoo.cappuccino.ucc.impl;
 
+import java.util.List;
+
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
@@ -47,7 +49,7 @@ class CompanyUcc implements ICompanyUcc {
   }
 
   @Override
-  public ICompanyDto[] searchCompanies(String name, String postCode, String town, String street) {
+  public List<ICompanyDto> searchCompanies(String name, String postCode, String town, String street) {
     if (StringUtils.isEmpty(street)) {
       street = null;
     }
@@ -68,12 +70,12 @@ class CompanyUcc implements ICompanyUcc {
   }
 
   @Override
-  public ICompanyDto[] getInvitableCompanies() {
+  public List<ICompanyDto> getInvitableCompanies() {
     return companyDao.fetchInvitableCompanies();
   }
 
   @Override
-  public ICompanyDto[] getAllCompanies() {
+  public List<ICompanyDto> getAllCompanies() {
     return companyDao.fetchAll();
   }
 
@@ -83,7 +85,7 @@ class CompanyUcc implements ICompanyUcc {
   }
 
   @Override
-  public ICompanyDto[] getCompaniesByDay(int dayid) {
+  public List<ICompanyDto> getCompaniesByDay(int dayid) {
     return companyDao.fetchCompaniesByDay(dayid);
   }
 }

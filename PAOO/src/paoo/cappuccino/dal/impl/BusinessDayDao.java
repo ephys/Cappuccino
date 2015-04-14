@@ -68,7 +68,7 @@ class BusinessDayDao implements IBusinessDayDao {
   }
 
   @Override
-  public IBusinessDayDto[] fetchAll() {
+  public List<IBusinessDayDto> fetchAll() {
     String query = "SELECT d.business_day_id, d.event_date, d.creation_date, d.version "
                    + "FROM business_days.business_days d";
 
@@ -84,17 +84,17 @@ class BusinessDayDao implements IBusinessDayDao {
           businessDayList.add(makeBusinessDaysFromSet(rs));
         }
 
-        return businessDayList.toArray(new IBusinessDayDto[businessDayList.size()]);
+        return businessDayList;
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
 
-    return null;
+    throw new FatalException("Unreachable statement");
   }
 
   @Override
-  public IBusinessDayDto[] fetchInvitationlessDays() {
+  public List<IBusinessDayDto> fetchInvitationlessDays() {
     String query = "SELECT d.business_day_id, d.event_date, d.creation_date, d.version \n"
                    + "FROM business_days.business_days d\n"
                    + "WHERE d.business_day_id NOT IN (SELECT DISTINCT p.business_day "
@@ -112,12 +112,13 @@ class BusinessDayDao implements IBusinessDayDao {
           businessDayList.add(makeBusinessDaysFromSet(rs));
         }
 
-        return businessDayList.toArray(new IBusinessDayDto[businessDayList.size()]);
+        return businessDayList;
       }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
-    return new IBusinessDayDto[0];
+
+    throw new FatalException("Unreachable statement");
   }
 
   @Override
