@@ -23,7 +23,7 @@ class ContactUcc implements IContactUcc {
     this.dao = contactDao;
   }
 
-  // @Override
+  @Override
   public IContactDto create(int companyId, String email, String firstName, String lastName,
       String phone) {
     ValidationUtil.ensureNotNull(lastName, "lastName");

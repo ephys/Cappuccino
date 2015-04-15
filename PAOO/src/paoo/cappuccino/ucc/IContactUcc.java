@@ -23,8 +23,8 @@ public interface IContactUcc {
    * @throws java.lang.IllegalArgumentException The email does not follow a valid email format or
    *         one of the non-nullable fields is empty.
    */
-  IContactDto create(int company, String email, String firstName,
-                     String lastName, String phone);
+  IContactDto create(int company, String email, String firstName, String lastName, String phone);
+
 
   /**
    * Set a contact's email as being invalid.
@@ -37,14 +37,19 @@ public interface IContactUcc {
   /**
    * Searches contacts based on their names.
    *
+   * 
    * @param firstName First name of the contact search. Nullable.
    * @param lastName Last name of the contact search. Nullable.
    * @return the list of contacts matching the criteria.
    */
   List<IContactDto> searchContact(String firstName, String lastName);
 
+
   /**
-   * Returns the list of contacts working for a given company.
+   * Get all the contacts of a company.
+   * 
+   * @param id The id of the company for which the contacts are needed. Returns the list of contacts
+   *        working for a given company.
    */
   List<IContactDto> getContactByCompany(int id);
 }
