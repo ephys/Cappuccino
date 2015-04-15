@@ -23,9 +23,9 @@ class ContactUcc implements IContactUcc {
     this.dao = contactDao;
   }
 
-  @Override
+  // @Override
   public IContactDto create(int companyId, String email, String firstName, String lastName,
-                            String phone) {
+      String phone) {
     ValidationUtil.ensureNotNull(lastName, "lastName");
     ValidationUtil.ensureNotNull(firstName, "firstName");
     ValidationUtil.ensureNotNull(email, "email");
@@ -82,8 +82,7 @@ class ContactUcc implements IContactUcc {
       return (IContact) dto;
     } else {
       return factory.createContact(dto.getId(), dto.getVersion(), dto.getCompany(), dto.getEmail(),
-                                      dto.isEmailValid(), dto.getFirstName(), dto.getLastName(),
-                                      dto.getPhone());
+          dto.isEmailValid(), dto.getFirstName(), dto.getLastName(), dto.getPhone());
     }
   }
 }
