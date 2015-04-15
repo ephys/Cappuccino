@@ -212,43 +212,42 @@ class CompanyDao implements ICompanyDao {
   public List<ICompanyDto> fetchInvitableCompanies() {
     /**
      * Le SELECT utilise le système d'année academique.
-     * Premier SELECT : soit entreprise ayant participé, au moins 1 x,
+     * Premier SELECT : soit entreprise enregistrée comme nouvelle entreprise dans l’année écoulée.
+     * Second SELECT :  soit entreprise ayant participé, au moins 1 x,
      *                  dans les 4 années précédentes et ayant payé sa participation.
-     * Second SELECT : soit entreprise enregistrée comme nouvelle entreprise dans l’année écoulée.
      */
-    //TODO replace the academic year field by an int to simplify calculations
-    String query = "SELECT company_id, creator, name, register_date,"
-                   + "  address_street, address_num, address_mailbox, address_postcode, "
-                   + "address_town, companies.version \n"
-                   + "FROM business_days.participations, business_days.business_days, "
-                   + "business_days.companies \n"
-                   + "WHERE participations.state = 'PAID'\n"
-                   + "AND business_day = business_days.business_day_id\n"
-                   + "AND companies.company_id = company\n"
-                   + "AND date_part('month', now()) between 1 AND 6 \n"
-                   + "AND date_part('years', now() - INTERVAL '4 year' ) < "
-                   + "date_part('year', event_date)\n"
-                   + "OR date_part('month', now()) between 9 AND 12\n"
-                   + "AND date_part('years', now() - INTERVAL '4 year' ) "
-                   + "< date_part('year', event_date)\n"
-                   + "AND date_part('month', register_date) between 9 AND 12\n"
-                   + "UNION \n"
-                   + "SELECT DISTINCT company_id, creator, name, register_date, address_street,\n"
-                   + "address_num, address_mailbox, address_postcode, "
-                   + "address_town, companies.version\n"
-                   + "FROM business_days.participations, business_days.companies\n"
-                   + "WHERE company_id NOT IN (SELECT company FROM business_days.participations)\n"
-                   + "AND ( date_part('month', now()) between 1 AND 6\n"
-                   + "AND date_part('year', register_date) =  "
-                   + "date_part('year', now() - INTERVAL '1 year')\n"
-                   + "AND date_part('month', register_date) between 9 AND 12\n"
-                   + "OR date_part('month', now()) between 1  AND 6\n"
-                   + "AND date_part('year', register_date) =  date_part('year', now())\n"
-                   + "AND date_part('month', register_date) between 1 AND 6\n"
-                   + "OR date_part('month', now()) between 9 AND 12\n"
-                   + "AND date_part('year', register_date) =  date_part('year', now())\n"
-                   + "AND date_part('month', register_date) between 9 AND 12 );";
-
+    String query = "SELECT company_id, creator, name, register_date, address_street, address_num, "
+                   + "      address_mailbox, address_postcode, address_town, companies.version"
+                   + "FROM business_days.companies"
+                   + "WHERE company_id NOT IN (SELECT company FROM business_days.participations)"
+                   + "  AND ("
+                   + "    date_part('month', now()) BETWEEN 1 AND 6"
+                   + "    AND date_part('years', register_date) = date_part('years', now())"
+                   + "    OR date_part('years', register_date) = "
+                   + "                    date_part('years', now() - INTERVAL '1 year')"
+                   + "    AND date_part('month', register_date) BETWEEN 6 AND 12"
+                   + "  )"
+                   + "  OR ("
+                   + "    date_part('month', now()) BETWEEN 6 AND 12"
+                   + "    AND date_part('years', register_date) = date_part('years', now())"
+                   + "    AND date_part('month', register_date) BETWEEN 6 AND 12"
+                   + ")"
+                   + "UNION"
+                   + "SELECT company_id, creator, name, register_date, address_street, address_num,"
+                   + "       address_mailbox, address_postcode, address_town, companies.version \n"
+                   + "FROM business_days.companies, business_days.participations, "
+                   + "      business_days.business_days"
+                   + "WHERE company = companies.company_id"
+                   + "AND business_day = business_days.business_day_id"
+                   + "AND participations.state = 'PAID'"
+                   + "AND ("
+                   + "  date_part('month', now()) BETWEEN 1 AND 6"
+                   + "  AND academic_year >= date_part('years', now() - INTERVAL '5 year')"
+                   + ")"
+                   + "OR ("
+                   + "  date_part('month', now()) BETWEEN 6 AND 12"
+                   + "  AND academic_year >= date_part('years', now() - INTERVAL '4 year')"
+                   + ");";
     try {
       if (psFetchInvitableCompanies == null) {
         psFetchInvitableCompanies = dalBackend.fetchPreparedStatement(query);
