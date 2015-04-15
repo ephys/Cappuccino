@@ -144,6 +144,6 @@ public interface IEntityFactory {
    * @param state The participation's state.
    * @param cancelled The participation has been cancelled.
    */
-  public IParticipation createParticipation(int companyId, int businessDayId, boolean cancelled,
-                                            int version, IParticipationDto.State state);
+  IParticipation createParticipation(int companyId, int businessDayId, boolean cancelled,
+                                     int version, IParticipationDto.State state);
 }

@@ -19,7 +19,7 @@ public interface IStringHasher {
    * @param identifier A key used to identify the algorithm used to hash a string.
    * @param algorithm  An algorithm used to hash strings.
    */
-  public boolean addHashAlgorithm(String identifier, IHashAlgorithm algorithm);
+  boolean addHashAlgorithm(String identifier, IHashAlgorithm algorithm);
 
   /**
    * Makes the string hasher use that algorithm for newer hashes.
@@ -27,7 +27,7 @@ public interface IStringHasher {
    * @param identifier The identifier of a previously registered hash algorithm.
    * @throws java.lang.IllegalArgumentException No algorithm is registered under that identifier.
    */
-  public void setPreferedAlgorithm(String identifier);
+  void setPreferedAlgorithm(String identifier);
 
   /**
    * Checks a given set of byte is the hash of a given string.
@@ -39,7 +39,7 @@ public interface IStringHasher {
    *                        {@link paoo.cappuccino.util.hasher.StringHasher#hash(char[])}
    * @return true: the given hash is the given string's hash
    */
-  public boolean matchHash(final char[] toHash, final IHashHolderDto currentHashData);
+  boolean matchHash(final char[] toHash, final IHashHolderDto currentHashData);
 
   /**
    * Checks if a hash is using the latest algorithm.
@@ -47,7 +47,7 @@ public interface IStringHasher {
    * @param hash The hash to check.
    * @return true: the hash is using the latest algorithm.
    */
-  public boolean isHashOutdated(final IHashHolderDto hash);
+  boolean isHashOutdated(final IHashHolderDto hash);
 
   /**
    * Hashes a string using the latest added algorithm.
@@ -55,7 +55,7 @@ public interface IStringHasher {
    * @param toHash The string to hash.
    * @return The hash encoded as a string.
    */
-  public IHashHolderDto hash(final char[] toHash);
+  IHashHolderDto hash(final char[] toHash);
 
   /**
    * Translates an hash holder into a string representation of it, for persistence. Use {@link
@@ -64,7 +64,7 @@ public interface IStringHasher {
    * @param hash The hash holder to serialize.
    * @return The representation of the holder as a string.
    */
-  public String serialize(IHashHolderDto hash);
+  String serialize(IHashHolderDto hash);
 
   /**
    * Translates a string representation of a hash holder into an instance of IHashHolderDto
@@ -72,5 +72,5 @@ public interface IStringHasher {
    * @param data the representation of the holder.
    * @return the instance containing the data of the hash.
    */
-  public IHashHolderDto deserialize(String data);
+  IHashHolderDto deserialize(String data);
 }

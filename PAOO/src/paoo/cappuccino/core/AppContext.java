@@ -230,7 +230,7 @@ public class AppContext {
     return this.crashListeners.remove(listener);
   }
 
-  public static enum Profile {
+  public enum Profile {
     PROD, TEST, DEV
   }
 }

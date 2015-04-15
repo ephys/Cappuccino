@@ -14,5 +14,5 @@ public interface IDalBackend {
    *
    * @param query the query to prepare.
    */
-  public PreparedStatement fetchPreparedStatement(String query);
+  PreparedStatement fetchPreparedStatement(String query);
 }

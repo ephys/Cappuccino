@@ -57,7 +57,7 @@ public interface IUserDto extends IBaseDto {
   /**
    * Defines the list of roles an user can hold.
    */
-  public static enum Role {
+  enum Role {
     USER, ADMIN
   }
 }

@@ -13,20 +13,20 @@ public interface IDalService {
    * @throws java.lang.IllegalStateException This thread already has a transaction is already in
    *                                         progress.
    */
-  public void startTransaction();
+  void startTransaction();
 
   /**
    * Closes the transaction by committing the changes.
    *
    * @throws java.lang.IllegalStateException This thread doesn't have a transaction running.
    */
-  public void commit();
+  void commit();
 
   /**
    * Closes the transaction by rollbacking the changes.
    *
    * @throws java.lang.IllegalStateException This thread doesn't have a transaction running.
    */
-  public void rollback();
+  void rollback();
 
 }

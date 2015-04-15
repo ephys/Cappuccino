@@ -18,7 +18,7 @@ public class CheckBoxCellEditor extends DefaultCellEditor {
     box.addActionListener(e -> {
       int nbChecked = 0;
       for (int i = 0; i < table.getRowCount(); i++) {
-        if ((boolean) ((TableContactModel) (table.getModel())).getValueAt(
+        if ((boolean) table.getModel().getValueAt(
             i, table.getColumnCount() - 1)) {
           nbChecked++;
         }

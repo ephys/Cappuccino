@@ -35,7 +35,7 @@ public interface IParticipationDto {
   /**
    * Defines the list of states a participation can take.
    */
-  public static enum State {
+  enum State {
     INVITED, CONFIRMED, DECLINED, BILLED, PAID
   }
 }

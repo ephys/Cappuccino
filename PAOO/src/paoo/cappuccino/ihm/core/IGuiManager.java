@@ -17,15 +17,15 @@ public interface IGuiManager {
    * @param frame the frame class
    * @return the new window
    */
-  public <A extends JFrame> A openFrame(Class<A> frame);
+  <A extends JFrame> A openFrame(Class<A> frame);
 
   /**
    * Returns the Gui logger.
    */
-  public Logger getLogger();
+  Logger getLogger();
 
   /**
    * Returns the resource manager.
    */
-  public IResourceManager getResourceManager();
+  IResourceManager getResourceManager();
 }

@@ -113,10 +113,7 @@ public class CompanySelectionView extends JPanel implements ChangeListener {
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
 
-      if (columnIndex == data[0].length - 1) {
-        return true;
-      }
-      return false;
+      return columnIndex == data[0].length - 1;
     }
 
     @Override
