@@ -50,8 +50,8 @@ class UserDao implements IUserDao {
         "INSERT INTO business_days.users(user_id, role, password, email, username,"
         + " first_name, last_name, register_date, version) "
         + "VALUES (DEFAULT, DEFAULT, ?, ?, ?, ?, ?, DEFAULT, DEFAULT) "
-        + "RETURNING (user_id, role, password, email, username,"
-        + " first_name, last_name, register_date, version)";
+        + "RETURNING user_id, role, password, email, username, "
+        + " first_name, last_name, register_date, version";
 
     try {
       if (psCreateUser == null) {
@@ -106,8 +106,8 @@ class UserDao implements IUserDao {
     ValidationUtil.ensureNotNull(user, "user");
 
     String query =
-        "UPDATE business_days.users SET password = ?, email = ?, first_name = ?, last_name = ?,"
-        + "version = version + 1"
+        "UPDATE business_days.users SET password = ?, email = ?, first_name = ?, last_name = ?, "
+        + "version = version + 1 "
         + "WHERE user_id = ? AND version = ? LIMIT 1";
 
     try {

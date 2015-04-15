@@ -40,7 +40,7 @@ class ParticipationDao implements IParticipationDao {
   public IParticipationDto createParticipation(IParticipationDto participation) {
     String query = "INSERT INTO business_days.participations (company, business_day) "
                    + "VALUES (?, ?) "
-                   + "RETURNING (company, business_day, state, cancelled, version)";
+                   + "RETURNING company, business_day, state, cancelled, version";
     try {
       if (psCreateParticipation == null) {
         psCreateParticipation = dalBackend.fetchPreparedStatement(query);
@@ -64,7 +64,7 @@ class ParticipationDao implements IParticipationDao {
   @Override
   public void updateParticipation(IParticipationDto participation) {
     String query = "UPDATE business_days.participations "
-                   + "SET state = ?, cancelled = ?, version = version + 1"
+                   + "SET state = ?, cancelled = ?, version = version + 1 "
                    + "WHERE company = ? AND business_day = ? AND version = ? LIMIT 1";
 
     try {

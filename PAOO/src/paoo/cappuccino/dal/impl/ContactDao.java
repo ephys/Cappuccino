@@ -41,7 +41,7 @@ class ContactDao implements IContactDao {
   public IContactDto createContact(IContactDto contact) {
     String query = "INSERT INTO business_days.contacts (company, email, email_valid, "
                    + "first_name, last_name, phone) "
-                   + "VALUES (?, ?, ?, ?, ?, ?)"
+                   + "VALUES (?, ?, ?, ?, ?, ?) "
                    + "RETURNING contact_id, company, email, email_valid, first_name, last_name, "
                    + "phone, version";
 
@@ -78,7 +78,7 @@ class ContactDao implements IContactDao {
   public void updateContact(IContactDto contact) {
     String query = "UPDATE business_days.contacts SET "
                    + " company = ?, email = ?, email_valid = ?, first_name = ?, last_name = ?, "
-                   + " phone = ?, version = version + 1"
+                   + " phone = ?, version = version + 1 "
                    + "WHERE user_id = ? AND version = ? LIMIT 1";
 
     try {
@@ -121,7 +121,7 @@ class ContactDao implements IContactDao {
   public List<IContactDto> fetchContactByName(String firstName, String lastName) {
     String query = "SELECT c.contact_id, c.company, c.email, c.email_valid, c.first_name, "
                    + " c.last_name, c.phone, c.version "
-                   + "FROM business_days.contacts c"
+                   + "FROM business_days.contacts c "
                    + "WHERE (? IS NULL OR LOWER(first_name) LIKE '%?%') "
                    + " AND (? IS NULL OR LOWER(last_name) LIKE '%?%')";
 

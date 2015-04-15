@@ -50,14 +50,14 @@ class CompanyDao implements ICompanyDao {
         "INSERT INTO business_days.companies(creator, name, address_street, address_num, "
         + " address_mailbox, address_postcode, address_town) "
         + " VALUES (?, ?, ?, ?, ?, ?, ?) "
-        + "RETURNING (company_id, creator, name, register_date, address_street, "
-        + " address_num, address_mailbox, address_postcode, address_town,version)";
+        + "RETURNING company_id, creator, name, register_date, address_street, "
+        + " address_num, address_mailbox, address_postcode, address_town,version ;";
 
     try {
       if (psCreateCompany == null) {
         psCreateCompany = dalBackend.fetchPreparedStatement(query);
       }
-
+      System.out.println(psCreateCompany.toString());
       psCreateCompany.setInt(1, company.getCreator());
       psCreateCompany.setString(2, company.getName());
       psCreateCompany.setString(3, company.getAddressStreet());

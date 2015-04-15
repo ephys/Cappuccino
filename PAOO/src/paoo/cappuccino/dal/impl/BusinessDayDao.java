@@ -45,8 +45,8 @@ class BusinessDayDao implements IBusinessDayDao {
     ValidationUtil.ensureNotNull(businessDay, "businessDay");
 
     String query =
-        "INSERT INTO business_days.business_days(event_date, academic_year) VALUES (?, ?)"
-        + "RETURNING (business_day_id, event_date, creation_date, version)";
+        "INSERT INTO business_days.business_days(event_date, academic_year) VALUES (?, ?) "
+        + "RETURNING business_day_id, event_date, creation_date, version ;";
 
     try {
       if (psCreateBusinessDay == null) {
