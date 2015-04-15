@@ -26,7 +26,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
   @Inject
   public BusinessDayUcc(IEntityFactory entityFactory, IDalService dalService,
-                        IBusinessDayDao businessDayDao, IParticipationDao participationDao) {
+      IBusinessDayDao businessDayDao, IParticipationDao participationDao) {
     this.factory = entityFactory;
     this.dalService = dalService;
     this.businessDayDao = businessDayDao;
@@ -46,16 +46,15 @@ class BusinessDayUcc implements IBusinessDayUcc {
   }
 
   @Override
-  public void addInvitedCompanies(ICompanyDto[] companies,
-                                  IBusinessDayDto businessDay) {
+  public void addInvitedCompanies(ICompanyDto[] companies, IBusinessDayDto businessDay) {
     ValidationUtil.ensureNotNull(businessDay, "businessDay");
     ValidationUtil.ensureNotNull(companies, "companies");
 
     dalService.startTransaction();
 
     for (ICompanyDto company : companies) {
-      IParticipationDto participation = factory.createParticipation(company.getId(),
-                                                                    businessDay.getId());
+      IParticipationDto participation =
+          factory.createParticipation(company.getId(), businessDay.getId());
 
       participationDao.createParticipation(participation);
     }
@@ -65,6 +64,8 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
   @Override
   public boolean changeState(IParticipationDto participation, State state) {
+    ValidationUtil.ensureNotNull(participation, "participation");
+    ValidationUtil.ensureNotNull(state, "state");
     IParticipation participationEntity = convertParticipationDto(participation);
 
     try {
@@ -102,6 +103,9 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
   @Override
   public List<IParticipationDto> getParticipations(int businessDayId) {
+    if (businessDayId <= 0) {
+      throw new IllegalArgumentException("Id corrupted");
+    }
     return participationDao.fetchParticipationsByDate(businessDayId);
   }
 
@@ -110,7 +114,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
       return (IParticipation) dto;
     } else {
       return factory.createParticipation(dto.getCompany(), dto.getBusinessDay(), dto.isCancelled(),
-                                         dto.getVersion(), dto.getState());
+          dto.getVersion(), dto.getState());
     }
   }
 }
