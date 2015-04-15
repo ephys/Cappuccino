@@ -1,5 +1,7 @@
 package paoo.cappuccino.ucc;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -93,22 +95,22 @@ public class TestCompanyUcc {
     companyUcc.searchCompanies(filled, filled, filled, filled);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void testSearchCompanyNameNull() {
     companyUcc.searchCompanies(null, filled, filled, filled);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void testSearchCompanyPostCodeNull() {
     companyUcc.searchCompanies(filled, null, filled, filled);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void testSearchCompanyTownNull() {
     companyUcc.searchCompanies(filled, filled, null, filled);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void testSearchCompanyStreetNull() {
     companyUcc.searchCompanies(filled, filled, filled, null);
   }
@@ -116,10 +118,22 @@ public class TestCompanyUcc {
 
   // ====================== getInvitableCompanies
 
-
+  @Test()
+  public void TestGetInvitableCompanies() {
+    assertNotNull(companyUcc.getInvitableCompanies());
+  }
 
   // ====================== getAllCompanies
 
+  @Test()
+  public void TestGetAllCompanies() {
+    assertNotNull(companyUcc.getAllCompanies());
+  }
 
   // ====================== getCompanyById
+
+  @Test()
+  public void TestGetCompanyById() {
+    assertNotNull(companyUcc.getCompanyById(1));
+  }
 }
