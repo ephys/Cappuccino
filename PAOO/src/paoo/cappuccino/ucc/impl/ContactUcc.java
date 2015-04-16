@@ -48,6 +48,7 @@ class ContactUcc implements IContactUcc {
 
   @Override
   public boolean setMailInvalid(IContactDto contactDto) {
+    ValidationUtil.ensureNotNull(contactDto, "contactDto");
     if (StringUtils.isEmpty(contactDto.getEmail()) || !contactDto.isEmailValid()) {
       return false;
     }
@@ -74,10 +75,14 @@ class ContactUcc implements IContactUcc {
 
   @Override
   public List<IContactDto> getContactByCompany(int id) {
+    if (id <= 0) {
+      throw new IllegalArgumentException("invalid id");
+    }
     return dao.fetchContactsByCompany(id);
   }
 
   private IContact convertContact(IContactDto dto) {
+    ValidationUtil.ensureNotNull(dto, "Dto");
     if (dto instanceof IContact) {
       return (IContact) dto;
     } else {

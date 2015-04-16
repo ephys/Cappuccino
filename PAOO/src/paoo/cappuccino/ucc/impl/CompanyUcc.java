@@ -27,7 +27,6 @@ class CompanyUcc implements ICompanyUcc {
   public ICompanyDto create(IUserDto creator, String name, String street, String numAddress,
                             String mailBox, String postCode, String town) {
     ValidationUtil.ensureNotNull(creator, "creator");
-
     ValidationUtil.ensureFilled(name, "name");
     ValidationUtil.ensureFilled(street, "street");
     ValidationUtil.ensureFilled(numAddress, "numAddress");
@@ -38,8 +37,8 @@ class CompanyUcc implements ICompanyUcc {
       mailBox = null;
     }
 
-    ICompanyDto dto = factory.createCompany(creator.getId(), name, street, numAddress, mailBox,
-                                            postCode, town);
+    ICompanyDto dto =
+        factory.createCompany(creator.getId(), name, street, numAddress, mailBox, postCode, town);
 
     try {
       return companyDao.createCompany(dto);
@@ -82,11 +81,17 @@ class CompanyUcc implements ICompanyUcc {
 
   @Override
   public ICompanyDto getCompanyById(int company) {
+    if (company <= 0) {
+      throw new IllegalArgumentException("invalid id");
+    }
     return companyDao.fetchCompanyById(company);
   }
 
   @Override
   public List<ICompanyDto> getCompaniesByDay(int dayid) {
+    if (dayid <= 0) {
+      throw new IllegalArgumentException("invalid id");
+    }
     return companyDao.fetchCompaniesByDay(dayid);
   }
 }
