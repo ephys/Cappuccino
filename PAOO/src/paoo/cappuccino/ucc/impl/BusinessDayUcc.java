@@ -117,7 +117,6 @@ class BusinessDayUcc implements IBusinessDayUcc {
   }
 
   private IParticipation convertParticipationDto(IParticipationDto dto) {
-    ValidationUtil.ensureNotNull(dto, "dto");
     if (dto instanceof IParticipation) {
       return (IParticipation) dto;
     } else {

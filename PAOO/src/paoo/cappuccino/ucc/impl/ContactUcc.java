@@ -25,11 +25,7 @@ class ContactUcc implements IContactUcc {
 
   @Override
   public IContactDto create(int companyId, String email, String firstName, String lastName,
-      String phone) {
-    ValidationUtil.ensureNotNull(lastName, "lastName");
-    ValidationUtil.ensureNotNull(firstName, "firstName");
-    ValidationUtil.ensureNotNull(email, "email");
-    ValidationUtil.ensureNotNull(phone, "phone");
+                            String phone) {
     ValidationUtil.ensureFilled(lastName, "lastName");
     ValidationUtil.ensureFilled(firstName, "firstName");
 
@@ -82,7 +78,6 @@ class ContactUcc implements IContactUcc {
   }
 
   private IContact convertContact(IContactDto dto) {
-    ValidationUtil.ensureNotNull(dto, "Dto");
     if (dto instanceof IContact) {
       return (IContact) dto;
     } else {
