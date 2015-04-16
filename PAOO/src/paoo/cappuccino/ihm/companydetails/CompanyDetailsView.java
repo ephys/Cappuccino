@@ -1,137 +1,122 @@
 package paoo.cappuccino.ihm.companydetails;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
+import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
+import paoo.cappuccino.business.dto.IUserDto;
+import paoo.cappuccino.ihm.util.JLabelFont;
+import paoo.cappuccino.ihm.util.LocalizationUtil;
+import paoo.cappuccino.ucc.IUserUcc;
 
-public class CompanyDetailsView extends JPanel{
+public class CompanyDetailsView extends JPanel {
 
-  private CompanyDetailsModel model;
-  private JTable table;
+  private final JTable contactsTable;
+  private final JPanel contactList = new JPanel(new BorderLayout());
+  private final CompanyDetailsModel model;
+  private final IUserUcc userUcc;
+  private final JPanel companyPanel = new JPanel(new BorderLayout());
 
-  public CompanyDetailsView(CompanyDetailsModel model) {
-
+  public CompanyDetailsView(CompanyDetailsModel model, IUserUcc userUcc) {
     super(new BorderLayout());
     this.model = model;
-    table = new JTable();
+    this.userUcc = userUcc;
 
-    JPanel gridLayoutpanel = new JPanel(new GridLayout(3,1));
-    JPanel panel = new JPanel();
-    panel.add(new JLabel("Nom : " + model.getCompanyDto().getName()),FlowLayout.LEFT);
-    panel.add(new JLabel("    "),FlowLayout.LEFT);
-    // TODO ajouter getUserByid dans userUcc
-    panel.add(new JLabel("Enregisteur : "),FlowLayout.LEFT);
-
-    gridLayoutpanel.add(panel);
-
-    panel = new JPanel();
-    panel.add(new JLabel("Date de l'enregistrement : "
-        +model.getCompanyDto().getRegisterDate().toString()),FlowLayout.LEFT);
-
-    gridLayoutpanel.add(panel);
-
-    panel = new JPanel(new GridLayout(1, 2));
-
-    JPanel leftPanel = new JPanel(new BorderLayout());
-    JPanel rightPanel = new JPanel(new BorderLayout());
-
-    leftPanel.add(new JLabel("Adresse : "), BorderLayout.NORTH);
-
-    JPanel leftInnerPanel = new JPanel(new GridLayout(3, 1));
-
-    leftInnerPanel.add(new JLabel("Rue : " + model.getCompanyDto().getAddressStreet()));
-    leftInnerPanel.add(new JLabel("Ville : " + model.getCompanyDto().getAddressTown()));
-    leftInnerPanel.add(new JLabel("Boite : " + model.getCompanyDto().getAddressMailbox()));
-
-    leftPanel.add(leftInnerPanel);
-
-    rightPanel.add(new JLabel("Numero : "), BorderLayout.NORTH);
-    rightPanel.add(new JLabel("Code postal : " + model.getCompanyDto().getAddressPostcode()));
-
-    gridLayoutpanel.add(leftPanel);
-    gridLayoutpanel.add(rightPanel);
-
-    this.add(gridLayoutpanel,BorderLayout.NORTH);
-
-    JPanel borderLayoutPanel = new JPanel(new BorderLayout());
-
-    borderLayoutPanel.add(new JLabel("Personne de contact : "),BorderLayout.NORTH);
-
-    if(model.getContactDto().size() == 0){
-      borderLayoutPanel.add(new JLabel("Il n'y a aucune personne de contact pour cet entreprise."));
-    }else{
-     borderLayoutPanel.add(new JScrollPane(table));
-      table.setModel(new tableModel(model.getContactDto()));
-    }
-    this.add(borderLayoutPanel);
-
-    //TODO ajouter getBusinessDaybyCompanyId
-  }
-
-  public JTable getTable() {
-
-    return table;
-  }
-
-  class tableModel extends AbstractTableModel {
-
-    String[] columns = {"Nom", "prenom", "Entreprise","Mail","Téléphone"};
-    Object[][] data;
-
-    public tableModel(List<IContactDto> contactDto) {
-
-      data = new Object[contactDto.size()][];
-
-      for (int i = 0; i < contactDto.size(); i++) {
-
-        data[i] =
-            new Object[]{contactDto.get(i).getLastName(), contactDto.get(i).getFirstName(),
-            contactDto.get(i).getCompany(),contactDto.get(i).getEmail(),contactDto.get(i).getPhone()};
+    String[] tableTitles = new String[]{"Nom", "prenom", "Mail", "Téléphone"};
+    this.contactsTable = new JTable(new DefaultTableModel(tableTitles, 0) {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
       }
+    });
+    contactsTable.setRowHeight(35);
+    contactsTable.getColumn(tableTitles[0]).setCellRenderer(new DefaultTableCellRenderer() {
+      @Override
+      public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                     boolean hasFocus, int row, int column) {
+        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        setText(((IContactDto) value).getLastName());
 
-    }
+        return this;
+      }
+    });
 
-    @Override
-    public int getRowCount() {
-      return data.length;
-    }
+    JPanel contactWrapper = new JPanel(new BorderLayout());
+    contactWrapper.add(new JLabelFont("Contacts", 17), BorderLayout.NORTH);
+    contactWrapper.add(contactList, BorderLayout.CENTER);
+    contactWrapper.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-    @Override
-    public int getColumnCount() {
-      return columns.length;
-    }
-
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-      return data[rowIndex][columnIndex];
-    }
-
-    @Override
-    public String getColumnName(int column) {
-      return columns[column];
-    }
-
-
-    @Override
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-
-      data[rowIndex][columnIndex] = aValue;
-    }
-
-    @Override
-    public Class<?> getColumnClass(int columnIndex) {
-      return data[0][columnIndex].getClass();
-    }
+    this.add(contactWrapper);
   }
 
+  private void displayCompanyData() {
+    final ICompanyDto company = model.getCompanyDto();
+    if (company == null) {
+      return;
+    }
 
+    final JLabel title = new JLabelFont(company.getName(), 20);
+    title.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+    companyPanel.add(title, BorderLayout.NORTH);
+
+    final JPanel center = new JPanel(new BorderLayout());
+
+    final IUserDto companyCreator = userUcc.getUserById(company.getCreator());
+    final String registerText = "Enregistré par " + (companyCreator == null ? "<Supprimé>" :
+                                                     companyCreator.getFirstName()
+                                                     + " " + companyCreator.getLastName())
+                                + " le " + LocalizationUtil.localizeDate(model.getCompanyDto()
+                                                                             .getRegisterDate());
+    center.add(new JLabel(registerText), BorderLayout.NORTH);
+
+    final JPanel addressPanel = new JPanel(new BorderLayout());
+    addressPanel.add(new JLabelFont("Adresse", 17), BorderLayout.NORTH);
+
+    final JPanel addressDataPanel = new JPanel(new GridLayout(3, 2));
+    addressPanel.add(addressDataPanel);
+
+    addressDataPanel.add(new JLabel("Rue : " + company.getAddressStreet()));
+    addressDataPanel.add(new JLabel("Ville : " + company.getAddressTown()));
+    addressDataPanel.add(new JLabel("Boite : " + company.getAddressMailbox()));
+    addressDataPanel.add(new JLabel(
+        "Numero : " + (company.getAddressNum() == null ? "N/A" : company.getAddressNum())));
+    addressDataPanel.add(new JLabel("Code postal : " + company.getAddressPostcode()));
+
+    companyPanel.add(addressPanel);
+
+    this.add(companyPanel, BorderLayout.NORTH);
+  }
+
+  JTable getContactsTable() {
+    return contactsTable;
+  }
+
+  public void stateChanged(List<IContactDto> contacts) {
+    companyPanel.removeAll();
+    displayCompanyData();
+
+    contactList.removeAll();
+    if (contacts == null) {
+      return;
+    }
+
+    if (contacts.size() == 0) {
+      JLabel errorLabel = new JLabel("Il n'y a aucune personne de contact pour cet entreprise.");
+      errorLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+      contactList.add(errorLabel);
+    } else {
+      contactList.add(new JScrollPane(contactsTable));
+    }
+  }
 }

@@ -25,7 +25,7 @@ import paoo.cappuccino.ucc.IContactUcc;
 import paoo.cappuccino.util.StringUtils;
 
 /**
- * ViewController for the registration Gui.
+ * ViewController for the new contact Gui.
  *
  * @author Opsomer Mathias
  */
@@ -33,12 +33,9 @@ import paoo.cappuccino.util.StringUtils;
 public class NewContactViewController extends JPanel {
 
   /**
-   * Creates a new ViewController for the new company gui.
+   * Creates a new ViewController for the new contact gui.
    *
    * @param model The ViewController's model.
-   * @param manager The manager responsible for the opening/closing this frame.
-   * @param contactUcc
-   * @param companyUcc
    */
   public NewContactViewController(NewContactModel model, MenuModel menu, IGuiManager manager,
       IContactUcc contactUcc, ICompanyUcc companyUcc) {
@@ -59,8 +56,8 @@ public class NewContactViewController extends JPanel {
     comboCompanies.setRenderer(new ComboEntrepriseRenderer());
 
 
-    if (menu.hasTransitionObject())
-      comboCompanies.setSelectedItem(menu.getTransitionObject());
+   // if (menu.hasTransitionObject())
+   //   comboCompanies.setSelectedItem(menu.getTransitionObject());
 
     JPanel controls =
         new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
@@ -123,12 +120,6 @@ public class NewContactViewController extends JPanel {
 
   class ComboEntrepriseRenderer implements ListCellRenderer<ICompanyDto> {
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see javax.swing.ListCellRenderer#getListCellRendererComponent(javax.swing.JList,
-     * java.lang.Object, int, boolean, boolean)
-     */
     @Override
     public Component getListCellRendererComponent(JList<? extends ICompanyDto> arg0,
         ICompanyDto value, int arg2, boolean arg3, boolean arg4) {

@@ -34,4 +34,11 @@ public interface IUserUcc {
    * @throws java.lang.IllegalArgumentException A parameter is null or empty.
    */
   IUserDto logIn(String username, char[] password);
+
+  /**
+   * Fetches the user matching a given id.
+   * @param id The user identifier.
+   * @return The user or null if none matched.
+   */
+  IUserDto getUserById(int id);
 }

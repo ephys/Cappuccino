@@ -26,7 +26,7 @@ public class MenuFrame extends BaseFrame {
                    IContactUcc contactUcc, IGuiManager guiManager) {
     super("Cappuccino", 950, 600, guiManager);
 
-    this.menuModel = new MenuModel(this);
+    this.menuModel = new MenuModel(this, guiManager.getLogger());
     this.guiManager = guiManager;
     this.guiFactory = new ViewControllerFactory(userUcc, businessDayUcc, companyUcc,
                                                 contactUcc, menuModel, guiManager);

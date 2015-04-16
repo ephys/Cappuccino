@@ -1,9 +1,18 @@
 package paoo.cappuccino.ihm.menu;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
+import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JLabelFont;
@@ -85,28 +94,30 @@ public class MenuViewController extends MenuView {
     controls.add(search, gbc);
     controls.add(day, gbc);
 
-    // si admin
-    // button admin
-    JButton newEntrepriseButton = new JButton("Créer entreprise");
-    newEntrepriseButton.addActionListener(e -> model.setCurrentPage(MenuEntry.CREATE_COMPANY));
-    JButton newContactButton = new JButton("Créer contact");
-    newContactButton.addActionListener(e -> model.setCurrentPage(MenuEntry.CREATE_CONTACT));
-
     // labels admin
-    JPanel entrepriseLabelPanel = new JPanel();
-    JLabelFont entrepriseLabel = new JLabelFont("Gérer entreprises", 16);
-    entrepriseLabelPanel.add(entrepriseLabel);
-    entrepriseLabelPanel.setBackground(IhmConstants.LIGHT_BLUE);
+    if (model.getLoggedUser().getRole() == IUserDto.Role.ADMIN) {
+      // si admin
+      // button admin
+      JButton newEntrepriseButton = new JButton("Créer entreprise");
+      newEntrepriseButton.addActionListener(e -> model.setCurrentPage(MenuEntry.CREATE_COMPANY));
+      JButton newContactButton = new JButton("Créer contact");
+      newContactButton.addActionListener(e -> model.setCurrentPage(MenuEntry.CREATE_CONTACT));
 
-    JPanel companies = new JPanel(new BorderLayout());
-    JPanel companiesCenter = new JPanel(new GridLayout(2, 0));
-    companiesCenter.add(newEntrepriseButton);
-    companiesCenter.add(newContactButton);
-    controls.add(companies, gbc);
-    companies.add(entrepriseLabelPanel, BorderLayout.NORTH);
-    companies.add(companiesCenter);
+      JPanel entrepriseLabelPanel = new JPanel();
+      JLabelFont entrepriseLabel = new JLabelFont("Administration", 16);
+      entrepriseLabelPanel.add(entrepriseLabel);
+      entrepriseLabelPanel.setBackground(IhmConstants.LIGHT_BLUE);
 
-    controls.add(companies, gbc);
+      JPanel companies = new JPanel(new BorderLayout());
+      JPanel companiesCenter = new JPanel(new GridLayout(2, 0));
+      companiesCenter.add(newEntrepriseButton);
+      companiesCenter.add(newContactButton);
+      controls.add(companies, gbc);
+      companies.add(entrepriseLabelPanel, BorderLayout.NORTH);
+      companies.add(companiesCenter);
+
+      controls.add(companies, gbc);
+    }
 
     JPanel west = new JPanel(new BorderLayout());
     west.add(controls, BorderLayout.NORTH);

@@ -3,6 +3,9 @@ package paoo.cappuccino.ihm.home;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.ihm.util.BaseModel;
 
+/**
+ * Model for the participation modification screen.
+ */
 public class HomeModel extends BaseModel {
 
   private IBusinessDayDto selectedDay;

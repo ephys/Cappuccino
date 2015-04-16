@@ -74,7 +74,7 @@ public class ViewControllerFactory {
     switch (page) {
       case HOME:
         return new HomeViewController(modelHome, menuModel, guiManager, businessDayUcc,
-                                         companyUcc);
+                                      companyUcc);
 
       case SELECT_COMPANY:
         return new CompanySelectionViewController(modelCompanySelection, menuModel, guiManager,
@@ -97,15 +97,17 @@ public class ViewControllerFactory {
 
       case SEARCH_PARTICIPATION:
         return new ParticipationSearchingViewController(modelParticipationSearching, menuModel,
-                                                        guiManager, businessDayUcc, companyUcc);
+                                                        businessDayUcc, companyUcc);
 
       case COMPANY_DETAILS:
-        return new CompanyDetailsViewController(modelCompanyDetails, menuModel, userUcc, contactUcc,
-                                                guiManager);
+        modelCompanyDetails.init(menuModel.getTransitionObjects());
+        return new CompanyDetailsViewController(modelCompanyDetails, menuModel, contactUcc,
+                                                userUcc);
 
       case CONTACT_DETAILS:
+        modelContactDetails.init(menuModel.getTransitionObjects());
         return new ContactDetailsViewController(modelContactDetails, menuModel, contactUcc,
-                                                guiManager);
+                                                companyUcc);
 
       default:
         throw new UnsupportedOperationException("Could not open page \"" + page.getTitle()

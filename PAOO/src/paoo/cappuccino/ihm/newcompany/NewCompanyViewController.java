@@ -94,8 +94,7 @@ public class NewCompanyViewController extends JPanel {
           postCodeField.setText(null);
 
           // redirection utilisateur
-          menu.setTransitionObject(company);
-          menu.setCurrentPage(MenuEntry.CREATE_CONTACT);
+          menu.setCurrentPage(MenuEntry.CREATE_CONTACT, company);
         } catch (IllegalArgumentException ex) {
           model.setNameError(IhmConstants.NAME_ALREADY_TAKEN);
         }

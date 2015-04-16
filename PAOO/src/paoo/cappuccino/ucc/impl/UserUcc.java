@@ -70,4 +70,9 @@ class UserUcc implements IUserUcc {
 
     return user;
   }
+
+  @Override
+  public IUserDto getUserById(int id) {
+    return userDao.getUserById(id);
+  }
 }

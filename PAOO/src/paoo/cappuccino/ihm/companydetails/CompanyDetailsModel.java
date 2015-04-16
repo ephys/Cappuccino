@@ -1,38 +1,29 @@
 package paoo.cappuccino.ihm.companydetails;
 
-import java.util.List;
-
 import paoo.cappuccino.business.dto.ICompanyDto;
-import paoo.cappuccino.business.dto.IContactDto;
+import paoo.cappuccino.ihm.core.Initializable;
 import paoo.cappuccino.ihm.util.BaseModel;
 
-public class CompanyDetailsModel extends BaseModel{
-
+public class CompanyDetailsModel extends BaseModel implements Initializable {
 
   private ICompanyDto companyDto;
-  private List<IContactDto> contactDto;
-
-
-  public void setCompanyDto(ICompanyDto companyDto){
-
-    this.companyDto = companyDto;
-  }
-
-  public void setContactDto(List<IContactDto> contactDto){
-
-    this.contactDto = contactDto;
-
-  }
 
   public ICompanyDto getCompanyDto() {
-
     return companyDto;
   }
 
+  @Override
+  public void init(Object[] data) {
+    if (data == null || data.length != 1) {
+      return;
+    }
 
-  public List<IContactDto> getContactDto() {
+    if (!(data[0] instanceof ICompanyDto)) {
+      throw new IllegalArgumentException("Incorrect initialization data for CompanyDetailsModel");
+    }
 
-    return contactDto;
+    companyDto = (ICompanyDto) data[0];
+
+    dispatchChangeEvent();
   }
-
 }

@@ -17,12 +17,10 @@ final class ContactEntity extends BaseEntity implements IContact {
   private String email;
   private boolean emailValid;
 
-
   public ContactEntity(int companyId, String email, boolean emailValid, String firstName,
       String lastName, String phone) {
     this(-1, 0, companyId, email, emailValid, firstName, lastName, phone);
   }
-
 
   public ContactEntity(int id, int version, int companyId, String email, boolean emailValid,
       String firstName, String lastName, String phone) {
@@ -32,8 +30,7 @@ final class ContactEntity extends BaseEntity implements IContact {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phone = phone;
-
-    setEmail(email);
+    this.email = email;
   }
 
   @Override

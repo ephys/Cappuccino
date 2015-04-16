@@ -31,7 +31,7 @@ class CachedResourceManager implements IResourceManager {
 
       return image;
     } catch (IOException e) {
-      guiManager.getLogger().log(Level.WARNING, "Could not read the app icon", e);
+      guiManager.getLogger().log(Level.WARNING, "Could not read the requested image " + path, e);
 
       return null;
     }

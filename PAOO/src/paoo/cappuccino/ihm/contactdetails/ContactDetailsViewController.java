@@ -1,55 +1,49 @@
 package paoo.cappuccino.ihm.contactdetails;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import paoo.cappuccino.business.dto.IContactDto;
-import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
+import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.ucc.IContactUcc;
 
 @SuppressWarnings("serial")
-public class ContactDetailsViewController extends JPanel {
-  private ContactDetailsModel model;
-  private MenuModel menu;
-  private IContactUcc contactUcc;
-  private IGuiManager guiManager;
-  private ContactDetailsView view;
+public class ContactDetailsViewController extends JPanel implements ChangeListener {
+
+  private final JButton markInvalidButton = new JButton("Renseigner Invalide");
+
+  private final ContactDetailsModel model;
+  private final MenuModel menu;
 
   public ContactDetailsViewController(ContactDetailsModel model, MenuModel menu,
-      IContactUcc contactUcc, IGuiManager guiManager) {
-
+                                      IContactUcc contactUcc, ICompanyUcc companyUcc) {
     this.model = model;
     this.menu = menu;
-    this.contactUcc = contactUcc;
-    this.guiManager = guiManager;
 
-    this.guiManager.getLogger().info("[ContactDetailsFrame]");
-   
-    IContactDto contactDto = (IContactDto)menu.getTransitionObject();
-    model.setContactDto(contactDto);
-    JButton button = new JButton("Renseigner invalide");
-    
-   
-    if(!contactDto.isEmailValid()){
-      
-      model.setInvalidMail(true);
-      button.setEnabled(false);
+    model.addChangeListener(this);
+    this.add(new ContactDetailsView(model, markInvalidButton, companyUcc, menu));
+
+    markInvalidButton.addActionListener(e -> {
+      contactUcc.setMailInvalid(model.getContactDto());
+      markInvalidButton.setEnabled(false);
+    });
+
+    stateChanged(null);
+  }
+
+  @Override
+  public void stateChanged(ChangeEvent e) {
+    IContactDto contact = model.getContactDto();
+
+    if (contact == null) {
+      menu.setCurrentPage(MenuEntry.HOME);
+      return;
     }
-    this.view = new ContactDetailsView(model,button);
-    
 
-   button.addActionListener(e->{
-     
-      contactUcc.setMailInvalid(contactDto);
-      model.setInvalidMail(true);
-      button.setEnabled(false);
-   });
-   
-    this.add(view);
-    
+    markInvalidButton.setEnabled(contact.isEmailValid());
   }
 }

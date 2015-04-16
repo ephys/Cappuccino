@@ -40,11 +40,16 @@ import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ihm.util.JLabelFont;
 import paoo.cappuccino.ihm.util.LocalizationUtil;
+import paoo.cappuccino.ihm.util.cellrenderers.CompanyCellRenderer;
+import paoo.cappuccino.ihm.util.cellrenderers.StateCellRenderer;
 import paoo.cappuccino.ihm.util.disableablecombo.DisableableComboRenderer;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.util.ParticipationUtils;
 
+/**
+ * ViewController for the participation modification screen.
+ */
 public class HomeViewController extends JPanel implements ChangeListener {
 
   private static final long serialVersionUID = 3071496812344175953L;
@@ -64,7 +69,6 @@ public class HomeViewController extends JPanel implements ChangeListener {
     this.menu = menu;
     this.dayUcc = dayUcc;
     this.companyUcc = companyUcc;
-    guiManager.getLogger().info("AcceuilFrame");
 
     this.viewModel = model;
 
@@ -89,7 +93,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
           model.setSelectedDay(selectedDay);
 
           guiManager.getLogger().info(
-              "Home screen: selected day is "
+              "[Home screen] selected day is "
               + (selectedDay == null ? null : selectedDay.getEventDate()));
         });
 
@@ -99,7 +103,12 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
     // center
     String[] tableTitles = new String[]{"Nom entreprise", "État", "Annuler participation"};
-    tableModel = new DefaultTableModel(tableTitles, 0);
+    tableModel = new DefaultTableModel(tableTitles, 0) {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return column != 0;
+      }
+    };
 
     JTable table = new JTable(tableModel);
 
@@ -108,11 +117,11 @@ public class HomeViewController extends JPanel implements ChangeListener {
     // gestion affichage table
     TableColumn nameCol = table.getColumn(tableTitles[0]);
     nameCol.setMinWidth(nameCol.getWidth() * 6);
-    nameCol.setCellRenderer(new CompanyRenderer());
+    nameCol.setCellRenderer(new CompanyCellRenderer());
 
     TableColumn stateCol = table.getColumn(tableTitles[1]);
     stateCol.setMinWidth(stateCol.getWidth() * 2);
-    stateCol.setCellRenderer(new StateRenderer());
+    stateCol.setCellRenderer(new StateCellRenderer());
     ComboBoxModel<State> stateModel = new DefaultComboBoxModel<>(new State[]{State.INVITED,
                                                                              State.CONFIRMED,
                                                                              State.DECLINED,
@@ -253,21 +262,6 @@ public class HomeViewController extends JPanel implements ChangeListener {
     }
   }
 
-  private static class StateRenderer implements TableCellRenderer {
-
-    private JLabel label = new JLabel();
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                   boolean isFocus, int row, int col) {
-      State state = (State) value;
-
-      label.setText(LocalizationUtil.localizeState(state));
-
-      return label;
-    }
-  }
-
   private static class StateComboRenderer extends DisableableComboRenderer {
 
     public StateComboRenderer(ListSelectionModel enabled) {
@@ -296,20 +290,6 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
       setText(participation.isCancelled() ? "Annulé" : "Annuler");
       return this;
-    }
-  }
-
-  private static class CompanyRenderer implements TableCellRenderer {
-
-    private final JLabel label = new JLabel();
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                   boolean hasFocus, int row, int column) {
-
-      label.setText(((ICompanyDto) value).getName());
-
-      return label;
     }
   }
 

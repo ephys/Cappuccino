@@ -2,7 +2,6 @@ package paoo.cappuccino.ihm.participationsearching;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -11,39 +10,69 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
+import paoo.cappuccino.ihm.util.cellrenderers.CompanyCellRenderer;
+import paoo.cappuccino.ihm.util.cellrenderers.DateCellRenderer;
+import paoo.cappuccino.ihm.util.cellrenderers.StateCellRenderer;
+import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
 
 @SuppressWarnings("serial")
 public class ParticipationSearchingView extends JPanel implements ChangeListener {
 
-  private ParticipationSearchingModel model;
-  private ICompanyUcc companyUcc;
-  private JTable table;
-  private JScrollPane scrollPane;
+  private final ParticipationSearchingModel model;
+  private final ICompanyUcc companyUcc;
+  private final DefaultTableModel tableModel;
+  private final JScrollPane scrollPane;
+  private final IBusinessDayUcc businessDayUcc;
+  private final JTable table;
   private boolean removedWidget;
   private JPanel centerPadding;
 
-  public ParticipationSearchingView(ParticipationSearchingModel model, ICompanyUcc companyUcc) {
+  public ParticipationSearchingView(ParticipationSearchingModel model, ICompanyUcc companyUcc,
+                                    IBusinessDayUcc businessDayUcc) {
+    this.businessDayUcc = businessDayUcc;
 
     setLayout(new BorderLayout());
     this.model = model;
     this.companyUcc = companyUcc;
-    this.table = new JTable();
+
+    String[] tableTitles = new String[] {"Nom entreprise", "Adresse entreprise",
+                                         "Date d'enregistrement", "État"};
+    this.tableModel = new DefaultTableModel(tableTitles, 0) {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    };
+
+    this.table = new JTable(tableModel);
+
+    TableColumn companyCol = table.getColumn(tableTitles[0]);
+    companyCol.setCellRenderer(new CompanyCellRenderer());
+
+    TableColumn dateCol = table.getColumn(tableTitles[2]);
+    dateCol.setCellRenderer(new DateCellRenderer());
+
+    TableColumn stateCol = table.getColumn(tableTitles[3]);
+    stateCol.setCellRenderer(new StateCellRenderer());
+
     this.scrollPane = new JScrollPane(table);
     this.add(scrollPane);
     this.model.addChangeListener(this);
   }
 
-
   @Override
   public void stateChanged(ChangeEvent event) {
+    List<IParticipationDto> participations =
+        model.getSelectedDay() == null
+        ? null : businessDayUcc.getParticipations(model.getSelectedDay().getId());
 
-    if (model.getParticipationDto() != null && model.getParticipationDto().size() > 0) {
-
+    if (participations != null && participations.size() != 0) {
       if (this.removedWidget) {
         this.remove(this.centerPadding);
         this.add(this.scrollPane);
@@ -52,14 +81,12 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
         this.repaint();
       }
 
-      this.table.setModel(new tableModel(model.getParticipationDto()));
-
+      buildTable(participations);
     } else {
-
       if (!this.removedWidget) {
         this.centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        centerPadding.add(new JLabel(errorMessage(model.getParticipationDto())));
+        centerPadding.add(new JLabel(buildErrorMessage(participations)));
 
         this.remove(this.scrollPane);
         this.add(centerPadding);
@@ -67,70 +94,32 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
         this.revalidate();
         this.repaint();
       }
-
     }
-
   }
 
-
-  public JTable getTable() {
-
+  JTable getTable() {
     return this.table;
   }
 
-  class tableModel extends AbstractTableModel {
+  private void buildTable(List<IParticipationDto> participations) {
+    tableModel.setRowCount(participations.size());
 
-    String[] columns = {"Nom entreprise", "Adresse entreprise", "Date de l'enregistrement", "Etat"};
-    Object[][] data;
+    for (int i = 0; i < participations.size(); i++) {
+      IParticipationDto participation = participations.get(i);
+      ICompanyDto company = companyUcc.getCompanyById(participation.getCompany());
 
-    public tableModel(List<IParticipationDto> participationDto) {
-
-      this.data = new Object[participationDto.size()][];
-
-      for (int i = 0; i < participationDto.size(); i++) {
-
-        ICompanyDto companyDto =
-            companyUcc.getCompanyById(participationDto.get(i)
-                .getCompany());
-        this.data[i] =
-            new Object[] {companyDto.getName(), companyDto.getAddressTown(),
-                companyDto.getRegisterDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy à hh:mm:ss")), participationDto.get(i).getState().toString(),
-                companyDto.getId()};
-      }
-
-    }
-
-    public int getRowCount() {
-      return data.length;
-    }
-
-    public int getColumnCount() {
-      return columns.length;
-    }
-
-    public Object getValueAt(int rowIndex, int columnIndex) {
-
-      return data[rowIndex][columnIndex];
-    }
-
-    public String getColumnName(int column) {
-      return columns[column];
-    }
-
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-
-      data[rowIndex][columnIndex] = aValue;
-    }
-
-    public Class<?> getColumnClass(int columnIndex) {
-      return data[0][columnIndex].getClass();
+      tableModel.setValueAt(company, i, 0);
+      tableModel.setValueAt(company.getAddressTown(), i, 1);
+      tableModel.setValueAt(company.getRegisterDate(), i, 2);
+      tableModel.setValueAt(participation.getState(), i, 3);
     }
   }
 
-  public String errorMessage(List<IParticipationDto> participationDto){
-
-      if(participationDto == null) return "Il n'y a aucune journée d'entreprise disponible.";
-      else return "Il n'y a aucune participation correspondante.";
+  public String buildErrorMessage(List<IParticipationDto> participationDto) {
+    if (participationDto == null) {
+      return "Il n'y a aucune journée d'entreprise disponible.";
+    } else {
+      return "Il n'y a aucune participation correspondante.";
+    }
   }
-
 }

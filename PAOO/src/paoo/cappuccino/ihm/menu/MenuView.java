@@ -4,11 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.logging.Level;
+import java.awt.image.BufferedImage;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,8 +29,9 @@ public class MenuView extends JPanel implements ChangeListener {
 
   /**
    * Creates a new Menu View.
-   * @param menuModel The view model.
-   * @param guiManager The manager which opened this gui.
+   *
+   * @param menuModel   The view model.
+   * @param guiManager  The manager which opened this gui.
    * @param viewFactory The factory used to create the main view.
    */
   public MenuView(MenuModel menuModel, IGuiManager guiManager, ViewControllerFactory viewFactory) {
@@ -62,10 +60,12 @@ public class MenuView extends JPanel implements ChangeListener {
     imagePanel.setPreferredSize(new Dimension(150, 90));
     imagePanel.setAlignmentX(CENTER_ALIGNMENT);
 
-    try {
-      imagePanel.add(new JLabel(new ImageIcon(ImageIO.read(new FileInputStream("lib/logo.png")))));
-    } catch (IOException e) {
-      guiManager.getLogger().log(Level.WARNING, "Could not load the application logo", e);
+    BufferedImage logo = guiManager.getResourceManager().fetchImage("lib/logo.png");
+
+    if (logo != null) {
+      imagePanel.add(new JLabel(new ImageIcon(logo)));
+    } else {
+      imagePanel.add(new JLabel("logo"));
     }
 
     header.add(imagePanel, BorderLayout.WEST);
@@ -95,7 +95,7 @@ public class MenuView extends JPanel implements ChangeListener {
   @Override
   public void stateChanged(ChangeEvent event) {
     try {
-      Component previousVc = ((BorderLayout)mainPanel.getLayout())
+      Component previousVc = ((BorderLayout) mainPanel.getLayout())
           .getLayoutComponent(BorderLayout.CENTER);
       if (previousVc != null) {
         mainPanel.remove(previousVc);

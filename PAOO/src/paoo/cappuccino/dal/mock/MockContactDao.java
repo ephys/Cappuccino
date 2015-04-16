@@ -46,9 +46,10 @@ class MockContactDao implements IContactDao {
 
   @Override
   public void updateContact(IContactDto contact) {
-    if (contactList.size() > contact.getId()
-        || contactList.get(contact.getId() - 1).getVersion() != contact.getVersion()) {
-      throw new ConcurrentModificationException();
+    if (contactList.size() < contact.getId()) {
+      throw new ConcurrentModificationException("contact not found");
+    } else if (contactList.get(contact.getId() - 1).getVersion() != contact.getVersion()) {
+      throw new ConcurrentModificationException("Version mismatch");
     }
 
     IContact contactEntity = factory.createContact(contact.getId(), contact.getVersion() + 1,

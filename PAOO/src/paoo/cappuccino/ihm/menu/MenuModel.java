@@ -1,5 +1,7 @@
 package paoo.cappuccino.ihm.menu;
 
+import java.util.logging.Logger;
+
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.ihm.util.BaseModel;
 
@@ -9,12 +11,13 @@ import paoo.cappuccino.ihm.util.BaseModel;
 public class MenuModel extends BaseModel {
 
   private final MenuFrame containingFrame;
+  private final Logger guiLogger;
   private MenuEntry currentPage = MenuEntry.HOME;
-  private Object transitionObject;
-  private boolean hasTransitionObject = false;
+  private Object[] transitionObjects;
 
-  public MenuModel(MenuFrame containingFrame) {
+  public MenuModel(MenuFrame containingFrame, Logger guiLogger) {
     this.containingFrame = containingFrame;
+    this.guiLogger = guiLogger;
   }
 
   /**
@@ -29,15 +32,26 @@ public class MenuModel extends BaseModel {
    *
    * @param page the page to open.
    */
-  public boolean setCurrentPage(MenuEntry page) {
+  public boolean setCurrentPage(MenuEntry page, Object... modelData) {
     if (page == currentPage) {
       return false;
     }
 
+    if (page == null) {
+      guiLogger.warning("Page closed");
+    } else {
+      guiLogger.info("Opening page " + page.getTitle());
+    }
+
     currentPage = page;
+    transitionObjects = modelData;
     dispatchChangeEvent();
 
     return true;
+  }
+
+  Object[] getTransitionObjects() {
+    return transitionObjects;
   }
 
   /**
@@ -45,29 +59,5 @@ public class MenuModel extends BaseModel {
    */
   public MenuEntry getCurrentPage() {
     return currentPage;
-  }
-
-  /**
-   * @return the transitionObject
-   */
-  public Object getTransitionObject() {
-    hasTransitionObject = false;
-    return transitionObject;
-  }
-
-  /**
-   * @param transitionObject the transitionObject to set
-   */
-  public void setTransitionObject(Object transitionObject) {
-    hasTransitionObject = true;
-    this.transitionObject = transitionObject;
-  }
-
-  /**
-   *
-   * @return
-   */
-  public boolean hasTransitionObject() {
-    return hasTransitionObject;
   }
 }

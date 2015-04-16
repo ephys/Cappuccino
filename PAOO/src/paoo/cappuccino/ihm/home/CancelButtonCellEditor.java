@@ -7,6 +7,7 @@ import javax.swing.JCheckBox;
 import paoo.cappuccino.business.dto.IParticipationDto;
 
 /**
+ * Cell Editor for a toggle button.
  * @author Opsomer Mathias
  */
 public class CancelButtonCellEditor extends DefaultCellEditor {

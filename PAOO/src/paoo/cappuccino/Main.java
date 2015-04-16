@@ -75,7 +75,7 @@ public class Main extends BaseMain {
 
       @Override
       public Role getRole() {
-        return Role.USER;
+        return Role.ADMIN;
       }
 
       @Override

@@ -11,8 +11,6 @@ import javax.swing.JTable;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
-import paoo.cappuccino.business.dto.IParticipationDto;
-import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.JComboDay;
@@ -22,87 +20,56 @@ import paoo.cappuccino.ucc.ICompanyUcc;
 @SuppressWarnings("serial")
 public class ParticipationSearchingViewController extends JPanel {
 
-  private ParticipationSearchingModel model;
-  private IGuiManager guiManager;
-  private MenuModel menu;
-  private IBusinessDayUcc businessDayUcc;
-  private ICompanyUcc companyUcc;
-  private ParticipationSearchingView view;
-  private List<IBusinessDayDto> businessDayDto;
-  private IBusinessDayDto selectedBusinessDay;
+  private final ParticipationSearchingModel model;
+  private final List<IBusinessDayDto> businessDayDto;
 
   public ParticipationSearchingViewController(ParticipationSearchingModel model, MenuModel menu,
-      IGuiManager guiManager, IBusinessDayUcc businessDayUcc, ICompanyUcc companyUcc) {
+                                              IBusinessDayUcc businessDayUcc,
+                                              ICompanyUcc companyUcc) {
 
     super(new BorderLayout());
     this.model = model;
-    this.menu = menu;
-    this.businessDayUcc = businessDayUcc;
-    this.companyUcc = companyUcc;
-    this.guiManager = guiManager;
-    view = new ParticipationSearchingView(model, companyUcc);
-    JPanel panelWrapper = new JPanel(new BorderLayout());
-    // log message dans console et fichier pour frame courant
-    this.guiManager.getLogger().info("[ParticipationSearchingFrame]");
 
+    ParticipationSearchingView view = new ParticipationSearchingView(model, companyUcc, businessDayUcc);
+    JPanel panelWrapper = new JPanel(new BorderLayout());
 
     JPanel searchingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-    businessDayDto = this.businessDayUcc.getBusinessDays();
+    businessDayDto = businessDayUcc.getBusinessDays();
 
     JComboDay comboBox = new JComboDay(
         businessDayDto.toArray(new IBusinessDayDto[businessDayDto.size()]));
 
     if (businessDayDto.size() == 0) {
-
       comboBox.setEnabled(false);
-      this.model.setParticipationDto(null);
-
     } else {
-
-      List<IParticipationDto> participationDto =
-          businessDayUcc.getParticipations(businessDayDto.get(0).getId());
-      this.model.setParticipationDto(participationDto);
+      this.model.setSelectedDay(businessDayDto.get(0));
     }
 
+    comboBox.getCombo().addActionListener(e -> {
+      IBusinessDayDto selectedBusinessDay = businessDayDto.get(comboBox.getCombo().getSelectedIndex());
 
-    comboBox.getCombo().addActionListener(
-        e -> {
-
-          this.selectedBusinessDay = businessDayDto.get(comboBox.getCombo().getSelectedIndex());
-
-          List<IParticipationDto> participationDto =
-              businessDayUcc.getParticipations(this.selectedBusinessDay.getId());
-          this.model.setParticipationDto(participationDto);
-
-        });
+      this.model.setSelectedDay(selectedBusinessDay);
+    });
 
     searchingPanel.add(comboBox);
 
-
     JTable table = view.getTable();
+    table.setRowHeight(35);
     table.addMouseListener(new MouseAdapter() {
-
       @Override
       public void mouseClicked(MouseEvent e) {
-
         if (e.getClickCount() == 2) {
+          ICompanyDto company =
+              (ICompanyDto) table.getModel().getValueAt(table.getSelectedRow(), 0);
 
-          int companyId =
-              (int) table.getModel().getValueAt(table.getSelectedRow(), table.getColumnCount());
-          ICompanyDto companyDto = companyUcc.getCompanyById(companyId);
-
-          menu.setTransitionObject(companyDto);
-          menu.setCurrentPage(MenuEntry.COMPANY_DETAILS);
+          menu.setCurrentPage(MenuEntry.COMPANY_DETAILS, company);
         }
-
       }
     });
 
     panelWrapper.add(view);
     panelWrapper.add(searchingPanel, BorderLayout.NORTH);
     this.add(panelWrapper);
-
-
   }
 }

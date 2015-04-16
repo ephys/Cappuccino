@@ -70,10 +70,9 @@ public class NewBusinessDayController extends JPanel {
       LocalDateTime date = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
       try {
         IBusinessDayDto createdDate = businessDayUcc.create(date);
-        menu.setTransitionObject(createdDate);
         manager.getLogger().info("new BusinessDay created : " + date.toString());
         JOptionPane.showMessageDialog(null, "Journée crée");
-        menu.setCurrentPage(MenuEntry.SELECT_COMPANY);
+        menu.setCurrentPage(MenuEntry.SELECT_COMPANY, createdDate);
       } catch (IllegalArgumentException ex) {
         JOptionPane.showMessageDialog(null, ex.getMessage());
       }
@@ -88,14 +87,8 @@ public class NewBusinessDayController extends JPanel {
     this.add(new NewBusinessDayView(model, spinnerDate));
   }
 
-  class ComboEntrepriseRenderer implements ListCellRenderer<ICompanyDto> {
+  private static class ComboEntrepriseRenderer implements ListCellRenderer<ICompanyDto> {
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see javax.swing.ListCellRenderer#getListCellRendererComponent(javax.swing.JList,
-     * java.lang.Object, int, boolean, boolean)
-     */
     @Override
     public Component getListCellRendererComponent(JList<? extends ICompanyDto> arg0,
         ICompanyDto value, int arg2, boolean arg3, boolean arg4) {
