@@ -59,7 +59,7 @@ class MockParticipationDao implements IParticipationDao {
         participationList.set(i, factory.createParticipation(participation.getCompany(),
                                                              participation.getBusinessDay(),
                                                              participation.isCancelled(),
-                                                             participation.getVersion(),
+                                                             participation.getVersion() + 1,
                                                              participation.getState()));
 
         if (participation instanceof IParticipation) {

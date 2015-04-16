@@ -2,6 +2,8 @@ package paoo.cappuccino.ucc.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
@@ -9,6 +11,7 @@ import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.dto.IParticipationDto.State;
 import paoo.cappuccino.business.entity.IParticipation;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
+import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalService;
 import paoo.cappuccino.dal.dao.IBusinessDayDao;
@@ -23,14 +26,17 @@ class BusinessDayUcc implements IBusinessDayUcc {
   private final IBusinessDayDao businessDayDao;
   private final IParticipationDao participationDao;
   private final IDalService dalService;
+  private final Logger logger;
 
   @Inject
   public BusinessDayUcc(IEntityFactory entityFactory, IDalService dalService,
-      IBusinessDayDao businessDayDao, IParticipationDao participationDao) {
+                        IBusinessDayDao businessDayDao, IParticipationDao participationDao,
+                        AppContext app) {
     this.factory = entityFactory;
     this.dalService = dalService;
     this.businessDayDao = businessDayDao;
     this.participationDao = participationDao;
+    this.logger = app.getLogger("BusinessDayUcc");
   }
 
   @Override
@@ -46,15 +52,16 @@ class BusinessDayUcc implements IBusinessDayUcc {
   }
 
   @Override
-  public void addInvitedCompanies(ICompanyDto[] companies, IBusinessDayDto businessDay) {
+  public void addInvitedCompanies(ICompanyDto[] companies,
+                                  IBusinessDayDto businessDay) {
     ValidationUtil.ensureNotNull(businessDay, "businessDay");
     ValidationUtil.ensureNotNull(companies, "companies");
 
     dalService.startTransaction();
 
     for (ICompanyDto company : companies) {
-      IParticipationDto participation =
-          factory.createParticipation(company.getId(), businessDay.getId());
+      IParticipationDto participation = factory.createParticipation(company.getId(),
+                                                                    businessDay.getId());
 
       participationDao.createParticipation(participation);
     }
@@ -70,7 +77,8 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
     try {
       participationEntity.setState(state);
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalStateException e) {
+      logger.log(Level.INFO, "state change failed", e);
       return false;
     }
 
@@ -103,9 +111,6 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
   @Override
   public List<IParticipationDto> getParticipations(int businessDayId) {
-    if (businessDayId <= 0) {
-      throw new IllegalArgumentException("Id corrupted");
-    }
     return participationDao.fetchParticipationsByDate(businessDayId);
   }
 
@@ -114,7 +119,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
       return (IParticipation) dto;
     } else {
       return factory.createParticipation(dto.getCompany(), dto.getBusinessDay(), dto.isCancelled(),
-          dto.getVersion(), dto.getState());
+                                         dto.getVersion(), dto.getState());
     }
   }
 }

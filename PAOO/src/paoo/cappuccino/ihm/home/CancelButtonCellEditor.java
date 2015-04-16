@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.accueil;
+package paoo.cappuccino.ihm.home;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -10,6 +10,7 @@ import paoo.cappuccino.business.dto.IParticipationDto;
  * @author Opsomer Mathias
  */
 public class CancelButtonCellEditor extends DefaultCellEditor {
+
   private IParticipationDto participation;
   private boolean cancelled;
 

@@ -2,8 +2,6 @@ package paoo.cappuccino.ihm.menu;
 
 import java.awt.Component;
 
-import paoo.cappuccino.ihm.accueil.AccueilViewController;
-import paoo.cappuccino.ihm.accueil.HomeModel;
 import paoo.cappuccino.ihm.attendence.AttendanceController;
 import paoo.cappuccino.ihm.attendence.AttendanceModel;
 import paoo.cappuccino.ihm.companydetails.CompanyDetailsModel;
@@ -13,6 +11,8 @@ import paoo.cappuccino.ihm.companyselection.CompanySelectionViewController;
 import paoo.cappuccino.ihm.contactdetails.ContactDetailsModel;
 import paoo.cappuccino.ihm.contactdetails.ContactDetailsViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.home.HomeModel;
+import paoo.cappuccino.ihm.home.HomeViewController;
 import paoo.cappuccino.ihm.newbusinessday.NewBusinessDayController;
 import paoo.cappuccino.ihm.newbusinessday.NewBusinessDayModel;
 import paoo.cappuccino.ihm.newcompany.NewCompanyModel;
@@ -73,7 +73,7 @@ public class ViewControllerFactory {
   public Component createViewController(MenuEntry page) {
     switch (page) {
       case HOME:
-        return new AccueilViewController(modelHome, menuModel, guiManager, businessDayUcc,
+        return new HomeViewController(modelHome, menuModel, guiManager, businessDayUcc,
                                          companyUcc);
 
       case SELECT_COMPANY:

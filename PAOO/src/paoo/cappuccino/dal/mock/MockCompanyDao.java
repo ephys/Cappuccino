@@ -65,7 +65,7 @@ class MockCompanyDao implements ICompanyDao {
       throw new ConcurrentModificationException();
     }
 
-    ICompany companyEntity = factory.createCompany(company.getId(), company.getVersion(),
+    ICompany companyEntity = factory.createCompany(company.getId(), company.getVersion() + 1,
                                                    company.getCreator(),
                                                    company.getName(), company.getAddressStreet(),
                                                    company.getAddressNum(),

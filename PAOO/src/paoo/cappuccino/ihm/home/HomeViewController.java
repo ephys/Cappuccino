@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.accueil;
+package paoo.cappuccino.ihm.home;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -6,18 +6,26 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.awt.event.ItemEvent;
 import java.util.List;
 
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -31,17 +39,13 @@ import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ihm.util.JLabelFont;
+import paoo.cappuccino.ihm.util.LocalizationUtil;
+import paoo.cappuccino.ihm.util.disableablecombo.DisableableComboRenderer;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.util.ParticipationUtils;
 
-
-/**
- * ViewController for the Login Gui.
- *
- * @author Opsomer Mathias
- */
-public class AccueilViewController extends JPanel implements ChangeListener {
+public class HomeViewController extends JPanel implements ChangeListener {
 
   private static final long serialVersionUID = 3071496812344175953L;
   private final HomeModel viewModel;
@@ -54,13 +58,8 @@ public class AccueilViewController extends JPanel implements ChangeListener {
   private DefaultTableModel tableModel;
   private JComboDay dayList;
 
-  /**
-   * Creates a new ViewController for the Login gui.
-   *
-   * @param model The ViewController's model.
-   */
-  public AccueilViewController(HomeModel model, MenuModel menu, IGuiManager guiManager,
-      IBusinessDayUcc dayUcc, ICompanyUcc companyUcc) {
+  public HomeViewController(HomeModel model, MenuModel menu, IGuiManager guiManager,
+                            IBusinessDayUcc dayUcc, ICompanyUcc companyUcc) {
     super(new BorderLayout());
     this.menu = menu;
     this.dayUcc = dayUcc;
@@ -84,7 +83,6 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
     dayList = new JComboDay(businessDays.toArray(new IBusinessDayDto[businessDays.size()]));
 
-
     dayList.getCombo().addActionListener(
         e -> {
           IBusinessDayDto selectedDay = (IBusinessDayDto) dayList.getCombo().getSelectedItem();
@@ -92,7 +90,7 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
           guiManager.getLogger().info(
               "Home screen: selected day is "
-                  + (selectedDay == null ? null : selectedDay.getEventDate()));
+              + (selectedDay == null ? null : selectedDay.getEventDate()));
         });
 
     daylistPanel.add(dayList);
@@ -100,10 +98,11 @@ public class AccueilViewController extends JPanel implements ChangeListener {
     this.add(daylistPanel, BorderLayout.NORTH);
 
     // center
-    String[] tableTitles = new String[] {"Nom entreprise", "État", "Annuler participation"};
+    String[] tableTitles = new String[]{"Nom entreprise", "État", "Annuler participation"};
     tableModel = new DefaultTableModel(tableTitles, 0);
 
     JTable table = new JTable(tableModel);
+
     table.setRowHeight(35);
 
     // gestion affichage table
@@ -113,17 +112,70 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
     TableColumn stateCol = table.getColumn(tableTitles[1]);
     stateCol.setMinWidth(stateCol.getWidth() * 2);
-    JComboBox<IParticipationDto.State> stateCombo = new JComboBox<>();
-    stateCol.setCellEditor(new JComboEditor(stateCombo));
-    stateCol
-        .setCellRenderer((table1, value, isSelected, hasFocus, row, column) -> (JComboBox) value);
-    stateCombo.addActionListener(e -> {
-      int row = table.getSelectedRow();
+    stateCol.setCellRenderer(new StateRenderer());
+    ComboBoxModel<State> stateModel = new DefaultComboBoxModel<>(new State[]{State.INVITED,
+                                                                             State.CONFIRMED,
+                                                                             State.DECLINED,
+                                                                             State.BILLED,
+                                                                             State.PAID});
+    JComboBox<State> stateCombo = new JComboBox<>(stateModel);
+    stateCol.setCellEditor(new DefaultCellEditor(stateCombo));
+
+    ListSelectionModel enabledStates = new DefaultListSelectionModel();
+    stateCombo.setRenderer(new StateComboRenderer(enabledStates));
+    stateCombo.addItemListener(e -> {
+      if (e.getStateChange() != ItemEvent.SELECTED) {
+        return;
+      }
+
+      int row = table.getEditingRow();
+      if (row == -1) {
+        return;
+      }
 
       IParticipationDto participation = (IParticipationDto) tableModel.getValueAt(row, 2);
-      JComboBox<State> stateList = (JComboBox<State>) tableModel.getValueAt(row, 1);
+      State selectedState = (State) stateCombo.getSelectedItem();
+      if (selectedState == participation.getState()) {
+        return;
+      }
 
-      dayUcc.changeState(participation, (State) stateList.getSelectedItem());
+      if (!dayUcc.changeState(participation, selectedState)) {
+        JOptionPane.showMessageDialog(
+            HomeViewController.this,
+            "Impossible de sélectionner cet état.",
+            "Action invalide",
+            JOptionPane.ERROR_MESSAGE);
+
+        stateCombo.setSelectedItem(participation.getState());
+      }
+    });
+    stateCombo.addPopupMenuListener(new PopupMenuListener() {
+      @Override
+      public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+        int row = table.getEditingRow();
+        if (row == -1) {
+          return;
+        }
+
+        IParticipationDto participation = (IParticipationDto) tableModel.getValueAt(row, 2);
+        State[] states = ParticipationUtils.getFollowingStates(participation.getState());
+
+        System.out.println("Possible states " + states.length);
+
+        enabledStates.clearSelection();
+        for (State state : states) {
+          enabledStates.addSelectionInterval(state.ordinal(),
+                                             state.ordinal());
+        }
+        enabledStates.addSelectionInterval(participation.getState().ordinal(),
+                                           participation.getState().ordinal());
+      }
+
+      @Override
+      public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+
+      @Override
+      public void popupMenuCanceled(PopupMenuEvent e) {}
     });
 
     TableColumn cancelCol = table.getColumn(tableTitles[2]);
@@ -158,14 +210,7 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
       tableModel.setValueAt(company, i, 0);
 
-      List<State> validStates = new ArrayList<>();
-      validStates.add(participation.getState());
-      Collections.addAll(validStates,
-          ParticipationUtils.getFollowingStates(participation.getState()));
-
-      JComboBox<State> boxState =
-          new JComboBox<>(validStates.toArray(new State[validStates.size()]));
-      tableModel.setValueAt(boxState, i, 1);
+      tableModel.setValueAt(participation.getState(), i, 1);
 
       tableModel.setValueAt(participation, i, 2);
     }
@@ -208,15 +253,46 @@ public class AccueilViewController extends JPanel implements ChangeListener {
     }
   }
 
+  private static class StateRenderer implements TableCellRenderer {
+
+    private JLabel label = new JLabel();
+
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                   boolean isFocus, int row, int col) {
+      State state = (State) value;
+
+      label.setText(LocalizationUtil.localizeState(state));
+
+      return label;
+    }
+  }
+
+  private static class StateComboRenderer extends DisableableComboRenderer {
+
+    public StateComboRenderer(ListSelectionModel enabled) {
+      super(enabled);
+    }
+
+    @Override
+    public Component getListCellRendererComponent(JList list, Object value, int index,
+                                                  boolean isSelected, boolean cellHasFocus) {
+      super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+      setText(LocalizationUtil.localizeState((State) value));
+
+      return this;
+    }
+  }
+
   private static class ButtonRenderer extends JButton implements TableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-        boolean isFocus, int row, int col) {
+                                                   boolean isFocus, int row, int col) {
       IParticipationDto participation = (IParticipationDto) value;
 
       setEnabled(participation.getState() != State.DECLINED
-          && participation.getState() != State.INVITED && !participation.isCancelled());
+                 && participation.getState() != State.INVITED && !participation.isCancelled());
 
       setText(participation.isCancelled() ? "Annulé" : "Annuler");
       return this;
@@ -229,7 +305,7 @@ public class AccueilViewController extends JPanel implements ChangeListener {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-        boolean hasFocus, int row, int column) {
+                                                   boolean hasFocus, int row, int column) {
 
       label.setText(((ICompanyDto) value).getName());
 
