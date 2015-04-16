@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -20,6 +22,7 @@ public class DatePicker extends JPanel {
 
   private final LocalDateTime minDate;
   private final LocalDateTime maxDate;
+  private final Logger logger;
 
   private final JSpinner daysList = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
   private final JSpinner monthList = new JSpinner(new SpinnerListModel(Month.values()));
@@ -31,11 +34,12 @@ public class DatePicker extends JPanel {
    * @param minDate The date to which the selection cannot be lower. Null = no lower limit.
    * @param maxDate The date to which the selection cannot be higher. Null = no upper limit.
    */
-  public DatePicker(LocalDateTime minDate, LocalDateTime maxDate) {
+  public DatePicker(LocalDateTime minDate, LocalDateTime maxDate, Logger logger) {
     super(new FlowLayout());
 
     this.minDate = minDate;
     this.maxDate = maxDate;
+    this.logger = logger;
 
     yearList = new JSpinner(new SpinnerNumberModel(minDate == null
                                                    ? Integer.valueOf(LocalDateTime.now().getYear())
@@ -81,6 +85,7 @@ public class DatePicker extends JPanel {
 
       return selectedDate;
     } catch (DateTimeException e) {
+      logger.log(Level.FINE, "Failed to parse input date", e);
       return null;
     }
   }

@@ -3,6 +3,7 @@ package paoo.cappuccino.ihm.companyselection;
 import java.util.List;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.ihm.core.Initializable;
 import paoo.cappuccino.ihm.util.BaseModel;
 
 /**
@@ -10,7 +11,7 @@ import paoo.cappuccino.ihm.util.BaseModel;
  *
  * @author Maduka Junior
  */
-public class CompanySelectionModel extends BaseModel {
+public class CompanySelectionModel extends BaseModel implements Initializable {
 
   boolean selectAll;
   boolean notDeselectAll;
@@ -49,4 +50,8 @@ public class CompanySelectionModel extends BaseModel {
   }
 
 
+  @Override
+  public void init(Object[] data) {
+    // TODO
+  }
 }

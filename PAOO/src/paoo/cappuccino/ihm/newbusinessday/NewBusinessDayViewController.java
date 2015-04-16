@@ -6,7 +6,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.time.LocalDateTime;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -18,7 +17,6 @@ import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.DatePicker;
-import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JLabelFont;
 import paoo.cappuccino.ihm.util.LocalizationUtil;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
@@ -39,14 +37,17 @@ public class NewBusinessDayViewController extends JPanel {
     super(new GridBagLayout());
 
     final DatePicker datePicker = new DatePicker(LocalDateTime.now(),
-                                                 LocalDateTime.now().plusYears(20));
+                                                 LocalDateTime.now().plusYears(20),
+                                                 manager.getLogger());
 
     JButton createButton = new JButton("Créer");
     createButton.addActionListener(e -> {
       LocalDateTime selectedDate = datePicker.getSelection();
 
       if (selectedDate == null) {
-        JOptionPane.showMessageDialog(this, "La date entrée n'est pas valide",
+        JOptionPane.showMessageDialog(this, "La date entrée n'est pas valide."
+                                            + " Vérifiez qu'elle ne soit pas déjà passée et "
+                                            + "correctement est formée.",
                                       "Date invalide", JOptionPane.ERROR_MESSAGE);
 
         return;
@@ -60,15 +61,13 @@ public class NewBusinessDayViewController extends JPanel {
     });
 
     JPanel mainPanel = new JPanel(new GridLayout(2, 1));
-    JLabel titleLabel = new JLabelFont("Date de la nouvelle journée", 20);
+    JLabel titleLabel = new JLabelFont("Date de la nouvelle journée :", 20);
     titleLabel.setHorizontalTextPosition(SwingConstants.CENTER);
     mainPanel.add(titleLabel);
 
-    JPanel controls = new JPanel(new FlowLayout(FlowLayout.CENTER, IhmConstants.M_GAP,
-                                                IhmConstants.M_GAP));
+    JPanel controls = new JPanel(new FlowLayout(FlowLayout.CENTER));
     controls.add(datePicker);
     controls.add(createButton);
-    controls.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
 
     mainPanel.add(controls);
 

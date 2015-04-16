@@ -75,6 +75,7 @@ public class ViewControllerFactory {
                                       companyUcc);
 
       case SELECT_COMPANY:
+        modelCompanySelection.init(menuModel.getTransitionObjects());
         return new CompanySelectionViewController(modelCompanySelection, menuModel, guiManager,
                                                   businessDayUcc, companyUcc, contactUcc);
 
