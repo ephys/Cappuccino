@@ -1,13 +1,6 @@
 package paoo.cappuccino.ihm.registration;
 
-import java.util.Arrays;
-
-import paoo.cappuccino.business.dto.IUserDto;
-import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.ihm.util.BaseModel;
-import paoo.cappuccino.ihm.util.IhmConstants;
-import paoo.cappuccino.ucc.IUserUcc;
-import paoo.cappuccino.util.StringUtils;
 
 /**
  * Model for the registration View/ViewController.
@@ -16,7 +9,6 @@ import paoo.cappuccino.util.StringUtils;
  */
 public class RegistrationModel extends BaseModel {
 
-  private final IUserUcc userUcc;
   private String passwordError;
   private String usernameError;
   private String confirmPasswordError;
@@ -24,53 +16,25 @@ public class RegistrationModel extends BaseModel {
   private String firstNameError;
   private String emailError;
 
-  @Inject
-  public RegistrationModel(IUserUcc userUcc) {
-    this.userUcc = userUcc;
-  }
-
   /**
-   * Tries to register the user.
-   *
-   * @param username The user's username.
-   * @param password The user's password.
-   * @return a user or null if registration failed
+   * Sets the error of the registration form.
+   * @param passwordError Error message relative to the password field.
+   * @param usernameError Error message relative to the username field.
+   * @param confirmPasswordError Error message relative to the password confirmation field.
+   * @param lastNameError Error message relative to the last name field.
+   * @param firstNameError Error message relative to the first name field.
+   * @param emailError Error message relative to the email field.
    */
-  public IUserDto attemptRegistration(String username, char[] password, char[] confirmPassword,
-      String lastName, String firstName, String email) {
-
-    usernameError =
-        StringUtils.isEmpty(username) ? IhmConstants.ERROR_FIELD_EMPTY : (!StringUtils
-            .isAlphaString(username) ? IhmConstants.ERROR_ALPHA_INPUT : null);
-
-    lastNameError = StringUtils.isEmpty(lastName) ? IhmConstants.ERROR_FIELD_EMPTY : null;
-
-    firstNameError = StringUtils.isEmpty(firstName) ? IhmConstants.ERROR_FIELD_EMPTY : null;
-
-    emailError =
-        StringUtils.isEmpty(email) ? IhmConstants.ERROR_FIELD_EMPTY
-            : (!StringUtils.isEmail(email) ? IhmConstants.ERROR_INVALID_EMAIL : null);
-
-    passwordError =
-        !StringUtils.isValidPassword(password) ? IhmConstants.ERROR_INVALID_PASSWORD : null;
-
-    confirmPasswordError =
-        (!Arrays.equals(password, confirmPassword) ? IhmConstants.ERROR_NOT_MATCHING_PASSWORD
-            : null);
+  public void setErrors(String passwordError, String usernameError, String confirmPasswordError,
+                         String lastNameError, String firstNameError, String emailError) {
+    this.passwordError = passwordError;
+    this.usernameError = usernameError;
+    this.confirmPasswordError = confirmPasswordError;
+    this.lastNameError = lastNameError;
+    this.firstNameError = firstNameError;
+    this.emailError = emailError;
 
     dispatchChangeEvent();
-
-    if (usernameError != null || lastNameError != null || firstNameError != null
-        || emailError != null || passwordError != null || confirmPasswordError != null) {
-      return null;
-    }
-
-    IUserDto user = userUcc.register(username, password, firstName, lastName, email);
-
-    StringUtils.clearString(password);
-    StringUtils.clearString(confirmPassword);
-
-    return user;
   }
 
   /**

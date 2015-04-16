@@ -16,6 +16,10 @@ public class JComboDay extends JPanel {
 
   private final JComboBox<IBusinessDayDto> combo;
 
+  /**
+   * Creates a JComboBox rendering a list of business days.
+   * @param businessDays The list of business days to render in the combo box.
+   */
   public JComboDay(IBusinessDayDto[] businessDays) {
     super(new FlowLayout(FlowLayout.CENTER));
     JLabel label = new JLabel("Journée du");

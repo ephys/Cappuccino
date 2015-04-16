@@ -13,14 +13,13 @@ import paoo.cappuccino.ihm.contactdetails.ContactDetailsViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.home.HomeModel;
 import paoo.cappuccino.ihm.home.HomeViewController;
-import paoo.cappuccino.ihm.newbusinessday.NewBusinessDayController;
-import paoo.cappuccino.ihm.newbusinessday.NewBusinessDayModel;
+import paoo.cappuccino.ihm.newbusinessday.NewBusinessDayViewController;
 import paoo.cappuccino.ihm.newcompany.NewCompanyModel;
 import paoo.cappuccino.ihm.newcompany.NewCompanyViewController;
 import paoo.cappuccino.ihm.newcontact.NewContactModel;
 import paoo.cappuccino.ihm.newcontact.NewContactViewController;
-import paoo.cappuccino.ihm.participationsearching.ParticipationSearchingModel;
-import paoo.cappuccino.ihm.participationsearching.ParticipationSearchingViewController;
+import paoo.cappuccino.ihm.participationsearch.ParticipationSearchModel;
+import paoo.cappuccino.ihm.participationsearch.ParticipationSearchViewController;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.ucc.IContactUcc;
@@ -41,11 +40,10 @@ public class ViewControllerFactory {
 
   private final NewCompanyModel modelNewCompany = new NewCompanyModel();
   private final NewContactModel modelNewContact = new NewContactModel();
-  private final NewBusinessDayModel modelNewBusinessDay = new NewBusinessDayModel();
   private final AttendanceModel modelAttendance = new AttendanceModel();
   private final CompanySelectionModel modelCompanySelection = new CompanySelectionModel();
-  private final ParticipationSearchingModel modelParticipationSearching =
-      new ParticipationSearchingModel();
+  private final ParticipationSearchModel modelParticipationSearching =
+      new ParticipationSearchModel();
   private final HomeModel modelHome = new HomeModel();
   private final CompanyDetailsModel modelCompanyDetails = new CompanyDetailsModel();
   private final ContactDetailsModel modelContactDetails = new ContactDetailsModel();
@@ -88,7 +86,7 @@ public class ViewControllerFactory {
                                             companyUcc);
 
       case CREATE_BDAY:
-        return new NewBusinessDayController(modelNewBusinessDay, menuModel, guiManager,
+        return new NewBusinessDayViewController(menuModel, guiManager,
                                             businessDayUcc);
 
       case ATTENDANCE:
@@ -96,7 +94,7 @@ public class ViewControllerFactory {
                                         businessDayUcc, contactUcc);
 
       case SEARCH_PARTICIPATION:
-        return new ParticipationSearchingViewController(modelParticipationSearching, menuModel,
+        return new ParticipationSearchViewController(modelParticipationSearching, menuModel,
                                                         businessDayUcc, companyUcc);
 
       case COMPANY_DETAILS:

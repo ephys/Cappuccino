@@ -5,9 +5,13 @@ import java.time.format.DateTimeFormatter;
 
 import paoo.cappuccino.business.dto.IParticipationDto;
 
+/**
+ * Utility methods to localize objects.
+ */
 public final class LocalizationUtil {
-  private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-  private final static String[] stateLocalizations = {
+
+  private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+  private static final String[] stateLocalizations = {
       "Invité", "Confirmé", "Decliné", "Facturé", "Payé"
   };
 

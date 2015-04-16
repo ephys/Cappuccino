@@ -36,7 +36,7 @@ public class LoginFrame extends BaseFrame {
     this.getContentPane().setBackground(new Color(212, 82, 82));
 
     this.setLayout(new GridBagLayout());
-    this.add(new LoginViewController(new LoginModel(userUcc), guiManager),
+    this.add(new LoginViewController(new LoginModel(), guiManager, userUcc),
              new GridBagConstraints());
 
     this.setVisible(true);

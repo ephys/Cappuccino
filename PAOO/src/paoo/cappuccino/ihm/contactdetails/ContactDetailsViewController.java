@@ -19,6 +19,13 @@ public class ContactDetailsViewController extends JPanel implements ChangeListen
   private final ContactDetailsModel model;
   private final MenuModel menu;
 
+  /**
+   * Creates a view controller for the "contact details" screen.
+   * @param model The model of the view.
+   * @param menu The model of the global gui menu.
+   * @param contactUcc The app instance of the contact ucc.
+   * @param companyUcc The app instance of the company ucc.
+   */
   public ContactDetailsViewController(ContactDetailsModel model, MenuModel menu,
                                       IContactUcc contactUcc, ICompanyUcc companyUcc) {
     this.model = model;
@@ -27,7 +34,7 @@ public class ContactDetailsViewController extends JPanel implements ChangeListen
     model.addChangeListener(this);
     this.add(new ContactDetailsView(model, markInvalidButton, companyUcc, menu));
 
-    markInvalidButton.addActionListener(e -> {
+    markInvalidButton.addActionListener(event -> {
       contactUcc.setMailInvalid(model.getContactDto());
       markInvalidButton.setEnabled(false);
     });
@@ -36,7 +43,7 @@ public class ContactDetailsViewController extends JPanel implements ChangeListen
   }
 
   @Override
-  public void stateChanged(ChangeEvent e) {
+  public void stateChanged(ChangeEvent event) {
     IContactDto contact = model.getContactDto();
 
     if (contact == null) {

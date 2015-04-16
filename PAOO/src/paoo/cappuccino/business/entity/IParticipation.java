@@ -1,6 +1,7 @@
 package paoo.cappuccino.business.entity;
 
 import paoo.cappuccino.business.dto.IParticipationDto;
+import paoo.cappuccino.util.ParticipationUtils;
 
 /**
  * Interface containing business methods relative to the participation entity.
@@ -10,7 +11,8 @@ import paoo.cappuccino.business.dto.IParticipationDto;
 public interface IParticipation extends IParticipationDto {
 
   /**
-   * Changes the state of the participation. See {@link paoo.cappuccino.util.ParticipationUtils#getFollowingStates(paoo.cappuccino.business.dto.IParticipationDto.State)}
+   * Changes the state of the participation.
+   * See {@link ParticipationUtils#getFollowingStates(IParticipationDto.State)}
    * to know which states are valid.
    *
    * @param state The new state.

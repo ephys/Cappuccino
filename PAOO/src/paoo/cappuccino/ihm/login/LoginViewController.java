@@ -20,6 +20,7 @@ import paoo.cappuccino.ihm.menu.MenuFrame;
 import paoo.cappuccino.ihm.registration.RegistrationFrame;
 import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JLabelFont;
+import paoo.cappuccino.ucc.IUserUcc;
 import paoo.cappuccino.util.StringUtils;
 
 /**
@@ -32,6 +33,7 @@ public class LoginViewController extends JPanel {
   private static final long serialVersionUID = 3071496812344175953L;
   private final LoginModel model;
   private final IGuiManager guiManager;
+  private final IUserUcc userUcc;
 
   /**
    * Creates a new ViewController for the Login gui.
@@ -39,10 +41,11 @@ public class LoginViewController extends JPanel {
    * @param model The ViewController's model.
    * @param guiManager The manager responsible for the containing frame.
    */
-  public LoginViewController(LoginModel model, IGuiManager guiManager) {
+  public LoginViewController(LoginModel model, IGuiManager guiManager, IUserUcc userUcc) {
     super(new BorderLayout());
     this.model = model;
     this.guiManager = guiManager;
+    this.userUcc = userUcc;
 
     this.setBorder(BorderFactory.createCompoundBorder(
         BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(80,80,80)),
@@ -110,7 +113,7 @@ public class LoginViewController extends JPanel {
       return;
     }
 
-    IUserDto user = model.getUserUcc().logIn(username, password);
+    IUserDto user = userUcc.logIn(username, password);
 
     if (user == null) {
       model.setUsernameError(IhmConstants.ERROR_WRONG_LOGIN);

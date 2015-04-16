@@ -28,6 +28,11 @@ public class CompanyDetailsView extends JPanel {
   private final IUserUcc userUcc;
   private final JPanel companyPanel = new JPanel(new BorderLayout());
 
+  /**
+   * Creates a view for the Company Details screen.
+   * @param model The model of the view.
+   * @param userUcc App user use case controller.
+   */
   public CompanyDetailsView(CompanyDetailsModel model, IUserUcc userUcc) {
     super(new BorderLayout());
     this.model = model;
@@ -102,7 +107,11 @@ public class CompanyDetailsView extends JPanel {
     return contactsTable;
   }
 
-  public void stateChanged(List<IContactDto> contacts) {
+  /**
+   * Called when the data to display changes.
+   * @param contacts The list of contacts of the company.
+   */
+  void stateChanged(List<IContactDto> contacts) {
     companyPanel.removeAll();
     displayCompanyData();
 

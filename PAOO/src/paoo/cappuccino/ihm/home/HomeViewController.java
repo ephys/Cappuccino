@@ -63,6 +63,14 @@ public class HomeViewController extends JPanel implements ChangeListener {
   private DefaultTableModel tableModel;
   private JComboDay dayList;
 
+  /**
+   * Creates a view controller for the participation modification screen.
+   * @param model The model of the view.
+   * @param menu The model of the menu.
+   * @param guiManager The app gui manager.
+   * @param dayUcc The app business day use case controller.
+   * @param companyUcc The app company use case controller.
+   */
   public HomeViewController(HomeModel model, MenuModel menu, IGuiManager guiManager,
                             IBusinessDayUcc dayUcc, ICompanyUcc companyUcc) {
     super(new BorderLayout());
@@ -160,7 +168,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
     });
     stateCombo.addPopupMenuListener(new PopupMenuListener() {
       @Override
-      public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+      public void popupMenuWillBecomeVisible(PopupMenuEvent event) {
         int row = table.getEditingRow();
         if (row == -1) {
           return;
@@ -181,10 +189,10 @@ public class HomeViewController extends JPanel implements ChangeListener {
       }
 
       @Override
-      public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+      public void popupMenuWillBecomeInvisible(PopupMenuEvent event) {}
 
       @Override
-      public void popupMenuCanceled(PopupMenuEvent e) {}
+      public void popupMenuCanceled(PopupMenuEvent event) {}
     });
 
     TableColumn cancelCol = table.getColumn(tableTitles[2]);

@@ -30,43 +30,48 @@ final class EntityFactory implements IEntityFactory {
 
   @Override
   public IUser createUser(String username, char[] password, String lastName,
-      String firstName, String email, IUserDto.Role role) {
+                          String firstName, String email, IUserDto.Role role) {
     return new UserEntity(stringHasher, username, password, lastName, firstName, email, role);
   }
 
   @Override
   public IUser createUser(int id, int version, String username, IHashHolderDto password,
-      String lastName, String firstName, String email, IUserDto.Role role,
-      LocalDateTime registerDate) {
+                          String lastName, String firstName, String email, IUserDto.Role role,
+                          LocalDateTime registerDate) {
 
-    return new UserEntity(stringHasher, id, version, username, password, lastName, firstName, email, registerDate, role);
+    return new UserEntity(stringHasher, id, version, username, password, lastName, firstName,
+                          email, registerDate, role);
   }
 
   @Override
   public IContact createContact(int companyId, String email, String firstName, String lastName,
-      String phone) {
+                                String phone) {
     return new ContactEntity(companyId, email, true, firstName, lastName, phone);
   }
 
   @Override
   public IContact createContact(int id, int version, int companyId, String email,
-      boolean emailValid, String firstName, String lastName, String phone) {
+                                boolean emailValid, String firstName, String lastName,
+                                String phone) {
     return new ContactEntity(id, version, companyId, email, emailValid, firstName, lastName, phone);
   }
 
   @Override
   public ICompany createCompany(int creatorId, String name, String addressStreet,
-      String addressNum, String addressMailbox, String addressPostcode, String addressTown) {
+                                String addressNum, String addressMailbox, String addressPostcode,
+                                String addressTown) {
     return new CompanyEntity(name, addressStreet, addressNum, addressMailbox, addressPostcode,
-        addressTown, creatorId);
+                             addressTown, creatorId);
   }
 
   @Override
   public ICompany createCompany(int id, int version, int creatorId, String name,
-      String addressStreet, String addressNum, String addressMailbox, String addressPostcode,
-      String addressTown, LocalDateTime registerDate) {
-    return new CompanyEntity(id, version, name, registerDate, addressStreet, addressNum, addressMailbox,
-        addressPostcode, addressTown, creatorId);
+                                String addressStreet, String addressNum, String addressMailbox,
+                                String addressPostcode,
+                                String addressTown, LocalDateTime registerDate) {
+    return new CompanyEntity(id, version, name, registerDate, addressStreet, addressNum,
+                             addressMailbox,
+                             addressPostcode, addressTown, creatorId);
   }
 
   @Override
@@ -76,7 +81,7 @@ final class EntityFactory implements IEntityFactory {
 
   @Override
   public IBusinessDay createBusinessDay(int id, int version, LocalDateTime eventDate,
-      LocalDateTime creationDate) {
+                                        LocalDateTime creationDate) {
     return new BusinessDayEntity(id, version, eventDate, creationDate);
   }
 

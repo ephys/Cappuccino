@@ -25,12 +25,13 @@ public class DisableableComboRenderer extends BasicComboBoxRenderer {
   @Override
   public Component getListCellRendererComponent(JList list, Object value, int index,
                                                 boolean isSelected, boolean cellHasFocus) {
-    Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+    Component cell = super.getListCellRendererComponent(list, value, index,
+                                                        isSelected, cellHasFocus);
 
     if (!enabledItems.isSelectedIndex(index)) {
-      c.setForeground(disabledColor);
+      cell.setForeground(disabledColor);
     }
 
-    return c;
+    return cell;
   }
 }

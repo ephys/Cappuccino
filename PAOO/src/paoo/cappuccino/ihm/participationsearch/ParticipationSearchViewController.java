@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.participationsearching;
+package paoo.cappuccino.ihm.participationsearch;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -18,22 +18,24 @@ import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
 
 @SuppressWarnings("serial")
-public class ParticipationSearchingViewController extends JPanel {
+public class ParticipationSearchViewController extends JPanel {
 
-  private final ParticipationSearchingModel model;
+  private final ParticipationSearchModel model;
   private final List<IBusinessDayDto> businessDayDto;
 
-  public ParticipationSearchingViewController(ParticipationSearchingModel model, MenuModel menu,
-                                              IBusinessDayUcc businessDayUcc,
-                                              ICompanyUcc companyUcc) {
+  /**
+   * Creates a view controller for the participation search view.
+   * @param model The model of the view.
+   * @param menu The model of the menu.
+   * @param businessDayUcc The app instance of the business day ucc.
+   * @param companyUcc The app instance of the company ucc.
+   */
+  public ParticipationSearchViewController(ParticipationSearchModel model, MenuModel menu,
+                                           IBusinessDayUcc businessDayUcc,
+                                           ICompanyUcc companyUcc) {
 
     super(new BorderLayout());
     this.model = model;
-
-    ParticipationSearchingView view = new ParticipationSearchingView(model, companyUcc, businessDayUcc);
-    JPanel panelWrapper = new JPanel(new BorderLayout());
-
-    JPanel searchingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
     businessDayDto = businessDayUcc.getBusinessDays();
 
@@ -47,19 +49,23 @@ public class ParticipationSearchingViewController extends JPanel {
     }
 
     comboBox.getCombo().addActionListener(e -> {
-      IBusinessDayDto selectedBusinessDay = businessDayDto.get(comboBox.getCombo().getSelectedIndex());
+      IBusinessDayDto selectedBusinessDay =
+          businessDayDto.get(comboBox.getCombo().getSelectedIndex());
 
       this.model.setSelectedDay(selectedBusinessDay);
     });
 
+    JPanel searchingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     searchingPanel.add(comboBox);
 
+    ParticipationSearchView view = new ParticipationSearchView(model, companyUcc,
+                                                               businessDayUcc);
     JTable table = view.getTable();
     table.setRowHeight(35);
     table.addMouseListener(new MouseAdapter() {
       @Override
-      public void mouseClicked(MouseEvent e) {
-        if (e.getClickCount() == 2) {
+      public void mouseClicked(MouseEvent clickEvent) {
+        if (clickEvent.getClickCount() == 2) {
           ICompanyDto company =
               (ICompanyDto) table.getModel().getValueAt(table.getSelectedRow(), 0);
 
@@ -68,6 +74,7 @@ public class ParticipationSearchingViewController extends JPanel {
       }
     });
 
+    JPanel panelWrapper = new JPanel(new BorderLayout());
     panelWrapper.add(view);
     panelWrapper.add(searchingPanel, BorderLayout.NORTH);
     this.add(panelWrapper);

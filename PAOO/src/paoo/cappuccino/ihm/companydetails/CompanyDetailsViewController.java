@@ -24,6 +24,13 @@ public class CompanyDetailsViewController extends JPanel implements ChangeListen
   private final IContactUcc contactUcc;
   private final CompanyDetailsView view;
 
+  /**
+   * Creates a view controller for the company details screen.
+   * @param model The model of the view.
+   * @param menu The GUI menu model.
+   * @param contactUcc App contact ucc instance.
+   * @param userUcc App user ucc instance.
+   */
   public CompanyDetailsViewController(CompanyDetailsModel model, MenuModel menu,
                                       IContactUcc contactUcc, IUserUcc userUcc) {
     this.model = model;
@@ -35,8 +42,8 @@ public class CompanyDetailsViewController extends JPanel implements ChangeListen
     contactsTable = view.getContactsTable();
     contactsTable.addMouseListener(new MouseAdapter() {
       @Override
-      public void mouseClicked(MouseEvent e) {
-        if (e.getClickCount() == 2) {
+      public void mouseClicked(MouseEvent event) {
+        if (event.getClickCount() == 2) {
           menu.setCurrentPage(MenuEntry.CONTACT_DETAILS,
                               contactsTable.getModel().getValueAt(contactsTable.getSelectedRow(),
                                                                   0));
@@ -49,7 +56,7 @@ public class CompanyDetailsViewController extends JPanel implements ChangeListen
   }
 
   @Override
-  public void stateChanged(ChangeEvent e) {
+  public void stateChanged(ChangeEvent event) {
     ICompanyDto company = model.getCompanyDto();
     if (company == null) {
       view.stateChanged(null);

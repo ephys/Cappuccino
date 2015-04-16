@@ -27,7 +27,16 @@ public class ContactDetailsView extends JPanel implements ChangeListener {
   private final ContactDetailsModel model;
   private final JLabel invalidMessagePanel = new JLabel("Invalide !");
 
-  public ContactDetailsView(ContactDetailsModel model, JButton button, ICompanyUcc companyUcc,
+  /**
+   * Creates a view for the contact details screen.
+   *
+   * @param model                  The model of the view.
+   * @param markEmailInvalidButton The button used to mark an email as invalid.
+   * @param companyUcc             The app instance of the company use case controller.
+   * @param menu                   The model of the gui menu.
+   */
+  public ContactDetailsView(ContactDetailsModel model, JButton markEmailInvalidButton,
+                            ICompanyUcc companyUcc,
                             MenuModel menu) {
     super(new BorderLayout());
 
@@ -37,8 +46,9 @@ public class ContactDetailsView extends JPanel implements ChangeListener {
     final IContactDto contact = model.getContactDto();
 
     final JPanel contactWrapperPanel = new JPanel(new BorderLayout());
-    contactWrapperPanel.add(new JLabelFont(contact.getLastName() + " " + contact.getFirstName(), 20),
-                            BorderLayout.NORTH);
+    contactWrapperPanel
+        .add(new JLabelFont(contact.getLastName() + " " + contact.getFirstName(), 20),
+             BorderLayout.NORTH);
 
     final JPanel contactPanel = new JPanel(new GridLayout(0, 3));
     contactWrapperPanel.add(contactPanel);
@@ -54,7 +64,7 @@ public class ContactDetailsView extends JPanel implements ChangeListener {
     contactPanel.add(new JLabel("Mail : "));
     contactPanel.add(new JLabel(contact.getEmail() == null ? "N/A" : contact.getEmail()));
     final JPanel markInvalidPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-    markInvalidPanel.add(button);
+    markInvalidPanel.add(markEmailInvalidButton);
     markInvalidPanel.add(invalidMessagePanel);
     contactPanel.add(markInvalidPanel);
 
@@ -67,7 +77,7 @@ public class ContactDetailsView extends JPanel implements ChangeListener {
     companyLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     companyLabel.addMouseListener(new MouseAdapter() {
       @Override
-      public void mouseClicked(MouseEvent e) {
+      public void mouseClicked(MouseEvent event) {
         menu.setCurrentPage(MenuEntry.COMPANY_DETAILS, contactCompany);
       }
     });
@@ -79,7 +89,7 @@ public class ContactDetailsView extends JPanel implements ChangeListener {
 
     this.model.addChangeListener(this);
 
-    button.addActionListener(e -> stateChanged(null));
+    markEmailInvalidButton.addActionListener(e -> stateChanged(null));
     stateChanged(null);
   }
 

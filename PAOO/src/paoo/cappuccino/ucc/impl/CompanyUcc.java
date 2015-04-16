@@ -25,7 +25,7 @@ class CompanyUcc implements ICompanyUcc {
 
   @Override
   public ICompanyDto create(IUserDto creator, String name, String street, String numAddress,
-      String mailBox, String postCode, String town) {
+                            String mailBox, String postCode, String town) {
     ValidationUtil.ensureNotNull(creator, "creator");
 
     ValidationUtil.ensureFilled(name, "name");
@@ -49,7 +49,8 @@ class CompanyUcc implements ICompanyUcc {
   }
 
   @Override
-  public List<ICompanyDto> searchCompanies(String name, String postCode, String town, String street) {
+  public List<ICompanyDto> searchCompanies(String name, String postCode, String town,
+                                           String street) {
     if (StringUtils.isEmpty(street)) {
       street = null;
     }

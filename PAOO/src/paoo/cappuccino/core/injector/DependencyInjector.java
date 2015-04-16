@@ -66,7 +66,7 @@ public class DependencyInjector {
   /**
    * Hardcodes dependencies for dependencies impossible to fetch dynamically.
    *
-   * @param dependency The dependency's class/interface
+   * @param dependency  The dependency's class/interface
    * @param depInstance An instance of an implementation of the dependency.
    * @return true: the dependency has been set. false: the dependency was already set.
    */
@@ -106,8 +106,8 @@ public class DependencyInjector {
       return constructor.newInstance(paramValues);
     } catch (NoSuchMethodException e) {
       throw new FatalException("Could not instantiate " + dependency.getCanonicalName()
-          + ", it does not have a default constructor and "
-          + "no constructor has an @Inject annotation.", e);
+                               + ", it does not have a default constructor and "
+                               + "no constructor has an @Inject annotation.", e);
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
       throw new FatalException("Could not instantiate " + dependency.getCanonicalName(), e);
     }
@@ -128,8 +128,8 @@ public class DependencyInjector {
       if (field.getAnnotation(Inject.class) != null) {
         if (app.getProfileType() != AppContext.Profile.TEST) {
           logger.warning("Injecting directly into field '" + field.getName() + "' in class '"
-              + clazz.getCanonicalName() + "'. This behavior is deprecated and should "
-              + "only be used for populating JUnit tests.");
+                         + clazz.getCanonicalName() + "'. This behavior is deprecated and should "
+                         + "only be used for populating JUnit tests.");
         }
 
         field.setAccessible(true);
@@ -137,7 +137,8 @@ public class DependencyInjector {
         try {
           field.set(obj, buildDependency(field.getType()));
         } catch (Exception e) {
-          throw new FatalException("Populating " + obj.getClass().getCanonicalName() + " failed", e);
+          throw new FatalException("Populating " + obj.getClass().getCanonicalName()
+                                   + " failed", e);
         }
       }
     }
@@ -150,7 +151,7 @@ public class DependencyInjector {
    * @param dependency The class or interface to instantiate.
    * @return An instance with the same type as the class given.
    * @throws paoo.cappuccino.util.exception.FatalException The instance could not be created or
-   *         populated.
+   *                                                       populated.
    */
   @SuppressWarnings("unchecked")
   public <A> A buildDependency(final Class<A> dependency) {
@@ -173,8 +174,10 @@ public class DependencyInjector {
       return depInstance;
     } catch (ClassCastException e) {
       throw new FatalException(dependency.getCanonicalName()
-          + " has for declared instanciable class '" + implementation.getCanonicalName()
-          + "' but that class doesn't implement/extends" + " the dependency.", e);
+                               + " has for declared instanciable class '" + implementation
+                                   .getCanonicalName()
+                               + "' but that class doesn't implement/extends" + " the dependency.",
+                               e);
     }
   }
 
@@ -195,7 +198,7 @@ public class DependencyInjector {
       return (Class<? extends A>) Class.forName(depClassName);
     } catch (IllegalArgumentException | ClassNotFoundException e) {
       throw new FatalException("Could not fetch interface " + interfaze.getCanonicalName()
-          + "'s implementation.", e);
+                               + "'s implementation.", e);
     }
   }
 }

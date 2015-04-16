@@ -15,6 +15,10 @@ public class CancelButtonCellEditor extends DefaultCellEditor {
   private IParticipationDto participation;
   private boolean cancelled;
 
+  /**
+   * Creates a toggle cell editor.
+   * @param button The button to display while editing, feel free to attach event listeners to it.
+   */
   public CancelButtonCellEditor(JButton button) {
     super(new JCheckBox());
 

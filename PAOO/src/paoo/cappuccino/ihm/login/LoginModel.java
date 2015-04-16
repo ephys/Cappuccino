@@ -1,7 +1,6 @@
 package paoo.cappuccino.ihm.login;
 
 import paoo.cappuccino.ihm.util.BaseModel;
-import paoo.cappuccino.ucc.IUserUcc;
 
 /**
  * Model for the Login View/ViewController.
@@ -10,13 +9,8 @@ import paoo.cappuccino.ucc.IUserUcc;
  */
 public class LoginModel extends BaseModel {
 
-  private final IUserUcc userUcc;
   private String passwordError;
   private String usernameError;
-
-  public LoginModel(IUserUcc userUcc) {
-    this.userUcc = userUcc;
-  }
 
   /**
    * Clears the form errors.
@@ -48,10 +42,5 @@ public class LoginModel extends BaseModel {
   public void setPasswordError(String error) {
     passwordError = error;
     dispatchChangeEvent();
-
-  }
-
-  public IUserUcc getUserUcc() {
-    return userUcc;
   }
 }

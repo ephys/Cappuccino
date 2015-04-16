@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.participationsearching;
+package paoo.cappuccino.ihm.participationsearch;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -22,9 +22,9 @@ import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
 
 @SuppressWarnings("serial")
-public class ParticipationSearchingView extends JPanel implements ChangeListener {
+public class ParticipationSearchView extends JPanel implements ChangeListener {
 
-  private final ParticipationSearchingModel model;
+  private final ParticipationSearchModel model;
   private final ICompanyUcc companyUcc;
   private final DefaultTableModel tableModel;
   private final JScrollPane scrollPane;
@@ -33,8 +33,14 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
   private boolean removedWidget;
   private JPanel centerPadding;
 
-  public ParticipationSearchingView(ParticipationSearchingModel model, ICompanyUcc companyUcc,
-                                    IBusinessDayUcc businessDayUcc) {
+  /**
+   * Creates a view for the participation search screen.
+   * @param model The model of the view.
+   * @param companyUcc The app instance of the company ucc.
+   * @param businessDayUcc The app instance of the business day ucc.
+   */
+  public ParticipationSearchView(ParticipationSearchModel model, ICompanyUcc companyUcc,
+                                 IBusinessDayUcc businessDayUcc) {
     this.businessDayUcc = businessDayUcc;
 
     setLayout(new BorderLayout());
@@ -115,7 +121,7 @@ public class ParticipationSearchingView extends JPanel implements ChangeListener
     }
   }
 
-  public String buildErrorMessage(List<IParticipationDto> participationDto) {
+  private String buildErrorMessage(List<IParticipationDto> participationDto) {
     if (participationDto == null) {
       return "Il n'y a aucune journée d'entreprise disponible.";
     } else {
