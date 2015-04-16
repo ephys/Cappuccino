@@ -1,5 +1,11 @@
 package paoo.cappuccino.ucc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -10,12 +16,6 @@ import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.util.hasher.IStringHasher;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * User UCC Unit test
@@ -69,7 +69,7 @@ public class TestUserUcc {
 
   @Test(expected = IllegalArgumentException.class)
   public void testRegisterPassword() {
-    userUcc.register(username, new char[]{ '1', '2', '3', '4', '5' }, firstName, lastName, email);
+    userUcc.register(username, new char[] {'1', '2', '3', '4', '5'}, firstName, lastName, email);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -176,14 +176,16 @@ public class TestUserUcc {
   public void testLoginCase() {
     userUcc.register(username, password, firstName, lastName, email);
 
-    assertNotNull("Valid login, should not return null", userUcc.logIn(username.toUpperCase(), password));
+    assertNotNull("Valid login, should not return null",
+        userUcc.logIn(username.toUpperCase(), password));
   }
 
   @Test
   public void testLoginWrongPassword() {
     userUcc.register(username, password, firstName, lastName, email);
 
-    assertNull("Incorrect password, should return null", userUcc.logIn(username, new char[] { 'f', 'l', 'u', 'f', 'l' }));
+    assertNull("Incorrect password, should return null",
+        userUcc.logIn(username, new char[] {'f', 'l', 'u', 'f', 'l'}));
   }
 
   @Test
@@ -198,19 +200,38 @@ public class TestUserUcc {
     userUcc.register(username, password, firstName, lastName, email);
 
     try {
-      assertNull("Incorrect username, should throw IllegalArgumentException", userUcc.logIn(null, password));
+      assertNull("Incorrect username, should throw IllegalArgumentException",
+          userUcc.logIn(null, password));
 
       fail("Username null, should throw IllegalArgumentException.");
-    } catch(IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       assertTrue(true);
     }
 
     try {
-      assertNull("Incorrect username, should throw IllegalArgumentException", userUcc.logIn(username, null));
+      assertNull("Incorrect username, should throw IllegalArgumentException",
+          userUcc.logIn(username, null));
 
       fail("Password null, should throw IllegalArgumentException.");
-    } catch(IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       assertTrue(true);
     }
+  }
+
+  // ====================== getUserById
+
+  @Test
+  public void testGetUserById() {
+    userUcc.getUserById(1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetUserByIdZero() {
+    assertNotNull(userUcc.getUserById(0));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetUserByIdNegative() {
+    assertNotNull(userUcc.getUserById(-1));
   }
 }
