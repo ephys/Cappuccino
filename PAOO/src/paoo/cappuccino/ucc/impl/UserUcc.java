@@ -48,8 +48,9 @@ class UserUcc implements IUserUcc {
 
     firstName = firstName.trim();
     lastName = lastName.trim();
-    IUser registeredUser = entityFactory.createUser(username, password, lastName,
-                                                    firstName, email, IUserDto.Role.USER);
+    IUser registeredUser =
+        entityFactory
+            .createUser(username, password, lastName, firstName, email, IUserDto.Role.USER);
 
     return userDao.createUser(registeredUser);
   }
@@ -73,6 +74,9 @@ class UserUcc implements IUserUcc {
 
   @Override
   public IUserDto getUserById(int id) {
+    if (id <= 0) {
+      throw new IllegalArgumentException("invalid id");
+    }
     return userDao.getUserById(id);
   }
 }
