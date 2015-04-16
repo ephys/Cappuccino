@@ -1,6 +1,11 @@
 package paoo.cappuccino.ucc;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.time.LocalDateTime;
+import java.util.ConcurrentModificationException;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -8,7 +13,10 @@ import org.junit.Test;
 
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
+import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
+import paoo.cappuccino.business.dto.IParticipationDto.State;
+import paoo.cappuccino.business.entity.IParticipation;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
@@ -53,7 +61,14 @@ public class TestBusinessDayUcc {
 
   @Test()
   public void testCreateBusinessDayCorrect() {
-   // businessDayUcc.create(LocalDateTime.now());
+    businessDayUcc.create(LocalDateTime.now().plusYears(+LocalDateTime.now().getYear()));
+
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testCreateBusinessDayIncorrect() {
+    businessDayUcc.create(LocalDateTime.now());
+
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -69,16 +84,72 @@ public class TestBusinessDayUcc {
     businessDayUcc.addInvitedCompanies(null, dto);
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddInvitedCompaniesDtoNull() {
+    ICompanyDto[] table = {};
+    businessDayUcc.addInvitedCompanies(table, null);
+  }
+
   // ====================== changeState
 
+  @Test(expected = ConcurrentModificationException.class)
+  public void TestChangeState() {
+    IParticipation participation = factory.createParticipation(1, 1);
+    assertTrue(businessDayUcc.changeState(participation, State.CONFIRMED));
+    assertTrue(businessDayUcc.changeState(participation, State.BILLED));
+
+  }
+
+  @Test()
+  public void TestChangeState1() {
+    IParticipation participation = factory.createParticipation(2, 2);
+    assertFalse(businessDayUcc.changeState(participation, State.INVITED));
+  }
 
 
   // ====================== cancelParticipation
 
+  @Test(expected = ConcurrentModificationException.class)
+  public void TestCancelParticipation() {
+    IParticipation participation = factory.createParticipation(1, 1);
+    participation.setState(State.CONFIRMED);
+    assertTrue(businessDayUcc.cancelParticipation(participation));
+    assertFalse(businessDayUcc.cancelParticipation(participation));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void TestCancelParticipationNull() {
+    businessDayUcc.cancelParticipation(null);
+  }
 
   // ====================== getInvitationlessDays
 
-  // ====================== getBusinessDays
+  @Test()
+  public void TestGetInvitationlessDays() {
+    assertNotNull(businessDayUcc.getInvitationlessDays());
+  }
 
   // ====================== getParticipations
+
+  @Test()
+  public void TestGetParticipations() {
+    assertNotNull(businessDayUcc.getParticipations(1));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void TestGetParticipationsIdZero() {
+    assertNotNull(businessDayUcc.getParticipations(0));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void TestGetParticipationsIdFail() {
+    assertNotNull(businessDayUcc.getParticipations(-1));
+  }
+
+  // ======================getBusinessDays
+
+  @Test()
+  public void TestGetBusinessDays() {
+    assertNotNull(businessDayUcc.getBusinessDays());
+  }
 }

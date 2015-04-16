@@ -1,11 +1,17 @@
 package paoo.cappuccino.ucc;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ConcurrentModificationException;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.IContactDto;
+import paoo.cappuccino.business.entity.IContact;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
@@ -103,14 +109,15 @@ public class TestContactUcc {
 
   // ====================== SETMAILVALID
 
-  // @Test()
-  // public void testSetMailInvalidReturn() {
-  // assertTrue(contactUcc.setMailInvalid(dto));
-  // IContactDto cdto = factory.createContact(2, emptyString, firstName, lastName, phone);
-  // assertFalse(contactUcc.setMailInvalid(cdto));
-  // contactUcc.setMailInvalid(dto);
-  // assertFalse(contactUcc.setMailInvalid(dto));
-  // }
+  @Test(expected = ConcurrentModificationException.class)
+  public void testSetMailInvalidReturn() {
+    IContact entity = (IContact) dto;
+    entity.setEmailValid(true);
+    assertTrue(contactUcc.setMailInvalid(dto));
+    assertFalse(contactUcc.setMailInvalid((IContactDto) entity));
+    entity.setEmail("");
+    assertFalse(contactUcc.setMailInvalid((IContactDto) entity));
+  }
 
   // ====================== SEARCHCONTACT
 
@@ -119,13 +126,31 @@ public class TestContactUcc {
     contactUcc.searchContact(firstName, lastName);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void testSearchContactFirstNameNull() {
     contactUcc.searchContact(null, lastName);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void testSearchContactLastNameNull() {
     contactUcc.searchContact(firstName, null);
   }
+
+  // ====================== getContactByCompany
+
+  @Test()
+  public void testGetContactByCompanyOk() {
+    contactUcc.getContactByCompany(1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetContactByCompanyIdNegativ() {
+    contactUcc.getContactByCompany(-1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetContactByCompanyIdZero() {
+    contactUcc.getContactByCompany(0);
+  }
+
 }
