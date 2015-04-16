@@ -61,6 +61,11 @@ class MockParticipationDao implements IParticipationDao {
                                                              participation.isCancelled(),
                                                              participation.getVersion(),
                                                              participation.getState()));
+
+        if (participation instanceof IParticipation) {
+          ((IParticipation) participation).incrementVersion();
+        }
+        return;
       }
     }
 

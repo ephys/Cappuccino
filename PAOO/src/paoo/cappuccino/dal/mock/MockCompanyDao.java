@@ -76,6 +76,9 @@ class MockCompanyDao implements ICompanyDao {
 
     companyList.set(company.getId() - 1, companyEntity);
 
+    if (company instanceof ICompany) {
+      ((ICompany) company).incrementVersion();
+    }
   }
 
   @Override

@@ -57,6 +57,9 @@ class MockContactDao implements IContactDao {
                                                    contact.getLastName(), contact.getPhone());
 
     contactList.set(contact.getId() - 1, contactEntity);
+    if (contact instanceof IContact) {
+      ((IContact) contact).incrementVersion();
+    }
   }
 
   @Override
