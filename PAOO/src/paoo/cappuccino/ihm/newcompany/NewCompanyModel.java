@@ -13,7 +13,7 @@ public class NewCompanyModel extends BaseModel {
   private String streetError;
   private String cityError;
   private String boxError;
-  private String numerError;
+  private String numError;
   private String postCodeError;
 
   public String getCompanyNameError() {
@@ -32,59 +32,34 @@ public class NewCompanyModel extends BaseModel {
     return boxError;
   }
 
-  public String getNumerError() {
-    return numerError;
+  public String getNumError() {
+    return numError;
   }
 
   public String getPostCodeError() {
     return postCodeError;
   }
 
-  public void setCompanyNameError(String error) {
-    nameError = error;
-  }
-
-  public void setNameError(String nameError) {
+  /**
+   * Sets the errors relative to the various fields of the company creation form.
+   */
+  public void setErrors(String nameError, String streetError, String cityError, String boxError,
+                        String numError, String postCodeError) {
     this.nameError = nameError;
-  }
-
-  public void setStreetError(String streetError) {
     this.streetError = streetError;
-  }
-
-  public void setCityError(String cityError) {
     this.cityError = cityError;
-  }
-
-  public void setBoxError(String boxError) {
     this.boxError = boxError;
-  }
-
-  public void setNumerError(String numerError) {
-    this.numerError = numerError;
-  }
-
-  public void setPostCodeError(String postCodeError) {
+    this.numError = numError;
     this.postCodeError = postCodeError;
-  }
 
-  public boolean hasError() {
-    if (nameError != null || boxError != null || cityError != null || numerError != null
-        || postCodeError != null || streetError != null) {
-      dispatchChangeEvent();
-      return true;
-    }
-    return false;
-  }
-
-  public void clearError() {
-    boxError = null;
-    cityError = null;
-    nameError = null;
-    numerError = null;
-    postCodeError = null;
-    streetError = null;
     dispatchChangeEvent();
   }
 
+  /**
+   * Returns Whether or there is an error in one of the fields.
+   */
+  public boolean hasError() {
+    return nameError != null || boxError != null || cityError != null || numError != null
+           || postCodeError != null || streetError != null;
+  }
 }

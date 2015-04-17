@@ -22,7 +22,7 @@ import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuModel;
-import paoo.cappuccino.ihm.util.CompanyRenderer;
+import paoo.cappuccino.ihm.util.CompanyListRenderer;
 import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
@@ -79,7 +79,7 @@ public class AttendanceViewController extends JPanel implements ChangeListener {
     comboCompanyPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     comboCompanies.addActionListener(e -> model.setSelectedCompany((ICompanyDto) comboCompanies
         .getSelectedItem()));
-    comboCompanies.setRenderer(new CompanyRenderer());
+    comboCompanies.setRenderer(new CompanyListRenderer());
 
     List<IBusinessDayDto> listDay = businessDayUcc.getBusinessDays();
 
@@ -148,7 +148,7 @@ public class AttendanceViewController extends JPanel implements ChangeListener {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
    */
   @Override

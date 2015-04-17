@@ -1,63 +1,72 @@
 package paoo.cappuccino.ihm.newcompany;
 
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import paoo.cappuccino.ihm.util.ErrorableTextField;
-import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JLabelFont;
 
 /**
- * View for the registration Gui.
+ * View for the new company Gui.
  *
  * @author Opsomer Mathias
  */
 @SuppressWarnings("serial")
 public class NewCompanyView extends JPanel implements ChangeListener {
 
-  private NewCompanyModel model;
-  private ErrorableTextField CompanyNamePanel;
-  private ErrorableTextField numerPanel;
-  private ErrorableTextField postCodePanel;
-  private ErrorableTextField boxPanel;
-  private ErrorableTextField cityPanel;
-  private ErrorableTextField streetPanel;
+  private final NewCompanyModel model;
+  private final ErrorableTextField companyNamePanel;
+  private final ErrorableTextField numPanel;
+  private final ErrorableTextField postCodePanel;
+  private final ErrorableTextField boxPanel;
+  private final ErrorableTextField cityPanel;
+  private final ErrorableTextField streetPanel;
 
+  private GridBagConstraints makeGbc(int fieldNum) {
+    GridBagConstraints gbc = new GridBagConstraints();
 
+    gbc.gridwidth = GridBagConstraints.REMAINDER;
+    gbc.gridy = fieldNum;
+    gbc.ipadx = 400;
+    gbc.fill = GridBagConstraints.HORIZONTAL;
 
-  public NewCompanyView(NewCompanyModel model, JTextField companyNameField, JTextField numerField,
-      JTextField postCodeField, JTextField streetField, JTextField cityField, JTextField boxField) {
-    super(new GridLayout(7, 1));
-    this.setBorder(new EmptyBorder(0, IhmConstants.XL_GAP, 0, IhmConstants.XL_GAP));
+    return gbc;
+  }
+
+  /**
+   * Creates a new view for the company gui.
+   */
+  protected NewCompanyView(NewCompanyModel model, JTextField companyNameField,
+                           JTextField numerField, JTextField postCodeField, JTextField streetField,
+                           JTextField cityField, JTextField boxField) {
+    super(new GridBagLayout());
 
     this.model = model;
 
-    this.CompanyNamePanel = new ErrorableTextField(companyNameField, "Nom", 16);
-    this.add(this.CompanyNamePanel);
+    this.companyNamePanel = new ErrorableTextField(companyNameField, "Nom", 16);
+    this.add(this.companyNamePanel, makeGbc(0));
 
-    this.add(new JLabelFont("Adresse", 16));
+    this.add(new JLabelFont("Adresse", 20), makeGbc(1));
 
     this.streetPanel = new ErrorableTextField(streetField, "Rue", 16);
-    this.add(this.streetPanel);
+    this.add(this.streetPanel, makeGbc(2));
 
     this.cityPanel = new ErrorableTextField(cityField, "Ville", 16);
-    this.add(this.cityPanel);
+    this.add(this.cityPanel, makeGbc(3));
 
     this.boxPanel = new ErrorableTextField(boxField, "Boite", 16);
-    this.add(this.boxPanel);
+    this.add(this.boxPanel, makeGbc(4));
 
-    this.numerPanel = new ErrorableTextField(numerField, "Numéro", 16);
-    this.add(this.numerPanel);
+    this.numPanel = new ErrorableTextField(numerField, "Numéro", 16);
+    this.add(this.numPanel, makeGbc(5));
 
     this.postCodePanel = new ErrorableTextField(postCodeField, "Code postal", 16);
-    this.add(this.postCodePanel);
-
-
+    this.add(this.postCodePanel, makeGbc(6));
 
     model.addChangeListener(this);
     stateChanged(null);
@@ -65,12 +74,11 @@ public class NewCompanyView extends JPanel implements ChangeListener {
 
   @Override
   public void stateChanged(ChangeEvent event) {
-    CompanyNamePanel.setError(model.getCompanyNameError());
+    companyNamePanel.setError(model.getCompanyNameError());
     streetPanel.setError(model.getStreetError());
     cityPanel.setError(model.getCityError());
     boxPanel.setError(model.getBoxError());
-    numerPanel.setError(model.getNumerError());
+    numPanel.setError(model.getNumError());
     postCodePanel.setError(model.getPostCodeError());
-
   }
 }

@@ -15,15 +15,14 @@ import javax.swing.JTextField;
  */
 public class ErrorableTextField extends JPanel {
 
-
   private static final long serialVersionUID = -4802276683409889790L;
-  private JLabelFont error;
+  private final JLabelFont error;
 
   /**
    * Creates an input panel.
    *
-   * @param field An input field.
-   * @param label The field's description.
+   * @param field        An input field.
+   * @param label        The field's description.
    * @param errorMessage The error to display.
    */
   public ErrorableTextField(JTextField field, String label, String errorMessage, int taille) {
@@ -33,7 +32,8 @@ public class ErrorableTextField extends JPanel {
     this.error.setForeground(Color.RED);
 
     field.setBorder(BorderFactory.createCompoundBorder(field.getBorder(),
-        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+                                                       BorderFactory
+                                                           .createEmptyBorder(5, 5, 5, 5)));
 
     this.add(new JLabelFont(label, taille));
     this.add(field);

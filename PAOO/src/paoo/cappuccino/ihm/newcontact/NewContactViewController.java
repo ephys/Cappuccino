@@ -1,23 +1,20 @@
 package paoo.cappuccino.ihm.newcontact;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.util.CompanyListRenderer;
 import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.ucc.IContactUcc;
@@ -52,7 +49,7 @@ public class NewContactViewController extends JPanel {
     List<ICompanyDto> allCompanies = companyUcc.getAllCompanies();
     JComboBox<ICompanyDto> comboCompanies =
         new JComboBox<>(allCompanies.toArray(new ICompanyDto[allCompanies.size()]));
-    comboCompanies.setRenderer(new ComboEntrepriseRenderer());
+    comboCompanies.setRenderer(new CompanyListRenderer());
 
     // if (menu.hasTransitionObject())
     //   comboCompanies.setSelectedItem(menu.getTransitionObject());
@@ -122,18 +119,5 @@ public class NewContactViewController extends JPanel {
 
     this.add(new NewContactView(model, contactFirstNameField, contactLastNameField,
                                 contactMailField, contactPhoneField, comboCompanies));
-  }
-
-  private static class ComboEntrepriseRenderer implements ListCellRenderer<ICompanyDto> {
-
-    private final JLabel label = new JLabel();
-
-    @Override
-    public Component getListCellRendererComponent(JList<? extends ICompanyDto> arg0,
-                                                  ICompanyDto value, int arg2, boolean arg3,
-                                                  boolean arg4) {
-      label.setText(value == null ? null : value.getName());
-      return label;
-    }
   }
 }

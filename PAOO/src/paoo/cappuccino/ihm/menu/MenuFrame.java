@@ -1,5 +1,7 @@
 package paoo.cappuccino.ihm.menu;
 
+import java.awt.Dimension;
+
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.core.injector.NoCache;
@@ -25,6 +27,8 @@ public class MenuFrame extends BaseFrame {
   public MenuFrame(IUserUcc userUcc, IBusinessDayUcc businessDayUcc, ICompanyUcc companyUcc,
                    IContactUcc contactUcc, IGuiManager guiManager) {
     super("Cappuccino", 950, 600, guiManager);
+
+    this.setMinimumSize(new Dimension(800, 650));
 
     this.menuModel = new MenuModel(this, guiManager.getLogger());
     this.guiManager = guiManager;

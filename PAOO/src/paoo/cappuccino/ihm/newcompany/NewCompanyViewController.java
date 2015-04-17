@@ -2,6 +2,8 @@ package paoo.cappuccino.ihm.newcompany;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -18,7 +20,7 @@ import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.util.StringUtils;
 
 /**
- * ViewController for the registration Gui.
+ * ViewController for the new company Gui.
  *
  * @author Opsomer Mathias
  */
@@ -27,87 +29,74 @@ public class NewCompanyViewController extends JPanel {
 
   /**
    * Creates a new ViewController for the new company gui.
-   *
-   * @param model The ViewController's model.
-   * @param manager The manager responsible for the opening/closing this frame.
-   * @param companyUcc
    */
   public NewCompanyViewController(NewCompanyModel model, MenuModel menu, IGuiManager manager,
-      ICompanyUcc companyUcc) {
-    super(new BorderLayout());
-    this.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0, IhmConstants.M_GAP));
-    // Log
-    manager.getLogger().info("NewCompany Frame");
+                                  ICompanyUcc companyUcc) {
+    super(new GridBagLayout());
+
+    final JPanel wrapperPanel = new JPanel(new BorderLayout());
+    this.add(wrapperPanel, new GridBagConstraints());
+    wrapperPanel.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP,
+                                           0, IhmConstants.M_GAP));
 
     JTextField companyNameField = new JTextField();
     JTextField streetField = new JTextField();
     JTextField cityField = new JTextField();
     JTextField boxField = new JTextField();
-    JTextField numerField = new JTextField();
+    JTextField numField = new JTextField();
     JTextField postCodeField = new JTextField();
+    wrapperPanel.add(new NewCompanyView(model, companyNameField, numField, postCodeField,
+                                        streetField, cityField, boxField));
 
-
-    JPanel controls =
-        new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
+    JPanel controls = new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP,
+                                                IhmConstants.M_GAP));
+    wrapperPanel.add(controls, BorderLayout.SOUTH);
 
     JButton createButton = new JButton("Créer");
-    createButton
-    .addActionListener(e -> {
+    controls.add(createButton);
+    createButton.addActionListener(e -> {
       // test input
-      model.setCompanyNameError(StringUtils.isEmpty(companyNameField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
-              : (!StringUtils.isAlphaString(companyNameField.getText()) ? IhmConstants.ERROR_ALPHA_INPUT
-                  : null));
+      String nameError = StringUtils.isEmpty(companyNameField.getText())
+                         ? IhmConstants.ERROR_FIELD_EMPTY : null;
 
-      model.setStreetError(StringUtils.isEmpty(streetField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
-          : null);
+      String streetError = StringUtils.isEmpty(streetField.getText())
+                           ? IhmConstants.ERROR_FIELD_EMPTY : null;
 
-      model.setCityError(StringUtils.isEmpty(cityField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
-          : null);
+      String cityError = StringUtils.isEmpty(cityField.getText())
+                         ? IhmConstants.ERROR_FIELD_EMPTY : null;
 
-      model.setBoxError(StringUtils.isEmpty(boxField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
-          : (!StringUtils.isAlphaString(boxField.getText()) ? IhmConstants.ERROR_ALPHA_INPUT
-              : null));
+      String boxError = StringUtils.isEmpty(boxField.getText()) ? null : (
+          StringUtils.isAlphaString(boxField.getText())
+          ? null : IhmConstants.ERROR_ALPHA_INPUT
+      );
 
-      model.setNumerError(StringUtils.isEmpty(numerField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
-          : null);
+      String numError = StringUtils.isEmpty(numField.getText())
+                        ? IhmConstants.ERROR_FIELD_EMPTY : null;
 
-      model.setPostCodeError(StringUtils.isEmpty(postCodeField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
-              : null);
-      if (!model.hasError()) {
-        try {
-          ICompanyDto company =
-              companyUcc.create(menu.getLoggedUser(), companyNameField.getText(),
-                      streetField.getText(), numerField.getText(), boxField.getText(),
-                  postCodeField.getText(), cityField.getText());
+      String postCodeError = StringUtils.isEmpty(postCodeField.getText())
+                             ? IhmConstants.ERROR_FIELD_EMPTY
+                             : (!postCodeField.getText().matches("^[0-9]{4}$")
+                                ? "Le code postal doit être composé de 4 chiffres" : null);
 
+      model.setErrors(nameError, streetError, cityError, boxError, numError, postCodeError);
+      if (model.hasError()) {
+        return;
+      }
 
-          model.clearError();
-          manager.getLogger().info("new Company created : " + company.getName());
-          JOptionPane.showMessageDialog(null, "Entreprise créée");
+      try {
+        final ICompanyDto company = companyUcc.create(menu.getLoggedUser(),
+                                                      companyNameField.getText(),
+                                                      streetField.getText(), numField.getText(),
+                                                      boxField.getText(), postCodeField.getText(),
+                                                      cityField.getText());
 
-          // clear les champs
-          companyNameField.setText(null);
-          streetField.setText(null);
-          cityField.setText(null);
-          boxField.setText(null);
-          numerField.setText(null);
-          postCodeField.setText(null);
+        manager.getLogger().info("new Company created : " + company.getName());
+        JOptionPane.showMessageDialog(this, "Entreprise créée");
 
-          // redirection utilisateur
-          menu.setCurrentPage(MenuEntry.CREATE_CONTACT, company);
-        } catch (IllegalArgumentException ex) {
-          model.setNameError(IhmConstants.NAME_ALREADY_TAKEN);
-        }
+        menu.setCurrentPage(MenuEntry.CREATE_CONTACT, company);
+      } catch (IllegalArgumentException ex) {
+        model.setErrors(IhmConstants.NAME_ALREADY_TAKEN, null, null, null, null, null);
       }
     });
-
-
-    controls.add(createButton);
-
-    this.add(controls, BorderLayout.SOUTH);
-    // end buttons //
-
-    this.add(new NewCompanyView(model, companyNameField, numerField, postCodeField, streetField,
-        cityField, boxField));
   }
 }
