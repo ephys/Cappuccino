@@ -177,8 +177,6 @@ public class HomeViewController extends JPanel implements ChangeListener {
         IParticipationDto participation = (IParticipationDto) tableModel.getValueAt(row, 2);
         State[] states = ParticipationUtils.getFollowingStates(participation.getState());
 
-        System.out.println("Possible states " + states.length);
-
         enabledStates.clearSelection();
         for (State state : states) {
           enabledStates.addSelectionInterval(state.ordinal(),

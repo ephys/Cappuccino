@@ -81,9 +81,11 @@ public class CompanySelectionView extends JPanel {
       if (model.getSelectedDay() != null) {
         this.add(new JScrollPane(companiesTable));
       } else {
-        System.out.println("hi");
         this.add(new JLabel("Aucune journée des entreprises sélectionnée", SwingConstants.CENTER));
       }
+
+      this.repaint();
+      this.revalidate();
     };
 
     model.addChangeListener(listener);

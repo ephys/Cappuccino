@@ -71,6 +71,7 @@ public class ViewControllerFactory {
   public Component createViewController(MenuEntry page) {
     switch (page) {
       case HOME:
+        modelHome.init(menuModel.getTransitionObjects());
         return new HomeViewController(modelHome, menuModel, guiManager, businessDayUcc,
                                       companyUcc);
 
@@ -84,8 +85,7 @@ public class ViewControllerFactory {
         return new NewCompanyViewController(modelNewCompany, menuModel, guiManager, companyUcc);
 
       case CREATE_CONTACT:
-        return new NewContactViewController(modelNewContact, menuModel, guiManager, contactUcc,
-                                            companyUcc);
+        return new NewContactViewController(modelNewContact, guiManager, contactUcc, companyUcc);
 
       case CREATE_BDAY:
         return new NewBusinessDayViewController(menuModel, guiManager,

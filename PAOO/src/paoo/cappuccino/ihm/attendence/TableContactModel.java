@@ -14,13 +14,10 @@ public class TableContactModel extends AbstractTableModel {
   private String[] titles;
   private Object[][] data;
 
-
-  /**
-   */
   public TableContactModel() {
     this.titles =
-        new String[] {"Nom contact", "Prénom contact", "Email contact",
-            "Sélèctionner"};
+        new String[]{"Nom contact", "Prénom contact", "Email contact",
+                     "Sélèctionner"};
     this.data = new Object[0][0];
   }
 

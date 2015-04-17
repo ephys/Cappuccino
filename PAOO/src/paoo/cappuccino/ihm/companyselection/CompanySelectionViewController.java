@@ -115,9 +115,10 @@ public class CompanySelectionViewController extends JPanel {
       }
 
       if (writeCompaniesToDisk(selectedCompanies)) {
-        this.businessDayUcc.addInvitedCompanies((ICompanyDto[]) selectedCompanies.toArray(),
+        this.businessDayUcc.addInvitedCompanies(
+            selectedCompanies.toArray(new ICompanyDto[selectedCompanies.size()]),
                                                 model.getSelectedDay());
-        this.menu.setCurrentPage(MenuEntry.HOME);
+        this.menu.setCurrentPage(MenuEntry.HOME, model.getSelectedDay());
       }
     });
 
@@ -199,13 +200,30 @@ public class CompanySelectionViewController extends JPanel {
     }
 
     try {
-      if (!saveDirectory.mkdirs() || !saveDirectory.createNewFile()) {
-        throw new IOException("File creation failled for unknown reasons. :(");
+      final File directory = saveDirectory.getParentFile();
+      if (!directory.exists() && !directory.mkdirs()) {
+        JOptionPane.showMessageDialog(CompanySelectionViewController.this,
+                                      "Impossible de créer le répertoire du fichier "
+                                      + directory.getAbsolutePath(),
+                                      "Erreur filesystem",
+                                      JOptionPane.ERROR_MESSAGE);
+
+        return false;
+      }
+
+      if (!saveDirectory.createNewFile()) {
+        JOptionPane.showMessageDialog(CompanySelectionViewController.this,
+                                      "Impossible de créer le fichier "
+                                      + saveDirectory.getAbsolutePath(),
+                                      "Erreur filesystem",
+                                      JOptionPane.ERROR_MESSAGE);
+
+        return false;
       }
 
       try (BufferedWriter fileWriter = new BufferedWriter(
           new OutputStreamWriter(new FileOutputStream(saveDirectory), Charset.forName("UTF-8")))) {
-        fileWriter.write("Nom entreprise,Nom,Prenom,Email");
+        fileWriter.write("Nom entreprise,Nom,Prénom,Email");
         fileWriter.newLine();
         fileWriter.newLine();
 

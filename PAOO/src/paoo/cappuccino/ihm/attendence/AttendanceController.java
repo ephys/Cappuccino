@@ -98,8 +98,9 @@ public class AttendanceController extends JPanel implements ChangeListener {
       JPanel comboCompanyPanel =
           new JPanel(new FlowLayout(FlowLayout.CENTER));
       comboCompanyPanel.add(new JLabel("Entreprise"));
+      List<ICompanyDto> allCompanies = companyUcc.getAllCompanies();
       JComboBox<ICompanyDto> comboCompanies =
-          new JComboBox<>((ICompanyDto[]) companyUcc.getAllCompanies().toArray());
+          new JComboBox<>(allCompanies.toArray(new ICompanyDto[allCompanies.size()]));
       model.setSelectedCompany((ICompanyDto) comboCompanies
           .getSelectedItem());
       comboCompanies.addActionListener(e -> model.setSelectedCompany((ICompanyDto) comboCompanies
