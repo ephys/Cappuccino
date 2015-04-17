@@ -196,11 +196,13 @@ public class TestCompanyUcc {
 
   @Test(expected = IllegalArgumentException.class)
   public void TestGetCompanyByIdNeg() {
+    companyUcc.create(companyCreator, name + "4", street, num, boxnum, postcode, town);
     companyUcc.getCompanyById(-1);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void TestGetCompanyByIdNull() {
+    companyUcc.create(companyCreator, name + "5", street, num, boxnum, postcode, town);
     companyUcc.getCompanyById(0);
   }
 
