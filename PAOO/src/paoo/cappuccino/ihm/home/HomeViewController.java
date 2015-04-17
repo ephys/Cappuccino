@@ -251,7 +251,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
   @Override
   public void stateChanged(ChangeEvent event) {
-    if (viewModel.getSelectedDay() != dayList.getCombo().getSelectedItem()) {
+    if (!viewModel.getSelectedDay().equals(dayList.getCombo().getSelectedItem())) {
       dayList.getCombo().setSelectedItem(viewModel.getSelectedDay());
     }
 
