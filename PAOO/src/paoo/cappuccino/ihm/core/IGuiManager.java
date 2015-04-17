@@ -28,4 +28,9 @@ public interface IGuiManager {
    * Returns the resource manager.
    */
   IResourceManager getResourceManager();
+
+  /**
+   * Invokes a Runnable using another thread than the swing one.
+   */
+  void invoke(Runnable runnable);
 }

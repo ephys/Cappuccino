@@ -2,6 +2,7 @@ package paoo.cappuccino.business.entity.impl;
 
 import java.time.LocalDateTime;
 
+import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.entity.IBusinessDay;
 
 /**
@@ -35,4 +36,8 @@ final class BusinessDayEntity extends BaseEntity implements IBusinessDay {
     return this.creationDate;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof IBusinessDayDto && ((IBusinessDayDto) obj).getId() == this.getId();
+  }
 }

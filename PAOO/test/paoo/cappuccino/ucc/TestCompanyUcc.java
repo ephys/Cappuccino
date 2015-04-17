@@ -1,14 +1,10 @@
 package paoo.cappuccino.ucc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.time.LocalDateTime;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.time.LocalDateTime;
 
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.ICompanyDto;
@@ -17,6 +13,10 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Company UCC Unit Test.
@@ -193,35 +193,17 @@ public class TestCompanyUcc {
     assertNotNull(companyUcc.getCompanyById(1));
   }
 
-
   @Test(expected = IllegalArgumentException.class)
-  public void TestGetCompanyByIdNeg() {
-    companyUcc.create(companyCreator, name + "4", street, num, boxnum, postcode, town);
-    companyUcc.getCompanyById(-1);
+  public void testGetCompanyByIdInvalid() {
+    assertNotNull(companyUcc.getCompanyById(-1));
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void TestGetCompanyByIdNull() {
-    companyUcc.create(companyCreator, name + "5", street, num, boxnum, postcode, town);
-    companyUcc.getCompanyById(0);
-  }
 
   // ====================== getCompanyByDay
 
   @Test()
   public void TestGetCompanyByDay() {
     assertNotNull(companyUcc.getCompaniesByDay(1));
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void TestGetCompanyByDayNull() {
-    companyUcc.getCompaniesByDay(0);
-  }
-
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testGetCompanyByIdInvalid() {
-    assertNotNull(companyUcc.getCompanyById(-1));
   }
 
   @Test(expected = IllegalArgumentException.class)

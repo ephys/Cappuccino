@@ -75,9 +75,9 @@ class ParticipationDao implements IParticipationDao {
       psUpdateParticipation.setString(1, participation.getState().name());
       psUpdateParticipation.setBoolean(2, participation.isCancelled());
 
-      psUpdateParticipation.setInt(4, participation.getCompany());
-      psUpdateParticipation.setInt(5, participation.getBusinessDay());
-      psUpdateParticipation.setInt(6, participation.getVersion());
+      psUpdateParticipation.setInt(3, participation.getCompany());
+      psUpdateParticipation.setInt(4, participation.getBusinessDay());
+      psUpdateParticipation.setInt(5, participation.getVersion());
 
       int affectedRows = psUpdateParticipation.executeUpdate();
       if (affectedRows == 0) {

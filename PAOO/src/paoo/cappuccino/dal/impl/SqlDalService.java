@@ -33,6 +33,8 @@ class SqlDalService implements IDalService, IDalBackend {
     } catch (Exception e) {
       throw new FatalException("Could not fetch the JDBC driver.", e);
     }
+
+    DriverManager.setLoginTimeout(5);
   }
 
   private ThreadLocal<Connection> connections = new ThreadLocal<>();
@@ -42,6 +44,7 @@ class SqlDalService implements IDalService, IDalBackend {
       Connection connection = connections.get();
       if (connection == null || connection.isClosed()) {
         connection = DriverManager.getConnection(host + "?user=" + user + "&password=" + password);
+
 
         connections.set(connection);
         return connection;

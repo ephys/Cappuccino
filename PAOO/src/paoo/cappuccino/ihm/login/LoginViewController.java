@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import paoo.cappuccino.business.dto.IUserDto;
@@ -38,7 +39,7 @@ public class LoginViewController extends JPanel {
   /**
    * Creates a new ViewController for the Login gui.
    *
-   * @param model The ViewController's model.
+   * @param model      The ViewController's model.
    * @param guiManager The manager responsible for the containing frame.
    */
   public LoginViewController(LoginModel model, IGuiManager guiManager, IUserUcc userUcc) {
@@ -48,7 +49,7 @@ public class LoginViewController extends JPanel {
     this.userUcc = userUcc;
 
     this.setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(80,80,80)),
+        BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(80, 80, 80)),
         new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0, IhmConstants.M_GAP)));
 
     JPanel titlePanel = new JPanel(new BorderLayout());
@@ -77,8 +78,8 @@ public class LoginViewController extends JPanel {
     registerButton.addActionListener(e -> guiManager.openFrame(RegistrationFrame.class));
 
     JButton loginButton = new JButton("Se connecter");
-    loginButton.addActionListener(e ->  attemptLogin(usernameField.getText(),
-                                                     passwordField.getPassword()));
+    loginButton.addActionListener(e -> attemptLogin(usernameField.getText(),
+                                                    passwordField.getPassword()));
 
     controls.add(registerButton);
     controls.add(loginButton);
@@ -113,18 +114,23 @@ public class LoginViewController extends JPanel {
       return;
     }
 
-    IUserDto user = userUcc.logIn(username, password);
+    guiManager.invoke(() -> {
+      model.setUsernameError("Chargement...");
+      model.setPasswordError(null);
 
-    if (user == null) {
-      model.setUsernameError(IhmConstants.ERROR_WRONG_LOGIN);
-      model.setPasswordError(IhmConstants.ERROR_WRONG_LOGIN);
+      IUserDto user = userUcc.logIn(username, password);
 
-      return;
-    }
+      if (user == null) {
+        model.setUsernameError(IhmConstants.ERROR_WRONG_LOGIN);
+        model.setPasswordError(IhmConstants.ERROR_WRONG_LOGIN);
 
-    // avoid password release in case of memory dump.
-    StringUtils.clearString(password);
+        return;
+      }
 
-    guiManager.openFrame(MenuFrame.class).setLoggedUser(user);
+      // avoid password release in case of memory dump.
+      StringUtils.clearString(password);
+
+      SwingUtilities.invokeLater(() -> guiManager.openFrame(MenuFrame.class).setLoggedUser(user));
+    });
   }
 }

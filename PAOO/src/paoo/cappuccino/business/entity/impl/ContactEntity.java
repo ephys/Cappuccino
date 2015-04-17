@@ -1,5 +1,6 @@
 package paoo.cappuccino.business.entity.impl;
 
+import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.entity.IContact;
 import paoo.cappuccino.util.StringUtils;
 
@@ -81,5 +82,10 @@ final class ContactEntity extends BaseEntity implements IContact {
   @Override
   public void setPhone(String phone) {
     this.phone = phone;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof IContactDto && ((IContactDto) obj).getId() == this.getId();
   }
 }

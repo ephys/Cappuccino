@@ -2,6 +2,7 @@ package paoo.cappuccino.business.entity.impl;
 
 import java.time.LocalDateTime;
 
+import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.entity.ICompany;
 
 /**
@@ -78,5 +79,10 @@ final class CompanyEntity extends BaseEntity implements ICompany {
   @Override
   public int getCreator() {
     return this.creatorId;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof ICompanyDto && ((ICompanyDto) obj).getId() == this.getId();
   }
 }

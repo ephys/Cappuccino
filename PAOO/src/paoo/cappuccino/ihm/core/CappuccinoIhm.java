@@ -21,6 +21,7 @@ import paoo.cappuccino.util.exception.FatalException;
  */
 class CappuccinoIhm implements IGuiManager {
 
+  private final CappuccinoThread cappuccinoThread = new CappuccinoThread();
   private final IResourceManager resourceManager = new CachedResourceManager(this);
   private final Logger logger;
   private final DependencyInjector injector;
@@ -57,6 +58,11 @@ class CappuccinoIhm implements IGuiManager {
   @Override
   public IResourceManager getResourceManager() {
     return resourceManager;
+  }
+
+  @Override
+  public void invoke(Runnable runnable) {
+    cappuccinoThread.invokeLater(runnable);
   }
 
   /**

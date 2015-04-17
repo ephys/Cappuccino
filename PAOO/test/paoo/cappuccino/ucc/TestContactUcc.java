@@ -155,6 +155,4 @@ public class TestContactUcc {
   public void testGetContactByCompanyIdNegative() {
     contactUcc.getContactByCompany(-1);
   }
-
-
 }

@@ -2,6 +2,7 @@ package paoo.cappuccino.business.entity.impl;
 
 import java.time.LocalDateTime;
 
+import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.IUser;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
 import paoo.cappuccino.util.hasher.IStringHasher;
@@ -99,5 +100,10 @@ final class UserEntity extends BaseEntity implements IUser {
   @Override
   public boolean isPassword(char[] password) {
     return hasher.matchHash(password, this.password);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof IUserDto && ((IUserDto) obj).getId() == this.getId();
   }
 }

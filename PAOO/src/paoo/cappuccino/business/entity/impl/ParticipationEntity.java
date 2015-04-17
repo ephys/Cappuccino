@@ -1,5 +1,6 @@
 package paoo.cappuccino.business.entity.impl;
 
+import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.entity.IParticipation;
 import paoo.cappuccino.util.ParticipationUtils;
 
@@ -86,4 +87,10 @@ final class ParticipationEntity implements IParticipation {
     return ++this.version;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof IParticipationDto
+           && ((IParticipationDto) obj).getCompany() == this.getCompany()
+           && ((IParticipationDto) obj).getBusinessDay() == this.getBusinessDay();
+  }
 }
