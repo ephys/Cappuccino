@@ -70,6 +70,7 @@ public class ParticipationSearchView extends JPanel implements ChangeListener {
     this.scrollPane = new JScrollPane(table);
     this.add(scrollPane);
     this.model.addChangeListener(this);
+    stateChanged(null);
   }
 
   @Override

@@ -1,15 +1,11 @@
 package paoo.cappuccino.ucc;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.time.LocalDateTime;
-import java.util.ConcurrentModificationException;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.time.LocalDateTime;
+import java.util.ConcurrentModificationException;
 
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
@@ -22,9 +18,13 @@ import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Business Day UCC Unit Test.
- * 
+ *
  * @author Laurent
  */
 public class TestBusinessDayUcc {

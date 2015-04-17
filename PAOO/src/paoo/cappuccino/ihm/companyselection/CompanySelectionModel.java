@@ -1,57 +1,26 @@
 package paoo.cappuccino.ihm.companyselection;
 
-import java.util.List;
-
-import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.ihm.core.Initializable;
-import paoo.cappuccino.ihm.util.BaseModel;
+import paoo.cappuccino.ihm.home.HomeModel;
 
 /**
- * Model for the company selection model Gui.
+ * Model for the company selection Gui.
  *
  * @author Maduka Junior
  */
-public class CompanySelectionModel extends BaseModel implements Initializable {
-
-  boolean selectAll;
-  boolean notDeselectAll;
-  private List<ICompanyDto> companyDto;
-
-  public List<ICompanyDto> getCompanyDto() {
-    return companyDto;
-  }
-
-  public void setCompanyDto(List<ICompanyDto> companyDto) {
-    this.companyDto = companyDto;
-    selectAll = false;
-    dispatchChangeEvent();
-
-  }
-
-  public boolean isSelectAll() {
-    return selectAll;
-  }
-
-  public void setSelectAll(boolean b) {
-
-    selectAll = b;
-    if (!notDeselectAll) {
-      dispatchChangeEvent();
-    }
-  }
-
-  public boolean isNotDeselectAll() {
-    return notDeselectAll;
-  }
-
-  public void setNotDeselectAll(boolean b) {
-
-    notDeselectAll = b;
-  }
-
+public class CompanySelectionModel extends HomeModel implements Initializable {
 
   @Override
   public void init(Object[] data) {
-    // TODO
+    if (data == null || data.length == 0) {
+      return;
+    }
+
+    if (!(data[0] instanceof IBusinessDayDto)) {
+      throw new IllegalArgumentException("Incorrect initialization data for CompanySelectionModel");
+    }
+
+    setSelectedDay((IBusinessDayDto) data[0]);
   }
 }
