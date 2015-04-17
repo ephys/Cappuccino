@@ -101,8 +101,20 @@ class MockCompanyDao implements ICompanyDao {
                                            String town) {
     List<ICompanyDto> toReturn = new ArrayList<>();
 
+    if (name != null) {
+      name = name.toLowerCase();
+    }
+
+    if (street != null) {
+      street = street.toLowerCase();
+    }
+
+    if (town != null) {
+      town = town.toLowerCase();
+    }
+
     for (ICompany company : companyList) {
-      if (name != null && !company.getName().equalsIgnoreCase(name)) {
+      if (name != null && !company.getName().toLowerCase().contains(name)) {
         continue;
       }
 
@@ -110,11 +122,11 @@ class MockCompanyDao implements ICompanyDao {
         continue;
       }
 
-      if (street != null && !company.getAddressStreet().equalsIgnoreCase(street)) {
+      if (street != null && !company.getAddressStreet().toLowerCase().contains(street)) {
         continue;
       }
 
-      if (town != null && !company.getAddressTown().equalsIgnoreCase(town)) {
+      if (town != null && !company.getAddressTown().toLowerCase().contains(town)) {
         continue;
       }
 
