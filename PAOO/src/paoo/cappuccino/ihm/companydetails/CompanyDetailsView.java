@@ -121,7 +121,7 @@ public class CompanyDetailsView extends JPanel {
     }
 
     if (contacts.size() == 0) {
-      JLabel errorLabel = new JLabel("Il n'y a aucune personne de contact pour cet entreprise.");
+      JLabel errorLabel = new JLabel("Il n'y a aucune personne de contact pour cette entreprise.");
       errorLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
       contactList.add(errorLabel);
     } else {
