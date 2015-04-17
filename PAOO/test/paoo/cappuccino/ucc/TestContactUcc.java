@@ -3,8 +3,6 @@ package paoo.cappuccino.ucc;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ConcurrentModificationException;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -72,12 +70,12 @@ public class TestContactUcc {
     contactUcc.create(companyId, emailCorrect, firstName, null, phone);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void testCreateContactMailNull() {
     contactUcc.create(companyId, null, firstName, lastName, phone);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void testCreateContactPhoneNull() {
     contactUcc.create(companyId, emailCorrect, firstName, lastName, null);
   }
@@ -109,13 +107,12 @@ public class TestContactUcc {
 
   // ====================== SETMAILVALID
 
-  @Test(expected = ConcurrentModificationException.class)
+  @Test()
   public void testSetMailInvalidReturn() {
     IContact entity = (IContact) dto;
+    entity = (IContact) contactUcc.searchContact("Paul", "").get(0);
     entity.setEmailValid(true);
-    assertTrue(contactUcc.setMailInvalid(dto));
-    assertFalse(contactUcc.setMailInvalid((IContactDto) entity));
-    entity.setEmail("");
+    assertTrue(contactUcc.setMailInvalid((IContactDto) entity));
     assertFalse(contactUcc.setMailInvalid((IContactDto) entity));
   }
 
