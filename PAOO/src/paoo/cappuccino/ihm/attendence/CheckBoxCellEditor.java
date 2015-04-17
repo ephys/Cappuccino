@@ -12,14 +12,12 @@ import javax.swing.JTable;
 public class CheckBoxCellEditor extends DefaultCellEditor {
 
 
-  public CheckBoxCellEditor(JCheckBox box, AttendanceModel model,
-      JTable table) {
+  public CheckBoxCellEditor(JCheckBox box, AttendanceModel model, JTable table, JCheckBox all) {
     super(box = new JCheckBox());
     box.addActionListener(e -> {
       int nbChecked = 0;
       for (int i = 0; i < table.getRowCount(); i++) {
-        if ((boolean) table.getModel().getValueAt(
-            i, table.getColumnCount() - 1)) {
+        if ((boolean) table.getModel().getValueAt(i, table.getColumnCount() - 1)) {
           nbChecked++;
         }
       }
@@ -30,10 +28,17 @@ public class CheckBoxCellEditor extends DefaultCellEditor {
         nbChecked--;
       }
 
-      if (nbChecked == table.getRowCount()) {
-        model.setAllSelected(true);
-      } else if (nbChecked == 0) {
-        model.setAllSelected(false);
+      if (model.isSelectAll() && nbChecked == (table.getRowCount() - 1)) {
+
+        model.setNotDeselectAll(true);
+        all.setSelected(false);
+        return;
+      }
+      if (!model.isSelectAll() && nbChecked == table.getRowCount()) {
+
+        model.setNotDeselectAll(true);
+        all.setSelected(true);
+        return;
       }
     });
   }

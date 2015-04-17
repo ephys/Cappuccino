@@ -51,7 +51,13 @@ public interface IhmConstants {
    */
   String ERROR_ALPHA_INPUT = "Ce champ ne peut contenir que des lettres.";
 
+  String ERROR_NUMERICAL_INPUT = "Ce champ ne peut contenir que des chiffres";
+
   Color LIGHT_BLUE = new Color(155, 178, 247);
 
   String PATH_LOGO = "lib/logo.png";
+  String ERROR_NO_COMPANIES = "Aucune entreprise disponible";
+
+
+
 }

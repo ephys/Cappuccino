@@ -12,7 +12,8 @@ import paoo.cappuccino.ihm.util.BaseModel;
 public class AttendanceModel extends BaseModel {
   private ICompanyDto selectedCompany;
   private IBusinessDayDto selectedDay;
-  private boolean allSelected = false;
+  private boolean notDeselectAll;
+  private boolean selectAll;
 
   // table
 
@@ -22,6 +23,7 @@ public class AttendanceModel extends BaseModel {
 
   public void setSelectedCompany(ICompanyDto selectedCompany) {
     this.selectedCompany = selectedCompany;
+    selectAll = false;
     dispatchChangeEvent();
   }
 
@@ -31,16 +33,30 @@ public class AttendanceModel extends BaseModel {
 
   public void setSelectedDay(IBusinessDayDto selectedDay) {
     this.selectedDay = selectedDay;
+    selectAll = false;
     dispatchChangeEvent();
   }
 
-  public void setAllSelected(boolean b) {
-    allSelected = b;
-    dispatchChangeEvent();
+  public boolean isSelectAll() {
+    return selectAll;
   }
 
-  public boolean getAllSelected() {
-    return allSelected;
+  public void setSelectAll(boolean b) {
+
+    selectAll = b;
+    if (!notDeselectAll) {
+      dispatchChangeEvent();
+    }
   }
+
+  public boolean isNotDeselectAll() {
+    return notDeselectAll;
+  }
+
+  public void setNotDeselectAll(boolean b) {
+    notDeselectAll = b;
+  }
+
+
 
 }

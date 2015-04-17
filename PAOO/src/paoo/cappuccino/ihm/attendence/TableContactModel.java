@@ -15,14 +15,12 @@ public class TableContactModel extends AbstractTableModel {
   private Object[][] data;
 
   public TableContactModel() {
-    this.titles =
-        new String[]{"Nom contact", "Prénom contact", "Email contact",
-                     "Sélèctionner"};
-    this.data = new Object[0][0];
+    this.titles = new String[] {"Nom contact", "Prénom contact", "Email contact", "Sélèctionner"};
+    this.data = new Object[0][3];
   }
 
   public void changeData(List<IContactDto> listContact) {
-    if (listContact == null) {
+    if (listContact == null || listContact.size() == 0) {
       return;
     }
     data = new Object[titles.length][listContact.size()];
@@ -35,7 +33,7 @@ public class TableContactModel extends AbstractTableModel {
   }
 
   public Class<?> getColumnClass(int col) {
-    return data[0][col].getClass();
+    return (data == null) ? null : data[0][col].getClass();
   }
 
   @Override
