@@ -84,6 +84,7 @@ class CompanyUcc implements ICompanyUcc {
     if (company <= 0) {
       throw new IllegalArgumentException("invalid id");
     }
+
     return companyDao.fetchCompanyById(company);
   }
 
@@ -92,6 +93,7 @@ class CompanyUcc implements ICompanyUcc {
     if (dayid <= 0) {
       throw new IllegalArgumentException("invalid id");
     }
+
     return companyDao.fetchCompaniesByDay(dayid);
   }
 }

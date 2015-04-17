@@ -1,45 +1,38 @@
 package paoo.cappuccino.ucc;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.IContactDto;
-import paoo.cappuccino.business.entity.IContact;
-import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Contact UCC Unit Test.
- * 
+ *
  * @author Laurent
  */
 public class TestContactUcc {
 
   private static DependencyInjector injector;
 
-  private int companyId = 1;
-  private String emailCorrect = "thisis@email.com";
-  private String emailIncorrect = "fail.mail@oups";
-  private String firstName = "FirstName";
-  private String lastName = "LastName";
-  private String phone = "00/000 00 00";
-  private IContactDto dto = null;
-  private String emptyString = "";
-
-
+  private static final int companyId = 1;
+  private static final String emailCorrect = "thisis@email.com";
+  private static final String firstName = "FirstName";
+  private static final String lastName = "LastName";
+  private static final String phone = "00/000 00 00";
 
   @Inject
   private IContactUcc contactUcc;
-
-  @Inject
-  private IEntityFactory factory;
 
   @BeforeClass
   public static void systemInit() {
@@ -50,14 +43,20 @@ public class TestContactUcc {
   @Before
   public void inject() {
     injector.populate(this);
-    dto = factory.createContact(1, emailCorrect, firstName, lastName, phone);
   }
 
   // ====================== CREATE
 
-  @Test()
-  public void testCreateContactCorrect() {
-    contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+  @Test
+  public void testCreateContactFine() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    assertNotNull("contactUcc.create should not return null", contact);
+
+    assertEquals("Company match failed", contact.getCompany(), companyId);
+    assertEquals("Email match failed", contact.getEmail(), emailCorrect);
+    assertEquals("First Name match failed", contact.getFirstName(), firstName);
+    assertEquals("Last Name match failed", contact.getLastName(), lastName);
+    assertEquals("Phone match failed", contact.getPhone(), phone);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -66,88 +65,94 @@ public class TestContactUcc {
   }
 
   @Test(expected = IllegalArgumentException.class)
+  public void testCreateContactFistNameIncorrect() {
+    contactUcc.create(companyId, emailCorrect, "", lastName, phone);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
   public void testCreateContactLastNameNull() {
     contactUcc.create(companyId, emailCorrect, firstName, null, phone);
   }
 
-  @Test()
-  public void testCreateContactMailNull() {
-    contactUcc.create(companyId, null, firstName, lastName, phone);
-  }
-
-  @Test()
-  public void testCreateContactPhoneNull() {
-    contactUcc.create(companyId, emailCorrect, firstName, lastName, null);
-  }
-
-  @Test()
-  public void testCreateContactCorrectWithoutPhone() {
-    contactUcc.create(companyId, emailCorrect, firstName, lastName, emptyString);
-  }
-
-  @Test()
-  public void testCreateContactCorrectWithoutMail() {
-    contactUcc.create(companyId, emptyString, firstName, lastName, phone);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testCreateContactFistNameIncorrect() {
-    contactUcc.create(companyId, emailCorrect, emptyString, lastName, phone);
-  }
-
   @Test(expected = IllegalArgumentException.class)
   public void testCreateContactLastNameIncorrect() {
-    contactUcc.create(companyId, emailCorrect, firstName, emptyString, phone);
+    contactUcc.create(companyId, emailCorrect, firstName, "", phone);
+  }
+
+  @Test
+  public void testCreateContactMailNull() {
+    IContactDto contact = contactUcc.create(companyId, null, firstName, lastName, phone);
+
+    assertNull(contact.getEmail());
+  }
+
+  @Test
+  public void testCreateContactMailEmpty() {
+    IContactDto contact = contactUcc.create(companyId, "", firstName, lastName, phone);
+
+    assertNull(contact.getEmail());
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateContactMailIncorrect() {
+    String emailIncorrect = "fail.mail@oups";
     contactUcc.create(companyId, emailIncorrect, firstName, lastName, phone);
+  }
+
+  @Test
+  public void testCreateContactPhoneNull() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, null);
+    assertNull(contact.getPhone());
+  }
+
+  @Test
+  public void testCreateContactPhoneEmpty() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, "");
+    assertNull(contact.getPhone());
   }
 
   // ====================== SETMAILVALID
 
-  @Test()
-  public void testSetMailInvalidReturn() {
-    IContact entity = (IContact) dto;
-    entity = (IContact) contactUcc.searchContact("Paul", "").get(0);
-    entity.setEmailValid(true);
-    assertTrue(contactUcc.setMailInvalid((IContactDto) entity));
-    assertFalse(contactUcc.setMailInvalid((IContactDto) entity));
+  @Test
+  public void testSetMailAlreadyInvalid() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+
+    assertTrue(contactUcc.setMailInvalid(contact));
+    assertFalse("Mail cannot be set invalid twice", contactUcc.setMailInvalid(contact));
+  }
+
+  @Test
+  public void testSetMailAlready() {
+    IContactDto contact = contactUcc.create(companyId, null, firstName, lastName, phone);
+    assertFalse(contactUcc.setMailInvalid(contact));
   }
 
   // ====================== SEARCHCONTACT
 
-  @Test()
-  public void testSearchContactCorrect() {
-    contactUcc.searchContact(firstName, lastName);
+  @Test
+  public void testSearchContactFine() {
+    assertNotNull(contactUcc.searchContact(firstName, lastName));
   }
 
-  @Test()
+  @Test
   public void testSearchContactFirstNameNull() {
-    contactUcc.searchContact(null, lastName);
+    assertNotNull(contactUcc.searchContact(null, lastName));
   }
 
-  @Test()
+  @Test
   public void testSearchContactLastNameNull() {
-    contactUcc.searchContact(firstName, null);
+    assertNotNull(contactUcc.searchContact(firstName, null));
   }
 
   // ====================== getContactByCompany
 
-  @Test()
+  @Test
   public void testGetContactByCompanyOk() {
-    contactUcc.getContactByCompany(1);
+    assertNotNull(contactUcc.getContactByCompany(1));
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testGetContactByCompanyIdNegativ() {
+  public void testGetContactByCompanyIdNegative() {
     contactUcc.getContactByCompany(-1);
   }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testGetContactByCompanyIdZero() {
-    contactUcc.getContactByCompany(0);
-  }
-
 }

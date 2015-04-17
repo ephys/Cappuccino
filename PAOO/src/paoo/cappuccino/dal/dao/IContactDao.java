@@ -11,7 +11,9 @@ public interface IContactDao {
 
   /**
    * Inserts a new contact in the database.
-   *
+   *    if (id <= 0) {
+      throw new IllegalArgumentException("invalid id");
+    }
    * @param contact The contact to insert.
    * @return the contact entity with its information updated from the database.
    * @throws java.lang.IllegalArgumentException            One of the fields failed to insert due to

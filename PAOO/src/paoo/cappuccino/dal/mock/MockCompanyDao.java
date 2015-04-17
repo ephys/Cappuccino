@@ -16,6 +16,7 @@ import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.dao.IBusinessDayDao;
 import paoo.cappuccino.dal.dao.ICompanyDao;
 import paoo.cappuccino.dal.dao.IParticipationDao;
+import paoo.cappuccino.dal.exception.NonUniqueFieldException;
 
 /**
  * Mock implementation of the company dao.
@@ -44,8 +45,22 @@ class MockCompanyDao implements ICompanyDao {
                                         "Ville d'operating system"));
   }
 
+  private ICompanyDto getCompanyByName(String name) {
+    for (ICompany company : companyList) {
+      if (company.getName().equalsIgnoreCase(name)) {
+        return company;
+      }
+    }
+
+    return null;
+  }
+
   @Override
   public ICompanyDto createCompany(ICompanyDto company) {
+    if (getCompanyByName(company.getName()) != null) {
+      throw new NonUniqueFieldException("A company with that name already exists");
+    }
+
     ICompany newCompany =
         factory.createCompany(companyList.size() + 1, 1, company.getCreator(), company.getName(),
                               company.getAddressStreet(), company.getAddressNum(),

@@ -10,7 +10,6 @@ import java.util.ConcurrentModificationException;
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
-import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.dto.IParticipationDto.State;
 import paoo.cappuccino.business.entity.IParticipation;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
@@ -31,18 +30,15 @@ public class TestBusinessDayUcc {
 
   private static DependencyInjector injector;
 
-  private String full = "full";
+  private static final String filled = "full";
+
   private IBusinessDayDto dto = null;
-  private String emptyString = "";
-  private IContactDto cdto = null;
-  private String emailCorrect = "mail@correct.yay";
-
-
-  @Inject
-  private IBusinessDayUcc businessDayUcc;
 
   @Inject
   private IEntityFactory factory;
+
+  @Inject
+  private IBusinessDayUcc businessDayUcc;
 
   @BeforeClass
   public static void systemInit() {
@@ -53,8 +49,6 @@ public class TestBusinessDayUcc {
   @Before
   public void before() throws Exception {
     injector.populate(this);
-    dto = factory.createBusinessDay(LocalDateTime.now());
-    cdto = factory.createContact(1, emailCorrect, full, full, full);
   }
 
   // ====================== CREATE

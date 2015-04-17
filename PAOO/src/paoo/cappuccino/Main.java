@@ -27,7 +27,7 @@ public class Main extends BaseMain {
   }
 
   protected Main() {
-    super(new AppContext("Cappuccino", "1.1.0"));
+    super(new AppContext("Cappuccino", "1.2.0"));
 
     createGui();
   }
