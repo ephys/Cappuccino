@@ -65,6 +65,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
   /**
    * Creates a view controller for the participation modification screen.
+   * 
    * @param model The model of the view.
    * @param menu The model of the menu.
    * @param guiManager The app gui manager.
@@ -72,7 +73,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
    * @param companyUcc The app company use case controller.
    */
   public HomeViewController(HomeModel model, MenuModel menu, IGuiManager guiManager,
-                            IBusinessDayUcc dayUcc, ICompanyUcc companyUcc) {
+      IBusinessDayUcc dayUcc, ICompanyUcc companyUcc) {
     super(new BorderLayout());
     this.menu = menu;
     this.dayUcc = dayUcc;
@@ -102,7 +103,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
           guiManager.getLogger().info(
               "[Home screen] selected day is "
-              + (selectedDay == null ? null : selectedDay.getEventDate()));
+                  + (selectedDay == null ? null : selectedDay.getEventDate()));
         });
 
     daylistPanel.add(dayList);
@@ -110,7 +111,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
     this.add(daylistPanel, BorderLayout.NORTH);
 
     // center
-    String[] tableTitles = new String[]{"Nom entreprise", "État", "Annuler participation"};
+    String[] tableTitles = new String[] {"Nom entreprise", "État", "Annuler participation"};
     tableModel = new DefaultTableModel(tableTitles, 0) {
       @Override
       public boolean isCellEditable(int row, int column) {
@@ -130,11 +131,9 @@ public class HomeViewController extends JPanel implements ChangeListener {
     TableColumn stateCol = table.getColumn(tableTitles[1]);
     stateCol.setMinWidth(stateCol.getWidth() * 2);
     stateCol.setCellRenderer(new StateCellRenderer());
-    ComboBoxModel<State> stateModel = new DefaultComboBoxModel<>(new State[]{State.INVITED,
-                                                                             State.CONFIRMED,
-                                                                             State.DECLINED,
-                                                                             State.BILLED,
-                                                                             State.PAID});
+    ComboBoxModel<State> stateModel =
+        new DefaultComboBoxModel<>(new State[] {State.INVITED, State.CONFIRMED, State.DECLINED,
+            State.BILLED, State.PAID});
     JComboBox<State> stateCombo = new JComboBox<>(stateModel);
     stateCol.setCellEditor(new DefaultCellEditor(stateCombo));
 
@@ -157,11 +156,8 @@ public class HomeViewController extends JPanel implements ChangeListener {
       }
 
       if (!dayUcc.changeState(participation, selectedState)) {
-        JOptionPane.showMessageDialog(
-            HomeViewController.this,
-            "Impossible de sélectionner cet état.",
-            "Action invalide",
-            JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(HomeViewController.this,
+            "Impossible de sélectionner cet état.", "Action invalide", JOptionPane.ERROR_MESSAGE);
 
         stateCombo.setSelectedItem(participation.getState());
       }
@@ -179,11 +175,10 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
         enabledStates.clearSelection();
         for (State state : states) {
-          enabledStates.addSelectionInterval(state.ordinal(),
-                                             state.ordinal());
+          enabledStates.addSelectionInterval(state.ordinal(), state.ordinal());
         }
-        enabledStates.addSelectionInterval(participation.getState().ordinal(),
-                                           participation.getState().ordinal());
+        enabledStates.addSelectionInterval(participation.getState().ordinal(), participation
+            .getState().ordinal());
       }
 
       @Override
@@ -251,7 +246,8 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
   @Override
   public void stateChanged(ChangeEvent event) {
-    if (!viewModel.getSelectedDay().equals(dayList.getCombo().getSelectedItem())) {
+    if (viewModel.getSelectedDay() != null
+        && !viewModel.getSelectedDay().equals(dayList.getCombo().getSelectedItem())) {
       dayList.getCombo().setSelectedItem(viewModel.getSelectedDay());
     }
 
@@ -276,7 +272,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index,
-                                                  boolean isSelected, boolean cellHasFocus) {
+        boolean isSelected, boolean cellHasFocus) {
       super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
       setText(LocalizationUtil.localizeState((State) value));
 
@@ -288,11 +284,11 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                   boolean isFocus, int row, int col) {
+        boolean isFocus, int row, int col) {
       IParticipationDto participation = (IParticipationDto) value;
 
       setEnabled(participation.getState() != State.DECLINED
-                 && participation.getState() != State.INVITED && !participation.isCancelled());
+          && participation.getState() != State.INVITED && !participation.isCancelled());
 
       setText(participation.isCancelled() ? "Annulé" : "Annuler");
       return this;
@@ -315,8 +311,8 @@ public class HomeViewController extends JPanel implements ChangeListener {
       super(new GridBagLayout());
 
       createDayButton.addActionListener(e -> menu.setCurrentPage(MenuEntry.CREATE_BDAY));
-      createParticipationButton.addActionListener(e -> menu
-          .setCurrentPage(MenuEntry.SELECT_COMPANY, viewModel.getSelectedDay()));
+      createParticipationButton.addActionListener(e -> menu.setCurrentPage(
+          MenuEntry.SELECT_COMPANY, viewModel.getSelectedDay()));
 
       this.add(contents, new GridBagConstraints());
       contents.add(errorMessage);
