@@ -1,11 +1,16 @@
 package paoo.cappuccino.ucc;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
@@ -18,11 +23,6 @@ import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 /**
  * Business Day UCC Unit Test.
  *
@@ -33,6 +33,7 @@ public class TestBusinessDayUcc {
   private static DependencyInjector injector;
   private static final LocalDateTime eventDate = LocalDateTime.now().plusYears(200);
   private static int nbBusinessDays = 0;
+
 
   @Inject
   private IBusinessDayUcc businessDayUcc;
@@ -90,14 +91,13 @@ public class TestBusinessDayUcc {
   public void testAddInvitedCompanies() {
     IBusinessDayDto day = makeBusinessDay();
 
-    businessDayUcc.addInvitedCompanies(new ICompanyDto[]{makeCompany()}, day);
+    businessDayUcc.addInvitedCompanies(new ICompanyDto[] {makeCompany()}, day);
 
     List<IParticipationDto> participations = businessDayUcc.getParticipations(day.getId());
     assertEquals(participations.size(), 1);
 
-    assertEquals("Participation initiated with the wrong state.",
-                 participations.get(0).getState(),
-                 State.INVITED);
+    assertEquals("Participation initiated with the wrong state.", participations.get(0).getState(),
+        State.INVITED);
   }
 
   // ====================== changeState
@@ -107,9 +107,9 @@ public class TestBusinessDayUcc {
     IParticipationDto participation = makeParticipation();
 
     assertTrue("Transition INVITED -> CONFIRMED failled",
-               businessDayUcc.changeState(participation, State.CONFIRMED));
-    assertEquals("Participation state not updated in the entity",
-                 participation.getState(), State.CONFIRMED);
+        businessDayUcc.changeState(participation, State.CONFIRMED));
+    assertEquals("Participation state not updated in the entity", participation.getState(),
+        State.CONFIRMED);
   }
 
   @Test
@@ -128,7 +128,7 @@ public class TestBusinessDayUcc {
 
     assertTrue("Cancellation denied", businessDayUcc.cancelParticipation(participation));
     assertFalse("Cancellation accepted when already cancelled",
-                businessDayUcc.cancelParticipation(participation));
+        businessDayUcc.cancelParticipation(participation));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -164,7 +164,7 @@ public class TestBusinessDayUcc {
 
   private ICompany makeCompany() {
     return factory.createCompany(1, 1, 1, "Beure de cacahuètes", "c'est", "tout", "ce", "que",
-                                 "j'ai sous la main", LocalDateTime.now());
+        "j'ai sous la main", LocalDateTime.now());
   }
 
   private IBusinessDayDto makeBusinessDay() {
@@ -172,7 +172,7 @@ public class TestBusinessDayUcc {
   }
 
   private List<IParticipationDto> makeParticipation(IBusinessDayDto businessDay) {
-    businessDayUcc.addInvitedCompanies(new ICompanyDto[]{makeCompany()}, businessDay);
+    businessDayUcc.addInvitedCompanies(new ICompanyDto[] {makeCompany()}, businessDay);
 
     return businessDayUcc.getParticipations(businessDay.getId());
   }

@@ -1,10 +1,14 @@
 package paoo.cappuccino.ucc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import java.time.LocalDateTime;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.time.LocalDateTime;
 
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.ICompanyDto;
@@ -13,11 +17,6 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
 /**
  * Company UCC Unit Test.
@@ -53,16 +52,17 @@ public class TestCompanyUcc {
   public void before() throws Exception {
     injector.populate(this);
 
-    companyCreator = factory.createUser(5, 1, "john", null, "lastname", "firstname",
-                                        "email@test.fr", IUserDto.Role.ADMIN, LocalDateTime.now());
+    companyCreator =
+        factory.createUser(5, 1, "john", null, "lastname", "firstname", "email@test.fr",
+            IUserDto.Role.ADMIN, LocalDateTime.now());
   }
 
   // ====================== CREATE
 
   @Test
   public void testCreateCompanyCorrect() {
-    ICompanyDto company = companyUcc.create(companyCreator, name, street, num,
-                                            boxnum, postcode, town);
+    ICompanyDto company =
+        companyUcc.create(companyCreator, name, street, num, boxnum, postcode, town);
 
     assertNotNull("companyUcc.create cannot return null", company);
 
@@ -77,7 +77,8 @@ public class TestCompanyUcc {
 
   @Test()
   public void testCreateCompanytCorrectEmptyMailbox() {
-    ICompanyDto company = companyUcc.create(companyCreator, name + "2", street, num, "", postcode, town);
+    ICompanyDto company =
+        companyUcc.create(companyCreator, name + "2", street, num, "", postcode, town);
 
     assertNull(company.getAddressMailbox());
   }
@@ -192,19 +193,32 @@ public class TestCompanyUcc {
     assertNotNull(companyUcc.getCompanyById(1));
   }
 
-  @Test
-  public void testGetCompanyByDay() {
+
+  @Test(expected = IllegalArgumentException.class)
+  public void TestGetCompanyByIdNeg() {
+    companyUcc.getCompanyById(-1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void TestGetCompanyByIdNull() {
+    companyUcc.getCompanyById(0);
+  }
+
+  // ====================== getCompanyByDay
+
+  @Test()
+  public void TestGetCompanyByDay() {
     assertNotNull(companyUcc.getCompaniesByDay(1));
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testGetCompanyByIdInvalid() {
-    try {
-      companyUcc.create(companyCreator, name, street, num, boxnum, postcode, town);
-    } catch(IllegalArgumentException e) {
-      fail("Creation should not launch illegal argument exception");
-    }
+  public void TestGetCompanyByDayNull() {
+    companyUcc.getCompaniesByDay(0);
+  }
 
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetCompanyByIdInvalid() {
     assertNotNull(companyUcc.getCompanyById(-1));
   }
 
