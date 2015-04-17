@@ -17,6 +17,7 @@ import paoo.cappuccino.core.injector.Inject;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 /**
  * Company UCC Unit Test.
@@ -44,7 +45,7 @@ public class TestCompanyUcc {
 
   @BeforeClass
   public static void systemInit() {
-    BaseMain main = new BaseMain(new AppContext("CompanyUccTest", "0.1.0", "test"));
+    BaseMain main = new BaseMain(new AppContext("CompanyUccTest", "0.1.1", "test"));
     injector = main.getInjector();
   }
 
@@ -196,10 +197,14 @@ public class TestCompanyUcc {
     assertNotNull(companyUcc.getCompaniesByDay(1));
   }
 
-
   @Test(expected = IllegalArgumentException.class)
   public void testGetCompanyByIdInvalid() {
-    companyUcc.create(companyCreator, name, street, num, boxnum, postcode, town);
+    try {
+      companyUcc.create(companyCreator, name, street, num, boxnum, postcode, town);
+    } catch(IllegalArgumentException e) {
+      fail("Creation should not launch illegal argument exception");
+    }
+
     assertNotNull(companyUcc.getCompanyById(-1));
   }
 
