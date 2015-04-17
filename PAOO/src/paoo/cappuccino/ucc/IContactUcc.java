@@ -36,7 +36,6 @@ public interface IContactUcc {
 
   /**
    * Searches contacts based on their names.
-   *
    * 
    * @param firstName First name of the contact search. Nullable.
    * @param lastName Last name of the contact search. Nullable.
