@@ -316,7 +316,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
       createDayButton.addActionListener(e -> menu.setCurrentPage(MenuEntry.CREATE_BDAY));
       createParticipationButton.addActionListener(e -> menu
-          .setCurrentPage(MenuEntry.SELECT_COMPANY));
+          .setCurrentPage(MenuEntry.SELECT_COMPANY, viewModel.getSelectedDay()));
 
       this.add(contents, new GridBagConstraints());
       contents.add(errorMessage);
