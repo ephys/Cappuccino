@@ -65,10 +65,15 @@ class MockContactDao implements IContactDao {
 
   @Override
   public List<IContactDto> fetchContactByName(String firstName, String lastName) {
+    final String finalFirstName = firstName == null ? null : firstName.toLowerCase();
+    final String finalLastName = lastName == null ? null : lastName.toLowerCase();
+
     return contactList.stream()
         .filter(searched ->
-                    (firstName == null || searched.getFirstName().equalsIgnoreCase(firstName))
-                    && (lastName == null || searched.getLastName().equalsIgnoreCase(lastName)))
+                    (finalFirstName == null || searched.getFirstName().toLowerCase()
+                        .contains(finalFirstName))
+                    && (finalLastName == null || searched.getLastName().toLowerCase()
+                        .contains(finalLastName)))
         .collect(Collectors.toList());
   }
 
