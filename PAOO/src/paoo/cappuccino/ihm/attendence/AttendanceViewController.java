@@ -161,7 +161,7 @@ public class AttendanceViewController extends JPanel implements ChangeListener {
 
     }
 
-    System.out.println("changement entreprises");
+
     List<ICompanyDto> companyList = companyUcc.getAllCompanies();// TODO chose them
     comboCompanyPanel.removeAll();
     if (companyList.size() == 0) {
@@ -176,7 +176,7 @@ public class AttendanceViewController extends JPanel implements ChangeListener {
     }
     comboCompanyPanel.repaint();
 
-    System.out.println("changement contacts");
+
     if (model.getSelectedCompany() != null) {
       modelTable.changeData(contactUcc.getContactByCompany(model.getSelectedCompany().getId()));
     }

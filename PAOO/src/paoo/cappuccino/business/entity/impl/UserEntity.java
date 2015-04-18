@@ -106,4 +106,23 @@ final class UserEntity extends BaseEntity implements IUser {
   public boolean equals(Object obj) {
     return obj instanceof IUserDto && ((IUserDto) obj).getId() == this.getId();
   }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
+
+  @Override
+  public String toString() {
+    return "UserEntity{"
+           + "hasher=" + hasher
+           + ", username='" + username + '\''
+           + ", password=" + password
+           + ", lastName='" + lastName + '\''
+           + ", firstName='" + firstName + '\''
+           + ", email='" + email + '\''
+           + ", registerDate=" + registerDate
+           + ", role=" + role
+           + '}';
+  }
 }

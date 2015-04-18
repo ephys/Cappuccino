@@ -87,6 +87,11 @@ final class CompanyEntity extends BaseEntity implements ICompany {
   }
 
   @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
+
+  @Override
   public String toString() {
     return "CompanyEntity{"
            + "name='" + name + '\''

@@ -42,6 +42,11 @@ final class BusinessDayEntity extends BaseEntity implements IBusinessDay {
   }
 
   @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
+
+  @Override
   public String toString() {
     return "BusinessDayEntity{"
            + "eventDate=" + eventDate

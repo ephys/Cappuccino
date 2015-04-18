@@ -57,7 +57,7 @@ class CompanyDao implements ICompanyDao {
       if (psCreateCompany == null) {
         psCreateCompany = dalBackend.fetchPreparedStatement(query);
       }
-      System.out.println(psCreateCompany.toString());
+
       psCreateCompany.setInt(1, company.getCreator());
       psCreateCompany.setString(2, company.getName());
       psCreateCompany.setString(3, company.getAddressStreet());
@@ -252,7 +252,7 @@ class CompanyDao implements ICompanyDao {
       if (psFetchInvitableCompanies == null) {
         psFetchInvitableCompanies = dalBackend.fetchPreparedStatement(query);
       }
-      System.out.println(psFetchInvitableCompanies.toString());
+
       try (ResultSet rs = psFetchInvitableCompanies.executeQuery()) {
         List<ICompanyDto> companiesList = new ArrayList<>();
         while (rs.next()) {

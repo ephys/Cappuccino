@@ -1,6 +1,7 @@
 package paoo.cappuccino.util;
 
 import java.util.Random;
+import java.util.regex.Pattern;
 
 /**
  * Utility methods callable for strings.
@@ -9,8 +10,11 @@ import java.util.Random;
  */
 public class StringUtils {
 
-  private static final String EMAIL_REGEX =
-      "^([a-zA-Z0-9][+a-zA-Z0-9_.-]*)+@([a-zA-Z0-9][a-zA-Z0-9_.-]*)+\\.[a-zA-Z]{2,3}$";
+  private static final Pattern NUM_REGEX = Pattern.compile("^[a-zA-Z]*$");
+  private static final Pattern ALPHA_REGEX = Pattern.compile("^[a-zA-Z]*$");
+  private static final Pattern NONEMPTY_REGEX = Pattern.compile("\\S+");
+  private static final Pattern EMAIL_REGEX = Pattern.compile(
+      "^([a-zA-Z0-9][+a-zA-Z0-9_.-]*)+@([a-zA-Z0-9][a-zA-Z0-9_.-]*)+\\.[a-zA-Z]{2,3}$");
 
   private static final Random random = new Random();
 
@@ -21,7 +25,7 @@ public class StringUtils {
    * @return true if the string contains only letters, false otherwise.
    */
   public static boolean isAlphaString(String str) {
-    return str.matches("^[a-zA-Z]*$");
+    return ALPHA_REGEX.matcher(str).matches();
   }
 
   /**
@@ -30,8 +34,8 @@ public class StringUtils {
    * @param str The string to check.
    * @return true if the string contains only numbers, false otherwise.
    */
-  public static boolean isNumeriC(String str) {
-    return str.matches("^[0-9]*$");
+  public static boolean isNumeric(String str) {
+    return NUM_REGEX.matcher(str).matches();
   }
 
   /**
@@ -41,8 +45,8 @@ public class StringUtils {
    * @return true if the string is an email, false otherwise.
    */
   public static boolean isEmail(String str) {
-    // are we allowed to use libraries ? Because we shouldn't handle this ourselves
-    return str.matches(EMAIL_REGEX);
+    // TODO (post-school) We shouldn't handle this ourselves, use a lib.
+    return EMAIL_REGEX.matcher(str).matches();
   }
 
   /**
@@ -53,6 +57,8 @@ public class StringUtils {
    * @return true if the string is a password, false otherwise.
    */
   public static boolean isValidPassword(char[] str) {
+    // TODO (post-school) note: implement something to ensure a high entropy ?
+    // http://en.wikipedia.org/wiki/Password_strength
     return str.length >= 6;
   }
 
@@ -63,7 +69,10 @@ public class StringUtils {
    * @return true if the string contains non-space characters, false otherwise.
    */
   public static boolean isEmpty(String str) {
-    return str == null || str.trim().length() == 0;
+    // TODO (post-school) note: this does not match unicode whitespaces, consider using a lib.
+    return str == null || !NONEMPTY_REGEX.matcher(str).matches();
+
+    //return str == null || str.trim().length() == 0;
   }
 
   /**

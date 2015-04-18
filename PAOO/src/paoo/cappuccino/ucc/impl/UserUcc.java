@@ -4,7 +4,6 @@ import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.IUser;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
-import paoo.cappuccino.dal.IDalService;
 import paoo.cappuccino.dal.dao.IUserDao;
 import paoo.cappuccino.ucc.IUserUcc;
 import paoo.cappuccino.util.StringUtils;
@@ -21,7 +20,7 @@ class UserUcc implements IUserUcc {
   private final IUserDao userDao;
 
   @Inject
-  public UserUcc(IEntityFactory entityFactory, IDalService dalService, IUserDao userDao) {
+  public UserUcc(IEntityFactory entityFactory, IUserDao userDao) {
     this.entityFactory = entityFactory;
     this.userDao = userDao;
   }

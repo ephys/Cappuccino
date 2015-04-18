@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -58,7 +59,7 @@ class CrashWriter implements CrashListener {
 
       writer.close();
     } catch (IOException e) {
-      e.printStackTrace();
+      appContext.getAppLogger().log(Level.SEVERE, "Could not create crash report", e);
 
       return null;
     }
@@ -78,7 +79,6 @@ class CrashWriter implements CrashListener {
     } else {
       logger.severe("The details could not be saved, the crash-reports folder "
                     + REPORTS_FOLDER.getAbsolutePath() + " cannot be created");
-      crashSource.printStackTrace();
     }
   }
 }

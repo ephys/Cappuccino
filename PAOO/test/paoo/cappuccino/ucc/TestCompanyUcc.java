@@ -202,7 +202,7 @@ public class TestCompanyUcc {
   // ====================== getCompanyByDay
 
   @Test()
-  public void TestGetCompanyByDay() {
+  public void testGetCompanyByDay() {
     assertNotNull(companyUcc.getCompaniesByDay(1));
   }
 

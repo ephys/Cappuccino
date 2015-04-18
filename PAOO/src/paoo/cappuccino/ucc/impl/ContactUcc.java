@@ -6,7 +6,6 @@ import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.entity.IContact;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
-import paoo.cappuccino.dal.IDalService;
 import paoo.cappuccino.dal.dao.IContactDao;
 import paoo.cappuccino.ucc.IContactUcc;
 import paoo.cappuccino.util.StringUtils;
@@ -18,7 +17,7 @@ class ContactUcc implements IContactUcc {
   private final IContactDao dao;
 
   @Inject
-  public ContactUcc(IEntityFactory entityFactory, IDalService dalService, IContactDao contactDao) {
+  public ContactUcc(IEntityFactory entityFactory, IContactDao contactDao) {
     this.factory = entityFactory;
     this.dao = contactDao;
   }

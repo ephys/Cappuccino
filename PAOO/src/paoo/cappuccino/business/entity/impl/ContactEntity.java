@@ -90,6 +90,11 @@ final class ContactEntity extends BaseEntity implements IContact {
   }
 
   @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
+
+  @Override
   public String toString() {
     return "ContactEntity{"
            + "companyId=" + companyId

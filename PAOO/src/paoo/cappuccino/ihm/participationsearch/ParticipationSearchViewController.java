@@ -25,15 +25,15 @@ public class ParticipationSearchViewController extends JPanel {
 
   /**
    * Creates a view controller for the participation search view.
-   * @param model The model of the view.
-   * @param menu The model of the menu.
+   *
+   * @param model          The model of the view.
+   * @param menu           The model of the menu.
    * @param businessDayUcc The app instance of the business day ucc.
-   * @param companyUcc The app instance of the company ucc.
+   * @param companyUcc     The app instance of the company ucc.
    */
   public ParticipationSearchViewController(ParticipationSearchModel model, MenuModel menu,
                                            IBusinessDayUcc businessDayUcc,
                                            ICompanyUcc companyUcc) {
-
     super(new BorderLayout());
     this.model = model;
 

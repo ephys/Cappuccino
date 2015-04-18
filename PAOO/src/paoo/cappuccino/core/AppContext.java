@@ -24,12 +24,12 @@ import paoo.cappuccino.util.exception.FatalException;
  */
 public class AppContext {
 
-  private List<CrashListener> crashListeners = new ArrayList<>();
-  private Logger appLogger;
-  private Profile profileType = Profile.PROD;
-  private String profile = "prod";
-  private String appName;
-  private String version;
+  private final List<CrashListener> crashListeners = new ArrayList<>();
+  private final Logger appLogger;
+  private final Profile profileType;
+  private final String profile;
+  private final String appName;
+  private final String version;
 
   /**
    * Configures the environment using an hardcoded profile.
@@ -41,15 +41,13 @@ public class AppContext {
   public AppContext(String appName, String version, String profile) {
     addCrashListener(new CrashWriter(this));
 
-    if (profile != null) {
-      this.profile = profile;
-    }
+    this.profile = profile == null ? "prod" : profile;
+    this.profileType = fetchProfile();
 
     this.appName = appName;
     this.version = version;
 
-    initLogger();
-    fetchProfile();
+    appLogger = initLogger();
     initGlobalCatcher();
   }
 
@@ -66,13 +64,13 @@ public class AppContext {
   /**
    * Parses the profile name and extrapolates the profile type from it.
    */
-  private void fetchProfile() {
+  private Profile fetchProfile() {
     if (profile.startsWith("prod")) {
-      profileType = Profile.PROD;
+      return Profile.PROD;
     } else if (profile.startsWith("dev")) {
-      profileType = Profile.DEV;
+      return Profile.DEV;
     } else {
-      profileType = Profile.TEST;
+      return Profile.TEST;
     }
   }
 
@@ -81,7 +79,7 @@ public class AppContext {
    */
   private void initGlobalCatcher() {
     Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
-      exception.printStackTrace();
+      appLogger.log(Level.SEVERE, "Fatal exception", exception);
 
       for (CrashListener listener : crashListeners) {
         listener.onCrash(exception);
@@ -94,8 +92,8 @@ public class AppContext {
   /**
    * Setups the application main logger.
    */
-  private void initLogger() {
-    appLogger = Logger.getLogger(appName);
+  private Logger initLogger() {
+    Logger appLogger = Logger.getLogger(appName);
 
     try {
       Formatter formatter = new Formatter() {
@@ -103,7 +101,7 @@ public class AppContext {
         public String format(LogRecord record) {
           StringBuilder str = new StringBuilder();
 
-          str.append("[")
+          str.append('[')
               .append(LocalDateTime.now()
                           .format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
               .append("][").append(record.getLoggerName()).append("][")
@@ -149,6 +147,8 @@ public class AppContext {
     } catch (IOException e) {
       throw new FatalException("Could not setup the application logger", e);
     }
+
+    return appLogger;
   }
 
   /**
