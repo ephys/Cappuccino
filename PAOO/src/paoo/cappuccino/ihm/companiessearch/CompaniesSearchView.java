@@ -15,6 +15,7 @@ import javax.swing.table.TableColumn;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IUserDto;
+import paoo.cappuccino.ihm.util.LocalizationUtil;
 import paoo.cappuccino.ihm.util.cellrenderers.CompanyCellRenderer;
 import paoo.cappuccino.ihm.util.cellrenderers.DateCellRenderer;
 import paoo.cappuccino.ucc.ICompanyUcc;
@@ -120,7 +121,7 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
       }
 
       tableModel.setValueAt(company, i, 0);
-      tableModel.setValueAt(company.getAddressTown(), i, 1);
+      tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i, 1);
       tableModel.setValueAt(company.getRegisterDate(), i, 2);
       tableModel.setValueAt(creatorName, i, 3);
     }

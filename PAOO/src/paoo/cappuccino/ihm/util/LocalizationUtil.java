@@ -3,6 +3,7 @@ package paoo.cappuccino.ihm.util;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
 
 /**
@@ -21,5 +22,10 @@ public final class LocalizationUtil {
 
   public static String localizeDate(LocalDateTime date) {
     return date.format(formatter);
+  }
+
+  public static String localizeAddress(ICompanyDto company) {
+    return company.getAddressNum() + " " + company.getAddressStreet() + ", "
+           + company.getAddressPostcode() + " " + company.getAddressTown();
   }
 }

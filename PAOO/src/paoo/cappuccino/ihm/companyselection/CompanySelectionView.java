@@ -13,6 +13,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.ihm.util.LocalizationUtil;
 import paoo.cappuccino.ihm.util.cellrenderers.CompanyCellRenderer;
 import paoo.cappuccino.ihm.util.cellrenderers.DateCellRenderer;
 import paoo.cappuccino.ucc.ICompanyUcc;
@@ -64,11 +65,13 @@ public class CompanySelectionView extends JPanel {
       }
     };
 
+    companiesTable.setRowHeight(35);
+
     for (int i = 0; i < invitableCompanies.size(); i++) {
       ICompanyDto company = invitableCompanies.get(i);
 
       tableModel.setValueAt(company, i, 0);
-      tableModel.setValueAt(company.getAddressTown(), i, 1);
+      tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i, 1);
       tableModel.setValueAt(company.getRegisterDate(), i, 2);
       tableModel.setValueAt(false, i, 3);
     }

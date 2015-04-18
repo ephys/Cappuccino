@@ -65,7 +65,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
   /**
    * Creates a view controller for the participation modification screen.
-   * 
+   *
    * @param model The model of the view.
    * @param menu The model of the menu.
    * @param guiManager The app gui manager.
@@ -246,8 +246,8 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
   @Override
   public void stateChanged(ChangeEvent event) {
-    if (viewModel.getSelectedDay() != null
-        && !viewModel.getSelectedDay().equals(dayList.getCombo().getSelectedItem())) {
+    if (viewModel.getSelectedDay() == null
+        || !viewModel.getSelectedDay().equals(dayList.getCombo().getSelectedItem())) {
       dayList.getCombo().setSelectedItem(viewModel.getSelectedDay());
     }
 

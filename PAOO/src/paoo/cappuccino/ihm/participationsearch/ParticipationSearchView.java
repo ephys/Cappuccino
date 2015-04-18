@@ -15,6 +15,7 @@ import javax.swing.table.TableColumn;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
+import paoo.cappuccino.ihm.util.LocalizationUtil;
 import paoo.cappuccino.ihm.util.cellrenderers.CompanyCellRenderer;
 import paoo.cappuccino.ihm.util.cellrenderers.DateCellRenderer;
 import paoo.cappuccino.ihm.util.cellrenderers.StateCellRenderer;
@@ -116,7 +117,7 @@ public class ParticipationSearchView extends JPanel implements ChangeListener {
       ICompanyDto company = companyUcc.getCompanyById(participation.getCompany());
 
       tableModel.setValueAt(company, i, 0);
-      tableModel.setValueAt(company.getAddressTown(), i, 1);
+      tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i, 1);
       tableModel.setValueAt(company.getRegisterDate(), i, 2);
       tableModel.setValueAt(participation.getState(), i, 3);
     }
