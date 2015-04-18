@@ -120,12 +120,12 @@
                                 <fileset dir="${lib.dir}" includes="**/*.jar" />
                                 <fileset dir="${dist}/lib" includes="**/*.jar" />
                                 <fileset dir="/var/lib/jenkins/extra/lib" includes="*.jar" />
-								<excludes>
-									<exclude>src/paoo.cappuccino/core/**/*.class</exclude>
-									<exclude>src/paoo.cappuccino/dal/**/*.class</exclude>
-									<exclude>src/paoo.cappuccino/ihm/**/*.class</exclude>
-									<exclude>src/paoo.cappuccino/util/**/*.class</exclude>
-								</excludes>
+								<ignores>
+									<ignores>src/paoo.cappuccino/core/**/*.class</ignores>
+									<ignores>src/paoo.cappuccino/dal/**/*.class</ignores>
+									<ignores>src/paoo.cappuccino/ihm/**/*.class</ignores>
+									<ignores>src/paoo.cappuccino/util/**/*.class</ignores>
+								</ignores>
                         </classpath>
                         <formatter type="xml" />
                         <batchtest todir="${dist}/junit">
