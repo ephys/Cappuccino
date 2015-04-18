@@ -83,14 +83,11 @@ class CappuccinoIhm implements IGuiManager {
       protected void dispatchEvent(AWTEvent newEvent) {
         try {
           super.dispatchEvent(newEvent);
-        } catch (Throwable t) {
-          // Only rethrow exception that are meant to crash the application.
-          if (t instanceof FatalException) {
-            throw t;
-          }
-
-          logger.log(Level.SEVERE, "An exception has been caught by the Gui Manager", t);
-          displayException(t);
+        } catch (FatalException appKiller) {
+          throw appKiller;
+        } catch (Throwable exceptions) {
+          logger.log(Level.SEVERE, "An exception has been caught by the Gui Manager", exceptions);
+          displayException(exceptions);
         }
       }
     });
