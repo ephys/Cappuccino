@@ -12,6 +12,8 @@ import paoo.cappuccino.ihm.companyselection.CompanySelectionModel;
 import paoo.cappuccino.ihm.companyselection.CompanySelectionViewController;
 import paoo.cappuccino.ihm.contactdetails.ContactDetailsModel;
 import paoo.cappuccino.ihm.contactdetails.ContactDetailsViewController;
+import paoo.cappuccino.ihm.contactsearch.ContactSearchModel;
+import paoo.cappuccino.ihm.contactsearch.ContactSearchViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.home.HomeModel;
 import paoo.cappuccino.ihm.home.HomeViewController;
@@ -50,6 +52,7 @@ public class ViewControllerFactory {
   private final CompanyDetailsModel modelCompanyDetails = new CompanyDetailsModel();
   private final ContactDetailsModel modelContactDetails = new ContactDetailsModel();
   private final CompaniesSearchModel modelSearchCompanies = new CompaniesSearchModel();
+  private final ContactSearchModel modelSearchContact = new ContactSearchModel();
 
   /**
    * Creates the view factory with all the dependencies required by the views.
@@ -109,6 +112,10 @@ public class ViewControllerFactory {
       case SEARCH_COMPANY:
         return new CompaniesSearchViewController(modelSearchCompanies, menuModel, companyUcc,
             userUcc);
+
+      case SEARCH_CONTACT:
+        return new ContactSearchViewController(modelSearchContact, menuModel, companyUcc,
+            contactUcc);
 
       default:
         throw new UnsupportedOperationException("Could not open page \"" + page.getTitle()

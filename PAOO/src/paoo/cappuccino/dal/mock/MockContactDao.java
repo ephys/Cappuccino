@@ -25,12 +25,12 @@ class MockContactDao implements IContactDao {
   public MockContactDao(IEntityFactory factory) {
     this.factory = factory;
 
-    createContact(factory.createContact(1, "LIF@gmail.com", "Paul", "Pierre", "02/124.23.18"));
+    createContact(factory.createContact(1, "LIF@gmail.com", "Lambin", "Paul", "02/124.23.18"));
     createContact(factory.createContact(1, "JeanLouis@gmail.com", "Louis", "Jean", "02/122.32.18"));
-    createContact(factory.createContact(1, "AlfredChandleur@gmail.com", "Chandleur",
-                                        "Alfred", "02/237.42.79"));
+    createContact(factory.createContact(1, "AlfredChandleur@gmail.com", "Chandleur", "Alfred",
+        "02/237.42.79"));
     createContact(factory.createContact(1, "Contact@gmail.com", "ContactFirstname",
-                                        "ContactLasttname", "0488899999"));
+        "ContactLastname", "0488899999"));
   }
 
   @Override
@@ -52,10 +52,10 @@ class MockContactDao implements IContactDao {
       throw new ConcurrentModificationException("Version mismatch");
     }
 
-    IContact contactEntity = factory.createContact(contact.getId(), contact.getVersion() + 1,
-                                                   contact.getCompany(), contact.getEmail(),
-                                                   contact.isEmailValid(), contact.getFirstName(),
-                                                   contact.getLastName(), contact.getPhone());
+    IContact contactEntity =
+        factory.createContact(contact.getId(), contact.getVersion() + 1, contact.getCompany(),
+            contact.getEmail(), contact.isEmailValid(), contact.getFirstName(),
+            contact.getLastName(), contact.getPhone());
 
     contactList.set(contact.getId() - 1, contactEntity);
     if (contact instanceof IContact) {
@@ -68,19 +68,18 @@ class MockContactDao implements IContactDao {
     final String finalFirstName = firstName == null ? null : firstName.toLowerCase();
     final String finalLastName = lastName == null ? null : lastName.toLowerCase();
 
-    return contactList.stream()
-        .filter(searched ->
-                    (finalFirstName == null || searched.getFirstName().toLowerCase()
-                        .contains(finalFirstName))
-                    && (finalLastName == null || searched.getLastName().toLowerCase()
-                        .contains(finalLastName)))
-        .collect(Collectors.toList());
+    return contactList
+        .stream()
+        .filter(
+            searched -> (finalFirstName == null || searched.getFirstName().toLowerCase()
+                .contains(finalFirstName))
+                && (finalLastName == null || searched.getLastName().toLowerCase()
+                    .contains(finalLastName))).collect(Collectors.toList());
   }
 
   @Override
   public List<IContactDto> fetchContactsByCompany(int companyId) {
-    return contactList.stream()
-        .filter(searched -> searched.getCompany() == companyId)
+    return contactList.stream().filter(searched -> searched.getCompany() == companyId)
         .collect(Collectors.toList());
   }
 }
