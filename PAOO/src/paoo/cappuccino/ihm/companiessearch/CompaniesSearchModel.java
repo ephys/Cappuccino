@@ -4,7 +4,11 @@ import paoo.cappuccino.ihm.util.BaseModel;
 
 
 public class CompaniesSearchModel extends BaseModel {
-  private String name, postCode, town, street;
+
+  private String name;
+  private String postCode;
+  private String town;
+  private String street;
 
   public String getName() {
     return name;
@@ -41,7 +45,4 @@ public class CompaniesSearchModel extends BaseModel {
     this.street = street;
     dispatchChangeEvent();
   }
-
-
-
 }

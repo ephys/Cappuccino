@@ -118,7 +118,10 @@ public class CompanySelectionViewController extends JPanel {
         this.businessDayUcc.addInvitedCompanies(
             selectedCompanies.toArray(new ICompanyDto[selectedCompanies.size()]),
                                                 model.getSelectedDay());
-        this.menu.setCurrentPage(MenuEntry.HOME, model.getSelectedDay());
+
+        IBusinessDayDto selectedDay = model.getSelectedDay();
+        model.setSelectedDay(null);
+        this.menu.setCurrentPage(MenuEntry.HOME, selectedDay);
       }
     });
 
@@ -163,6 +166,14 @@ public class CompanySelectionViewController extends JPanel {
 
       if (!(boolean) companiesTable.getValueAt(e.getFirstRow(), 3)) {
         selectAllButton.setSelected(false);
+      } else {
+        for (int i = 0; i < companiesTable.getRowCount(); i++) {
+          if (!(boolean) companiesTable.getValueAt(i, 3)) {
+            return;
+          }
+
+          selectAllButton.setSelected(true);
+        }
       }
     });
 

@@ -55,12 +55,12 @@ public class Main extends BaseMain {
 
       @Override
       public String getFirstName() {
-        return "John";
+        return "Nicolas";
       }
 
       @Override
       public String getLastName() {
-        return "Smith";
+        return "Fisher";
       }
 
       @Override
