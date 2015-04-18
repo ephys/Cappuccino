@@ -22,11 +22,9 @@ import paoo.cappuccino.ucc.IContactUcc;
 @SuppressWarnings("serial")
 public class ContactSearchViewController extends JPanel {
 
-  private final ContactSearchModel model;
-
   /**
-   * Creates a view controller for the participation search view.
-   * 
+   * Creates a view controller for the contact search view.
+   *
    * @param model The model of the view.
    * @param menu The model of the menu.
    * @param companyUcc The app instance of the company ucc.
@@ -35,8 +33,6 @@ public class ContactSearchViewController extends JPanel {
       ICompanyUcc companyUcc, IContactUcc contactUcc) {
 
     super(new BorderLayout());
-    this.model = model;
-
 
     // first name
     JPanel panelFirstName = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -45,7 +41,7 @@ public class ContactSearchViewController extends JPanel {
     firstNameField.setText(model.getFirstName());
     firstNameField.addKeyListener(new KeyAdapter() {
       @Override
-      public void keyReleased(KeyEvent e) {
+      public void keyReleased(KeyEvent event) {
         model.setFirstName(firstNameField.getText());
       }
     });
@@ -58,7 +54,7 @@ public class ContactSearchViewController extends JPanel {
     lastNameField.setText(model.getLastName());
     lastNameField.addKeyListener(new KeyAdapter() {
       @Override
-      public void keyReleased(KeyEvent e) {
+      public void keyReleased(KeyEvent event) {
         model.setLastName(lastNameField.getText());
       }
     });
@@ -67,8 +63,6 @@ public class ContactSearchViewController extends JPanel {
     JPanel searchingPanel = new JPanel(new GridLayout(1, 0));
     searchingPanel.add(panelLastName);
     searchingPanel.add(panelFirstName);
-
-
 
     ContactSearchView view = new ContactSearchView(model, contactUcc, companyUcc);
     JTable table = view.getTable();

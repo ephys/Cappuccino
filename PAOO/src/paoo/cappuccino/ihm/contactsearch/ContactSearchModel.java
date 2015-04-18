@@ -2,9 +2,10 @@ package paoo.cappuccino.ihm.contactsearch;
 
 import paoo.cappuccino.ihm.util.BaseModel;
 
-
 public class ContactSearchModel extends BaseModel {
-  private String firstName, lastName;
+
+  private String firstName;
+  private String lastName;
 
   public String getFirstName() {
     return firstName;
@@ -23,7 +24,4 @@ public class ContactSearchModel extends BaseModel {
     this.lastName = lastName;
     dispatchChangeEvent();
   }
-
-
-
 }

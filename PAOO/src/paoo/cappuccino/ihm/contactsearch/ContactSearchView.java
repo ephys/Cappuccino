@@ -32,7 +32,14 @@ public class ContactSearchView extends JPanel implements ChangeListener {
   private boolean removedWidget;
   private JPanel centerPadding;
 
-  public ContactSearchView(ContactSearchModel model, IContactUcc contactUcc, ICompanyUcc companyUcc) {
+  /**
+   * Creates a new View for the contact search screen.
+   * @param model The model of the view.
+   * @param contactUcc The app instance of the contact ucc.
+   * @param companyUcc The app instance of the company ucc.
+   */
+  public ContactSearchView(ContactSearchModel model, IContactUcc contactUcc,
+                           ICompanyUcc companyUcc) {
 
     setLayout(new BorderLayout());
     this.model = model;
@@ -56,7 +63,6 @@ public class ContactSearchView extends JPanel implements ChangeListener {
     TableColumn companyCol = table.getColumn(tableTitles[2]);
     companyCol.setCellRenderer(new CompanyCellRenderer());
 
-
     this.scrollPane = new JScrollPane(table);
     this.add(scrollPane);
     this.model.addChangeListener(this);
@@ -69,10 +75,11 @@ public class ContactSearchView extends JPanel implements ChangeListener {
     List<IContactDto> contacts =
         contactUcc.searchContact(model.getFirstName(), model.getLastName());
 
-    if (contacts != null && contacts.size() != 0) {
+    if (contacts.size() != 0) {
       if (this.removedWidget) {
         this.remove(this.centerPadding);
         this.add(this.scrollPane);
+
         this.removedWidget = false;
         this.revalidate();
         this.repaint();
@@ -82,17 +89,16 @@ public class ContactSearchView extends JPanel implements ChangeListener {
     } else {
       if (!this.removedWidget) {
         this.centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
         centerPadding.add(new JLabel("Il n'y a aucun contact correspondant"));
 
         this.remove(this.scrollPane);
         this.add(centerPadding);
-        this.removedWidget = true;
 
+        this.removedWidget = true;
+        this.revalidate();
+        this.repaint();
       }
     }
-    this.revalidate();
-    this.repaint();
   }
 
   JTable getTable() {
@@ -113,6 +119,4 @@ public class ContactSearchView extends JPanel implements ChangeListener {
       tableModel.setValueAt(contact.getPhone(), i, 4);
     }
   }
-
-
 }
