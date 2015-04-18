@@ -107,7 +107,7 @@ public class ContactSearchView extends JPanel implements ChangeListener {
       ICompanyDto company = companyUcc.getCompanyById(contact.getCompany());
 
       tableModel.setValueAt(contact, i, 0);
-      tableModel.setValueAt(contact.getLastName(), i, 1);
+      tableModel.setValueAt(contact.getFirstName(), i, 1);
       tableModel.setValueAt(company, i, 2);
       tableModel.setValueAt(contact.getEmail(), i, 3);
       tableModel.setValueAt(contact.getPhone(), i, 4);
