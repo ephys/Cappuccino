@@ -70,7 +70,7 @@ public class StringUtils {
    */
   public static boolean isEmpty(String str) {
     // TODO (post-school) note: this does not match unicode whitespaces, consider using a lib.
-    return str == null || !NONEMPTY_REGEX.matcher(str).matches();
+    return str == null || !NONEMPTY_REGEX.matcher(str).find();
 
     //return str == null || str.trim().length() == 0;
   }
