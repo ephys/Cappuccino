@@ -85,4 +85,18 @@ final class CompanyEntity extends BaseEntity implements ICompany {
   public boolean equals(Object obj) {
     return obj instanceof ICompanyDto && ((ICompanyDto) obj).getId() == this.getId();
   }
+
+  @Override
+  public String toString() {
+    return "CompanyEntity{"
+           + "name='" + name + '\''
+           + ", registerDate=" + registerDate
+           + ", creatorId=" + creatorId
+           + ", addressStreet='" + addressStreet + '\''
+           + ", addressNum='" + addressNum + '\''
+           + ", addressMailbox='" + addressMailbox + '\''
+           + ", addressPostcode='" + addressPostcode + '\''
+           + ", addressTown='" + addressTown + '\''
+           + '}';
+  }
 }

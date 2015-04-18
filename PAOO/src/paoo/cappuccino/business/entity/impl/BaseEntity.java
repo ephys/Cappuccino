@@ -35,4 +35,9 @@ abstract class BaseEntity implements IBaseEntity {
   public int incrementVersion() {
     return ++this.version;
   }
+
+  @Override
+  public int hashCode() {
+    return id;
+  }
 }

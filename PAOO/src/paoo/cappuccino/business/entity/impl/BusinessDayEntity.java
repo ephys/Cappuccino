@@ -40,4 +40,12 @@ final class BusinessDayEntity extends BaseEntity implements IBusinessDay {
   public boolean equals(Object obj) {
     return obj instanceof IBusinessDayDto && ((IBusinessDayDto) obj).getId() == this.getId();
   }
+
+  @Override
+  public String toString() {
+    return "BusinessDayEntity{"
+           + "eventDate=" + eventDate
+           + ", creationDate=" + creationDate
+           + '}';
+  }
 }

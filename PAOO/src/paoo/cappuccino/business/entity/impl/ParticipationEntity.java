@@ -93,4 +93,22 @@ final class ParticipationEntity implements IParticipation {
            && ((IParticipationDto) obj).getCompany() == this.getCompany()
            && ((IParticipationDto) obj).getBusinessDay() == this.getBusinessDay();
   }
+
+  @Override
+  public int hashCode() {
+    int result = businessDay;
+    result = 31 * result + company;
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "ParticipationEntity{"
+           + "state=" + state
+           + ", businessDay=" + businessDay
+           + ", company=" + company
+           + ", version=" + version
+           + ", cancelled=" + cancelled
+           + '}';
+  }
 }

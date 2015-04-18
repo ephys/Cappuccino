@@ -88,4 +88,16 @@ final class ContactEntity extends BaseEntity implements IContact {
   public boolean equals(Object obj) {
     return obj instanceof IContactDto && ((IContactDto) obj).getId() == this.getId();
   }
+
+  @Override
+  public String toString() {
+    return "ContactEntity{"
+           + "companyId=" + companyId
+           + ", firstName='" + firstName + '\''
+           + ", lastName='" + lastName + '\''
+           + ", phone='" + phone + '\''
+           + ", email='" + email + '\''
+           + ", emailValid=" + emailValid
+           + '}';
+  }
 }
