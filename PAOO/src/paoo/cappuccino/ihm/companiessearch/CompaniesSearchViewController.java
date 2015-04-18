@@ -22,11 +22,9 @@ import paoo.cappuccino.ucc.IUserUcc;
 @SuppressWarnings("serial")
 public class CompaniesSearchViewController extends JPanel {
 
-  private final CompaniesSearchModel model;
-
   /**
    * Creates a view controller for the participation search view.
-   * 
+   *
    * @param model The model of the view.
    * @param menu The model of the menu.
    * @param companyUcc The app instance of the company ucc.
@@ -35,8 +33,6 @@ public class CompaniesSearchViewController extends JPanel {
       ICompanyUcc companyUcc, IUserUcc userUcc) {
 
     super(new BorderLayout());
-    this.model = model;
-
 
     // name
     JPanel panelName = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -45,7 +41,7 @@ public class CompaniesSearchViewController extends JPanel {
     nameField.setText(model.getName());
     nameField.addKeyListener(new KeyAdapter() {
       @Override
-      public void keyReleased(KeyEvent e) {
+      public void keyReleased(KeyEvent event) {
         model.setName(nameField.getText());
       }
     });
@@ -58,7 +54,7 @@ public class CompaniesSearchViewController extends JPanel {
     postCodeField.setText(model.getPostCode());
     postCodeField.addKeyListener(new KeyAdapter() {
       @Override
-      public void keyReleased(KeyEvent e) {
+      public void keyReleased(KeyEvent event) {
         model.setPostCode(postCodeField.getText());
       }
     });
@@ -71,7 +67,7 @@ public class CompaniesSearchViewController extends JPanel {
     townField.setText(model.getTown());
     townField.addKeyListener(new KeyAdapter() {
       @Override
-      public void keyReleased(KeyEvent e) {
+      public void keyReleased(KeyEvent event) {
         model.setTown(townField.getText());
       }
     });
@@ -84,13 +80,11 @@ public class CompaniesSearchViewController extends JPanel {
     streetField.setText(model.getStreet());
     streetField.addKeyListener(new KeyAdapter() {
       @Override
-      public void keyReleased(KeyEvent e) {
+      public void keyReleased(KeyEvent event) {
         model.setStreet(streetField.getText());
       }
     });
     panelStreet.add(streetField);
-
-
 
     JPanel searchingPanel = new JPanel(new GridLayout(0, 2));
     searchingPanel.add(panelName);

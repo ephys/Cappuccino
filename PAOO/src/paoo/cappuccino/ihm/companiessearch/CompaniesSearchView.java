@@ -33,10 +33,11 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
   private JPanel centerPadding;
 
   /**
-   * Creates a view for the participation search screen.
-   * 
-   * @param model The model of the view.
+   * Creates a view for the company search screen.
+   *
+   * @param model      The model of the view.
    * @param companyUcc The app instance of the company ucc.
+   * @param userUcc    The app instance of the user ucc.
    */
   public CompaniesSearchView(CompaniesSearchModel model, ICompanyUcc companyUcc, IUserUcc userUcc) {
 
@@ -45,10 +46,8 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
     this.companyUcc = companyUcc;
     this.userUcc = userUcc;
 
-
-    String[] tableTitles =
-        new String[] {"Nom entreprise", "Adresse entreprise", "Date d'enregistrement",
-            "Enregistreur"};
+    String[] tableTitles = new String[]{"Nom entreprise", "Adresse entreprise",
+                                        "Date d'enregistrement", "Enregistreur"};
     this.tableModel = new DefaultTableModel(tableTitles, 0) {
       @Override
       public boolean isCellEditable(int row, int column) {
@@ -64,7 +63,6 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
     TableColumn dateCol = table.getColumn(tableTitles[2]);
     dateCol.setCellRenderer(new DateCellRenderer());
 
-
     this.scrollPane = new JScrollPane(table);
     this.add(scrollPane);
     this.model.addChangeListener(this);
@@ -76,12 +74,13 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
 
     List<ICompanyDto> companies =
         companyUcc.searchCompanies(model.getName(), model.getPostCode(), model.getTown(),
-            model.getStreet());
+                                   model.getStreet());
 
     if (companies != null && companies.size() != 0) {
       if (this.removedWidget) {
         this.remove(this.centerPadding);
         this.add(this.scrollPane);
+
         this.removedWidget = false;
         this.revalidate();
         this.repaint();
@@ -96,12 +95,13 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
 
         this.remove(this.scrollPane);
         this.add(centerPadding);
-        this.removedWidget = true;
 
+        this.removedWidget = true;
+        this.revalidate();
+        this.repaint();
       }
     }
-    this.revalidate();
-    this.repaint();
+
   }
 
   JTable getTable() {
@@ -118,12 +118,11 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
       if (creator != null) {
         creatorName = creator.getUsername();
       }
+
       tableModel.setValueAt(company, i, 0);
       tableModel.setValueAt(company.getAddressTown(), i, 1);
       tableModel.setValueAt(company.getRegisterDate(), i, 2);
       tableModel.setValueAt(creatorName, i, 3);
     }
   }
-
-
 }
