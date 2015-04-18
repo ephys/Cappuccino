@@ -27,7 +27,12 @@ public class NewCompanyView extends JPanel implements ChangeListener {
   private final ErrorableTextField cityPanel;
   private final ErrorableTextField streetPanel;
 
-  private GridBagConstraints makeGbc(int fieldNum) {
+  /**
+   * Creates a gridbag constraint for a vertical grid.
+   * @param fieldNum The row num in the grid.
+   * @return The gridbag constraint.
+   */
+  public static GridBagConstraints makeGbc(int fieldNum) {
     GridBagConstraints gbc = new GridBagConstraints();
 
     gbc.gridwidth = GridBagConstraints.REMAINDER;

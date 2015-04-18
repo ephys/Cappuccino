@@ -1,19 +1,21 @@
 package paoo.cappuccino.ihm.newcontact;
 
+import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.ihm.core.Initializable;
 import paoo.cappuccino.ihm.util.BaseModel;
 
 /**
- * Model for the new Company View/ViewController.
+ * Model for the new contact screen.
  *
  * @author Opsomer mathias
  */
-public class NewContactModel extends BaseModel {
+public class NewContactModel extends BaseModel implements Initializable {
 
   private String firstNameError;
   private String lastNameError;
   private String mailError;
-  private String phoneError;
-
+  private ICompanyDto companyDto;
+  private String companyError;
 
   public String getFirstNameError() {
     return firstNameError;
@@ -27,45 +29,48 @@ public class NewContactModel extends BaseModel {
     return mailError;
   }
 
-  public String getPhoneError() {
-    return phoneError;
-  }
+  /**
+   * Sets the errors relative to the fields of the contact creation form.
+   */
+  public void setErrors(String firstNameError, String lastNameError,
+                        String mailError, String companyError) {
+    this.firstNameError = firstNameError;
+    this.lastNameError = lastNameError;
+    this.mailError = mailError;
+    this.companyError = companyError;
 
-  public void setFirstNameError(String error) {
-    firstNameError = error;
+    dispatchChangeEvent();
   }
-
-  public void setNameError(String error) {
-    this.firstNameError = error;
-  }
-
-  public void setLastNameError(String error) {
-    this.lastNameError = error;
-  }
-
-  public void setMailError(String error) {
-    this.mailError = error;
-  }
-
-  public void setPhoneError(String error) {
-    this.phoneError = error;
-  }
-
 
   public boolean hasError() {
-    if (firstNameError != null || phoneError != null || mailError != null
-        || lastNameError != null) {
-      dispatchChangeEvent();
-      return true;
-    }
-    return false;
+    return firstNameError != null || mailError != null
+           || lastNameError != null || companyError != null;
   }
 
-  public void clearError() {
-    phoneError = null;
-    mailError = null;
-    firstNameError = null;
-    lastNameError = null;
+  @Override
+  public void init(Object[] data) {
+    if (data == null || data.length != 1) {
+      return;
+    }
+
+    if (!(data[0] instanceof ICompanyDto)) {
+      throw new IllegalArgumentException("Incorrect initialization data for CompanyDetailsModel");
+    }
+
+    companyDto = (ICompanyDto) data[0];
+
     dispatchChangeEvent();
+  }
+
+  public ICompanyDto getCompanyDto() {
+    return companyDto;
+  }
+
+  public void setCompanyDto(ICompanyDto companyDto) {
+    this.companyDto = companyDto;
+  }
+
+  public String getCompanyError() {
+    return companyError;
   }
 }

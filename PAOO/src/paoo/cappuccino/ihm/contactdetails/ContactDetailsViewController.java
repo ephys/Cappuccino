@@ -51,6 +51,7 @@ public class ContactDetailsViewController extends JPanel implements ChangeListen
       return;
     }
 
+    markInvalidButton.setVisible(contact.getEmail() != null);
     markInvalidButton.setEnabled(contact.isEmailValid());
   }
 }

@@ -58,7 +58,8 @@ public class ViewControllerFactory {
    * Creates the view factory with all the dependencies required by the views.
    */
   public ViewControllerFactory(IUserUcc userUcc, IBusinessDayUcc businessDayUcc,
-      ICompanyUcc companyUcc, IContactUcc contactUcc, MenuModel menuModel, IGuiManager guiManager) {
+                               ICompanyUcc companyUcc, IContactUcc contactUcc, MenuModel menuModel,
+                               IGuiManager guiManager) {
     this.userUcc = userUcc;
     this.businessDayUcc = businessDayUcc;
     this.companyUcc = companyUcc;
@@ -82,44 +83,46 @@ public class ViewControllerFactory {
       case SELECT_COMPANY:
         modelCompanySelection.init(menuModel.getTransitionObjects());
         return new CompanySelectionViewController(modelCompanySelection, menuModel, businessDayUcc,
-            companyUcc, guiManager, contactUcc);
+                                                  companyUcc, guiManager, contactUcc);
 
       case CREATE_COMPANY:
         return new NewCompanyViewController(modelNewCompany, menuModel, guiManager, companyUcc);
 
       case CREATE_CONTACT:
-        return new NewContactViewController(modelNewContact, guiManager, contactUcc, companyUcc);
+        return new NewContactViewController(modelNewContact, guiManager, contactUcc, companyUcc,
+                                            menuModel);
 
       case CREATE_BDAY:
         return new NewBusinessDayViewController(menuModel, guiManager, businessDayUcc);
 
       case ATTENDANCE:
         return new AttendanceViewController(modelAttendance, menuModel, guiManager, companyUcc,
-            businessDayUcc, contactUcc);
+                                            businessDayUcc, contactUcc);
 
       case SEARCH_PARTICIPATION:
         return new ParticipationSearchViewController(modelParticipationSearching, menuModel,
-            businessDayUcc, companyUcc);
+                                                     businessDayUcc, companyUcc);
 
       case COMPANY_DETAILS:
         modelCompanyDetails.init(menuModel.getTransitionObjects());
-        return new CompanyDetailsViewController(modelCompanyDetails, menuModel, contactUcc, userUcc);
+        return new CompanyDetailsViewController(modelCompanyDetails, menuModel, contactUcc,
+                                                userUcc);
 
       case CONTACT_DETAILS:
         modelContactDetails.init(menuModel.getTransitionObjects());
         return new ContactDetailsViewController(modelContactDetails, menuModel, contactUcc,
-            companyUcc);
+                                                companyUcc);
       case SEARCH_COMPANY:
         return new CompaniesSearchViewController(modelSearchCompanies, menuModel, companyUcc,
-            userUcc);
+                                                 userUcc);
 
       case SEARCH_CONTACT:
         return new ContactSearchViewController(modelSearchContact, menuModel, companyUcc,
-            contactUcc);
+                                               contactUcc);
 
       default:
         throw new UnsupportedOperationException("Could not open page \"" + page.getTitle()
-            + "\": Not yet implemented.");
+                                                + "\": Not yet implemented.");
     }
   }
 }
