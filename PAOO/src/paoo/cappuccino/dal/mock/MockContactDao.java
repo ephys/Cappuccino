@@ -82,4 +82,13 @@ class MockContactDao implements IContactDao {
     return contactList.stream().filter(searched -> searched.getCompany() == companyId)
         .collect(Collectors.toList());
   }
+
+  @Override
+  public IContactDto fetchContactById(int contactId) {
+    if (contactList.size() < contactId || contactId <= 0) {
+      return null;
+    }
+
+    return contactList.get(contactId - 1);
+  }
 }

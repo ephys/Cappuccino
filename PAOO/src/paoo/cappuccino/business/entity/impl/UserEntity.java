@@ -104,7 +104,7 @@ final class UserEntity extends BaseEntity implements IUser {
 
   @Override
   public boolean equals(Object obj) {
-    return obj instanceof IUserDto && ((IUserDto) obj).getId() == this.getId();
+    return obj == this || (obj instanceof IUserDto && ((IUserDto) obj).getId() == this.getId());
   }
 
   @Override

@@ -1,27 +1,29 @@
 package paoo.cappuccino.ucc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.dto.IParticipationDto.State;
 import paoo.cappuccino.business.entity.ICompany;
+import paoo.cappuccino.business.entity.IContact;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Business Day UCC Unit Test.
@@ -97,7 +99,31 @@ public class TestBusinessDayUcc {
     assertEquals(participations.size(), 1);
 
     assertEquals("Participation initiated with the wrong state.", participations.get(0).getState(),
-        State.INVITED);
+                 State.INVITED);
+  }
+
+  // ====================== addInvitedContacts
+
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddInvitedContactsDayNull() {
+    IBusinessDayDto day = makeBusinessDay();
+    businessDayUcc.addInvitedContacts(null, day);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddInvitedContactsNull() {
+    businessDayUcc.addInvitedContacts(new IContactDto[0], null);
+  }
+
+  @Test
+  public void testAddInvitedContacts() {
+    IBusinessDayDto day = makeBusinessDay();
+
+    businessDayUcc.addInvitedContacts(new IContactDto[]{makeContact()}, day);
+
+    List<IContactDto> participatingContacts = businessDayUcc.getInvitedContacts(makeCompany(), day);
+    assertEquals(participatingContacts.size(), 1);
   }
 
   // ====================== changeState
@@ -165,6 +191,10 @@ public class TestBusinessDayUcc {
   private ICompany makeCompany() {
     return factory.createCompany(1, 1, 1, "Beure de cacahuètes", "c'est", "tout", "ce", "que",
         "j'ai sous la main", LocalDateTime.now());
+  }
+
+  private IContact makeContact() {
+    return factory.createContact(1, 1, 1, "john@blbl.net", true, "john", "bob", null);
   }
 
   private IBusinessDayDto makeBusinessDay() {

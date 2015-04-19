@@ -89,9 +89,9 @@ final class ParticipationEntity implements IParticipation {
 
   @Override
   public boolean equals(Object obj) {
-    return obj instanceof IParticipationDto
+    return obj == this || (obj instanceof IParticipationDto
            && ((IParticipationDto) obj).getCompany() == this.getCompany()
-           && ((IParticipationDto) obj).getBusinessDay() == this.getBusinessDay();
+           && ((IParticipationDto) obj).getBusinessDay() == this.getBusinessDay());
   }
 
   @Override

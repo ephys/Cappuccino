@@ -1,12 +1,15 @@
 package paoo.cappuccino.ucc.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import paoo.cappuccino.business.dto.IAttendanceDto;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.dto.IParticipationDto.State;
 import paoo.cappuccino.business.entity.IParticipation;
@@ -14,7 +17,9 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalService;
+import paoo.cappuccino.dal.dao.IAttendanceDao;
 import paoo.cappuccino.dal.dao.IBusinessDayDao;
+import paoo.cappuccino.dal.dao.IContactDao;
 import paoo.cappuccino.dal.dao.IParticipationDao;
 import paoo.cappuccino.dal.exception.NonUniqueFieldException;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
@@ -25,16 +30,21 @@ class BusinessDayUcc implements IBusinessDayUcc {
   private final IEntityFactory factory;
   private final IBusinessDayDao businessDayDao;
   private final IParticipationDao participationDao;
+  private final IAttendanceDao attendanceDao;
+  private final IContactDao contactDao;
   private final IDalService dalService;
   private final Logger logger;
 
   @Inject
   public BusinessDayUcc(IEntityFactory entityFactory, IDalService dalService,
-      IBusinessDayDao businessDayDao, IParticipationDao participationDao, AppContext app) {
+                        IBusinessDayDao businessDayDao, IParticipationDao participationDao,
+                        IAttendanceDao attendanceDao, AppContext app, IContactDao contactDao) {
     this.factory = entityFactory;
     this.dalService = dalService;
     this.businessDayDao = businessDayDao;
     this.participationDao = participationDao;
+    this.attendanceDao = attendanceDao;
+    this.contactDao = contactDao;
     this.logger = app.getLogger("BusinessDayUcc");
   }
 
@@ -65,6 +75,35 @@ class BusinessDayUcc implements IBusinessDayUcc {
     }
 
     dalService.commit();
+  }
+
+  @Override
+  public void addInvitedContacts(IContactDto[] contacts, IBusinessDayDto businessDay) {
+    ValidationUtil.ensureNotNull(businessDay, "businessDay");
+    ValidationUtil.ensureNotNull(contacts, "contacts");
+
+    dalService.startTransaction();
+
+    for (IContactDto contact : contacts) {
+      attendanceDao.createAttendance(factory.createAttendance(contact.getCompany(),
+                                                              businessDay.getId(),
+                                                              contact.getId()));
+    }
+
+    dalService.commit();
+  }
+
+  @Override
+  public List<IContactDto> getInvitedContacts(ICompanyDto company, IBusinessDayDto businessDay) {
+    List<IAttendanceDto> attendances = attendanceDao.fetchAttendances(company.getId(),
+                                                                      businessDay.getId());
+
+    List<IContactDto> contacts = new ArrayList<>(attendances.size());
+    for (IAttendanceDto attendance : attendances) {
+      contacts.add(contactDao.fetchContactById(attendance.getContact()));
+    }
+
+    return contacts;
   }
 
   @Override
@@ -121,7 +160,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
       return (IParticipation) dto;
     } else {
       return factory.createParticipation(dto.getCompany(), dto.getBusinessDay(), dto.isCancelled(),
-          dto.getVersion(), dto.getState());
+                                         dto.getVersion(), dto.getState());
     }
   }
 }

@@ -52,5 +52,13 @@ public interface IContactDao {
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   List<IContactDto> fetchContactsByCompany(int companyId);
+
+  /**
+   * Returns The contact registered under the given id.
+   *
+   * @param contactId the id of the contact.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
+   */
+  IContactDto fetchContactById(int contactId);
 }
 

@@ -38,7 +38,8 @@ final class BusinessDayEntity extends BaseEntity implements IBusinessDay {
 
   @Override
   public boolean equals(Object obj) {
-    return obj instanceof IBusinessDayDto && ((IBusinessDayDto) obj).getId() == this.getId();
+    return this == obj
+           || (obj instanceof IBusinessDayDto && ((IBusinessDayDto) obj).getId() == this.getId());
   }
 
   @Override

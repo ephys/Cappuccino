@@ -2,8 +2,8 @@ package paoo.cappuccino.ihm.menu;
 
 import java.awt.Component;
 
-import paoo.cappuccino.ihm.attendence.AttendanceModel;
-import paoo.cappuccino.ihm.attendence.AttendanceViewController;
+import paoo.cappuccino.ihm.attendance.AttendanceModel;
+import paoo.cappuccino.ihm.attendance.AttendanceViewController;
 import paoo.cappuccino.ihm.companiessearch.CompaniesSearchModel;
 import paoo.cappuccino.ihm.companiessearch.CompaniesSearchViewController;
 import paoo.cappuccino.ihm.companydetails.CompanyDetailsModel;
@@ -96,8 +96,8 @@ public class ViewControllerFactory {
         return new NewBusinessDayViewController(menuModel, guiManager, businessDayUcc);
 
       case ATTENDANCE:
-        return new AttendanceViewController(modelAttendance, menuModel, guiManager, companyUcc,
-                                            businessDayUcc, contactUcc);
+        return new AttendanceViewController(modelAttendance, companyUcc, businessDayUcc,
+                                            contactUcc);
 
       case SEARCH_PARTICIPATION:
         return new ParticipationSearchViewController(modelParticipationSearching, menuModel,

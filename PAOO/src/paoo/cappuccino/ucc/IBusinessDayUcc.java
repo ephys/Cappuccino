@@ -5,6 +5,7 @@ import java.util.List;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
 
 /**
@@ -31,6 +32,22 @@ public interface IBusinessDayUcc {
    * @param businessDay The business day the list must be added to.
    */
   void addInvitedCompanies(ICompanyDto[] companies, IBusinessDayDto businessDay);
+
+  /**
+   * Adds a list of invited contacts to the business day participation list.
+   *
+   * @param contacts    The list of contacts to add.
+   * @param businessDay The business day the list must be added to.
+   */
+  void addInvitedContacts(IContactDto[] contacts, IBusinessDayDto businessDay);
+
+  /**
+   * Returns the list of contact of a company attending a given business day.
+   *
+   * @param company     The company the contacts are working for.
+   * @param businessDay The business day the contacts are attending.
+   */
+  List<IContactDto> getInvitedContacts(ICompanyDto company, IBusinessDayDto businessDay);
 
   /**
    * Changes the state of a participation.

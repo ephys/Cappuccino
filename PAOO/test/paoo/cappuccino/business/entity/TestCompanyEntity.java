@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
@@ -12,6 +14,7 @@ import paoo.cappuccino.core.injector.Inject;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class TestCompanyEntity {
 
@@ -95,4 +98,19 @@ public class TestCompanyEntity {
     assertEquals(creatorId, company.getCreator());
   }
 
+  @Test
+  public void testHashCode() {
+    assertEquals(makeMockEntity().hashCode(), company.hashCode());
+  }
+
+  @Test
+  public void testEquals() {
+    assertTrue(makeMockEntity().equals(company));
+  }
+
+  private ICompany makeMockEntity() {
+    return entityFactory.createCompany(company.getId(), company.getVersion(),
+                                       5, "this", "should", "not", "matter",
+                                       "at", "all", LocalDateTime.now());
+  }
 }

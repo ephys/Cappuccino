@@ -83,7 +83,8 @@ final class CompanyEntity extends BaseEntity implements ICompany {
 
   @Override
   public boolean equals(Object obj) {
-    return obj instanceof ICompanyDto && ((ICompanyDto) obj).getId() == this.getId();
+    return obj == this
+           || (obj instanceof ICompanyDto && ((ICompanyDto) obj).getId() == this.getId());
   }
 
   @Override

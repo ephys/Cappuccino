@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
@@ -108,5 +110,20 @@ public class TestUserEntity {
                  IUserDto.Role.ADMIN, IUserDto.Role.valueOf("ADMIN"));
     assertEquals("IUserDto.Role.valueOf did not return the right value (USER)", IUserDto.Role.USER,
                  IUserDto.Role.valueOf("USER"));
+  }
+
+  @Test
+  public void testHashCode() {
+    assertEquals(makeMockEntity().hashCode(), user.hashCode());
+  }
+
+  @Test
+  public void testEquals() {
+    assertTrue(makeMockEntity().equals(user));
+  }
+
+  private IUser makeMockEntity() {
+    return entityFactory.createUser(user.getId(), 7, "fehiug", null, "dezugi", "dehzio", "éhigh",
+                                    IUserDto.Role.ADMIN, LocalDateTime.now());
   }
 }

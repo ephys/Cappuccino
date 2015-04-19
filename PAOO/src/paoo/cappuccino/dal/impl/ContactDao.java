@@ -29,6 +29,7 @@ class ContactDao implements IContactDao {
   private PreparedStatement psCreateContact;
   private PreparedStatement psFetchContactByName;
   private PreparedStatement psFetchContactsByCompany;
+  private PreparedStatement psFetchContactsById;
   private PreparedStatement psUpdateContact;
 
   @Inject
@@ -188,6 +189,31 @@ class ContactDao implements IContactDao {
     }
 
     throw new FatalException("Unreachable statement");
+  }
+
+  @Override
+  public IContactDto fetchContactById(int contactId) {
+    String query = "SELECT c.contact_id, c.company, c.email, c.email_valid, c.first_name, "
+                   + " c.last_name, c.phone, c.version FROM business_days.contacts c "
+                   + "WHERE c.contact_id = ? LIMIT 1";
+
+    try {
+      if (psFetchContactsById == null) {
+        psFetchContactsById = dalBackend.fetchPreparedStatement(query);
+      }
+
+      psFetchContactsById.setInt(1, contactId);
+
+      try (ResultSet rs = psFetchContactsById.executeQuery()) {
+        if (rs.next()) {
+          return makeContactFromSet(rs);
+        }
+      }
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
+
+    return null;
   }
 
   private IContactDto makeContactFromSet(ResultSet rs) throws SQLException {

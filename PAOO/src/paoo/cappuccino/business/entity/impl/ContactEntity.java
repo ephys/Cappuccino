@@ -86,7 +86,8 @@ final class ContactEntity extends BaseEntity implements IContact {
 
   @Override
   public boolean equals(Object obj) {
-    return obj instanceof IContactDto && ((IContactDto) obj).getId() == this.getId();
+    return obj == this
+           || (obj instanceof IContactDto && ((IContactDto) obj).getId() == this.getId());
   }
 
   @Override

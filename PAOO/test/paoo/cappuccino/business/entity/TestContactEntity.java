@@ -113,4 +113,17 @@ public class TestContactEntity {
     assertEquals(null, contact.getEmail());
   }
 
+  @Test
+  public void testHashCode() {
+    assertEquals(makeMockEntity().hashCode(), contact.hashCode());
+  }
+
+  @Test
+  public void testEquals() {
+    assertTrue(makeMockEntity().equals(contact));
+  }
+
+  private IContact makeMockEntity() {
+    return entityFactory.createContact(contact.getId(), 1, 5, "email", false, "de", "sa", "desf");
+  }
 }

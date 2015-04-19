@@ -129,4 +129,17 @@ public class TestParticipationEntity {
                  participation.getVersion(), incrementedVersion);
   }
 
+  @Test
+  public void testHashCode() {
+    assertEquals(makeMockEntity().hashCode(), participation.hashCode());
+  }
+
+  @Test
+  public void testEquals() {
+    assertTrue(makeMockEntity().equals(participation));
+  }
+
+  private IParticipation makeMockEntity() {
+    return entityFactory.createParticipation(companyId, businessDayId);
+  }
 }

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import paoo.cappuccino.business.dto.IParticipationDto.State;
 import paoo.cappuccino.business.dto.IUserDto;
+import paoo.cappuccino.business.entity.IAttendance;
 import paoo.cappuccino.business.entity.IBusinessDay;
 import paoo.cappuccino.business.entity.ICompany;
 import paoo.cappuccino.business.entity.IContact;
@@ -94,5 +95,10 @@ final class EntityFactory implements IEntityFactory {
   public IParticipation createParticipation(int companyId, int businessDayId, boolean cancelled,
                                             int version, State state) {
     return new ParticipationEntity(version, state, cancelled, businessDayId, companyId);
+  }
+
+  @Override
+  public IAttendance createAttendance(int companyId, int businessDayId, int contactId) {
+    return new AttendanceEntity(businessDayId, companyId, contactId);
   }
 }

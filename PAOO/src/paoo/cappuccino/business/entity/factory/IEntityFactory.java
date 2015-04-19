@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.dto.IUserDto;
+import paoo.cappuccino.business.entity.IAttendance;
 import paoo.cappuccino.business.entity.IBusinessDay;
 import paoo.cappuccino.business.entity.ICompany;
 import paoo.cappuccino.business.entity.IContact;
@@ -130,20 +131,29 @@ public interface IEntityFactory {
   /**
    * Creates a new participation entity (as in not yet stored), for the UCC.
    *
-   * @param companyId Refer the company's identifier of a participation.
-   * @param businessDayId Refer the businessDay's identifier of a participation.
+   * @param companyId the identifier of the company attending the business day.
+   * @param businessDayId the identifier of the business day the company is attending.
    */
   IParticipation createParticipation(int companyId, int businessDayId);
 
   /**
-   * Creates an already existing businessDay entity, for the DAL.
+   * Creates an already existing participation entity, for the DAL.
    *
-   * @param companyId Refer the company's identifier of a participation.
-   * @param businessDayId Refer the businessDay's identifier of a participation.
-   * @param version The participation version in the database.
-   * @param state The participation's state.
+   * @param companyId the identifier of the company attending the business day.
+   * @param businessDayId the identifier of the business day the company is attending.
+   * @param version The version of participation in the database.
+   * @param state The state of the participation.
    * @param cancelled The participation has been cancelled.
    */
   IParticipation createParticipation(int companyId, int businessDayId, boolean cancelled,
                                      int version, IParticipationDto.State state);
+
+  /**
+   * Creates a new attendance.
+   *
+   * @param companyId the identifier of the company attending the business day.
+   * @param businessDayId the identifier of the business day the company is attending.
+   * @param contactId the identifier of the contact attending the business day.
+   */
+  IAttendance createAttendance(int companyId, int businessDayId, int contactId);
 }
