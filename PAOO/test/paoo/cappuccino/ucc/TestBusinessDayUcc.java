@@ -129,7 +129,7 @@ public class TestBusinessDayUcc {
   // ====================== changeState
 
   @Test
-  public void TestChangeState() {
+  public void testChangeState() {
     IParticipationDto participation = makeParticipation();
 
     assertTrue("Transition INVITED -> CONFIRMED failled",
@@ -139,7 +139,7 @@ public class TestBusinessDayUcc {
   }
 
   @Test
-  public void TestChangeStateWrong() {
+  public void testChangeStateWrong() {
     IParticipationDto participation = makeParticipation();
     assertFalse(businessDayUcc.changeState(participation, State.INVITED));
   }
@@ -147,7 +147,7 @@ public class TestBusinessDayUcc {
   // ====================== cancelParticipation
 
   @Test
-  public void TestCancelParticipation() {
+  public void testCancelParticipation() {
     IParticipationDto participation = makeParticipation();
 
     businessDayUcc.changeState(participation, State.CONFIRMED);
@@ -158,33 +158,33 @@ public class TestBusinessDayUcc {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void TestCancelParticipationNull() {
+  public void testCancelParticipationNull() {
     businessDayUcc.cancelParticipation(null);
   }
 
   // ====================== getInvitationlessDays
 
   @Test()
-  public void TestGetInvitationlessDays() {
+  public void testGetInvitationlessDays() {
     assertNotNull(businessDayUcc.getInvitationlessDays());
   }
 
   // ====================== getParticipations
 
   @Test()
-  public void TestGetParticipations() {
+  public void testGetParticipations() {
     assertNotNull(businessDayUcc.getParticipations(1));
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void TestGetParticipationsIdFail() {
+  public void testGetParticipationsIdFail() {
     assertNotNull(businessDayUcc.getParticipations(-1));
   }
 
   // ======================getBusinessDays
 
   @Test
-  public void TestGetBusinessDays() {
+  public void testGetBusinessDays() {
     assertNotNull(businessDayUcc.getBusinessDays());
   }
 
