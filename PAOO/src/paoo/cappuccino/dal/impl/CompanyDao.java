@@ -15,7 +15,6 @@ import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalBackend;
 import paoo.cappuccino.dal.dao.ICompanyDao;
 import paoo.cappuccino.dal.exception.NonUniqueFieldException;
-import paoo.cappuccino.util.DateUtils;
 import paoo.cappuccino.util.ValidationUtil;
 import paoo.cappuccino.util.exception.FatalException;
 
@@ -213,6 +212,19 @@ class CompanyDao implements ICompanyDao {
      * comme nouvelle entreprise dans l’année écoulée. Second SELECT : soit entreprise ayant
      * participé, au moins 1 x, dans les 4 années précédentes et ayant payé sa participation.
      */
+    String query =
+        "SELECT c.company_id, c.creator, c.name, c.register_date, \n"
+            + "c.address_street, c.address_num, c.address_mailbox, \n"
+            + "c.address_postcode, c.address_town, c.version "
+            + "FROM business_days.companies c \n"
+            + "WHERE c.company_id IN ( \n"
+            + "SELECT p.company FROM business_days.participations p, "
+            + "       business_days.business_days b \n"
+            + "      WHERE p.business_day = b.business_day_id \n"
+                  + "AND b.academic_year >= (? - 4) "
+            + "      AND p.state = 'PAID'\n"
+            + ") OR now() - c.register_date <= INTERVAL '1' YEAR  \n";
+/*
     String query = "SELECT company_id, creator, name, register_date, address_street, address_num, "
                    + "      address_mailbox, address_postcode, address_town, version "
                    + "FROM business_days.companies "
@@ -245,6 +257,7 @@ class CompanyDao implements ICompanyDao {
                    + "  date_part('month', now()) BETWEEN 6 AND 12 "
                    + "  AND academic_year >= date_part('years', now() - INTERVAL '4 year') "
                    + ");";
+*/
 
     try {
       if (psFetchInvitableCompanies == null) {
