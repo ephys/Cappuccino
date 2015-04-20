@@ -251,8 +251,6 @@ class CompanyDao implements ICompanyDao {
         psFetchInvitableCompanies = dalBackend.fetchPreparedStatement(query);
       }
 
-      psFetchInvitableCompanies.setInt(1, DateUtils.getAcademicYear(LocalDateTime.now()));
-
       try (ResultSet rs = psFetchInvitableCompanies.executeQuery()) {
         List<ICompanyDto> companiesList = new ArrayList<>();
         while (rs.next()) {
