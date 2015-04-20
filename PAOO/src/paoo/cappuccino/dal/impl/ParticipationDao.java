@@ -65,7 +65,8 @@ class ParticipationDao implements IParticipationDao {
   public void updateParticipation(IParticipationDto participation) {
     String query =
         "UPDATE business_days.participations "
-            + "SET state = ?::business_days.participation_state, cancelled = ?, version = version + 1 "
+            + "SET state = ?::business_days.participation_state, cancelled = ?,"
+            + " version = version + 1 "
             + "WHERE company = ? AND business_day = ? AND version = ?";
 
     try {

@@ -120,7 +120,8 @@ class CompanyDao implements ICompanyDao {
   }
 
   @Override
-  public List<ICompanyDto> searchCompanies(String name, String postcode, String street, String town) {
+  public List<ICompanyDto> searchCompanies(String name, String postcode, 
+                                           String street, String town) {
     String query =
         "SELECT * FROM business_days.companies WHERE " + " (? IS NULL OR LOWER(name) LIKE ?) AND "
             + " (? IS NULL OR LOWER(address_street) LIKE ?) AND "
@@ -218,7 +219,8 @@ class CompanyDao implements ICompanyDao {
             + "c.address_postcode, c.address_town, c.version "
             + "FROM business_days.companies c \n"
             + "WHERE c.company_id IN ( \n"
-            + "SELECT p.company FROM business_days.participations p, business_days.business_days b \n"
+            + "SELECT p.company FROM business_days.participations p, "
+            + "       business_days.business_days b \n"
             + "WHERE p.business_day = b.business_day_id \n" + "AND b.academic_year >= (? - 4) \n"
             + ") OR now() - c.register_date <= INTERVAL '1' YEAR  \n";
 
