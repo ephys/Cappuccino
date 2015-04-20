@@ -96,7 +96,7 @@ public class CompanySelectionViewController extends JPanel {
       }
     });
 
-    JButton saveButton = new JButton("Valider");
+    JButton saveButton = new JButton("Sauvegarder et Valider");
     saveButton.addActionListener(e -> {
       List<ICompanyDto> selectedCompanies = new ArrayList<>();
       for (int i = 0; i < companiesTable.getRowCount(); i++) {
