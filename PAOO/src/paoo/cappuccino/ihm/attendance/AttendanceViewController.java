@@ -154,7 +154,8 @@ public class AttendanceViewController extends JPanel implements ChangeListener {
     });
     contactsTable.getModel().addTableModelListener(e -> {
       // check table initiated
-      if (contactsTable.getValueAt(contactsTable.getRowCount() - 1, 3) == null) {
+      if (contactsTable.getRowCount() == 0 
+          || contactsTable.getValueAt(contactsTable.getRowCount() - 1, 3) == null) {
         return;
       }
 

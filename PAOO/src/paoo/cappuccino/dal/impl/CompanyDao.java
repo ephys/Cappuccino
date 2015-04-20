@@ -15,6 +15,7 @@ import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.IDalBackend;
 import paoo.cappuccino.dal.dao.ICompanyDao;
 import paoo.cappuccino.dal.exception.NonUniqueFieldException;
+import paoo.cappuccino.util.DateUtils;
 import paoo.cappuccino.util.ValidationUtil;
 import paoo.cappuccino.util.exception.FatalException;
 
@@ -263,6 +264,9 @@ class CompanyDao implements ICompanyDao {
       if (psFetchInvitableCompanies == null) {
         psFetchInvitableCompanies = dalBackend.fetchPreparedStatement(query);
       }
+      
+      psFetchInvitableCompanies
+        .setInt(1, DateUtils.getAcademicYear(LocalDateTime.now()));
 
       try (ResultSet rs = psFetchInvitableCompanies.executeQuery()) {
         List<ICompanyDto> companiesList = new ArrayList<>();
