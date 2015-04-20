@@ -1,14 +1,14 @@
--- @author Kevin Bavay
+﻿-- @author Kevin Bavay
 DROP SCHEMA IF EXISTS business_days CASCADE;
 
 CREATE SCHEMA business_days;
 
 CREATE SEQUENCE business_days.users_id_seq;
-CREATE TYPE user_role AS ENUM ('USER', 'ADMIN');
+CREATE TYPE business_days.user_role AS ENUM ('USER', 'ADMIN');
 CREATE TABLE IF NOT EXISTS business_days.users (
   user_id       INTEGER PRIMARY KEY
     DEFAULT NEXTVAL('business_days.users_id_seq'),
-  role          user_role                   NOT NULL DEFAULT 'USER',
+  role          business_days.user_role                   NOT NULL DEFAULT 'USER',
   password      VARCHAR(256)                NOT NULL,
   email         VARCHAR(50)                 NOT NULL,
   username      VARCHAR(25)                 NOT NULL UNIQUE,
@@ -59,11 +59,11 @@ CREATE TABLE IF NOT EXISTS business_days.business_days (
   version         INTEGER                     NOT NULL DEFAULT 1
 );
 
-CREATE TYPE participation_state AS ENUM ('INVITED', 'CONFIRMED', 'DECLINED', 'BILLED', 'PAID');
+CREATE TYPE business_days.participation_state AS ENUM ('INVITED', 'CONFIRMED', 'DECLINED', 'BILLED', 'PAID');
 CREATE TABLE IF NOT EXISTS business_days.participations (
   company      INTEGER REFERENCES business_days.companies (company_id)           NOT NULL,
   business_day INTEGER REFERENCES business_days.business_days (business_day_id)  NOT NULL,
-  state        participation_state                                               NOT NULL DEFAULT 'INVITED',
+  state        business_days.participation_state                                               NOT NULL DEFAULT 'INVITED',
   cancelled    BOOLEAN                                                           NOT NULL DEFAULT FALSE,
   version      INTEGER                                                           NOT NULL DEFAULT 1,
 
@@ -85,9 +85,9 @@ INSERT INTO business_days.users VALUES (DEFAULT, 'USER',
                                         'pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000',
                                         'email', 'UserName', 'FirstName', 'lastName', DEFAULT,
                                         DEFAULT);
-INSERT INTO business_days.users VALUES (DEFAULT, 'USER',
+INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN',
                                         'pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000',
-                                        'email2', 'UserName2', 'FirstName2', 'lastName2', DEFAULT,
+                                        'email2', 'Admin', 'FirstName2', 'lastName2', DEFAULT,
                                         DEFAULT);
 
 INSERT INTO business_days.business_days VALUES (DEFAULT, '2010-04-04', DEFAULT, 2009, DEFAULT);
@@ -103,6 +103,10 @@ INSERT INTO business_days.participations VALUES (1, 2, 'DECLINED', DEFAULT, DEFA
 
 INSERT INTO business_days.companies
 VALUES (DEFAULT, 1, 'Company2', DEFAULT, 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
+
+INSERT INTO business_days.companies
+VALUES (DEFAULT, 1, 'Old company', '2010-01-06', 'Rue du rivage', 15, NULL, 1370, 'Jodoigne', DEFAULT);
+
 -- participé et payé
 INSERT INTO business_days.participations VALUES (2, 3, 'PAID', DEFAULT, DEFAULT);
 

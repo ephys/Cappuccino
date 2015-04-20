@@ -45,7 +45,7 @@ import paoo.cappuccino.ucc.IContactUcc;
 @SuppressWarnings("serial")
 public class CompanySelectionViewController extends JPanel {
 
-  private static final Pattern csvIllegalCharRegex = Pattern.compile("(,|\"|\\n)", Pattern.DOTALL);
+  private static final Pattern csvIllegalCharRegex = Pattern.compile("(;|\"|\\n)", Pattern.DOTALL);
   private static final int MAX_STRING_DIRECTORY = 50;
 
   private final CompanySelectionModel model;
@@ -60,14 +60,14 @@ public class CompanySelectionViewController extends JPanel {
   /**
    * Creates a new view controller for the company selection screen.
    *
-   * @param model          The model of the view controller.
-   * @param menu           The model of the menu.
+   * @param model The model of the view controller.
+   * @param menu The model of the menu.
    * @param businessDayUcc The app intance of the business day ucc.
-   * @param companyUcc     The app instance of the company ucc.
+   * @param companyUcc The app instance of the company ucc.
    */
   public CompanySelectionViewController(CompanySelectionModel model, MenuModel menu,
-                                        IBusinessDayUcc businessDayUcc, ICompanyUcc companyUcc,
-                                        IGuiManager guiManager, IContactUcc contactUcc) {
+      IBusinessDayUcc businessDayUcc, ICompanyUcc companyUcc, IGuiManager guiManager,
+      IContactUcc contactUcc) {
     super(new BorderLayout());
     this.model = model;
     this.menu = menu;
@@ -87,8 +87,8 @@ public class CompanySelectionViewController extends JPanel {
     });
 
     List<IBusinessDayDto> invitationlessDays = businessDayUcc.getInvitationlessDays();
-    JComboDay businessDayPanel = new JComboDay(invitationlessDays.toArray(
-        new IBusinessDayDto[invitationlessDays.size()]));
+    JComboDay businessDayPanel =
+        new JComboDay(invitationlessDays.toArray(new IBusinessDayDto[invitationlessDays.size()]));
     this.businessDaySelector = businessDayPanel.getCombo();
     businessDaySelector.addActionListener(event -> {
       if (model.getSelectedDay() != businessDaySelector.getSelectedItem()) {
@@ -107,9 +107,8 @@ public class CompanySelectionViewController extends JPanel {
 
       if (selectedCompanies.isEmpty()) {
         JOptionPane.showMessageDialog(CompanySelectionViewController.this,
-                                      "Vous devez au moins selectionner une entreprise !",
-                                      "Sélection invalide",
-                                      JOptionPane.INFORMATION_MESSAGE);
+            "Vous devez au moins selectionner une entreprise !", "Sélection invalide",
+            JOptionPane.INFORMATION_MESSAGE);
 
         return;
       }
@@ -117,7 +116,7 @@ public class CompanySelectionViewController extends JPanel {
       if (writeCompaniesToDisk(selectedCompanies)) {
         this.businessDayUcc.addInvitedCompanies(
             selectedCompanies.toArray(new ICompanyDto[selectedCompanies.size()]),
-                                                model.getSelectedDay());
+            model.getSelectedDay());
 
         IBusinessDayDto selectedDay = model.getSelectedDay();
         model.setSelectedDay(null);
@@ -139,8 +138,9 @@ public class CompanySelectionViewController extends JPanel {
       if (returnVal == JFileChooser.APPROVE_OPTION) {
         destinationDirectory = fc.getSelectedFile();
         String strDirectory = destinationDirectory.getAbsolutePath();
-        strDirectory = strDirectory.length() > MAX_STRING_DIRECTORY
-                       ? strDirectory.substring(0, MAX_STRING_DIRECTORY) + "..." : strDirectory;
+        strDirectory =
+            strDirectory.length() > MAX_STRING_DIRECTORY ? strDirectory.substring(0,
+                MAX_STRING_DIRECTORY) + "..." : strDirectory;
         directoryLocation.setText(strDirectory);
       }
     });
@@ -201,10 +201,10 @@ public class CompanySelectionViewController extends JPanel {
   }
 
   private boolean writeCompaniesToDisk(List<ICompanyDto> selectedCompanies) {
-    File saveDirectory = new File(destinationDirectory, model.getSelectedDay().getEventDate()
-                                                            .format(DateTimeFormatter
-                                                                        .ofPattern("yyyy-MM-dd"))
-                                                        + ".csv");
+    File saveDirectory =
+        new File(destinationDirectory, model.getSelectedDay().getEventDate()
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            + ".csv");
 
     while (saveDirectory.exists()) {
       saveDirectory = new File(saveDirectory.getPath() + ".dup");
@@ -214,27 +214,24 @@ public class CompanySelectionViewController extends JPanel {
       final File directory = saveDirectory.getParentFile();
       if (!directory.exists() && !directory.mkdirs()) {
         JOptionPane.showMessageDialog(CompanySelectionViewController.this,
-                                      "Impossible de créer le répertoire du fichier "
-                                      + directory.getAbsolutePath(),
-                                      "Erreur filesystem",
-                                      JOptionPane.ERROR_MESSAGE);
+            "Impossible de créer le répertoire du fichier " + directory.getAbsolutePath(),
+            "Erreur filesystem", JOptionPane.ERROR_MESSAGE);
 
         return false;
       }
 
       if (!saveDirectory.createNewFile()) {
         JOptionPane.showMessageDialog(CompanySelectionViewController.this,
-                                      "Impossible de créer le fichier "
-                                      + saveDirectory.getAbsolutePath(),
-                                      "Erreur filesystem",
-                                      JOptionPane.ERROR_MESSAGE);
+            "Impossible de créer le fichier " + saveDirectory.getAbsolutePath(),
+            "Erreur filesystem", JOptionPane.ERROR_MESSAGE);
 
         return false;
       }
 
-      try (BufferedWriter fileWriter = new BufferedWriter(
-          new OutputStreamWriter(new FileOutputStream(saveDirectory), Charset.forName("UTF-8")))) {
-        fileWriter.write("Nom entreprise,Nom,Prénom,Email");
+      try (BufferedWriter fileWriter =
+          new BufferedWriter(new OutputStreamWriter(new FileOutputStream(saveDirectory),
+              Charset.forName("UTF-8")))) {
+        fileWriter.write("Nom entreprise;Nom;Prénom;Email");
         fileWriter.newLine();
         fileWriter.newLine();
 
@@ -246,15 +243,13 @@ public class CompanySelectionViewController extends JPanel {
               continue;
             }
 
-            fileWriter.write(escapeCsv(company.getName()) + ","
-                             + escapeCsv(contact.getLastName()) + ","
-                             + escapeCsv(contact.getFirstName()) + ","
-                             + escapeCsv(contact.getEmail()));
+            fileWriter.write(escapeCsv(company.getName()) + ";" + escapeCsv(contact.getLastName())
+                + ";" + escapeCsv(contact.getFirstName()) + ";" + escapeCsv(contact.getEmail()));
             fileWriter.newLine();
           }
 
           if (companyContacts.isEmpty()) {
-            fileWriter.write(escapeCsv(company.getName()) + ",N/A,N/A,N/A");
+            fileWriter.write(escapeCsv(company.getName()) + ";N/A;N/A;N/A");
             fileWriter.newLine();
           }
         }
@@ -265,10 +260,8 @@ public class CompanySelectionViewController extends JPanel {
       logger.log(Level.WARNING, "Could not create CSV file", e);
 
       JOptionPane.showMessageDialog(CompanySelectionViewController.this,
-                                    "Impossible de créer le fichier "
-                                    + saveDirectory.getAbsolutePath(),
-                                    "Erreur filesystem",
-                                    JOptionPane.ERROR_MESSAGE);
+          "Impossible de créer le fichier " + saveDirectory.getAbsolutePath(), "Erreur filesystem",
+          JOptionPane.ERROR_MESSAGE);
 
       return false;
     }

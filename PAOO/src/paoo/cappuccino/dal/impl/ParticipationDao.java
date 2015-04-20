@@ -38,9 +38,9 @@ class ParticipationDao implements IParticipationDao {
 
   @Override
   public IParticipationDto createParticipation(IParticipationDto participation) {
-    String query = "INSERT INTO business_days.participations (company, business_day) "
-                   + "VALUES (?, ?) "
-                   + "RETURNING company, business_day, state, cancelled, version";
+    String query =
+        "INSERT INTO business_days.participations (company, business_day) " + "VALUES (?, ?) "
+            + "RETURNING company, business_day, state, cancelled, version";
     try {
       if (psCreateParticipation == null) {
         psCreateParticipation = dalBackend.fetchPreparedStatement(query);
@@ -63,9 +63,10 @@ class ParticipationDao implements IParticipationDao {
 
   @Override
   public void updateParticipation(IParticipationDto participation) {
-    String query = "UPDATE business_days.participations "
-                   + "SET state = ?, cancelled = ?, version = version + 1 "
-                   + "WHERE company = ? AND business_day = ? AND version = ? LIMIT 1";
+    String query =
+        "UPDATE business_days.participations "
+            + "SET state = ?::business_days.participation_state, cancelled = ?, version = version + 1 "
+            + "WHERE company = ? AND business_day = ? AND version = ?";
 
     try {
       if (psUpdateParticipation == null) {
@@ -81,10 +82,9 @@ class ParticipationDao implements IParticipationDao {
 
       int affectedRows = psUpdateParticipation.executeUpdate();
       if (affectedRows == 0) {
-        throw new ConcurrentModificationException(
-            "The user with id " + participation.getCompany() + ":" + participation.getBusinessDay()
-            + " (company, businessday) and version " + participation.getVersion()
-            + " was not found in the database. "
+        throw new ConcurrentModificationException("The user with id " + participation.getCompany()
+            + ":" + participation.getBusinessDay() + " (company, businessday) and version "
+            + participation.getVersion() + " was not found in the database. "
             + "It either was deleted or modified by another thread.");
       }
 
@@ -98,9 +98,9 @@ class ParticipationDao implements IParticipationDao {
 
   @Override
   public List<IParticipationDto> fetchParticipationsByDate(int businessDayId) {
-    String query = "SELECT company, business_day, state, cancelled, version "
-                   + "FROM business_days.participations "
-                   + "WHERE business_day = ?";
+    String query =
+        "SELECT company, business_day, state, cancelled, version "
+            + "FROM business_days.participations " + "WHERE business_day = ?";
 
     try {
       if (psFetchParticipationsByDate == null) {
@@ -127,9 +127,9 @@ class ParticipationDao implements IParticipationDao {
 
   @Override
   public List<IParticipationDto> fetchParticipationsByCompany(int companyId) {
-    String query = "SELECT company, business_day, state, cancelled, version "
-                   + "FROM business_days.participations "
-                   + "WHERE company = ?";
+    String query =
+        "SELECT company, business_day, state, cancelled, version "
+            + "FROM business_days.participations " + "WHERE company = ?";
 
     try {
       if (psFetchParticipationsByCompany == null) {

@@ -40,11 +40,11 @@ class ContactDao implements IContactDao {
 
   @Override
   public IContactDto createContact(IContactDto contact) {
-    String query = "INSERT INTO business_days.contacts (company, email, email_valid, "
-                   + "first_name, last_name, phone) "
-                   + "VALUES (?, ?, ?, ?, ?, ?) "
-                   + "RETURNING contact_id, company, email, email_valid, first_name, last_name, "
-                   + "phone, version";
+    String query =
+        "INSERT INTO business_days.contacts (company, email, email_valid, "
+            + "first_name, last_name, phone) " + "VALUES (?, ?, ?, ?, ?, ?) "
+            + "RETURNING contact_id, company, email, email_valid, first_name, last_name, "
+            + "phone, version";
 
     try {
       if (psCreateContact == null) {
@@ -77,10 +77,10 @@ class ContactDao implements IContactDao {
 
   @Override
   public void updateContact(IContactDto contact) {
-    String query = "UPDATE business_days.contacts SET "
-                   + " company = ?, email = ?, email_valid = ?, first_name = ?, last_name = ?, "
-                   + " phone = ?, version = version + 1 "
-                   + "WHERE user_id = ? AND version = ? LIMIT 1";
+    String query =
+        "UPDATE business_days.contacts SET "
+            + " company = ?, email = ?, email_valid = ?, first_name = ?, last_name = ?, "
+            + " phone = ?, version = version + 1 " + "WHERE contact_id = ? AND version = ?";
 
     try {
       if (psUpdateContact == null) {
@@ -90,9 +90,9 @@ class ContactDao implements IContactDao {
       psUpdateContact.setString(2, contact.getEmail());
 
       if (contact.getEmail() == null) {
-        psCreateContact.setNull(3, Types.BOOLEAN);
+        psUpdateContact.setNull(3, Types.BOOLEAN);
       } else {
-        psCreateContact.setBoolean(3, contact.isEmailValid());
+        psUpdateContact.setBoolean(3, contact.isEmailValid());
       }
 
       psUpdateContact.setString(4, contact.getFirstName());
@@ -104,9 +104,8 @@ class ContactDao implements IContactDao {
 
       int affectedRows = psUpdateContact.executeUpdate();
       if (affectedRows == 0) {
-        throw new ConcurrentModificationException(
-            "The user with id " + contact.getId() + " and version " + contact.getVersion()
-            + " was not found in the database. "
+        throw new ConcurrentModificationException("The user with id " + contact.getId()
+            + " and version " + contact.getVersion() + " was not found in the database. "
             + "It either was deleted or modified by another thread.");
       }
 
@@ -120,11 +119,11 @@ class ContactDao implements IContactDao {
 
   @Override
   public List<IContactDto> fetchContactByName(String firstName, String lastName) {
-    String query = "SELECT c.contact_id, c.company, c.email, c.email_valid, c.first_name, "
-                   + " c.last_name, c.phone, c.version "
-                   + "FROM business_days.contacts c "
-                   + "WHERE (? IS NULL OR LOWER(first_name) LIKE '%?%') "
-                   + " AND (? IS NULL OR LOWER(last_name) LIKE '%?%')";
+    String query =
+        "SELECT c.contact_id, c.company, c.email, c.email_valid, c.first_name, "
+            + " c.last_name, c.phone, c.version " + "FROM business_days.contacts c "
+            + "WHERE (? IS NULL OR LOWER(first_name) LIKE ?) "
+            + " AND (? IS NULL OR LOWER(last_name) LIKE ?)";
 
     try {
       if (psFetchContactByName == null) {
@@ -132,11 +131,11 @@ class ContactDao implements IContactDao {
       }
 
       if (firstName != null) {
-        firstName = firstName.toLowerCase();
+        firstName = '%' + firstName.toLowerCase() + '%';
       }
 
       if (lastName != null) {
-        lastName = lastName.toLowerCase();
+        lastName = '%' + lastName.toLowerCase() + '%';
       }
 
       psFetchContactByName.setString(1, firstName);
@@ -163,9 +162,10 @@ class ContactDao implements IContactDao {
 
   @Override
   public List<IContactDto> fetchContactsByCompany(int companyId) {
-    String query = "SELECT c.contact_id, c.company, c.email, c.email_valid, c.first_name, "
-                   + " c.last_name, c.phone, c.version FROM business_days.contacts c "
-                   + "WHERE c.company = ?";
+    String query =
+        "SELECT c.contact_id, c.company, c.email, c.email_valid, c.first_name, "
+            + " c.last_name, c.phone, c.version FROM business_days.contacts c "
+            + "WHERE c.company = ?";
 
     try {
       if (psFetchContactsByCompany == null) {
@@ -193,9 +193,10 @@ class ContactDao implements IContactDao {
 
   @Override
   public IContactDto fetchContactById(int contactId) {
-    String query = "SELECT c.contact_id, c.company, c.email, c.email_valid, c.first_name, "
-                   + " c.last_name, c.phone, c.version FROM business_days.contacts c "
-                   + "WHERE c.contact_id = ? LIMIT 1";
+    String query =
+        "SELECT c.contact_id, c.company, c.email, c.email_valid, c.first_name, "
+            + " c.last_name, c.phone, c.version FROM business_days.contacts c "
+            + "WHERE c.contact_id = ? LIMIT 1";
 
     try {
       if (psFetchContactsById == null) {
@@ -227,7 +228,7 @@ class ContactDao implements IContactDao {
     int version = rs.getInt(8);
 
     return entityFactory.createContact(contactId, version, companyId, email, emailValid, firstName,
-                                       lastName, phone);
+        lastName, phone);
   }
 
   private void rethrowSqlException(SQLException exception) {

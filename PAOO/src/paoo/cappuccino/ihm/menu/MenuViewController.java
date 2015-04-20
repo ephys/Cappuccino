@@ -50,7 +50,7 @@ public class MenuViewController extends MenuView {
     JButton newDayButton = new JButton("Créer journée");
     newDayButton.addActionListener(e -> model.setCurrentPage(MenuEntry.CREATE_BDAY));
 
-    JButton registerAttendanceButton = new JButton("Enregistrer présence");
+    JButton registerAttendanceButton = new JButton("Enregistrer présences");
     registerAttendanceButton.addActionListener(e -> model.setCurrentPage(MenuEntry.ATTENDANCE));
 
     // JPanel
