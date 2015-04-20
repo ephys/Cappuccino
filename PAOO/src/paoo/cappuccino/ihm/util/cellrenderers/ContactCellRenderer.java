@@ -16,7 +16,7 @@ public class ContactCellRenderer extends DefaultTableCellRenderer {
   public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
       boolean hasFocus, int row, int column) {
     super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-    setText(((IContactDto) value).getLastName());
+    setText(value == null ? "null" : ((IContactDto) value).getLastName());
 
     return this;
   }
