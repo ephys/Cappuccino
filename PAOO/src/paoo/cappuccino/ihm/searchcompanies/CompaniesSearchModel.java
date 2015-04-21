@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.companiessearch;
+package paoo.cappuccino.ihm.searchcompanies;
 
 import paoo.cappuccino.ihm.util.BaseModel;
 

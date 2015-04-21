@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.participationsearch;
+package paoo.cappuccino.ihm.searchparticipations;
 
 import paoo.cappuccino.ihm.home.HomeModel;
 

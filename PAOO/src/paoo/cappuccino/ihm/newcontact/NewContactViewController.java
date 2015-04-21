@@ -11,8 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
@@ -31,10 +29,15 @@ import paoo.cappuccino.util.StringUtils;
  * @author Opsomer Mathias
  */
 @SuppressWarnings("serial")
-public class NewContactViewController extends JPanel implements ChangeListener {
+public class NewContactViewController extends JPanel {
 
   private final JComboBox<ICompanyDto> companiesCombo;
   private final NewContactModel model;
+  private final JTextField contactFirstNameField = new JTextField();
+  private final JTextField contactLastNameField = new JTextField();
+  private final JTextField contactMailField = new JTextField();
+  private final JTextField contactPhoneField = new JTextField();
+
 
   /**
    * Creates a new ViewController for the new contact gui.
@@ -42,78 +45,111 @@ public class NewContactViewController extends JPanel implements ChangeListener {
    * @param model The ViewController's model.
    */
   public NewContactViewController(NewContactModel model, IGuiManager manager,
-                                  IContactUcc contactUcc, ICompanyUcc companyUcc, MenuModel menu) {
+      IContactUcc contactUcc, ICompanyUcc companyUcc, MenuModel menu) {
     super(new GridBagLayout());
     this.model = model;
     final JPanel wrapperPanel = new JPanel(new BorderLayout());
     this.add(wrapperPanel);
-    wrapperPanel.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP,
-                                           0, IhmConstants.M_GAP));
+    wrapperPanel.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0,
+        IhmConstants.M_GAP));
 
-    final JTextField contactFirstNameField = new JTextField();
-    final JTextField contactLastNameField = new JTextField();
-    final JTextField contactMailField = new JTextField();
-    final JTextField contactPhoneField = new JTextField();
+
     final List<ICompanyDto> companies = companyUcc.getAllCompanies();
     this.companiesCombo = new JComboBox<>(companies.toArray(new ICompanyDto[companies.size()]));
 
+    // check if modifying contact
+
+    final IContactDto contactToModify;
+    boolean modifyContact = false;
+    if (menu.getTransitionObjects().length == 1) {
+      modifyContact = menu.getTransitionObjects()[0] instanceof IContactDto;
+      if (!modifyContact) {
+        companiesCombo.setSelectedItem(menu.getTransitionObjects()[0]);
+      }
+    }
+
+
+    if (modifyContact) {
+      contactToModify = (IContactDto) menu.getTransitionObjects()[0];
+      contactFirstNameField.setText(contactToModify.getFirstName());
+      contactLastNameField.setText(contactToModify.getLastName());
+      contactMailField.setText(contactToModify.getEmail());
+      contactPhoneField.setText(contactToModify.getPhone());
+      companiesCombo.setSelectedItem(companyUcc.getCompanyById(contactToModify.getCompany()));
+    }
+
     wrapperPanel.add(new NewContactView(model, contactFirstNameField, contactLastNameField,
-                                        contactMailField, contactPhoneField, companiesCombo));
+        contactMailField, contactPhoneField, companiesCombo));
 
     companiesCombo.setRenderer(new CompanyListRenderer());
-    companiesCombo.addActionListener(
-        event -> model.setCompanyDto((ICompanyDto) companiesCombo.getSelectedItem()));
 
-    final JPanel controls = new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP,
-                                                IhmConstants.M_GAP));
+    final JPanel controls =
+        new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
     wrapperPanel.add(controls, BorderLayout.SOUTH);
-    final JButton createButton = new JButton("Créer");
-    controls.add(createButton);
 
-    createButton.addActionListener(e -> {
-      String firstNameError = StringUtils.isEmpty(contactFirstNameField.getText())
-                              ? IhmConstants.ERROR_FIELD_EMPTY : null;
+    if (modifyContact) {
+      final JButton modifyContactButton = new JButton("Modifier");
 
-      String lastNameError = StringUtils.isEmpty(contactLastNameField.getText())
-                             ? IhmConstants.ERROR_FIELD_EMPTY : null;
+      controls.add(modifyContactButton);
 
-      String mailError = !StringUtils.isEmpty(contactMailField.getText())
-                         && !StringUtils.isEmail(contactMailField.getText())
-                         ? IhmConstants.ERROR_INVALID_EMAIL : null;
+      modifyContactButton.addActionListener(e -> {
+        throw new UnsupportedOperationException("ucc non implémenter");
+        /*
+         * setErrors();
+         * 
+         * ICompanyDto company = (ICompanyDto) companiesCombo.getSelectedItem();
+         * 
+         * if (company == null || model.hasError()) { return; } // call ucc IContactDto contact =
+         * null; manager.getLogger().info( "Contact modified : " + contact.getFirstName() + " " +
+         * contact.getLastName() + "  (" + ((ICompanyDto)
+         * companiesCombo.getSelectedItem()).getName() + ")");
+         * 
+         * JOptionPane.showMessageDialog(this, "Contact modifié");
+         * menu.setCurrentPage(MenuEntry.CONTACT_DETAILS, contact);
+         */
+      });
+    } else {
 
-      ICompanyDto company = (ICompanyDto) companiesCombo.getSelectedItem();
-      String companyError = company == null ? "Sélectionnez une entreprise." : null;
+      final JButton createButton = new JButton("Créer");
 
-      model.setErrors(firstNameError, lastNameError, mailError, companyError);
+      controls.add(createButton);
 
-      if (company == null || model.hasError()) {
-        return;
-      }
+      createButton.addActionListener(e -> {
+        setErrors();
 
-      IContactDto contact = contactUcc.create(company.getId(), contactMailField.getText(),
-                            contactFirstNameField.getText(), contactLastNameField.getText(),
-                            contactPhoneField.getText());
+        ICompanyDto company = (ICompanyDto) companiesCombo.getSelectedItem();
 
-      manager.getLogger().info("new Contact created : "
-                               + contact.getFirstName() + " "
-                               + contact.getLastName()
-                               + "  ("
-                               + ((ICompanyDto) companiesCombo.getSelectedItem()).getName()
-                               + ")");
+        if (company == null || model.hasError()) {
+          return;
+        }
+        IContactDto contact =
+            contactUcc.create(company.getId(), contactMailField.getText(),
+                contactFirstNameField.getText(), contactLastNameField.getText(),
+                contactPhoneField.getText());
 
-      JOptionPane.showMessageDialog(this, "Contact créé");
-      menu.setCurrentPage(MenuEntry.CONTACT_DETAILS, contact);
-    });
+        manager.getLogger().info(
+            "new Contact created : " + contact.getFirstName() + " " + contact.getLastName() + "  ("
+                + ((ICompanyDto) companiesCombo.getSelectedItem()).getName() + ")");
 
-    model.addChangeListener(this);
-    stateChanged(null);
+        JOptionPane.showMessageDialog(this, "Contact créé");
+        menu.setCurrentPage(MenuEntry.CONTACT_DETAILS, contact);
+
+      });
+    }
   }
 
-  @Override
-  public void stateChanged(ChangeEvent event) {
-    if (model.getCompanyDto() == null
-        || companiesCombo.getSelectedItem() != model.getCompanyDto()) {
-      companiesCombo.setSelectedItem(model.getCompanyDto());
-    }
+  private void setErrors() {
+    String firstNameError =
+        StringUtils.isEmpty(contactFirstNameField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+            : null;
+
+    String lastNameError =
+        StringUtils.isEmpty(contactLastNameField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY : null;
+
+    String mailError =
+        !StringUtils.isEmpty(contactMailField.getText())
+            && !StringUtils.isEmail(contactMailField.getText()) ? IhmConstants.ERROR_INVALID_EMAIL
+            : null;
+    model.setErrors(firstNameError, lastNameError, mailError);
   }
 }

@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.participationsearch;
+package paoo.cappuccino.ihm.searchparticipations;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

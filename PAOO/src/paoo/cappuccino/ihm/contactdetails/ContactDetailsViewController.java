@@ -15,28 +15,34 @@ import paoo.cappuccino.ucc.IContactUcc;
 public class ContactDetailsViewController extends JPanel implements ChangeListener {
 
   private final JButton markInvalidButton = new JButton("Renseigner Invalide");
+  private final JButton modify = new JButton("Modifier contact");
 
   private final ContactDetailsModel model;
   private final MenuModel menu;
 
   /**
    * Creates a view controller for the "contact details" screen.
+   * 
    * @param model The model of the view.
    * @param menu The model of the global gui menu.
    * @param contactUcc The app instance of the contact ucc.
    * @param companyUcc The app instance of the company ucc.
    */
   public ContactDetailsViewController(ContactDetailsModel model, MenuModel menu,
-                                      IContactUcc contactUcc, ICompanyUcc companyUcc) {
+      IContactUcc contactUcc, ICompanyUcc companyUcc) {
     this.model = model;
     this.menu = menu;
 
     model.addChangeListener(this);
-    this.add(new ContactDetailsView(model, markInvalidButton, companyUcc, menu));
+    this.add(new ContactDetailsView(model, markInvalidButton, modify, companyUcc, menu));
 
     markInvalidButton.addActionListener(event -> {
       contactUcc.setMailInvalid(model.getContactDto());
       markInvalidButton.setEnabled(false);
+    });
+
+    modify.addActionListener(event -> {
+      menu.setCurrentPage(MenuEntry.CREATE_CONTACT, model.getContactDto());
     });
 
     stateChanged(null);

@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.companiessearch;
+package paoo.cappuccino.ihm.searchparticipations;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -14,41 +14,42 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
-import paoo.cappuccino.business.dto.IUserDto;
+import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.ihm.util.LocalizationUtil;
 import paoo.cappuccino.ihm.util.cellrenderers.CompanyCellRenderer;
 import paoo.cappuccino.ihm.util.cellrenderers.DateCellRenderer;
+import paoo.cappuccino.ihm.util.cellrenderers.StateCellRenderer;
+import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
-import paoo.cappuccino.ucc.IUserUcc;
 
 @SuppressWarnings("serial")
-public class CompaniesSearchView extends JPanel implements ChangeListener {
+public class ParticipationSearchView extends JPanel implements ChangeListener {
 
-  private final CompaniesSearchModel model;
+  private final ParticipationSearchModel model;
   private final ICompanyUcc companyUcc;
-  private final IUserUcc userUcc;
   private final DefaultTableModel tableModel;
   private final JScrollPane scrollPane;
+  private final IBusinessDayUcc businessDayUcc;
   private final JTable table;
   private boolean removedWidget;
   private JPanel centerPadding;
 
   /**
-   * Creates a view for the company search screen.
-   *
-   * @param model      The model of the view.
+   * Creates a view for the participation search screen.
+   * @param model The model of the view.
    * @param companyUcc The app instance of the company ucc.
-   * @param userUcc    The app instance of the user ucc.
+   * @param businessDayUcc The app instance of the business day ucc.
    */
-  public CompaniesSearchView(CompaniesSearchModel model, ICompanyUcc companyUcc, IUserUcc userUcc) {
+  public ParticipationSearchView(ParticipationSearchModel model, ICompanyUcc companyUcc,
+                                 IBusinessDayUcc businessDayUcc) {
+    this.businessDayUcc = businessDayUcc;
 
     setLayout(new BorderLayout());
     this.model = model;
     this.companyUcc = companyUcc;
-    this.userUcc = userUcc;
 
-    String[] tableTitles = new String[]{"Nom entreprise", "Adresse entreprise",
-                                        "Date d'enregistrement", "Enregistreur"};
+    String[] tableTitles = new String[] {"Nom entreprise", "Adresse entreprise",
+                                         "Date d'enregistrement", "État"};
     this.tableModel = new DefaultTableModel(tableTitles, 0) {
       @Override
       public boolean isCellEditable(int row, int column) {
@@ -64,6 +65,9 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
     TableColumn dateCol = table.getColumn(tableTitles[2]);
     dateCol.setCellRenderer(new DateCellRenderer());
 
+    TableColumn stateCol = table.getColumn(tableTitles[3]);
+    stateCol.setCellRenderer(new StateCellRenderer());
+
     this.scrollPane = new JScrollPane(table);
     this.add(scrollPane);
     this.model.addChangeListener(this);
@@ -72,58 +76,58 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
 
   @Override
   public void stateChanged(ChangeEvent event) {
+    List<IParticipationDto> participations =
+        model.getSelectedDay() == null
+        ? null : businessDayUcc.getParticipations(model.getSelectedDay().getId());
 
-    List<ICompanyDto> companies =
-        companyUcc.searchCompanies(model.getName(), model.getPostCode(), model.getTown(),
-                                   model.getStreet());
-
-    if (companies != null && companies.size() != 0) {
+    if (participations != null && participations.size() != 0) {
       if (this.removedWidget) {
         this.remove(this.centerPadding);
         this.add(this.scrollPane);
-
         this.removedWidget = false;
         this.revalidate();
         this.repaint();
       }
 
-      buildTable(companies);
+      buildTable(participations);
     } else {
       if (!this.removedWidget) {
         this.centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        centerPadding.add(new JLabel("Il n'y a aucune entreprise correspondante"));
+        centerPadding.add(new JLabel(buildErrorMessage(participations)));
 
         this.remove(this.scrollPane);
         this.add(centerPadding);
-
         this.removedWidget = true;
         this.revalidate();
         this.repaint();
       }
     }
-
   }
 
   JTable getTable() {
     return this.table;
   }
 
-  private void buildTable(List<ICompanyDto> companies) {
-    tableModel.setRowCount(companies.size());
+  private void buildTable(List<IParticipationDto> participations) {
+    tableModel.setRowCount(participations.size());
 
-    for (int i = 0; i < companies.size(); i++) {
-      ICompanyDto company = companies.get(i);
-      IUserDto creator = userUcc.getUserById(company.getCreator());
-      String creatorName = "inconnu";
-      if (creator != null) {
-        creatorName = creator.getUsername();
-      }
+    for (int i = 0; i < participations.size(); i++) {
+      IParticipationDto participation = participations.get(i);
+      ICompanyDto company = companyUcc.getCompanyById(participation.getCompany());
 
       tableModel.setValueAt(company, i, 0);
       tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i, 1);
       tableModel.setValueAt(company.getRegisterDate(), i, 2);
-      tableModel.setValueAt(creatorName, i, 3);
+      tableModel.setValueAt(participation.getState(), i, 3);
+    }
+  }
+
+  private String buildErrorMessage(List<IParticipationDto> participationDto) {
+    if (participationDto == null) {
+      return "Il n'y a aucune journée d'entreprise disponible.";
+    } else {
+      return "Il n'y a aucune participation correspondante.";
     }
   }
 }

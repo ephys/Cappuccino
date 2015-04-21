@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.contactsearch;
+package paoo.cappuccino.ihm.searchcontacts;
 
 import paoo.cappuccino.ihm.util.BaseModel;
 

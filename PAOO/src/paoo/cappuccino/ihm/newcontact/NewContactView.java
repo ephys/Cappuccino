@@ -36,8 +36,8 @@ public class NewContactView extends JPanel implements ChangeListener {
    * Creates a new view for the contact creation screen.
    */
   public NewContactView(NewContactModel model, JTextField contactFirstNameField,
-                        JTextField contactLastNameField, JTextField contactMailField,
-                        JTextField contactPhoneField, JComboBox<ICompanyDto> comboCompanies) {
+      JTextField contactLastNameField, JTextField contactMailField, JTextField contactPhoneField,
+      JComboBox<ICompanyDto> comboCompanies) {
     super(new GridBagLayout());
     this.setBorder(new EmptyBorder(0, IhmConstants.XL_GAP, 0, IhmConstants.XL_GAP));
 
@@ -75,6 +75,5 @@ public class NewContactView extends JPanel implements ChangeListener {
     contactLastNamePanel.setError(model.getLastNameError());
     contactFirstNamePanel.setError(model.getFirstNameError());
     contactMailPanel.setError(model.getMailError());
-    companyError.setText(model.getCompanyError());
   }
 }

@@ -16,6 +16,7 @@ import javax.swing.event.ChangeListener;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
+import paoo.cappuccino.business.dto.IUserDto.Role;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.JLabelFont;
@@ -30,14 +31,14 @@ public class ContactDetailsView extends JPanel implements ChangeListener {
   /**
    * Creates a view for the contact details screen.
    *
-   * @param model                  The model of the view.
+   * @param model The model of the view.
    * @param markEmailInvalidButton The button used to mark an email as invalid.
-   * @param companyUcc             The app instance of the company use case controller.
-   * @param menu                   The model of the gui menu.
+   * @param modify
+   * @param companyUcc The app instance of the company use case controller.
+   * @param menu The model of the gui menu.
    */
   public ContactDetailsView(ContactDetailsModel model, JButton markEmailInvalidButton,
-                            ICompanyUcc companyUcc,
-                            MenuModel menu) {
+      JButton modify, ICompanyUcc companyUcc, MenuModel menu) {
     super(new BorderLayout());
 
     this.model = model;
@@ -46,9 +47,9 @@ public class ContactDetailsView extends JPanel implements ChangeListener {
     final IContactDto contact = model.getContactDto();
 
     final JPanel contactWrapperPanel = new JPanel(new BorderLayout());
-    contactWrapperPanel
-        .add(new JLabelFont(contact.getLastName() + " " + contact.getFirstName(), 20),
-             BorderLayout.NORTH);
+    contactWrapperPanel.add(
+        new JLabelFont(contact.getLastName() + " " + contact.getFirstName(), 20),
+        BorderLayout.NORTH);
 
     final JPanel contactPanel = new JPanel(new GridLayout(0, 3));
     contactWrapperPanel.add(contactPanel);
@@ -85,6 +86,12 @@ public class ContactDetailsView extends JPanel implements ChangeListener {
     contactPanel.add(companyLabel);
     contactPanel.add(new JPanel());
 
+    if (menu.getLoggedUser().getRole() == Role.ADMIN) {
+      JPanel modifyPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+      modifyPanel.add(modify);
+
+      contactWrapperPanel.add(modifyPanel, BorderLayout.SOUTH);
+    }
     this.add(contactWrapperPanel);
 
     this.model.addChangeListener(this);
