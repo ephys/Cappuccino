@@ -115,7 +115,7 @@ public class ViewControllerFactory {
       case COMPANY_DETAILS:
         modelCompanyDetails.init(menuModel.getTransitionObjects());
         return new CompanyDetailsViewController(modelCompanyDetails,
-            menuModel, contactUcc, userUcc, businessDayUcc);
+            menuModel, contactUcc, userUcc, businessDayUcc, companyUcc);
 
       case CONTACT_DETAILS:
         modelContactDetails.init(menuModel.getTransitionObjects());

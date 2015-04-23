@@ -16,6 +16,7 @@ import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
+import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.ucc.IContactUcc;
 import paoo.cappuccino.ucc.IUserUcc;
 
@@ -27,6 +28,7 @@ public class CompanyDetailsViewController extends JPanel implements
   private final CompanyDetailsModel model;
   private final IContactUcc contactUcc;
   private final IBusinessDayUcc dayUcc;
+  private final ICompanyUcc companyUcc;
   private final CompanyDetailsView view;
 
   /**
@@ -39,9 +41,10 @@ public class CompanyDetailsViewController extends JPanel implements
    */
   public CompanyDetailsViewController(CompanyDetailsModel model,
       MenuModel menu, IContactUcc contactUcc, IUserUcc userUcc,
-      IBusinessDayUcc dayUcc) {
+      IBusinessDayUcc dayUcc, ICompanyUcc companyUcc) {
     this.model = model;
     this.contactUcc = contactUcc;
+    this.companyUcc = companyUcc;
     this.dayUcc = dayUcc;
 
     this.view = new CompanyDetailsView(model, userUcc);
@@ -85,7 +88,8 @@ public class CompanyDetailsViewController extends JPanel implements
 
     List<IContactDto> contacts =
         contactUcc.getContactByCompany(company.getId());
-    List<IParticipationDto> participations = dayUcc.getParticipations(1);
+    List<IParticipationDto> participations = null;
+    // companyUcc.getParticipations(id)
 
 
     DefaultTableModel contactTableModel =
@@ -103,30 +107,21 @@ public class CompanyDetailsViewController extends JPanel implements
     DefaultTableModel participationTableModel =
         (DefaultTableModel) participationsTable.getModel();
 
-    int previousDay = -1;// id impossible
-    for (int i = 0; i < participations.size(); i++) {
-      List<IContactDto> contactsForParticipation = null;
-      for (IContactDto contact : contactsForParticipation) {
-
-
-        IParticipationDto currentParticipation = participations.get(i);
-        int day = currentParticipation.getBusinessDay();
-        if (day != previousDay) {
-          previousDay = day;
-          // IBusinessDayDto dayDto = dayUcc.getById(day);
-
-          participationTableModel.setValueAt(day, i, 1);
-          participationTableModel.setValueAt(
-              currentParticipation.getState(), i, 1);
-
-        } else {
-          participationTableModel.setValueAt(null, i, 0);
-          participationTableModel.setValueAt(null, i, 1);
-        }
-        participationTableModel.setValueAt(contact, i, 2);
-      }
-    }
-
+    int previousDay = -1;/*
+                          * id impossible for (int i = 0; i < participations.size(); i++) {
+                          * List<IContactDto> contactsForParticipation = null; //
+                          * contactUcc.getContactByParticipation(id); for (IContactDto contact :
+                          * contactsForParticipation) {
+                          * 
+                          * 
+                          * IParticipationDto currentParticipation = participations.get(i); int day
+                          * = currentParticipation.getBusinessDay(); if (day != previousDay) {
+                          * previousDay = day; // IBusinessDayDto dayDto = dayUcc.getById(day);
+                          * 
+                          * participationTableModel.setValueAt(day, i, 1);
+                          * participationTableModel.setValueAt( currentParticipation.getState(), i,
+                          * 1); } participationTableModel.setValueAt(contact, i, 2); } }
+                          */
     view.stateChanged(contacts, participations);
 
 

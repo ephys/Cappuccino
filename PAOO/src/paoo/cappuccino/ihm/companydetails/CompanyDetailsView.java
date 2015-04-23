@@ -1,6 +1,7 @@
 package paoo.cappuccino.ihm.companydetails;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.List;
 
@@ -92,7 +93,7 @@ public class CompanyDetailsView extends JPanel {
         10, 0));
 
     JPanel tables = new JPanel(new GridLayout(0, 1));
-    // tables.add(contactWrapper);
+    tables.add(contactWrapper);
     tables.add(participationWrapper);
 
     this.add(tables);
@@ -172,7 +173,9 @@ public class CompanyDetailsView extends JPanel {
             .setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         contactList.add(errorLabel);
       } else {
-        contactList.add(new JScrollPane(contactsTable));
+        JScrollPane scrollContact = new JScrollPane(contactsTable);
+        scrollContact.setPreferredSize(new Dimension(500, 100));
+        contactList.add(scrollContact);
       }
     }
     participationList.removeAll();
@@ -185,7 +188,10 @@ public class CompanyDetailsView extends JPanel {
             .setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         participationList.add(errorLabel);
       } else {
-        participationList.add(new JScrollPane(participationTable));
+        JScrollPane scrollParticipations =
+            new JScrollPane(participationTable);
+        scrollParticipations.setPreferredSize(new Dimension(500, 100));
+        participationList.add(scrollParticipations);
       }
     }
   }
