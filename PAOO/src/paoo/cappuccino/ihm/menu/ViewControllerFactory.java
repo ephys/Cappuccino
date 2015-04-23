@@ -104,8 +104,8 @@ public class ViewControllerFactory {
             businessDayUcc);
 
       case ATTENDANCE:
-        return new AttendanceViewController(modelAttendance, companyUcc,
-            businessDayUcc, contactUcc);
+        return new AttendanceViewController(modelAttendance, menuModel,
+            companyUcc, businessDayUcc, contactUcc);
 
       case SEARCH_PARTICIPATION:
         return new ParticipationSearchViewController(
