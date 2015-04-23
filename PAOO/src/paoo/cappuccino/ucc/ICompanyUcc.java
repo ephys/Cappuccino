@@ -63,4 +63,11 @@ public interface ICompanyUcc {
    * @param dayid The identifier of the business day.
    */
   List<ICompanyDto> getCompaniesByDay(int dayid);
+
+  /**
+   * Returns the list of business days a company has attended.
+   *
+   * @param companyId The identifier of the company.
+   */
+  // TODO List<IParticipationDto> getCompanyParticipations(int companyId); & JUnits
 }

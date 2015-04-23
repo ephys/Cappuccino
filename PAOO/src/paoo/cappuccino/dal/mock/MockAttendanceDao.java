@@ -38,4 +38,11 @@ public class MockAttendanceDao implements IAttendanceDao {
                               && attendance.getBusinessDay() == businessDayId)
         .collect(Collectors.toList());
   }
+
+  @Override
+  public List<IAttendanceDto> fetchAttendancesByContact(int contactId) {
+    return attendances.stream()
+        .filter(attendance -> attendance.getContact() == contactId)
+        .collect(Collectors.toList());
+  }
 }

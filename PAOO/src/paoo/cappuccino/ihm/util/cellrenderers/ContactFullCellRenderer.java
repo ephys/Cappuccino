@@ -8,9 +8,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import paoo.cappuccino.business.dto.IContactDto;
 
 /**
- * Renders a {@link java.time.LocalDateTime date} in a JTable.
+ * Renders a {@link IContactDto date} in a JTable.
  */
-@SuppressWarnings("serial")
 public class ContactFullCellRenderer extends DefaultTableCellRenderer {
   @Override
   public Component getTableCellRendererComponent(JTable table,
@@ -20,9 +19,11 @@ public class ContactFullCellRenderer extends DefaultTableCellRenderer {
         hasFocus, row, column);
     if (value instanceof IContactDto) {
       IContactDto contact = (IContactDto) value;
-      setText(contact.getLastName() + " " + contact.getFirstName() + " "
-          + contact.getEmail() + " " + contact.getPhone());
+      setText(contact.getLastName() + " " + contact.getFirstName());
+    } else {
+      setText(null);
     }
+
     return this;
   }
 }

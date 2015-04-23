@@ -5,13 +5,12 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import paoo.cappuccino.business.dto.IParticipationDto;
+import paoo.cappuccino.business.dto.IParticipationDto.State;
 import paoo.cappuccino.ihm.util.LocalizationUtil;
 
 /**
- * Renders a {@link paoo.cappuccino.business.dto.IParticipationDto.State state} in a JTable.
+ * Renders a {@link State state} in a JTable.
  */
-@SuppressWarnings("serial")
 public class StateCellRenderer extends DefaultTableCellRenderer {
 
   @Override
@@ -19,9 +18,11 @@ public class StateCellRenderer extends DefaultTableCellRenderer {
       Object value, boolean isSelected, boolean isFocus, int row, int col) {
     super.getTableCellRendererComponent(table, value, isSelected, isFocus,
         row, col);
-    if (value instanceof IParticipationDto.State) {
-      IParticipationDto.State state = (IParticipationDto.State) value;
+    if (value instanceof State) {
+      State state = (State) value;
       setText(LocalizationUtil.localizeState(state));
+    } else {
+      setText(null);
     }
 
     return this;

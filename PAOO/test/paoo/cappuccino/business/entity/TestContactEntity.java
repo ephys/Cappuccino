@@ -14,6 +14,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+// TODO: test contact entity
+
 public class TestContactEntity {
 
   private final static int idCompany = 1;

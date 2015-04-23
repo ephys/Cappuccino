@@ -16,6 +16,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+// TODO: contactUcc.update()
+
 /**
  * Contact UCC Unit Test.
  *

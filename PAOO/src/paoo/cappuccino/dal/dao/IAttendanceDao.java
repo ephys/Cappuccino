@@ -25,4 +25,13 @@ public interface IAttendanceDao {
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   List<IAttendanceDto> fetchAttendances(int companyId, int businessDayId);
+
+  /**
+   * Fetches the list of attendances for a contact.
+   *
+   * @param contactId The id of the contact attending the business days.
+   * @return The list of attendances.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
+   */
+  List<IAttendanceDto> fetchAttendancesByContact(int contactId);
 }

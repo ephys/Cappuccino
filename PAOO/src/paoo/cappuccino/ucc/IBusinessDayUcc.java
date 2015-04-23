@@ -77,6 +77,13 @@ public interface IBusinessDayUcc {
   List<IBusinessDayDto> getBusinessDays();
 
   /**
+   * Returns the business day matching a given id.
+   *
+   * @param id the business day id.
+   */
+  // TODO: IBusinessDayDto getBusinessDay(int id);
+
+  /**
    * Returns the list of companies attending the business day matching a given identifier.
    *
    * @param businessDayId The identifier of the business day.

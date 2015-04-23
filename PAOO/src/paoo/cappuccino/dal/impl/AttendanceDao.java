@@ -21,6 +21,7 @@ public class AttendanceDao implements IAttendanceDao {
   private final IDalBackend dalBackend;
   private PreparedStatement psCreateParticipation;
   private PreparedStatement psFetchParticipation;
+  private PreparedStatement psFetchContactParticipation;
 
   @Inject
   public AttendanceDao(IEntityFactory entityFactory, IDalBackend dalBackend) {
@@ -69,6 +70,33 @@ public class AttendanceDao implements IAttendanceDao {
       psFetchParticipation.setInt(2, businessDayId);
 
       try (ResultSet rs = psFetchParticipation.executeQuery()) {
+        List<IAttendanceDto> attendances = new ArrayList<>();
+        while (rs.next()) {
+          attendances.add(makeEntityFromSet(rs));
+        }
+
+        return attendances;
+      }
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
+
+    throw new FatalException("unreachable statement");
+  }
+
+  @Override
+  public List<IAttendanceDto> fetchAttendancesByContact(int contactId) {
+    String query = "SELECT a.company, a.business_day, a.contact FROM business_days.attendances a "
+                   + "WHERE a.contact";
+
+    try {
+      if (psFetchContactParticipation == null) {
+        psFetchContactParticipation = dalBackend.fetchPreparedStatement(query);
+      }
+
+      psFetchContactParticipation.setInt(1, contactId);
+
+      try (ResultSet rs = psFetchContactParticipation.executeQuery()) {
         List<IAttendanceDto> attendances = new ArrayList<>();
         while (rs.next()) {
           attendances.add(makeEntityFromSet(rs));

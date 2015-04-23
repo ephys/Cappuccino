@@ -3,6 +3,7 @@ package paoo.cappuccino.business.entity.impl;
 import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.entity.IContact;
 import paoo.cappuccino.util.StringUtils;
+import paoo.cappuccino.util.ValidationUtil;
 
 /**
  * Class implementing the IContact entity.
@@ -104,11 +105,13 @@ final class ContactEntity extends BaseEntity implements IContact {
 
   @Override
   public void setLastName(String lastName) {
+    ValidationUtil.ensureNotNull(lastName, "lastName");
     this.lastName = lastName;
   }
 
   @Override
   public void setFirsName(String firstName) {
+    ValidationUtil.ensureNotNull(firstName, "firstName");
     this.firstName = firstName;
   }
 

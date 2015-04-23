@@ -9,44 +9,45 @@ import paoo.cappuccino.business.dto.IContactDto;
  */
 public interface IContact extends IContactDto, IBaseEntity {
   /**
-   * Sets the contact mail.
+   * Sets the contact mail. If the given email is not null, it will be considered valid and
+   * {@link IContactDto#isEmailValid()} will return true again.
    *
-   * @param email A String.
+   * @param email A valid email, nullable.
    */
   void setEmail(String email);
 
   /**
    * Sets the contact mail validity.
    *
-   * @param emailValid A boolean.
+   * @param emailValid true: the email is valid..
    */
   void setEmailValid(boolean emailValid);
 
   /**
-   * Sets the contact phone.
+   * Sets the contact phone number.
    *
-   * @param phone A String.
+   * @param phone A phone number, nullable.
    */
   void setPhone(String phone);
 
   /**
-   * Sets the last name.
-   * 
-   * @param lastName A string.
+   * Sets the contact's last name.
+   *
+   * @param lastName The contact's last name.
    */
   void setLastName(String lastName);
 
   /**
-   * Sets the first name.
-   * 
-   * @param firstName A string.
+   * Sets the contact's first name.
+   *
+   * @param firstName The contact's first name.
    */
   void setFirsName(String firstName);
 
   /**
    * Sets the company.
-   * 
-   * @param company An integer, the id of the company.
+   *
+   * @param company The id of the company.
    */
   void setCompany(int company);
 }

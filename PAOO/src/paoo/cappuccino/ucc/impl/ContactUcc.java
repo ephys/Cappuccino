@@ -91,25 +91,34 @@ class ContactUcc implements IContactUcc {
     if (contact <= 0) {
       throw new IllegalArgumentException("The id must be positive");
     }
+
+    ValidationUtil.ensureFilled(firstName, "firstName");
+    ValidationUtil.ensureFilled(lastName, "lastName");
+    if (StringUtils.isEmpty(email)) {
+      email = null;
+    } else if (!StringUtils.isEmail(email)) {
+      throw new IllegalArgumentException("Invalid email format");
+    }
+
+    if (StringUtils.isEmpty(phone)) {
+      phone = null;
+    }
+
     IContact toUpdate = (IContact) dao.fetchContactById(contact);
-    ValidationUtil.ensureNotNull(toUpdate, "Contact to update");
+    if (toUpdate == null) {
+      throw new IllegalArgumentException("There isn't any contact matching the id " + contact);
+    }
+
     if (company > 0) {
       toUpdate.setCompany(company);
     }
-    if (email != null && !email.isEmpty()) {
-      StringUtils.isEmail(email);
-      toUpdate.setEmail(email);
-    }
-    if (firstName != null && !firstName.isEmpty()) {
-      toUpdate.setFirsName(firstName);
-    }
-    if (lastName != null && !lastName.isEmpty()) {
-      toUpdate.setLastName(lastName);
-    }
-    if (phone != null && !phone.isEmpty()) {
-      toUpdate.setPhone(phone);
-    }
-    dao.updateContact((IContactDto) toUpdate);
-    return (IContactDto) toUpdate;
+
+    toUpdate.setEmail(email);
+    toUpdate.setFirsName(firstName);
+    toUpdate.setLastName(lastName);
+    toUpdate.setPhone(phone);
+
+    dao.updateContact(toUpdate);
+    return toUpdate;
   }
 }
