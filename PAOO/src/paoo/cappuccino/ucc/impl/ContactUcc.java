@@ -24,7 +24,7 @@ class ContactUcc implements IContactUcc {
 
   @Override
   public IContactDto create(int companyId, String email, String firstName, String lastName,
-                            String phone) {
+      String phone) {
     ValidationUtil.ensureFilled(lastName, "lastName");
     ValidationUtil.ensureFilled(firstName, "firstName");
 
@@ -83,5 +83,33 @@ class ContactUcc implements IContactUcc {
       return factory.createContact(dto.getId(), dto.getVersion(), dto.getCompany(), dto.getEmail(),
           dto.isEmailValid(), dto.getFirstName(), dto.getLastName(), dto.getPhone());
     }
+  }
+
+  @Override
+  public IContactDto update(int contact, int company, String email, String firstName,
+      String lastName, String phone) {
+    if (contact <= 0) {
+      throw new IllegalArgumentException("The id must be positive");
+    }
+    IContact toUpdate = (IContact) dao.fetchContactById(contact);
+    ValidationUtil.ensureNotNull(toUpdate, "Contact to update");
+    if (company > 0) {
+      toUpdate.setCompany(company);
+    }
+    if (email != null && !email.isEmpty()) {
+      StringUtils.isEmail(email);
+      toUpdate.setEmail(email);
+    }
+    if (firstName != null && !firstName.isEmpty()) {
+      toUpdate.setFirsName(firstName);
+    }
+    if (lastName != null && !lastName.isEmpty()) {
+      toUpdate.setLastName(lastName);
+    }
+    if (phone != null && !phone.isEmpty()) {
+      toUpdate.setPhone(phone);
+    }
+    dao.updateContact((IContactDto) toUpdate);
+    return (IContactDto) toUpdate;
   }
 }
