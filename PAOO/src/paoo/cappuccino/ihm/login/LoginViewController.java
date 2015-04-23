@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -39,25 +41,30 @@ public class LoginViewController extends JPanel {
   /**
    * Creates a new ViewController for the Login gui.
    *
-   * @param model      The ViewController's model.
+   * @param model The ViewController's model.
    * @param guiManager The manager responsible for the containing frame.
    */
-  public LoginViewController(LoginModel model, IGuiManager guiManager, IUserUcc userUcc) {
+  public LoginViewController(LoginModel model, IGuiManager guiManager,
+      IUserUcc userUcc) {
     super(new BorderLayout());
     this.model = model;
     this.guiManager = guiManager;
     this.userUcc = userUcc;
 
-    this.setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(80, 80, 80)),
-        new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0, IhmConstants.M_GAP)));
+    this.setBorder(BorderFactory.createCompoundBorder(BorderFactory
+        .createMatteBorder(2, 2, 2, 2, new Color(80, 80, 80)),
+        new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0,
+            IhmConstants.M_GAP)));
 
     JPanel titlePanel = new JPanel(new BorderLayout());
-    titlePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, IhmConstants.L_GAP, 0));
+    titlePanel.setBorder(BorderFactory.createEmptyBorder(0, 0,
+        IhmConstants.L_GAP, 0));
 
-    JLabel logo = new JLabel(new ImageIcon(guiManager.getResourceManager()
-                                               .fetchImage(IhmConstants.PATH_LOGO)));
-    logo.setBorder(BorderFactory.createEmptyBorder(0, 0, IhmConstants.M_GAP, 0));
+    JLabel logo =
+        new JLabel(new ImageIcon(guiManager.getResourceManager()
+            .fetchImage(IhmConstants.PATH_LOGO)));
+    logo.setBorder(BorderFactory.createEmptyBorder(0, 0,
+        IhmConstants.M_GAP, 0));
 
     titlePanel.add(logo, BorderLayout.CENTER);
     JLabel titleLabel = new JLabelFont("Connexion", 20);
@@ -70,24 +77,45 @@ public class LoginViewController extends JPanel {
     JPasswordField passwordField = new JPasswordField();
 
     // buttons //
-    JPanel controls = new JPanel(new GridLayout(2, 0, 0, IhmConstants.M_GAP));
+    JPanel controls =
+        new JPanel(new GridLayout(2, 0, 0, IhmConstants.M_GAP));
 
-    controls.setLayout(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
+    controls.setLayout(new FlowLayout(FlowLayout.RIGHT,
+        IhmConstants.M_GAP, IhmConstants.M_GAP));
 
     JButton registerButton = new JButton("S'inscrire");
-    registerButton.addActionListener(e -> guiManager.openFrame(RegistrationFrame.class));
+    registerButton.addActionListener(e -> guiManager
+        .openFrame(RegistrationFrame.class));
 
     JButton loginButton = new JButton("Se connecter");
-    loginButton.addActionListener(e -> attemptLogin(usernameField.getText(),
-                                                    passwordField.getPassword()));
+    loginButton.addActionListener(e -> attemptLogin(
+        usernameField.getText(), passwordField.getPassword()));
+
 
     controls.add(registerButton);
     controls.add(loginButton);
 
     this.add(controls, BorderLayout.SOUTH);
     // end buttons //
+    usernameField.addKeyListener(new KeyAdapter() {
+      public void keyPressed(KeyEvent e) {
+        super.keyPressed(e);
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+          loginButton.doClick();
+        }
+      }
+    });
+    passwordField.addKeyListener(new KeyAdapter() {
+      public void keyPressed(KeyEvent e) {
+        super.keyPressed(e);
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+          loginButton.doClick();
+        }
+      }
+    });
 
-    this.add(new LoginView(model, usernameField, passwordField), BorderLayout.CENTER);
+    this.add(new LoginView(model, usernameField, passwordField),
+        BorderLayout.CENTER);
   }
 
   /**
@@ -128,9 +156,10 @@ public class LoginViewController extends JPanel {
       }
 
       // avoid password release in case of memory dump.
-      StringUtils.clearString(password);
+        StringUtils.clearString(password);
 
-      SwingUtilities.invokeLater(() -> guiManager.openFrame(MenuFrame.class).setLoggedUser(user));
-    });
+        SwingUtilities.invokeLater(() -> guiManager.openFrame(
+            MenuFrame.class).setLoggedUser(user));
+      });
   }
 }

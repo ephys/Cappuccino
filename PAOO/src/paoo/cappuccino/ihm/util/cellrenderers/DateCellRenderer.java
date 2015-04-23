@@ -13,10 +13,14 @@ import paoo.cappuccino.ihm.util.LocalizationUtil;
  */
 public class DateCellRenderer extends DefaultTableCellRenderer {
   @Override
-  public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                 boolean hasFocus, int row, int column) {
-    super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-    setText(LocalizationUtil.localizeDate((LocalDateTime) value));
+  public Component getTableCellRendererComponent(JTable table,
+      Object value, boolean isSelected, boolean hasFocus, int row,
+      int column) {
+    super.getTableCellRendererComponent(table, value, isSelected,
+        hasFocus, row, column);
+    if (value instanceof LocalDateTime) {
+      setText(LocalizationUtil.localizeDate((LocalDateTime) value));
+    }
 
     return this;
   }

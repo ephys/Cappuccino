@@ -13,10 +13,14 @@ import paoo.cappuccino.business.dto.ICompanyDto;
 public class CompanyCellRenderer extends DefaultTableCellRenderer {
 
   @Override
-  public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                 boolean hasFocus, int row, int column) {
-    super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-    setText(((ICompanyDto) value).getName());
+  public Component getTableCellRendererComponent(JTable table,
+      Object value, boolean isSelected, boolean hasFocus, int row,
+      int column) {
+    super.getTableCellRendererComponent(table, value, isSelected,
+        hasFocus, row, column);
+    if (value instanceof ICompanyDto) {
+      setText(((ICompanyDto) value).getName());
+    }
 
     return this;
   }

@@ -14,12 +14,14 @@ import paoo.cappuccino.ihm.util.LocalizationUtil;
 public class StateCellRenderer extends DefaultTableCellRenderer {
 
   @Override
-  public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                 boolean isFocus, int row, int col) {
-    super.getTableCellRendererComponent(table, value, isSelected, isFocus, row, col);
-    IParticipationDto.State state = (IParticipationDto.State) value;
-
-    setText(LocalizationUtil.localizeState(state));
+  public Component getTableCellRendererComponent(JTable table,
+      Object value, boolean isSelected, boolean isFocus, int row, int col) {
+    super.getTableCellRendererComponent(table, value, isSelected, isFocus,
+        row, col);
+    if (value instanceof IParticipationDto) {
+      IParticipationDto.State state = (IParticipationDto.State) value;
+      setText(LocalizationUtil.localizeState(state));
+    }
 
     return this;
   }

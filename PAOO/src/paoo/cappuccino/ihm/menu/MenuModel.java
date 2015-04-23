@@ -51,7 +51,7 @@ public class MenuModel extends BaseModel {
   }
 
   public Object[] getTransitionObjects() {
-    return transitionObjects.clone();
+    return transitionObjects == null ? null : transitionObjects.clone();
   }
 
   /**
