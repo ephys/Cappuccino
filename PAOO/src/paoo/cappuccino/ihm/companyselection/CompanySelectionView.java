@@ -26,8 +26,8 @@ import paoo.cappuccino.ucc.ICompanyUcc;
 @SuppressWarnings("serial")
 public class CompanySelectionView extends JPanel {
 
-  private static final String[] tableNames = {"Nom entreprise", "Adresse entreprise",
-                                              "Date d'enregistrement", "Sélectionner"};
+  private static final String[] tableNames = {"Nom entreprise",
+      "Adresse entreprise", "Date d'enregistrement", "Sélectionner"};
 
   private final JTable companiesTable;
 
@@ -36,16 +36,19 @@ public class CompanySelectionView extends JPanel {
    *
    * @param model The model of the view.
    */
-  public CompanySelectionView(CompanySelectionModel model, ICompanyUcc companyUcc) {
+  public CompanySelectionView(CompanySelectionModel model,
+      ICompanyUcc companyUcc) {
     setLayout(new BorderLayout());
 
-    List<ICompanyDto> invitableCompanies = companyUcc.getInvitableCompanies();
-    DefaultTableModel tableModel = new DefaultTableModel(tableNames, invitableCompanies.size()) {
-      @Override
-      public boolean isCellEditable(int row, int column) {
-        return column == 3;
-      }
-    };
+    List<ICompanyDto> invitableCompanies =
+        companyUcc.getInvitableCompanies();
+    DefaultTableModel tableModel =
+        new DefaultTableModel(tableNames, invitableCompanies.size()) {
+          @Override
+          public boolean isCellEditable(int row, int column) {
+            return column == 3;
+          }
+        };
 
     companiesTable = new JTable(tableModel) {
       @Override
@@ -71,25 +74,31 @@ public class CompanySelectionView extends JPanel {
       ICompanyDto company = invitableCompanies.get(i);
 
       tableModel.setValueAt(company, i, 0);
-      tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i, 1);
+      tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i,
+          1);
       tableModel.setValueAt(company.getRegisterDate(), i, 2);
       tableModel.setValueAt(false, i, 3);
     }
 
-    companiesTable.getColumn(tableNames[0]).setCellRenderer(new CompanyCellRenderer());
-    companiesTable.getColumn(tableNames[2]).setCellRenderer(new DateCellRenderer());
+    companiesTable.getColumn(tableNames[0]).setCellRenderer(
+        new CompanyCellRenderer());
+    companiesTable.getColumn(tableNames[2]).setCellRenderer(
+        new DateCellRenderer());
 
-    ChangeListener listener = e -> {
-      this.removeAll();
-      if (model.getSelectedDay() != null) {
-        this.add(new JScrollPane(companiesTable));
-      } else {
-        this.add(new JLabel("Aucune journée des entreprises sélectionnée", SwingConstants.CENTER));
-      }
+    ChangeListener listener =
+        e -> {
+          this.removeAll();
+          if (model.getSelectedDay() != null) {
+            this.add(new JScrollPane(companiesTable));
+          } else {
+            this.add(new JLabel(
+                "Aucune journée des entreprises sélectionnée",
+                SwingConstants.CENTER));
+          }
 
-      this.repaint();
-      this.revalidate();
-    };
+          this.repaint();
+          this.revalidate();
+        };
 
     model.addChangeListener(listener);
     listener.stateChanged(null);

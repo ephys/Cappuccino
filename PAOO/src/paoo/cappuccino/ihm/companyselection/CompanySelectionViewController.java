@@ -56,7 +56,7 @@ public class CompanySelectionViewController extends JPanel {
   private final IBusinessDayUcc businessDayUcc;
   private final IContactUcc contactUcc;
   private final Logger logger;
-  private final JComboBox<IBusinessDayDto> businessDaySelector;
+  private JComboBox<IBusinessDayDto> businessDaySelector;
 
   private File destinationDirectory = new JFileChooser()
       .getFileSystemView().getDefaultDirectory();
@@ -92,21 +92,6 @@ public class CompanySelectionViewController extends JPanel {
       }
     });
 
-    List<IBusinessDayDto> invitationlessDays =
-        businessDayUcc.getInvitationlessDays();
-    JComboDay businessDayPanel =
-        new JComboDay(
-            invitationlessDays
-                .toArray(new IBusinessDayDto[invitationlessDays.size()]));
-    this.businessDaySelector = businessDayPanel.getCombo();
-    businessDaySelector
-        .addActionListener(event -> {
-          if (model.getSelectedDay() != businessDaySelector
-              .getSelectedItem()) {
-            model.setSelectedDay((IBusinessDayDto) businessDaySelector
-                .getSelectedItem());
-          }
-        });
 
     JButton saveButton = new JButton("Sauvegarder et Valider");
     saveButton.addActionListener(e -> {
@@ -165,6 +150,7 @@ public class CompanySelectionViewController extends JPanel {
     savePanel.add(directorySaveButton);
 
     JPanel validatePanel = new JPanel();
+    JPanel businessDayPanel = new JPanel();
     validatePanel.add(businessDayPanel);
     validatePanel.add(saveButton);
 
@@ -209,14 +195,44 @@ public class CompanySelectionViewController extends JPanel {
     this.add(view);
     this.add(southPanel, BorderLayout.SOUTH);
 
-    ChangeListener changeListener = e -> {
-      final boolean visible = model.getSelectedDay() != null;
-      selectAllButton.setVisible(visible);
-      saveButton.setVisible(visible);
-      savePanel.setVisible(visible);
+    ChangeListener changeListener =
+        e -> {
+          final boolean visible = model.getSelectedDay() != null;
+          selectAllButton.setVisible(visible);
+          saveButton.setVisible(visible);
+          savePanel.setVisible(visible);
+          // jcomboDay
+          List<IBusinessDayDto> invitationlessDays =
+              businessDayUcc.getInvitationlessDays();
+          businessDayPanel.removeAll();
+          if (invitationlessDays.size() != 0) {
+            JComboDay businessDayCombo =
+                new JComboDay(
+                    invitationlessDays
+                        .toArray(new IBusinessDayDto[invitationlessDays
+                            .size()]));
+            this.businessDaySelector = businessDayCombo.getCombo();
+            businessDaySelector.addActionListener(event -> {
+              if (model.getSelectedDay() != businessDaySelector
+                  .getSelectedItem()) {
+                model.setSelectedDay((IBusinessDayDto) businessDaySelector
+                    .getSelectedItem());
+              }
+            });
+            businessDaySelector.setSelectedItem(model.getSelectedDay());
+            businessDayPanel.add(businessDayCombo);
+          } else {
+            businessDayPanel.add(
+                new JLabel("Aucune journée disponible !"),
+                BorderLayout.NORTH);
+            JButton createDay = new JButton("nouvelle journée");
+            createDay.addActionListener(event -> {
+              menu.setCurrentPage(MenuEntry.CREATE_BDAY);
+            });
+            businessDayPanel.add(createDay);
+          }
 
-      businessDaySelector.setSelectedItem(model.getSelectedDay());
-    };
+        };
     model.addChangeListener(changeListener);
     changeListener.stateChanged(null);
   }
