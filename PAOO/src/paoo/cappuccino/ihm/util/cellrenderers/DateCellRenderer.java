@@ -11,6 +11,7 @@ import paoo.cappuccino.ihm.util.LocalizationUtil;
 /**
  * Renders a {@link java.time.LocalDateTime date} in a JTable.
  */
+@SuppressWarnings("serial")
 public class DateCellRenderer extends DefaultTableCellRenderer {
   @Override
   public Component getTableCellRendererComponent(JTable table,

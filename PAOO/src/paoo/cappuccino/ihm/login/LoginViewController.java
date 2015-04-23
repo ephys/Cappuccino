@@ -98,17 +98,17 @@ public class LoginViewController extends JPanel {
     this.add(controls, BorderLayout.SOUTH);
     // end buttons //
     usernameField.addKeyListener(new KeyAdapter() {
-      public void keyPressed(KeyEvent e) {
-        super.keyPressed(e);
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+      public void keyPressed(KeyEvent event) {
+        super.keyPressed(event);
+        if (event.getKeyCode() == KeyEvent.VK_ENTER) {
           loginButton.doClick();
         }
       }
     });
     passwordField.addKeyListener(new KeyAdapter() {
-      public void keyPressed(KeyEvent e) {
-        super.keyPressed(e);
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+      public void keyPressed(KeyEvent event) {
+        super.keyPressed(event);
+        if (event.getKeyCode() == KeyEvent.VK_ENTER) {
           loginButton.doClick();
         }
       }

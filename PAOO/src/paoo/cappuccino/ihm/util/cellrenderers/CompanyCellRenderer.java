@@ -10,6 +10,7 @@ import paoo.cappuccino.business.dto.ICompanyDto;
 /**
  * Renders a {@link ICompanyDto company} in a JTable.
  */
+@SuppressWarnings("serial")
 public class CompanyCellRenderer extends DefaultTableCellRenderer {
 
   @Override

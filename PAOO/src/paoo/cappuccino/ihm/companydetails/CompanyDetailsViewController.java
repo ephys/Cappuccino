@@ -103,25 +103,24 @@ public class CompanyDetailsViewController extends JPanel implements
       contactTableModel.setValueAt(contact.getEmail(), i, 2);
       contactTableModel.setValueAt(contact.getPhone(), i, 3);
     }
-
-    DefaultTableModel participationTableModel =
-        (DefaultTableModel) participationsTable.getModel();
-
-    int previousDay = -1;/*
-                          * id impossible for (int i = 0; i < participations.size(); i++) {
-                          * List<IContactDto> contactsForParticipation = null; //
-                          * contactUcc.getContactByParticipation(id); for (IContactDto contact :
-                          * contactsForParticipation) {
-                          * 
-                          * 
-                          * IParticipationDto currentParticipation = participations.get(i); int day
-                          * = currentParticipation.getBusinessDay(); if (day != previousDay) {
-                          * previousDay = day; // IBusinessDayDto dayDto = dayUcc.getById(day);
-                          * 
-                          * participationTableModel.setValueAt(day, i, 1);
-                          * participationTableModel.setValueAt( currentParticipation.getState(), i,
-                          * 1); } participationTableModel.setValueAt(contact, i, 2); } }
-                          */
+    /*
+     * DefaultTableModel participationTableModel = (DefaultTableModel)
+     * participationsTable.getModel();
+     * 
+     * int previousDay = -1; id impossible for (int i = 0; i < participations.size(); i++) {
+     * List<IContactDto> contactsForParticipation = null; //
+     * contactUcc.getContactByParticipation(id); for (IContactDto contact :
+     * contactsForParticipation) {
+     * 
+     * 
+     * IParticipationDto currentParticipation = participations.get(i); int day =
+     * currentParticipation.getBusinessDay(); if (day != previousDay) { previousDay = day; //
+     * IBusinessDayDto dayDto = dayUcc.getById(day);
+     * 
+     * participationTableModel.setValueAt(day, i, 1); participationTableModel.setValueAt(
+     * currentParticipation.getState(), i, 1); } participationTableModel.setValueAt(contact, i, 2);
+     * } }
+     */
     view.stateChanged(contacts, participations);
 
 

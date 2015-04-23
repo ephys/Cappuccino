@@ -10,6 +10,7 @@ import paoo.cappuccino.business.dto.IContactDto;
 /**
  * Renders a {@link IContactDto contact} in a JTable.
  */
+@SuppressWarnings("serial")
 public class ContactCellRenderer extends DefaultTableCellRenderer {
 
   @Override
@@ -19,7 +20,7 @@ public class ContactCellRenderer extends DefaultTableCellRenderer {
     super.getTableCellRendererComponent(table, value, isSelected,
         hasFocus, row, column);
     if (value instanceof IContactDto) {
-      setText(value == null ? "null" : ((IContactDto) value).getLastName());
+      setText(((IContactDto) value).getLastName());
     }
 
     return this;

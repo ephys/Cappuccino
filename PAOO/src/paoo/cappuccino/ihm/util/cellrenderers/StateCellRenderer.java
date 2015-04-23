@@ -11,6 +11,7 @@ import paoo.cappuccino.ihm.util.LocalizationUtil;
 /**
  * Renders a {@link paoo.cappuccino.business.dto.IParticipationDto.State state} in a JTable.
  */
+@SuppressWarnings("serial")
 public class StateCellRenderer extends DefaultTableCellRenderer {
 
   @Override
@@ -18,7 +19,7 @@ public class StateCellRenderer extends DefaultTableCellRenderer {
       Object value, boolean isSelected, boolean isFocus, int row, int col) {
     super.getTableCellRendererComponent(table, value, isSelected, isFocus,
         row, col);
-    if (value instanceof IParticipationDto) {
+    if (value instanceof IParticipationDto.State) {
       IParticipationDto.State state = (IParticipationDto.State) value;
       setText(LocalizationUtil.localizeState(state));
     }
