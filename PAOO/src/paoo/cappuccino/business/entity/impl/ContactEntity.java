@@ -11,9 +11,9 @@ import paoo.cappuccino.util.StringUtils;
  */
 final class ContactEntity extends BaseEntity implements IContact {
 
-  private final int companyId;
-  private final String firstName;
-  private final String lastName;
+  private int companyId;
+  private String firstName;
+  private String lastName;
   private String phone;
   private String email;
   private boolean emailValid;
@@ -87,7 +87,7 @@ final class ContactEntity extends BaseEntity implements IContact {
   @Override
   public boolean equals(Object obj) {
     return obj == this
-           || (obj instanceof IContactDto && ((IContactDto) obj).getId() == this.getId());
+        || (obj instanceof IContactDto && ((IContactDto) obj).getId() == this.getId());
   }
 
   @Override
@@ -97,13 +97,23 @@ final class ContactEntity extends BaseEntity implements IContact {
 
   @Override
   public String toString() {
-    return "ContactEntity{"
-           + "companyId=" + companyId
-           + ", firstName='" + firstName + '\''
-           + ", lastName='" + lastName + '\''
-           + ", phone='" + phone + '\''
-           + ", email='" + email + '\''
-           + ", emailValid=" + emailValid
-           + '}';
+    return "ContactEntity{" + "companyId=" + companyId + ", firstName='" + firstName + '\''
+        + ", lastName='" + lastName + '\'' + ", phone='" + phone + '\'' + ", email='" + email
+        + '\'' + ", emailValid=" + emailValid + '}';
+  }
+
+  @Override
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  @Override
+  public void setFirsName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  @Override
+  public void setCompany(int company) {
+    this.companyId = company;
   }
 }

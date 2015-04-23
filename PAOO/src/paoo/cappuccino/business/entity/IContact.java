@@ -28,4 +28,25 @@ public interface IContact extends IContactDto, IBaseEntity {
    * @param phone A String.
    */
   void setPhone(String phone);
+
+  /**
+   * Sets the last name.
+   * 
+   * @param lastName A string.
+   */
+  void setLastName(String lastName);
+
+  /**
+   * Sets the first name.
+   * 
+   * @param firstName A string.
+   */
+  void setFirsName(String firstName);
+
+  /**
+   * Sets the company.
+   * 
+   * @param company An integer, the id of the company.
+   */
+  void setCompany(int company);
 }
