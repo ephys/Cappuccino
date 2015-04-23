@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -25,6 +26,7 @@ import javax.swing.table.TableColumn;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
+import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.CompanyListRenderer;
@@ -67,8 +69,8 @@ public class AttendanceViewController extends JPanel implements
    * Creates a new ViewController for the attendance selection gui.
    */
   public AttendanceViewController(AttendanceModel model, MenuModel menu,
-      ICompanyUcc companyUcc, IBusinessDayUcc businessDayUcc,
-      IContactUcc contactUcc) {
+      IGuiManager manager, ICompanyUcc companyUcc,
+      IBusinessDayUcc businessDayUcc, IContactUcc contactUcc) {
     super(new BorderLayout());
     this.model = model;
     this.businessDayUcc = businessDayUcc;
@@ -202,19 +204,46 @@ public class AttendanceViewController extends JPanel implements
 
     JPanel controls = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     this.submitButton = new JButton("Valider");
-    submitButton.addActionListener(e -> {
-      List<IContactDto> contacts = new ArrayList<>();
+    submitButton
+        .addActionListener(e -> {
+          List<IContactDto> contacts = new ArrayList<>();
+          StringBuilder listContacts = new StringBuilder();
+          for (int i = 0; i < contactsTable.getRowCount(); i++) {
+            if ((boolean) contactsTable.getValueAt(i, 3)) {
+              IContactDto currentContact =
+                  (IContactDto) contactsTable.getValueAt(i, 0);
+              contacts.add(currentContact);
+              listContacts.append("[" + currentContact.getFirstName()
+                  + " " + currentContact.getLastName() + "]");
+            }
+          }
+          if (contacts.size() == 0) {
+            if (JOptionPane.showConfirmDialog(this,
+                "Personne n'est selectionné. Valider ?") != JOptionPane.OK_OPTION) {
+              return;
+            }
+          }
 
-      for (int i = 0; i < contactsTable.getRowCount(); i++) {
-        if ((boolean) contactsTable.getValueAt(i, 3)) {
-          contacts.add((IContactDto) contactsTable.getValueAt(i, 0));
-        }
-      }
-
-      businessDayUcc.addInvitedContacts(
-          contacts.toArray(new IContactDto[contacts.size()]),
-          model.getSelectedDay());
-    });
+          businessDayUcc.addInvitedContacts(
+              contacts.toArray(new IContactDto[contacts.size()]),
+              model.getSelectedDay());
+          JOptionPane.showMessageDialog(this,
+              "Participations enregistrées");
+          if (contacts.size() == 0) {
+            manager.getLogger().info(
+                "[Cancel Attendance] "
+                    + model.getSelectedDay().getEventDate() + " / "
+                    + model.getSelectedCompany().getName());
+          } else {
+            manager.getLogger().info(
+                "[New Attendance] "
+                    + model.getSelectedDay().getEventDate() + " / "
+                    + model.getSelectedCompany().getName() + " / "
+                    + listContacts.toString());
+          }
+          menu.setCurrentPage(MenuEntry.COMPANY_DETAILS,
+              model.getSelectedCompany());
+        });
     controls.add(submitButton);
 
     this.add(controls, BorderLayout.SOUTH);
