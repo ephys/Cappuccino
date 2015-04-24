@@ -8,6 +8,7 @@ import paoo.cappuccino.business.dto.IParticipationDto;
 
 /**
  * Cell Editor for a toggle button.
+ * 
  * @author Opsomer Mathias
  */
 public class CancelButtonCellEditor extends DefaultCellEditor {
@@ -17,6 +18,7 @@ public class CancelButtonCellEditor extends DefaultCellEditor {
 
   /**
    * Creates a toggle cell editor.
+   * 
    * @param button The button to display while editing, feel free to attach event listeners to it.
    */
   public CancelButtonCellEditor(JButton button) {
@@ -29,11 +31,12 @@ public class CancelButtonCellEditor extends DefaultCellEditor {
 
         cancelled = !participation.isCancelled();
 
-        button.setEnabled(participation.getState() != IParticipationDto.State.DECLINED
-                          && participation.getState() != IParticipationDto.State.INVITED
-                          && !participation.isCancelled());
+        button
+            .setEnabled(participation.getState() != IParticipationDto.State.DECLINED
+                && participation.getState() != IParticipationDto.State.INVITED
+                && cancelled);
 
-        button.setText(cancelled ? "Annuler" : "Annulé");
+        button.setText(cancelled ? "Annuler" : "Annulée");
       }
 
       public Object getCellEditorValue() {

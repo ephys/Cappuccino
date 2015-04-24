@@ -34,6 +34,7 @@ import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
+import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
@@ -115,7 +116,15 @@ public class CompanySelectionViewController extends JPanel {
         this.businessDayUcc.addInvitedCompanies(selectedCompanies
             .toArray(new ICompanyDto[selectedCompanies.size()]), model
             .getSelectedDay());
-
+        StringBuilder companies = new StringBuilder();
+        for (ICompanyDto iCompanyDto : selectedCompanies) {
+          companies.append("[" + iCompanyDto.getName() + "]");
+        }
+        guiManager.getLogger()
+            .info(
+                "[Selection screen] [New selection] "
+                    + model.getSelectedDay().getEventDate() + "/ "
+                    + companies);
         IBusinessDayDto selectedDay = model.getSelectedDay();
         model.setSelectedDay(null);
         this.menu.setCurrentPage(MenuEntry.HOME, selectedDay);
@@ -222,8 +231,7 @@ public class CompanySelectionViewController extends JPanel {
             businessDaySelector.setSelectedItem(model.getSelectedDay());
             businessDayPanel.add(businessDayCombo);
           } else {
-            businessDayPanel.add(
-                new JLabel("Aucune journée disponible !"),
+            businessDayPanel.add(new JLabel(IhmConstants.ERROR_NO_BUSINESS_DAY),
                 BorderLayout.NORTH);
             JButton createDay = new JButton("nouvelle journée");
             createDay.addActionListener(event -> {

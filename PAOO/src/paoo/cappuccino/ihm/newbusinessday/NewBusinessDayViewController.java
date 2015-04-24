@@ -17,6 +17,7 @@ import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.DatePicker;
+import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JLabelFont;
 import paoo.cappuccino.ihm.util.LocalizationUtil;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
@@ -43,28 +44,25 @@ public class NewBusinessDayViewController extends JPanel {
             20), manager.getLogger());
 
     JButton createButton = new JButton("Créer");
-    createButton
-        .addActionListener(e -> {
-          LocalDateTime selectedDate = datePicker.getSelection();
+    createButton.addActionListener(e -> {
+      LocalDateTime selectedDate = datePicker.getSelection();
 
-          if (selectedDate == null) {
+      if (selectedDate == null) {
 
-            errorDay.setText("La date entrée n'est pas valide.");
-            return;
-          }
-          try {
-            IBusinessDayDto createdDate =
-                businessDayUcc.create(selectedDate);
-            manager.getLogger().info(
-                "Created a new business day : "
-                    + LocalizationUtil.localizeDate(selectedDate));
-            menu.setCurrentPage(MenuEntry.SELECT_COMPANY, createdDate);
-          } catch (IllegalArgumentException event) {
-            errorDay
-                .setText("Une journée des entreprise existe déjà pour cette année.");
-          }
+        errorDay.setText(IhmConstants.ERROR_INVALID_DAY);
+        return;
+      }
+      try {
+        IBusinessDayDto createdDate = businessDayUcc.create(selectedDate);
+        manager.getLogger().info(
+            "Created a new business day : "
+                + LocalizationUtil.localizeDate(selectedDate));
+        menu.setCurrentPage(MenuEntry.SELECT_COMPANY, createdDate);
+      } catch (IllegalArgumentException event) {
+        errorDay.setText(IhmConstants.ERROR_YEAR_ALREADY_HAVE_A_DAY);
+      }
 
-        });
+    });
 
     JPanel mainPanel = new JPanel(new GridLayout(3, 1));
     JLabel titleLabel =

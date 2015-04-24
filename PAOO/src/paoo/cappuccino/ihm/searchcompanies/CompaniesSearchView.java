@@ -15,6 +15,7 @@ import javax.swing.table.TableColumn;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IUserDto;
+import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.LocalizationUtil;
 import paoo.cappuccino.ihm.util.cellrenderers.CompanyCellRenderer;
 import paoo.cappuccino.ihm.util.cellrenderers.DateCellRenderer;
@@ -36,19 +37,21 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
   /**
    * Creates a view for the company search screen.
    *
-   * @param model      The model of the view.
+   * @param model The model of the view.
    * @param companyUcc The app instance of the company ucc.
-   * @param userUcc    The app instance of the user ucc.
+   * @param userUcc The app instance of the user ucc.
    */
-  public CompaniesSearchView(CompaniesSearchModel model, ICompanyUcc companyUcc, IUserUcc userUcc) {
+  public CompaniesSearchView(CompaniesSearchModel model,
+      ICompanyUcc companyUcc, IUserUcc userUcc) {
 
     setLayout(new BorderLayout());
     this.model = model;
     this.companyUcc = companyUcc;
     this.userUcc = userUcc;
 
-    String[] tableTitles = new String[]{"Nom entreprise", "Adresse entreprise",
-                                        "Date d'enregistrement", "Enregistreur"};
+    String[] tableTitles =
+        new String[] {"Nom entreprise", "Adresse entreprise",
+            "Date d'enregistrement", "Enregistreur"};
     this.tableModel = new DefaultTableModel(tableTitles, 0) {
       @Override
       public boolean isCellEditable(int row, int column) {
@@ -74,8 +77,8 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
   public void stateChanged(ChangeEvent event) {
 
     List<ICompanyDto> companies =
-        companyUcc.searchCompanies(model.getName(), model.getPostCode(), model.getTown(),
-                                   model.getStreet());
+        companyUcc.searchCompanies(model.getName(), model.getPostCode(),
+            model.getTown(), model.getStreet());
 
     if (companies != null && companies.size() != 0) {
       if (this.removedWidget) {
@@ -92,7 +95,7 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
       if (!this.removedWidget) {
         this.centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        centerPadding.add(new JLabel("Il n'y a aucune entreprise correspondante"));
+        centerPadding.add(new JLabel(IhmConstants.ERROR_NO_BUSINESS_DAY));
 
         this.remove(this.scrollPane);
         this.add(centerPadding);
@@ -121,7 +124,8 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
       }
 
       tableModel.setValueAt(company, i, 0);
-      tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i, 1);
+      tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i,
+          1);
       tableModel.setValueAt(company.getRegisterDate(), i, 2);
       tableModel.setValueAt(creatorName, i, 3);
     }

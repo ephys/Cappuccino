@@ -16,6 +16,7 @@ import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.dto.IUserDto;
+import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JLabelFont;
 import paoo.cappuccino.ihm.util.LocalizationUtil;
 import paoo.cappuccino.ihm.util.cellrenderers.ContactCellRenderer;
@@ -166,9 +167,7 @@ public class CompanyDetailsView extends JPanel {
     contactList.removeAll();
     if (contacts != null) {
       if (contacts.size() == 0) {
-        JLabel errorLabel =
-            new JLabel(
-                "Il n'y a aucune personne de contact pour cette entreprise.");
+        JLabel errorLabel = new JLabel(IhmConstants.ERROR_NO_CONTACTS);
         errorLabel
             .setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         contactList.add(errorLabel);
@@ -181,9 +180,7 @@ public class CompanyDetailsView extends JPanel {
     participationList.removeAll();
     if (participations != null) {
       if (participations.size() == 0) {
-        JLabel errorLabel =
-            new JLabel(
-                "Il n'y a aucune participations pour cette entreprise.");
+        JLabel errorLabel = new JLabel(IhmConstants.ERROR_NO_PARTICIPATIONS);
         errorLabel
             .setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         participationList.add(errorLabel);

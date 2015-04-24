@@ -57,12 +57,12 @@ public class MenuViewController extends MenuView {
     JPanel searchLabelPanel = new JPanel();
     JLabelFont searchLabel = new JLabelFont("Recherches", 16);
     searchLabelPanel.add(searchLabel);
-    searchLabelPanel.setBackground(IhmConstants.LIGHT_BLUE);
+    searchLabelPanel.setBackground(IhmConstants.Font_Title);
 
     JPanel dayLabelPanel = new JPanel();
     JLabelFont dayLabel = new JLabelFont("Gérer journées", 16);
     dayLabelPanel.add(dayLabel);
-    dayLabelPanel.setBackground(IhmConstants.LIGHT_BLUE);
+    dayLabelPanel.setBackground(IhmConstants.Font_Title);
 
     JPanel controls = new JPanel(new GridBagLayout());
     controls.setAlignmentY(Component.TOP_ALIGNMENT);
@@ -106,7 +106,7 @@ public class MenuViewController extends MenuView {
       JPanel entrepriseLabelPanel = new JPanel();
       JLabelFont entrepriseLabel = new JLabelFont("Administration", 16);
       entrepriseLabelPanel.add(entrepriseLabel);
-      entrepriseLabelPanel.setBackground(IhmConstants.LIGHT_BLUE);
+      entrepriseLabelPanel.setBackground(IhmConstants.Font_Title);
 
       JPanel companies = new JPanel(new BorderLayout());
       JPanel companiesCenter = new JPanel(new GridLayout(2, 0));

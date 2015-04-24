@@ -10,13 +10,10 @@ import java.awt.Color;
 public interface IhmConstants {
 
   /**
-   * medium gap.
+   * gaps.
    */
   int M_GAP = 15;
 
-  /**
-   * large gap.
-   */
   int L_GAP = 30;
 
   int XL_GAP = 100;
@@ -33,7 +30,8 @@ public interface IhmConstants {
   /**
    * error passwords are not matching.
    */
-  String ERROR_NOT_MATCHING_PASSWORD = "Les mots de passes ne correspondent pas.";
+  String ERROR_NOT_MATCHING_PASSWORD =
+      "Les mots de passes ne correspondent pas.";
   /**
    * error invalid email.
    */
@@ -51,12 +49,30 @@ public interface IhmConstants {
    */
   String ERROR_ALPHA_INPUT = "Ce champ ne peut contenir que des lettres.";
 
-  String ERROR_NUMERICAL_INPUT = "Ce champ ne peut contenir que des chiffres";
+  String ERROR_NUMERICAL_INPUT =
+      "Ce champ ne peut contenir que des chiffres";
 
-  Color LIGHT_BLUE = new Color(155, 178, 247);
+  Color Font_Title = new Color(212, 82, 82);
 
   String PATH_LOGO = "lib/logo.png";
-  String ERROR_NO_COMPANIES = "Aucune entreprise disponible";
+  String ERROR_NO_COMPANY = "Aucune entreprise disponible";
+
+  String ERROR_NO_BUSINESS_DAY =
+      "Aucune journée des entreprises disponible.";
+
+  String ERROR_NO_CONTACTS =
+      "Il n'y a aucune personne de contact disponible";
+
+  String ERROR_NO_PARTICIPATIONS =
+      "Il n'y a aucune participations disponible";
+
+  String SELECT_A_DAY = "Sélectionnez une journée.";
+
+
+  String ERROR_INVALID_DAY = "La date entrée n'est pas valide.";
+
+  String ERROR_YEAR_ALREADY_HAVE_A_DAY =
+      "Une journée des entreprise existe déjà pour cette année.";
 
 
 

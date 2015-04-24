@@ -99,7 +99,7 @@ public class AttendanceViewController extends JPanel implements
 
     if (listDay.isEmpty()) {
       JPanel noDay = new JPanel();
-      noDay.add(new JLabel("Aucune journée des entreprises disponible."));
+      noDay.add(new JLabel(IhmConstants.ERROR_NO_BUSINESS_DAY));
       top.add(noDay);
     } else {
       top.add(dayPanel);
@@ -294,7 +294,7 @@ public class AttendanceViewController extends JPanel implements
     List<ICompanyDto> companyList =
         companyUcc.getCompaniesByDay(model.getSelectedDay().getId());
     if (companyList.isEmpty()) {
-      companyComboMessage.setText(IhmConstants.ERROR_NO_COMPANIES);
+      companyComboMessage.setText(IhmConstants.ERROR_NO_COMPANY);
       comboCompanies.setVisible(false);
 
       return;

@@ -30,7 +30,6 @@ public abstract class BaseFrame extends JFrame {
   public BaseFrame(String title, int width, int height,
       IGuiManager guiManager) {
     super(title);
-
     setIconImage(guiManager.getResourceManager().fetchImage(
         IhmConstants.PATH_LOGO));
 

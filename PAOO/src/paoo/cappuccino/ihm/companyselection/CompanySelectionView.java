@@ -13,6 +13,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.LocalizationUtil;
 import paoo.cappuccino.ihm.util.cellrenderers.CompanyCellRenderer;
 import paoo.cappuccino.ihm.util.cellrenderers.DateCellRenderer;
@@ -91,8 +92,7 @@ public class CompanySelectionView extends JPanel {
           if (model.getSelectedDay() != null) {
             this.add(new JScrollPane(companiesTable));
           } else {
-            this.add(new JLabel(
-                "Aucune journée des entreprises sélectionnée",
+            this.add(new JLabel(IhmConstants.SELECT_A_DAY,
                 SwingConstants.CENTER));
           }
 

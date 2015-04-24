@@ -39,6 +39,7 @@ import paoo.cappuccino.business.dto.IParticipationDto.State;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
+import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ihm.util.JLabelFont;
 import paoo.cappuccino.ihm.util.LocalizationUtil;
@@ -163,6 +164,14 @@ public class HomeViewController extends JPanel implements ChangeListener {
       if (selectedState == participation.getState()) {
         return;
       }
+      if (participation.isCancelled()) {
+        JOptionPane.showMessageDialog(HomeViewController.this,
+            "Participation annulée.", "Action invalide",
+            JOptionPane.ERROR_MESSAGE);
+        stateCombo.setSelectedItem(participation.getState());
+        return;
+      }
+
 
       if (!dayUcc.changeState(participation, selectedState)) {
         JOptionPane.showMessageDialog(HomeViewController.this,
@@ -170,6 +179,11 @@ public class HomeViewController extends JPanel implements ChangeListener {
             JOptionPane.ERROR_MESSAGE);
 
         stateCombo.setSelectedItem(participation.getState());
+      } else {
+        guiManager.getLogger().info(
+            "[Home screen] "
+                + ((ICompanyDto) tableModel.getValueAt(row, 0)).getName()
+                + " -> " + participation.getState());
       }
     });
     stateCombo.addPopupMenuListener(new PopupMenuListener() {
@@ -182,6 +196,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
         IParticipationDto participation =
             (IParticipationDto) tableModel.getValueAt(row, 2);
+
         State[] states =
             ParticipationUtils.getFollowingStates(participation.getState());
 
@@ -212,6 +227,10 @@ public class HomeViewController extends JPanel implements ChangeListener {
       IParticipationDto participation =
           (IParticipationDto) tableModel.getValueAt(row, 2);
       dayUcc.cancelParticipation(participation);
+      guiManager.getLogger().info(
+          "[Home screen] "
+              + ((ICompanyDto) tableModel.getValueAt(row, 0)).getName()
+              + " Cancelled");
     });
 
     this.scrollTable = new JScrollPane(table);
@@ -364,17 +383,17 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
       switch (errno) {
         case ERROR_NO_DAY:
-          errorMessage.setText("Aucune journée disponible.");
+          errorMessage.setText(IhmConstants.ERROR_NO_BUSINESS_DAY);
           contents.add(createDayButton);
           break;
 
         case ERROR_NO_DAY_SELECTED:
-          errorMessage.setText("Sélectionnez une journée.");
+          errorMessage.setText(IhmConstants.SELECT_A_DAY);
           contents.add(createDayButton);
           break;
 
         case ERROR_NO_PARTICIPATION:
-          errorMessage.setText("Aucune entreprise invitée.");
+          errorMessage.setText(IhmConstants.ERROR_NO_COMPANY);
           contents.add(createParticipationButton);
           break;
 

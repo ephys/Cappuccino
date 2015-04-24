@@ -77,7 +77,7 @@ public class MenuView extends JPanel implements ChangeListener {
     mainPanel = new JPanel(new BorderLayout());
 
     JPanel titlePanel = new JPanel();
-    titlePanel.setBackground(IhmConstants.LIGHT_BLUE);
+    titlePanel.setBackground(IhmConstants.Font_Title);
     titlePanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
     titlePanel.add(title);
 
