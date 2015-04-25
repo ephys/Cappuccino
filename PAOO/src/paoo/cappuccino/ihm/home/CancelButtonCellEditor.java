@@ -13,8 +13,9 @@ import paoo.cappuccino.business.dto.IParticipationDto;
  */
 public class CancelButtonCellEditor extends DefaultCellEditor {
 
+  private static final long serialVersionUID = 6445724856534424146L;
   private IParticipationDto participation;
-  private boolean cancelled;
+  private boolean isCancelled;
 
   /**
    * Creates a toggle cell editor.
@@ -26,17 +27,20 @@ public class CancelButtonCellEditor extends DefaultCellEditor {
 
     editorComponent = button;
     delegate = new EditorDelegate() {
+
+      private static final long serialVersionUID = 6350302015024530674L;
+
       public void setValue(Object value) {
         participation = (IParticipationDto) value;
 
-        cancelled = !participation.isCancelled();
+        isCancelled = participation.isCancelled();
 
         button
             .setEnabled(participation.getState() != IParticipationDto.State.DECLINED
                 && participation.getState() != IParticipationDto.State.INVITED
-                && cancelled);
+                && !isCancelled);
 
-        button.setText(cancelled ? "Annuler" : "Annulée");
+        button.setText(isCancelled ? "Annulée" : "Annuler");
       }
 
       public Object getCellEditorValue() {

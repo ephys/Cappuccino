@@ -100,4 +100,9 @@ class CappuccinoIhm implements IGuiManager {
         "Une erreur est survenue",
         JOptionPane.ERROR_MESSAGE);
   }
+
+  @Override
+  public JFrame getCurrentFrame() {
+    return currentFrame;
+  }
 }

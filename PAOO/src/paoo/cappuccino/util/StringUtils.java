@@ -10,11 +10,12 @@ import java.util.regex.Pattern;
  */
 public class StringUtils {
 
-  private static final Pattern NUM_REGEX = Pattern.compile("^[a-zA-Z]*$");
+  private static final Pattern NUM_REGEX = Pattern.compile("^[0-9]*$");
   private static final Pattern ALPHA_REGEX = Pattern.compile("^[a-zA-Z]*$");
+  private static final Pattern ALPHANUM_REGEX = Pattern.compile("^[a-zA-Z0-9]*$");
   private static final Pattern NONEMPTY_REGEX = Pattern.compile("\\S+");
   private static final Pattern EMAIL_REGEX = Pattern.compile(
-      "^([a-zA-Z0-9][+a-zA-Z0-9_.-]*)+@([a-zA-Z0-9][a-zA-Z0-9_.-]*)+\\.[a-zA-Z]{2,3}$");
+      "^([a-zA-Z0-9][+a-zA-Z0-9_.-]*)+@([a-zA-Z0-9][a-zA-Z0-9_.-]*)+\\.[a-zA-Z]*$");
 
   private static final Random random = new Random();
 
@@ -26,6 +27,16 @@ public class StringUtils {
    */
   public static boolean isAlphaString(String str) {
     return ALPHA_REGEX.matcher(str).matches();
+  }
+  
+  /**
+   * Verifies if a string contains only alphabetical letters and numbers.
+   *
+   * @param str The string to check.
+   * @return true if the string contains only letters and numbers, false otherwise.
+   */
+  public static boolean isAlphanumeric(String str) {
+    return ALPHANUM_REGEX.matcher(str).matches();
   }
 
   /**

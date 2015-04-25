@@ -37,10 +37,13 @@ public class LoginFrame extends BaseFrame {
     this.getContentPane().setBackground(new Color(212, 82, 82));
 
     this.setLayout(new GridBagLayout());
+    
+    LoginViewController viewController = new LoginViewController(new LoginModel(), guiManager, userUcc);
     this.add(
-        new LoginViewController(new LoginModel(), guiManager, userUcc),
+        viewController,
         new GridBagConstraints());
 
+    getRootPane().setDefaultButton(viewController.getSubmitButton());
 
     this.setVisible(true);
   }

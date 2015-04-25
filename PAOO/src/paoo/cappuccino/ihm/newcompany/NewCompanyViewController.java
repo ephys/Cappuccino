@@ -66,8 +66,8 @@ public class NewCompanyViewController extends JPanel {
                          ? IhmConstants.ERROR_FIELD_EMPTY : null;
 
       String boxError = StringUtils.isEmpty(boxField.getText()) ? null : (
-          StringUtils.isAlphaString(boxField.getText())
-          ? null : IhmConstants.ERROR_ALPHA_INPUT
+          StringUtils.isAlphanumeric(boxField.getText())
+          ? null : IhmConstants.ERROR_ALPHANUM_INPUT
       );
 
       String numError = StringUtils.isEmpty(numField.getText())
@@ -75,7 +75,8 @@ public class NewCompanyViewController extends JPanel {
 
       String postCodeError = StringUtils.isEmpty(postCodeField.getText())
                              ? IhmConstants.ERROR_FIELD_EMPTY
-                             : (!postCodeField.getText().matches("^[0-9]{4}$")
+                             : ((!StringUtils.isNumeric(postCodeField.getText()) 
+                                 || postCodeField.getText().length() != 4)
                                 ? "Le code postal doit être composé de 4 chiffres" : null);
 
       model.setErrors(nameError, streetError, cityError, boxError, numError, postCodeError);

@@ -42,7 +42,7 @@ public class ContactDetailsViewController extends JPanel implements ChangeListen
     });
 
     modify.addActionListener(event -> {
-      menu.setCurrentPage(MenuEntry.CREATE_CONTACT, model.getContactDto());
+      menu.setCurrentPage(MenuEntry.MODIFY_CONTACT, model.getContactDto());
     });
 
     stateChanged(null);

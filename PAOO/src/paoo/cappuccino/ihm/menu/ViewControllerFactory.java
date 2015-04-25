@@ -96,6 +96,8 @@ public class ViewControllerFactory {
             guiManager, companyUcc);
 
       case CREATE_CONTACT:
+      case MODIFY_CONTACT:
+        modelNewContact.init(menuModel.getTransitionObjects());
         return new NewContactViewController(modelNewContact, guiManager,
             contactUcc, companyUcc, menuModel);
 
@@ -128,7 +130,7 @@ public class ViewControllerFactory {
       case SEARCH_CONTACT:
         return new ContactSearchViewController(modelSearchContact,
             menuModel, companyUcc, contactUcc);
-
+        
       default:
         throw new UnsupportedOperationException("Could not open page \""
             + page.getTitle() + "\": Not yet implemented.");

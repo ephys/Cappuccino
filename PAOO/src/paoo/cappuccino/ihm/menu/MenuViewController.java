@@ -19,6 +19,8 @@ import paoo.cappuccino.ihm.util.JLabelFont;
 
 public class MenuViewController extends MenuView {
 
+  private static final long serialVersionUID = -6891806292313885766L;
+
   /**
    * Creates a new Menu View Controller.
    *

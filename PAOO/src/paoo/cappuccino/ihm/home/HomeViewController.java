@@ -122,9 +122,19 @@ public class HomeViewController extends JPanel implements ChangeListener {
     String[] tableTitles =
         new String[] {"Nom entreprise", "État", "Annuler participation"};
     tableModel = new DefaultTableModel(tableTitles, 0) {
+
+      private static final long serialVersionUID = 4116198217266394040L;
+
       @Override
       public boolean isCellEditable(int row, int column) {
-        return column != 0;
+        if (column == 0) {
+          return false;
+        }
+        
+        IParticipationDto participation =
+            (IParticipationDto) tableModel.getValueAt(row, 2);
+        
+        return !participation.isCancelled();
       }
     };
 
@@ -164,6 +174,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
       if (selectedState == participation.getState()) {
         return;
       }
+
       if (participation.isCancelled()) {
         JOptionPane.showMessageDialog(HomeViewController.this,
             "Participation annulée.", "Action invalide",
@@ -171,7 +182,6 @@ public class HomeViewController extends JPanel implements ChangeListener {
         stateCombo.setSelectedItem(participation.getState());
         return;
       }
-
 
       if (!dayUcc.changeState(participation, selectedState)) {
         JOptionPane.showMessageDialog(HomeViewController.this,
@@ -185,6 +195,8 @@ public class HomeViewController extends JPanel implements ChangeListener {
                 + ((ICompanyDto) tableModel.getValueAt(row, 0)).getName()
                 + " -> " + participation.getState());
       }
+      
+      table.repaint();
     });
     stateCombo.addPopupMenuListener(new PopupMenuListener() {
       @Override
@@ -196,17 +208,21 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
         IParticipationDto participation =
             (IParticipationDto) tableModel.getValueAt(row, 2);
+        enabledStates.clearSelection();
+        enabledStates.addSelectionInterval(participation.getState()
+            .ordinal(), participation.getState().ordinal());
+
+       if (participation.isCancelled()) {
+         return;
+       }
 
         State[] states =
             ParticipationUtils.getFollowingStates(participation.getState());
 
-        enabledStates.clearSelection();
         for (State state : states) {
           enabledStates.addSelectionInterval(state.ordinal(),
               state.ordinal());
         }
-        enabledStates.addSelectionInterval(participation.getState()
-            .ordinal(), participation.getState().ordinal());
       }
 
       @Override
@@ -314,6 +330,8 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
   private static class StateComboRenderer extends DisableableComboRenderer {
 
+    private static final long serialVersionUID = -1013445198861342267L;
+
     public StateComboRenderer(ListSelectionModel enabled) {
       super(enabled);
     }
@@ -332,6 +350,8 @@ public class HomeViewController extends JPanel implements ChangeListener {
   private static class ButtonRenderer extends JButton implements
       TableCellRenderer {
 
+    private static final long serialVersionUID = -8966333763971995652L;
+
     @Override
     public Component getTableCellRendererComponent(JTable table,
         Object value, boolean isSelected, boolean isFocus, int row, int col) {
@@ -341,13 +361,14 @@ public class HomeViewController extends JPanel implements ChangeListener {
           && participation.getState() != State.INVITED
           && !participation.isCancelled());
 
-      setText(participation.isCancelled() ? "Annulé" : "Annuler");
+      setText(participation.isCancelled() ? "Annulée" : "Annuler");
       return this;
     }
   }
 
   private class ErrorPanel extends JPanel {
 
+    private static final long serialVersionUID = -4377590597739100439L;
     public static final int ERROR_NO_DAY = 0;
     public static final int ERROR_NO_DAY_SELECTED = 1;
     public static final int ERROR_NO_PARTICIPATION = 2;

@@ -14,9 +14,11 @@ public enum MenuEntry {
   CREATE_BDAY("Créer une journée des entreprises"),
   CREATE_COMPANY("Créer une entreprise"),
   CREATE_CONTACT("Créer une personne de contact"),
+  MODIFY_CONTACT("Modifier une personne de contact"),
   ATTENDANCE("Enregistrer présences"),
   COMPANY_DETAILS("Entreprise"),
-  CONTACT_DETAILS("Contact");
+  CONTACT_DETAILS("Contact"); 
+  
 
   private final String title;
 

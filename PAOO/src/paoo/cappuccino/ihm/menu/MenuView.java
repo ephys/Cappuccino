@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import paoo.cappuccino.ihm.core.IDefaultButtonHandler;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.login.LoginFrame;
 import paoo.cappuccino.ihm.util.IhmConstants;
@@ -21,6 +22,7 @@ import paoo.cappuccino.ihm.util.JLabelFont;
 
 public class MenuView extends JPanel implements ChangeListener {
 
+  private static final long serialVersionUID = 6911695570825064346L;
   private final MenuModel menuModel;
   private final ViewControllerFactory viewFactory;
 
@@ -106,6 +108,10 @@ public class MenuView extends JPanel implements ChangeListener {
 
         title.setText(menuModel.getCurrentPage().getTitle());
         mainPanel.add(newVc, BorderLayout.CENTER);
+
+        if (newVc instanceof IDefaultButtonHandler) {
+          getRootPane().setDefaultButton(((IDefaultButtonHandler) newVc).getSubmitButton());
+        }
       } else {
         title.setText("/aucune page chargée/");
         mainPanel.repaint();

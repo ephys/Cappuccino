@@ -20,6 +20,12 @@ public interface IGuiManager {
   <A extends JFrame> A openFrame(Class<A> frame);
 
   /**
+   * Returns the currently open frame or null if none is open.
+   */
+  JFrame getCurrentFrame();
+
+  
+  /**
    * Returns the Gui logger.
    */
   Logger getLogger();

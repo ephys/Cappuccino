@@ -49,6 +49,8 @@ public interface IhmConstants {
    */
   String ERROR_ALPHA_INPUT = "Ce champ ne peut contenir que des lettres.";
 
+  String ERROR_ALPHANUM_INPUT = "Ce champ ne peut contenir que des charactères alphanumériques.";
+  
   String ERROR_NUMERICAL_INPUT =
       "Ce champ ne peut contenir que des chiffres";
 

@@ -50,7 +50,7 @@ public class MenuModel extends BaseModel {
     return true;
   }
 
-  public Object[] getTransitionObjects() {
+  Object[] getTransitionObjects() {
     return transitionObjects == null ? null : transitionObjects.clone();
   }
 

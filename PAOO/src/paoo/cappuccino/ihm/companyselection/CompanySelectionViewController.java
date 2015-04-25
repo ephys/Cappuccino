@@ -34,7 +34,6 @@ import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
-import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
@@ -57,7 +56,7 @@ public class CompanySelectionViewController extends JPanel {
   private final IBusinessDayUcc businessDayUcc;
   private final IContactUcc contactUcc;
   private final Logger logger;
-  private JComboBox<IBusinessDayDto> businessDaySelector;
+  private final JComboBox<IBusinessDayDto> businessDaySelector;
 
   private File destinationDirectory = new JFileChooser()
       .getFileSystemView().getDefaultDirectory();
@@ -93,6 +92,21 @@ public class CompanySelectionViewController extends JPanel {
       }
     });
 
+    List<IBusinessDayDto> invitationlessDays =
+        businessDayUcc.getInvitationlessDays();
+    JComboDay businessDayPanel =
+        new JComboDay(
+            invitationlessDays
+                .toArray(new IBusinessDayDto[invitationlessDays.size()]));
+    this.businessDaySelector = businessDayPanel.getCombo();
+    businessDaySelector
+        .addActionListener(event -> {
+          if (model.getSelectedDay() != businessDaySelector
+              .getSelectedItem()) {
+            model.setSelectedDay((IBusinessDayDto) businessDaySelector
+                .getSelectedItem());
+          }
+        });
 
     JButton saveButton = new JButton("Sauvegarder et Valider");
     saveButton.addActionListener(e -> {
@@ -107,7 +121,7 @@ public class CompanySelectionViewController extends JPanel {
       if (selectedCompanies.isEmpty()) {
         JOptionPane.showMessageDialog(CompanySelectionViewController.this,
             "Vous devez au moins selectionner une entreprise !",
-            "Sélection invalide", JOptionPane.INFORMATION_MESSAGE);
+            "SÃ©lection invalide", JOptionPane.INFORMATION_MESSAGE);
 
         return;
       }
@@ -116,15 +130,7 @@ public class CompanySelectionViewController extends JPanel {
         this.businessDayUcc.addInvitedCompanies(selectedCompanies
             .toArray(new ICompanyDto[selectedCompanies.size()]), model
             .getSelectedDay());
-        StringBuilder companies = new StringBuilder();
-        for (ICompanyDto iCompanyDto : selectedCompanies) {
-          companies.append("[" + iCompanyDto.getName() + "]");
-        }
-        guiManager.getLogger()
-            .info(
-                "[Selection screen] [New selection] "
-                    + model.getSelectedDay().getEventDate() + "/ "
-                    + companies);
+
         IBusinessDayDto selectedDay = model.getSelectedDay();
         model.setSelectedDay(null);
         this.menu.setCurrentPage(MenuEntry.HOME, selectedDay);
@@ -159,7 +165,6 @@ public class CompanySelectionViewController extends JPanel {
     savePanel.add(directorySaveButton);
 
     JPanel validatePanel = new JPanel();
-    JPanel businessDayPanel = new JPanel();
     validatePanel.add(businessDayPanel);
     validatePanel.add(saveButton);
 
@@ -204,43 +209,14 @@ public class CompanySelectionViewController extends JPanel {
     this.add(view);
     this.add(southPanel, BorderLayout.SOUTH);
 
-    ChangeListener changeListener =
-        e -> {
-          final boolean visible = model.getSelectedDay() != null;
-          selectAllButton.setVisible(visible);
-          saveButton.setVisible(visible);
-          savePanel.setVisible(visible);
-          // jcomboDay
-          List<IBusinessDayDto> invitationlessDays =
-              businessDayUcc.getInvitationlessDays();
-          businessDayPanel.removeAll();
-          if (invitationlessDays.size() != 0) {
-            JComboDay businessDayCombo =
-                new JComboDay(
-                    invitationlessDays
-                        .toArray(new IBusinessDayDto[invitationlessDays
-                            .size()]));
-            this.businessDaySelector = businessDayCombo.getCombo();
-            businessDaySelector.addActionListener(event -> {
-              if (model.getSelectedDay() != businessDaySelector
-                  .getSelectedItem()) {
-                model.setSelectedDay((IBusinessDayDto) businessDaySelector
-                    .getSelectedItem());
-              }
-            });
-            businessDaySelector.setSelectedItem(model.getSelectedDay());
-            businessDayPanel.add(businessDayCombo);
-          } else {
-            businessDayPanel.add(new JLabel(IhmConstants.ERROR_NO_BUSINESS_DAY),
-                BorderLayout.NORTH);
-            JButton createDay = new JButton("nouvelle journée");
-            createDay.addActionListener(event -> {
-              menu.setCurrentPage(MenuEntry.CREATE_BDAY);
-            });
-            businessDayPanel.add(createDay);
-          }
+    ChangeListener changeListener = e -> {
+      final boolean visible = model.getSelectedDay() != null;
+      selectAllButton.setVisible(visible);
+      saveButton.setVisible(visible);
+      savePanel.setVisible(visible);
 
-        };
+      businessDaySelector.setSelectedItem(model.getSelectedDay());
+    };
     model.addChangeListener(changeListener);
     changeListener.stateChanged(null);
   }
@@ -269,7 +245,7 @@ public class CompanySelectionViewController extends JPanel {
       if (!directory.exists() && !directory.mkdirs()) {
         JOptionPane.showMessageDialog(
             CompanySelectionViewController.this,
-            "Impossible de créer le répertoire du fichier "
+            "Impossible de crÃ©er le rÃ©pertoire du fichier "
                 + directory.getAbsolutePath(), "Erreur filesystem",
             JOptionPane.ERROR_MESSAGE);
 
@@ -279,7 +255,7 @@ public class CompanySelectionViewController extends JPanel {
       if (!saveDirectory.createNewFile()) {
         JOptionPane.showMessageDialog(
             CompanySelectionViewController.this,
-            "Impossible de créer le fichier "
+            "Impossible de crÃ©er le fichier "
                 + saveDirectory.getAbsolutePath(), "Erreur filesystem",
             JOptionPane.ERROR_MESSAGE);
 
@@ -289,7 +265,7 @@ public class CompanySelectionViewController extends JPanel {
       try (BufferedWriter fileWriter =
           new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
               saveDirectory), Charset.forName("UTF-8")))) {
-        fileWriter.write("Nom entreprise;Nom;Prénom;Email");
+        fileWriter.write("Nom entreprise;Nom;PrÃ©nom;Email");
         fileWriter.newLine();
         fileWriter.newLine();
 
@@ -323,7 +299,7 @@ public class CompanySelectionViewController extends JPanel {
 
       JOptionPane.showMessageDialog(
           CompanySelectionViewController.this,
-          "Impossible de créer le fichier "
+          "Impossible de crÃ©er le fichier "
               + saveDirectory.getAbsolutePath(), "Erreur filesystem",
           JOptionPane.ERROR_MESSAGE);
 

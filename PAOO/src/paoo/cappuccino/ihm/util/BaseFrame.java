@@ -2,10 +2,13 @@ package paoo.cappuccino.ihm.util;
 
 import java.awt.Font;
 import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import javax.swing.plaf.FontUIResource;
 
@@ -19,6 +22,7 @@ import paoo.cappuccino.ihm.core.IGuiManager;
 public abstract class BaseFrame extends JFrame {
 
   private static final long serialVersionUID = -5882096175427359233L;
+  private final Logger logger;
 
   /**
    * Creates a new frame.
@@ -30,6 +34,9 @@ public abstract class BaseFrame extends JFrame {
   public BaseFrame(String title, int width, int height,
       IGuiManager guiManager) {
     super(title);
+    
+    this.logger = guiManager.getLogger();
+    
     setIconImage(guiManager.getResourceManager().fetchImage(
         IhmConstants.PATH_LOGO));
 
@@ -47,6 +54,12 @@ public abstract class BaseFrame extends JFrame {
    */
   protected void setupDefaultLookAndFeel() {
     setDefaultFont(new Font("Arial", Font.PLAIN, 16));
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+        | UnsupportedLookAndFeelException e) {
+      logger.log(Level.WARNING, "Failled to setup default look and feel", e);
+    }
   }
 
   /**
