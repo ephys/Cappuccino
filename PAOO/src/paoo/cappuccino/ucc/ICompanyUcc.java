@@ -3,6 +3,7 @@ package paoo.cappuccino.ucc;
 import java.util.List;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.dto.IUserDto;
 
 /**
@@ -69,5 +70,5 @@ public interface ICompanyUcc {
    *
    * @param companyId The identifier of the company.
    */
-  // TODO List<IParticipationDto> getCompanyParticipations(int companyId); & JUnits
+  List<IParticipationDto> getCompanyParticipations(int companyId); // TODO& JUnits
 }

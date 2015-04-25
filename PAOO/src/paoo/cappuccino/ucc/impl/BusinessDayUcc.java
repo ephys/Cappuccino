@@ -37,8 +37,8 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
   @Inject
   public BusinessDayUcc(IEntityFactory entityFactory, IDalService dalService,
-                        IBusinessDayDao businessDayDao, IParticipationDao participationDao,
-                        IAttendanceDao attendanceDao, AppContext app, IContactDao contactDao) {
+      IBusinessDayDao businessDayDao, IParticipationDao participationDao,
+      IAttendanceDao attendanceDao, AppContext app, IContactDao contactDao) {
     this.factory = entityFactory;
     this.dalService = dalService;
     this.businessDayDao = businessDayDao;
@@ -86,8 +86,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
     for (IContactDto contact : contacts) {
       attendanceDao.createAttendance(factory.createAttendance(contact.getCompany(),
-                                                              businessDay.getId(),
-                                                              contact.getId()));
+          businessDay.getId(), contact.getId()));
     }
 
     dalService.commit();
@@ -95,8 +94,8 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
   @Override
   public List<IContactDto> getInvitedContacts(ICompanyDto company, IBusinessDayDto businessDay) {
-    List<IAttendanceDto> attendances = attendanceDao.fetchAttendances(company.getId(),
-                                                                      businessDay.getId());
+    List<IAttendanceDto> attendances =
+        attendanceDao.fetchAttendances(company.getId(), businessDay.getId());
 
     List<IContactDto> contacts = new ArrayList<>(attendances.size());
     for (IAttendanceDto attendance : attendances) {
@@ -160,7 +159,15 @@ class BusinessDayUcc implements IBusinessDayUcc {
       return (IParticipation) dto;
     } else {
       return factory.createParticipation(dto.getCompany(), dto.getBusinessDay(), dto.isCancelled(),
-                                         dto.getVersion(), dto.getState());
+          dto.getVersion(), dto.getState());
     }
+  }
+
+  @Override
+  public IBusinessDayDto getBusinessDay(int id) {
+    if (id <= 0) {
+      throw new IllegalArgumentException("L'id doit être positif");
+    }
+    return businessDayDao.fetchBusinessDayById(id);
   }
 }

@@ -2,10 +2,12 @@ package paoo.cappuccino.ucc.impl;
 
 import java.util.List;
 
+import paoo.cappuccino.business.dto.IAttendanceDto;
 import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.entity.IContact;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
+import paoo.cappuccino.dal.dao.IAttendanceDao;
 import paoo.cappuccino.dal.dao.IContactDao;
 import paoo.cappuccino.ucc.IContactUcc;
 import paoo.cappuccino.util.StringUtils;
@@ -15,11 +17,13 @@ class ContactUcc implements IContactUcc {
 
   private final IEntityFactory factory;
   private final IContactDao dao;
+  private final IAttendanceDao aDao;
 
   @Inject
-  public ContactUcc(IEntityFactory entityFactory, IContactDao contactDao) {
+  public ContactUcc(IEntityFactory entityFactory, IContactDao contactDao, IAttendanceDao iADao) {
     this.factory = entityFactory;
     this.dao = contactDao;
+    this.aDao = iADao;
   }
 
   @Override
@@ -120,5 +124,13 @@ class ContactUcc implements IContactUcc {
 
     dao.updateContact(toUpdate);
     return toUpdate;
+  }
+
+  @Override
+  public List<IAttendanceDto> getContactParticipations(int contactId) {
+    if (contactId <= 0) {
+      throw new IllegalArgumentException("L'id doit être positif");
+    }
+    return aDao.fetchAttendancesByContact(contactId);
   }
 }

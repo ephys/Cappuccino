@@ -3,10 +3,12 @@ package paoo.cappuccino.ucc.impl;
 import java.util.List;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.dal.dao.ICompanyDao;
+import paoo.cappuccino.dal.dao.IParticipationDao;
 import paoo.cappuccino.dal.exception.NonUniqueFieldException;
 import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.util.StringUtils;
@@ -16,16 +18,19 @@ class CompanyUcc implements ICompanyUcc {
 
   private final IEntityFactory factory;
   private final ICompanyDao companyDao;
+  private final IParticipationDao participationDao;
 
   @Inject
-  public CompanyUcc(IEntityFactory entityFactory, ICompanyDao companyDao) {
+  public CompanyUcc(IEntityFactory entityFactory, ICompanyDao companyDao,
+      IParticipationDao participationDao) {
     this.factory = entityFactory;
     this.companyDao = companyDao;
+    this.participationDao = participationDao;
   }
 
   @Override
   public ICompanyDto create(IUserDto creator, String name, String street, String numAddress,
-                            String mailBox, String postCode, String town) {
+      String mailBox, String postCode, String town) {
     ValidationUtil.ensureNotNull(creator, "creator");
     ValidationUtil.ensureFilled(name, "name");
     ValidationUtil.ensureFilled(street, "street");
@@ -48,8 +53,7 @@ class CompanyUcc implements ICompanyUcc {
   }
 
   @Override
-  public List<ICompanyDto> searchCompanies(String name, String postCode, String town,
-                                           String street) {
+  public List<ICompanyDto> searchCompanies(String name, String postCode, String town, String street) {
     if (StringUtils.isEmpty(street)) {
       street = null;
     }
@@ -95,5 +99,13 @@ class CompanyUcc implements ICompanyUcc {
     }
 
     return companyDao.fetchCompaniesByDay(dayid);
+  }
+
+  @Override
+  public List<IParticipationDto> getCompanyParticipations(int companyId) {
+    if (companyId <= 0) {
+      throw new IllegalArgumentException("L'id doit être positif");
+    }
+    return participationDao.fetchParticipationsByCompany(companyId);
   }
 }

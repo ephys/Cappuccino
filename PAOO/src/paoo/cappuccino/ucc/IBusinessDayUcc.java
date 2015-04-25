@@ -21,14 +21,14 @@ public interface IBusinessDayUcc {
    * @param evenDate The date of the event.
    * @return The new Business Day DTO.
    * @throws java.lang.IllegalArgumentException There is already a business day on that academic
-   *                                            year, or the date is null.
+   *         year, or the date is null.
    */
   IBusinessDayDto create(LocalDateTime evenDate);
 
   /**
    * Adds a list of invited companies to the business day participation list.
    *
-   * @param companies   The list of companies to add.
+   * @param companies The list of companies to add.
    * @param businessDay The business day the list must be added to.
    */
   void addInvitedCompanies(ICompanyDto[] companies, IBusinessDayDto businessDay);
@@ -36,7 +36,7 @@ public interface IBusinessDayUcc {
   /**
    * Adds a list of invited contacts to the business day participation list.
    *
-   * @param contacts    The list of contacts to add.
+   * @param contacts The list of contacts to add.
    * @param businessDay The business day the list must be added to.
    */
   void addInvitedContacts(IContactDto[] contacts, IBusinessDayDto businessDay);
@@ -44,7 +44,7 @@ public interface IBusinessDayUcc {
   /**
    * Returns the list of contact of a company attending a given business day.
    *
-   * @param company     The company the contacts are working for.
+   * @param company The company the contacts are working for.
    * @param businessDay The business day the contacts are attending.
    */
   List<IContactDto> getInvitedContacts(ICompanyDto company, IBusinessDayDto businessDay);
@@ -53,7 +53,7 @@ public interface IBusinessDayUcc {
    * Changes the state of a participation.
    *
    * @param participation The participation that needs its state changed.
-   * @param state         The new state of the participation.
+   * @param state The new state of the participation.
    * @return true: the change was successful.
    */
   boolean changeState(IParticipationDto participation, IParticipationDto.State state);
@@ -81,7 +81,7 @@ public interface IBusinessDayUcc {
    *
    * @param id the business day id.
    */
-  // TODO: IBusinessDayDto getBusinessDay(int id);
+  IBusinessDayDto getBusinessDay(int id); // TODO:Junits
 
   /**
    * Returns the list of companies attending the business day matching a given identifier.
