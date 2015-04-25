@@ -1,12 +1,13 @@
 package paoo.cappuccino.ihm.core;
 
-import java.util.LinkedList;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Invokes Runnables on a separate thread to avoid freezing swing.
  */
 public class CappuccinoThread extends Thread {
-  private LinkedList<Runnable> runnables = new LinkedList<>();
+  private BlockingQueue<Runnable> runnables = new LinkedBlockingQueue<>();
   private Thread self;
   private boolean isRunning = true;
 
@@ -22,16 +23,9 @@ public class CappuccinoThread extends Thread {
     self = Thread.currentThread();
 
     while (isRunning) {
-      if (runnables.size() == 0) {
-        try {
-          Thread.sleep(60000);
-        } catch (InterruptedException ignore) {
-        }
-
-        continue;
-      }
-
-      runnables.removeFirst().run();
+      try {
+        runnables.take().run();
+      } catch (InterruptedException ignore) { }
     }
   }
 
@@ -40,9 +34,7 @@ public class CappuccinoThread extends Thread {
    * @param runnable The runnable to run.
    */
   public void invokeLater(Runnable runnable) {
-    runnables.addLast(runnable);
-
-    self.interrupt();
+    runnables.add(runnable);
   }
 
   /**
@@ -50,5 +42,6 @@ public class CappuccinoThread extends Thread {
    */
   public void die() {
     isRunning = false;
+    self.interrupt();
   }
 }
