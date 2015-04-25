@@ -78,64 +78,101 @@ CREATE TABLE IF NOT EXISTS business_days.attendances (
   PRIMARY KEY (company, business_day, contact)
 );
 
--- password is password
+-- password is mdpadmin
 --TRUNCATE business_days.users CASCADE;
 
-INSERT INTO business_days.users VALUES (DEFAULT, 'USER',
-                                        'pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000',
-                                        'email', 'UserName', 'FirstName', 'lastName', DEFAULT,
-                                        DEFAULT);
-INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN',
-                                        'pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000',
-                                        'email2', 'Admin', 'FirstName2', 'lastName2', DEFAULT,
-                                        DEFAULT);
 
-INSERT INTO business_days.business_days VALUES (DEFAULT, '2010-04-04', DEFAULT, 2009, DEFAULT);
-INSERT INTO business_days.business_days VALUES (DEFAULT, '2010-10-04', DEFAULT, 2010, DEFAULT);
-INSERT INTO business_days.business_days VALUES (DEFAULT, '2012-04-04', DEFAULT, 2011, DEFAULT);
-INSERT INTO business_days.business_days VALUES (DEFAULT, '2013-06-04', DEFAULT, 2012, DEFAULT);
-INSERT INTO business_days.business_days VALUES (DEFAULT, '2013-10-04', DEFAULT, 2013, DEFAULT);
+INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN', 'pbkdf2:0a75ab12730a6f4a2496e6150eb5011901cc12a97175294b23e65df4296eef35deb6fe27aa1a1243fbc4b005f3384e6dfcf3009dd3ab55b364e70b8f701b7548:a63e85a6a7ca6a45a232cb84c250c519:1000', 'dgrolaux@ipl.be', 'dgrolaux', 'Donatien', 'Grolaux', DEFAULT, DEFAULT);
+INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN', 'pbkdf2:0a75ab12730a6f4a2496e6150eb5011901cc12a97175294b23e65df4296eef35deb6fe27aa1a1243fbc4b005f3384e6dfcf3009dd3ab55b364e70b8f701b7548:a63e85a6a7ca6a45a232cb84c250c519:1000', 'blehmann@ipl.be', 'blehmann', 'Brigitte', 'Lehmann', DEFAULT, DEFAULT);
+
+INSERT INTO business_days.business_days VALUES (DEFAULT, '2010-10-27', DEFAULT, 2010, DEFAULT);
+INSERT INTO business_days.business_days VALUES (DEFAULT, '2011-11-16', DEFAULT, 2011, DEFAULT);
+INSERT INTO business_days.business_days VALUES (DEFAULT, '2012-11-07', DEFAULT, 2012, DEFAULT);
+INSERT INTO business_days.business_days VALUES (DEFAULT, '2013-11-13', DEFAULT, 2013, DEFAULT);
+INSERT INTO business_days.business_days VALUES (DEFAULT, '2014-11-12', DEFAULT, 2014, DEFAULT);
+
 
 INSERT INTO business_days.companies
-VALUES (DEFAULT, 1, 'Company1', DEFAULT, 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
---Participé - declined
-INSERT INTO business_days.participations VALUES (1, 2, 'DECLINED', DEFAULT, DEFAULT);
+VALUES (DEFAULT, 1, 'Accenture', '2009-01-01', 'Waterloolaan ', '16', NULL, '1000', 'Bruxelles', DEFAULT);
+-- Participations
+INSERT INTO business_days.participations VALUES (1, 3, 'PAID', DEFAULT, DEFAULT);
+INSERT INTO business_days.participations VALUES (1, 4, 'PAID', DEFAULT, DEFAULT);
+INSERT INTO business_days.participations VALUES (1, 5, 'PAID', DEFAULT, DEFAULT);
+-- Contacts
+INSERT INTO business_days.contacts
+VALUES (DEFAULT, 1, 'stephanie.de.troyer@accenture.com', DEFAULT, 'Stéphanie', 'De troyer', NULL, DEFAULT);
+INSERT INTO business_days.contacts
+VALUES (DEFAULT, 1, 'marijke.vandyck@accenture.com', DEFAULT, 'Marijke', 'Van Dyck', NULL, DEFAULT);
+INSERT INTO business_days.contacts
+VALUES (DEFAULT, 1, 'aimee.marecaux@accenture.com', DEFAULT, 'Aimée', 'Marecaux', NULL, DEFAULT);
+-- Attendances
+INSERT INTO business_days.attendances VALUES (1, 3, 1);
+INSERT INTO business_days.attendances VALUES (1, 4, 2);
+INSERT INTO business_days.attendances VALUES (1, 4, 3);
+INSERT INTO business_days.attendances VALUES (1, 5, 3);
+
 
 INSERT INTO business_days.companies
-VALUES (DEFAULT, 1, 'Company2', DEFAULT, 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
+VALUES (DEFAULT, 1, 'CodeltBlue', '2009-01-01', 'Avenue de l’espérance', '40', 'b', '1348', 'Louvain-La-Neuve', DEFAULT);
+-- Participations
+INSERT INTO business_days.participations VALUES (2, 1, 'PAID', DEFAULT, DEFAULT);
+INSERT INTO business_days.participations VALUES (2, 2, 'DECLINED', DEFAULT, DEFAULT);
+-- Contacts
+INSERT INTO business_days.contacts
+VALUES (DEFAULT, 2, 'Vincent.lepape@CodeItBlue.com', DEFAULT, 'Vincent', 'Lepape', '0479/97.95.05', DEFAULT);
+-- Attendances
+INSERT INTO business_days.attendances VALUES (2, 2, 4);
+
 
 INSERT INTO business_days.companies
-VALUES (DEFAULT, 1, 'Old company', '2010-01-06', 'Rue du rivage', 15, NULL, 1370, 'Jodoigne', DEFAULT);
-
--- participé et payé
-INSERT INTO business_days.participations VALUES (2, 3, 'PAID', DEFAULT, DEFAULT);
-
-INSERT INTO business_days.companies
-VALUES (DEFAULT, 1, 'Company3', DEFAULT, 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
--- participé et payé
+VALUES (DEFAULT, 1, 'STERIA', '2012-01-01', 'Boulevard du Souverain', '36', NULL, '1170', 'Bruxelles', DEFAULT);
+-- Participations
+INSERT INTO business_days.participations VALUES (3, 1, 'PAID', DEFAULT, DEFAULT);
+INSERT INTO business_days.participations VALUES (3, 2, 'PAID', DEFAULT, DEFAULT);
+INSERT INTO business_days.participations VALUES (3, 3, 'PAID', DEFAULT, DEFAULT);
 INSERT INTO business_days.participations VALUES (3, 4, 'PAID', DEFAULT, DEFAULT);
-
-INSERT INTO business_days.companies
-VALUES (DEFAULT, 1, 'Company4', DEFAULT, 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
--- participé et payé  mais pas dans les 4ans
-INSERT INTO business_days.participations VALUES (4, 1, 'PAID', DEFAULT, DEFAULT);
-
-INSERT INTO business_days.companies
-VALUES (DEFAULT, 1, 'Company5', '2014-10-04', 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
--- nouvelle entreprise créée 1q
-
-INSERT INTO business_days.companies
-VALUES (DEFAULT, 1, 'Company6', DEFAULT, 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
--- nouvelle entreprise créée 2q
-
--- nouvelle entreprise crée il y 2ans
-INSERT INTO business_days.companies
-VALUES (DEFAULT, 1, 'Company7', '2012-04-04', 'Avenue Landmark', 42, NULL, 1000, 'Moscow', DEFAULT);
-
+INSERT INTO business_days.participations VALUES (3, 5, 'PAID', DEFAULT, DEFAULT);
+-- Contacts
 INSERT INTO business_days.contacts
-VALUES (DEFAULT, 1, 'alahackbar@isis.afriqua', DEFAULT, 'Sarah', 'Croche', '098765432', DEFAULT);
-INSERT INTO business_days.contacts
-VALUES (DEFAULT, 1, 'monte@negro.swag', DEFAULT, 'Jesus', 'Christ et parle', '098765432', DEFAULT);
+VALUES (DEFAULT, 3, 'roberto.alvarez@steria.be', DEFAULT, 'Roberto', 'Alvarez', NULL, DEFAULT);
+-- Attendances
+INSERT INTO business_days.attendances VALUES (3, 1, 5);
+INSERT INTO business_days.attendances VALUES (3, 2, 5);
+INSERT INTO business_days.attendances VALUES (3, 3, 5);
+INSERT INTO business_days.attendances VALUES (3, 4, 5);
+INSERT INTO business_days.attendances VALUES (3, 5, 5);
 
-INSERT INTO business_days.attendances VALUES (1, 1, 1);
-INSERT INTO business_days.attendances VALUES (1, 1, 2);
+
+INSERT INTO business_days.companies
+VALUES (DEFAULT, 2, 'Eezee-IT', '2012-01-01', 'rue André Dumont', '5', NULL, '1435', 'Mont-Saint-Guibert', DEFAULT);
+-- Participations
+INSERT INTO business_days.participations VALUES (4, 4, 'PAID', DEFAULT, DEFAULT);
+INSERT INTO business_days.participations VALUES (4, 5, 'DECLINED', DEFAULT, DEFAULT);
+-- Contacts
+INSERT INTO business_days.contacts
+VALUES (DEFAULT, 4, 'nicolas.rigo@eezee-it.com', DEFAULT, 'Roberto', 'Alvarez', '+32 478 88 02 55', DEFAULT);
+-- Attendances
+INSERT INTO business_days.attendances VALUES (4, 4, 6);
+
+
+INSERT INTO business_days.companies
+VALUES (DEFAULT, 2, 'Bewan', '2011-01-01', 'Drève Richelle', '161L', '46', '1410', 'Waterloo', DEFAULT);
+-- Participations
+INSERT INTO business_days.participations VALUES (5, 2, 'PAID', DEFAULT, DEFAULT);
+INSERT INTO business_days.participations VALUES (5, 3, 'DECLINED', DEFAULT, DEFAULT);
+INSERT INTO business_days.participations VALUES (5, 4, 'DECLINED', DEFAULT, DEFAULT);
+INSERT INTO business_days.participations VALUES (5, 5, 'PAID', DEFAULT, DEFAULT);
+-- Contacts
+INSERT INTO business_days.contacts 7
+VALUES (DEFAULT, 5, 'Virginie.BRASSINNE@bewan.be', DEFAULT, 'Virginie', 'Brassinne', NULL, DEFAULT);
+INSERT INTO business_days.contacts 8
+VALUES (DEFAULT, 5, 'isabelle.croiset@bewan.be', DEFAULT, 'Isabelle', 'Croiset', NULL, DEFAULT);
+INSERT INTO business_days.contacts 9
+VALUES (DEFAULT, 5, 'Dedecker drh@bewan.b', DEFAULT, 'Bénédicte', 'Dedecker', NULL, DEFAULT);
+-- Attendances
+INSERT INTO business_days.attendances VALUES (5, 2, 7);
+INSERT INTO business_days.attendances VALUES (5, 2, 8);
+INSERT INTO business_days.attendances VALUES (5, 5, 9);
+
+
+INSERT INTO business_days.users VALUES (DEFAULT, 'USER','pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000','jsmith@mordor.arda', 'admin', 'John', 'Smith', DEFAULT,DEFAULT);
