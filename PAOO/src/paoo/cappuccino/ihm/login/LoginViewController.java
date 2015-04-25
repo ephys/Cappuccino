@@ -69,9 +69,6 @@ public class LoginViewController extends JPanel implements IDefaultButtonHandler
 
     this.add(titlePanel, BorderLayout.NORTH);
 
-    JTextField usernameField = new JTextField();
-    JPasswordField passwordField = new JPasswordField();
-
     // buttons //
     JPanel controls = new JPanel(new GridLayout(2, 0, 0, IhmConstants.M_GAP));
 
@@ -80,6 +77,8 @@ public class LoginViewController extends JPanel implements IDefaultButtonHandler
     JButton registerButton = new JButton("S'inscrire");
     registerButton.addActionListener(e -> guiManager.openFrame(RegistrationFrame.class));
 
+    JTextField usernameField = new JTextField();
+    JPasswordField passwordField = new JPasswordField();
     this.loginButton = new JButton("Se connecter");
     loginButton.addActionListener(e -> attemptLogin(usernameField.getText(),
         passwordField.getPassword()));

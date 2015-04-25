@@ -25,20 +25,22 @@ public class LoginFrame extends BaseFrame {
   /**
    * Creates a new frame for the login gui.
    *
-   * @param userUcc The app User use case controller.
+   * @param userUcc    The app User use case controller.
    * @param guiManager The manager reponsible for opening this frame.
    */
   @Inject
   public LoginFrame(IUserUcc userUcc, IGuiManager guiManager,
-      AppContext context) {
+                    AppContext context) {
     super(context.getAppName(), 440, 490, guiManager);
 
     this.setMinimumSize(new Dimension(380, 440));
     this.getContentPane().setBackground(new Color(212, 82, 82));
 
     this.setLayout(new GridBagLayout());
-    
-    LoginViewController viewController = new LoginViewController(new LoginModel(), guiManager, userUcc);
+
+    LoginViewController viewController = new LoginViewController(new LoginModel(),
+                                                                 guiManager,
+                                                                 userUcc);
     this.add(
         viewController,
         new GridBagConstraints());
