@@ -181,6 +181,19 @@ public class TestContactUcc {
     assertEquals("Phone match failed", modifiedContact.getPhone(), phone2);
   }
 
+  public void testUpdateContactFineCompanyNull() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    IContactDto modifiedContact =
+        contactUcc.update(contact.getId(), 0, emailCorrect2, firstName2, lastName2, phone2);
+    assertNotNull("contactUcc.update not return null", modifiedContact);
+
+    assertEquals("Company match failed", modifiedContact.getCompany(), companyId);
+    assertEquals("Email match failed", modifiedContact.getEmail(), emailCorrect2);
+    assertEquals("First Name match failed", modifiedContact.getFirstName(), firstName2);
+    assertEquals("Last Name match failed", modifiedContact.getLastName(), lastName2);
+    assertEquals("Phone match failed", modifiedContact.getPhone(), phone2);
+  }
+
   @Test(expected = IllegalArgumentException.class)
   public void testUpdateContactFistNameNull() {
     IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
