@@ -1,5 +1,11 @@
 package paoo.cappuccino.ucc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -9,12 +15,6 @@ import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 // TODO: contactUcc.update()
 
@@ -32,7 +32,11 @@ public class TestContactUcc {
   private static final String firstName = "FirstName";
   private static final String lastName = "LastName";
   private static final String phone = "00/000 00 00";
-
+  private static final int companyId2 = 2;
+  private static final String emailCorrect2 = "thisis2@email.com";
+  private static final String firstName2 = "FirstName2";
+  private static final String lastName2 = "LastName2";
+  private static final String phone2 = "00/000 00 01";
   @Inject
   private IContactUcc contactUcc;
 
@@ -156,5 +160,123 @@ public class TestContactUcc {
   @Test(expected = IllegalArgumentException.class)
   public void testGetContactByCompanyIdNegative() {
     contactUcc.getContactByCompany(-1);
+  }
+
+
+
+  // ====================== UPDATE --Check from here?
+
+  @Test
+  public void testUpdateContactFine() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    IContactDto modifiedContact =
+        contactUcc
+            .update(contact.getId(), companyId2, emailCorrect2, firstName2, lastName2, phone2);
+    assertNotNull("contactUcc.update not return null", modifiedContact);
+
+    assertEquals("Company match failed", modifiedContact.getCompany(), companyId2);
+    assertEquals("Email match failed", modifiedContact.getEmail(), emailCorrect2);
+    assertEquals("First Name match failed", modifiedContact.getFirstName(), firstName2);
+    assertEquals("Last Name match failed", modifiedContact.getLastName(), lastName2);
+    assertEquals("Phone match failed", modifiedContact.getPhone(), phone2);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testUpdateContactFistNameNull() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    contactUcc.update(contact.getId(), companyId, emailCorrect, null, lastName, phone);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testUpdateContactFistNameIncorrect() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    contactUcc.update(contact.getId(), companyId, emailCorrect, "", lastName, phone);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testUpdateContactLastNameNull() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    contactUcc.update(contact.getId(), companyId, emailCorrect, firstName, null, phone);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testUpdateContactLastNameIncorrect() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    contactUcc.update(contact.getId(), companyId, emailCorrect, firstName, "", phone);
+  }
+
+  @Test
+  public void testUpdateContactMailNull() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    IContactDto modifiedContact =
+        contactUcc.update(contact.getId(), companyId, null, firstName, lastName, phone);
+    assertNull(modifiedContact.getEmail());
+  }
+
+  @Test
+  public void testUpdateContactMailEmpty() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    IContactDto modifiedContact =
+        contactUcc.update(contact.getId(), companyId, "", firstName, lastName, phone);
+    assertNull(modifiedContact.getEmail());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testUpdateContactMailIncorrect() {
+    String emailIncorrect = "fail.mail@oups";
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    contactUcc.update(contact.getId(), companyId, emailIncorrect, firstName, lastName, phone);
+  }
+
+  @Test
+  public void testUpdateContactPhoneNull() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    IContactDto modifiedContact =
+        contactUcc.update(contact.getId(), companyId, emailCorrect, firstName, lastName, null);
+    assertNull(modifiedContact.getPhone());
+  }
+
+  @Test
+  public void testUpdateContactPhoneEmpty() {
+    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    IContactDto modifiedContact =
+        contactUcc.update(contact.getId(), companyId, emailCorrect, firstName, lastName, "");
+
+    assertNull(modifiedContact.getPhone());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testUpdateContactIdContactNull() {
+    contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    contactUcc.update(0, companyId, emailCorrect, firstName, lastName, phone);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testUpdateContactIdContactNegative() {
+    contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    contactUcc.update(-1, companyId, emailCorrect, firstName, lastName, phone);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testUpdateContactIdContactNotFound() {
+    contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
+    contactUcc.update(999, companyId, emailCorrect, firstName, lastName, phone);
+  }
+
+  // ====================== GETCONTACTPARTICIPATIONS
+
+  @Test
+  public void testGetContactParticipations() {
+    assertNotNull(contactUcc.getContactParticipations(1));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetContactParticipationsIdNull() {
+    contactUcc.getContactParticipations(0);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetContactParticipationsIdNegative() {
+    contactUcc.getContactParticipations(-1);
   }
 }

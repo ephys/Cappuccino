@@ -1,11 +1,16 @@
 package paoo.cappuccino.ucc;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
@@ -19,11 +24,6 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Business Day UCC Unit Test.
@@ -99,7 +99,7 @@ public class TestBusinessDayUcc {
     assertEquals(participations.size(), 1);
 
     assertEquals("Participation initiated with the wrong state.", participations.get(0).getState(),
-                 State.INVITED);
+        State.INVITED);
   }
 
   // ====================== addInvitedContacts
@@ -120,7 +120,7 @@ public class TestBusinessDayUcc {
   public void testAddInvitedContacts() {
     IBusinessDayDto day = makeBusinessDay();
 
-    businessDayUcc.addInvitedContacts(new IContactDto[]{makeContact()}, day);
+    businessDayUcc.addInvitedContacts(new IContactDto[] {makeContact()}, day);
 
     List<IContactDto> participatingContacts = businessDayUcc.getInvitedContacts(makeCompany(), day);
     assertEquals(participatingContacts.size(), 1);
@@ -188,6 +188,24 @@ public class TestBusinessDayUcc {
     assertNotNull(businessDayUcc.getBusinessDays());
   }
 
+  // ======================getBusinessDaysById --Check down here
+
+  @Test
+  public void testGetBusinessDaysById() {
+    assertNotNull(businessDayUcc.getBusinessDay(1));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetBusinessDaysByIdNull() {
+    businessDayUcc.getBusinessDay(0);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetBusinessDaysByIdNegative() {
+    businessDayUcc.getBusinessDay(-1);
+  }
+
+  // ======================utilities
   private ICompany makeCompany() {
     return factory.createCompany(1, 1, 1, "Beure de cacahuètes", "c'est", "tout", "ce", "que",
         "j'ai sous la main", LocalDateTime.now());

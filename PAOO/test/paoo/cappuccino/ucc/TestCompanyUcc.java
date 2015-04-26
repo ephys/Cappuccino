@@ -1,10 +1,14 @@
 package paoo.cappuccino.ucc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import java.time.LocalDateTime;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.time.LocalDateTime;
 
 import paoo.cappuccino.BaseMain;
 import paoo.cappuccino.business.dto.ICompanyDto;
@@ -13,10 +17,6 @@ import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 /**
  * Company UCC Unit Test.
@@ -209,5 +209,22 @@ public class TestCompanyUcc {
   @Test(expected = IllegalArgumentException.class)
   public void testGetCompanyByDayInvalid() {
     assertNotNull(companyUcc.getCompaniesByDay(-1));
+  }
+
+  // ====================== getCompanyParticipations --check from here?
+
+  @Test()
+  public void testCompanyParticipations() {
+    assertNotNull(companyUcc.getCompanyParticipations(1));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testCompanyParticipationsIdNull() {
+    companyUcc.getCompanyParticipations(0);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testCompanyParticipationsIdNegative() {
+    companyUcc.getCompanyParticipations(-1);
   }
 }
