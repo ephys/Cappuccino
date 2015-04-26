@@ -17,13 +17,13 @@ class ContactUcc implements IContactUcc {
 
   private final IEntityFactory factory;
   private final IContactDao dao;
-  private final IAttendanceDao aDao;
+  private final IAttendanceDao atDao;
 
   @Inject
-  public ContactUcc(IEntityFactory entityFactory, IContactDao contactDao, IAttendanceDao iADao) {
+  public ContactUcc(IEntityFactory entityFactory, IContactDao contactDao, IAttendanceDao attDao) {
     this.factory = entityFactory;
     this.dao = contactDao;
-    this.aDao = iADao;
+    this.atDao = attDao;
   }
 
   @Override
@@ -131,6 +131,6 @@ class ContactUcc implements IContactUcc {
     if (contactId <= 0) {
       throw new IllegalArgumentException("L'id doit être positif");
     }
-    return aDao.fetchAttendancesByContact(contactId);
+    return atDao.fetchAttendancesByContact(contactId);
   }
 }

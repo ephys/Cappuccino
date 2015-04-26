@@ -53,7 +53,7 @@ class CompanyUcc implements ICompanyUcc {
   }
 
   @Override
-  public List<ICompanyDto> searchCompanies(String name, String postCode, String town, String street) {
+  public List<ICompanyDto> searchCompanies(String name, String pC, String town, String street) {
     if (StringUtils.isEmpty(street)) {
       street = null;
     }
@@ -62,15 +62,15 @@ class CompanyUcc implements ICompanyUcc {
       town = null;
     }
 
-    if (StringUtils.isEmpty(postCode)) {
-      postCode = null;
+    if (StringUtils.isEmpty(pC)) {
+      pC = null;
     }
 
     if (StringUtils.isEmpty(name)) {
       name = null;
     }
 
-    return companyDao.searchCompanies(name, postCode, street, town);
+    return companyDao.searchCompanies(name, pC, street, town);
   }
 
   @Override
