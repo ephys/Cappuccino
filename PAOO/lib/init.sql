@@ -1,89 +1,7 @@
-﻿-- @author Kevin Bavay
-DROP SCHEMA IF EXISTS business_days CASCADE;
+-- @author Kevin Bavay
 
-CREATE SCHEMA business_days;
-
-CREATE SEQUENCE business_days.users_id_seq;
-CREATE TYPE business_days.user_role AS ENUM ('USER', 'ADMIN');
-CREATE TABLE IF NOT EXISTS business_days.users (
-  user_id       INTEGER PRIMARY KEY
-    DEFAULT NEXTVAL('business_days.users_id_seq'),
-  role          business_days.user_role                   NOT NULL DEFAULT 'USER',
-  password      VARCHAR(256)                NOT NULL,
-  email         VARCHAR(50)                 NOT NULL,
-  username      VARCHAR(25)                 NOT NULL UNIQUE,
-  first_name    VARCHAR(25)                 NOT NULL,
-  last_name     VARCHAR(25)                 NOT NULL,
-  register_date TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
-  version       INTEGER                     NOT NULL DEFAULT 1
-);
-
-CREATE SEQUENCE business_days.companies_id_seq;
-CREATE TABLE IF NOT EXISTS business_days.companies (
-  company_id       INTEGER PRIMARY KEY
-                                                                              DEFAULT NEXTVAL(
-                                                                                  'business_days.companies_id_seq'),
-  creator          INTEGER REFERENCES business_days.users (user_id)  NOT NULL,
-  name             VARCHAR(25)                                       NOT NULL UNIQUE,
-  register_date    TIMESTAMP WITHOUT TIME ZONE                       NOT NULL DEFAULT now(),
-  address_street   VARCHAR(50)                                       NOT NULL,
-  address_num      VARCHAR(10)                                       NOT NULL,
-  address_mailbox  VARCHAR(10),
-  address_postcode VARCHAR(10)                                       NOT NULL,
-  address_town     VARCHAR(25)                                       NOT NULL,
-  version          INTEGER                                           NOT NULL DEFAULT 1
-);
-
-CREATE SEQUENCE business_days.contacts_id_seq;
-CREATE TABLE IF NOT EXISTS business_days.contacts (
-  contact_id  INTEGER PRIMARY KEY
-                                                                                 DEFAULT NEXTVAL(
-                                                                                     'business_days.contacts_id_seq'),
-  company     INTEGER REFERENCES business_days.companies (company_id)   NOT NULL,
-  email       VARCHAR(50),
-  email_valid BOOLEAN                                                            DEFAULT TRUE,
-  first_name  VARCHAR(25)                                               NOT NULL,
-  last_name   VARCHAR(25)                                               NOT NULL,
-  phone       VARCHAR(25),
-  version     INTEGER                                                   NOT NULL DEFAULT 1
-);
-
-CREATE SEQUENCE business_days.business_days_id_seq;
-CREATE TABLE IF NOT EXISTS business_days.business_days (
-  business_day_id INTEGER PRIMARY KEY
-                                                       DEFAULT NEXTVAL(
-                                                           'business_days.business_days_id_seq'),
-  event_date      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  creation_date   TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
-  academic_year   INTEGER                     NOT NULL UNIQUE,
-  version         INTEGER                     NOT NULL DEFAULT 1
-);
-
-CREATE TYPE business_days.participation_state AS ENUM ('INVITED', 'CONFIRMED', 'DECLINED', 'BILLED', 'PAID');
-CREATE TABLE IF NOT EXISTS business_days.participations (
-  company      INTEGER REFERENCES business_days.companies (company_id)           NOT NULL,
-  business_day INTEGER REFERENCES business_days.business_days (business_day_id)  NOT NULL,
-  state        business_days.participation_state                                               NOT NULL DEFAULT 'INVITED',
-  cancelled    BOOLEAN                                                           NOT NULL DEFAULT FALSE,
-  version      INTEGER                                                           NOT NULL DEFAULT 1,
-
-  PRIMARY KEY (company, business_day)
-);
-
-CREATE TABLE IF NOT EXISTS business_days.attendances (
-  company      INTEGER REFERENCES business_days.companies (company_id)          NOT NULL,
-  business_day INTEGER REFERENCES business_days.business_days (business_day_id) NOT NULL,
-  contact      INTEGER REFERENCES business_days.contacts (contact_id)           NOT NULL,
-
-  PRIMARY KEY (company, business_day, contact)
-);
-
--- password is mdpadmin
---TRUNCATE business_days.users CASCADE;
-
-
-INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN', 'pbkdf2:0a75ab12730a6f4a2496e6150eb5011901cc12a97175294b23e65df4296eef35deb6fe27aa1a1243fbc4b005f3384e6dfcf3009dd3ab55b364e70b8f701b7548:a63e85a6a7ca6a45a232cb84c250c519:1000', 'dgrolaux@ipl.be', 'dgrolaux', 'Donatien', 'Grolaux', DEFAULT, DEFAULT);
-INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN', 'pbkdf2:0a75ab12730a6f4a2496e6150eb5011901cc12a97175294b23e65df4296eef35deb6fe27aa1a1243fbc4b005f3384e6dfcf3009dd3ab55b364e70b8f701b7548:a63e85a6a7ca6a45a232cb84c250c519:1000', 'blehmann@ipl.be', 'blehmann', 'Brigitte', 'Lehmann', DEFAULT, DEFAULT);
+INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN', 'pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000', 'dgrolaux@ipl.be', 'dgrolaux', 'Donatien', 'Grolaux', DEFAULT, DEFAULT);
+INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN', 'pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000', 'blehmann@ipl.be', 'blehmann', 'Brigitte', 'Lehmann', DEFAULT, DEFAULT);
 
 INSERT INTO business_days.business_days VALUES (DEFAULT, '2010-10-27', DEFAULT, 2010, DEFAULT);
 INSERT INTO business_days.business_days VALUES (DEFAULT, '2011-11-16', DEFAULT, 2011, DEFAULT);
@@ -150,7 +68,7 @@ INSERT INTO business_days.participations VALUES (4, 4, 'PAID', DEFAULT, DEFAULT)
 INSERT INTO business_days.participations VALUES (4, 5, 'DECLINED', DEFAULT, DEFAULT);
 -- Contacts
 INSERT INTO business_days.contacts
-VALUES (DEFAULT, 4, 'nicolas.rigo@eezee-it.com', DEFAULT, 'Roberto', 'Alvarez', '+32 478 88 02 55', DEFAULT);
+VALUES (DEFAULT, 4, 'nicolas.rigo@eezee-it.com', DEFAULT, 'Nicolas', 'Rigo', '+32 478 88 02 55', DEFAULT);
 -- Attendances
 INSERT INTO business_days.attendances VALUES (4, 4, 6);
 
@@ -173,6 +91,3 @@ VALUES (DEFAULT, 5, 'Dedecker drh@bewan.b', DEFAULT, 'Bénédicte', 'Dedecker', 
 INSERT INTO business_days.attendances VALUES (5, 2, 7);
 INSERT INTO business_days.attendances VALUES (5, 2, 8);
 INSERT INTO business_days.attendances VALUES (5, 5, 9);
-
-
-INSERT INTO business_days.users VALUES (DEFAULT, 'USER','pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000','jsmith@mordor.arda', 'admin', 'John', 'Smith', DEFAULT,DEFAULT);
