@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -40,8 +41,8 @@ public class ContactSearchView extends JPanel implements ChangeListener {
    * @param contactUcc The app instance of the contact ucc.
    * @param companyUcc The app instance of the company ucc.
    */
-  public ContactSearchView(ContactSearchModel model,
-      IContactUcc contactUcc, ICompanyUcc companyUcc) {
+  public ContactSearchView(ContactSearchModel model, IContactUcc contactUcc, ICompanyUcc companyUcc) {
+
 
     setLayout(new BorderLayout());
     this.model = model;
@@ -49,8 +50,7 @@ public class ContactSearchView extends JPanel implements ChangeListener {
     this.contactUcc = contactUcc;
 
 
-    String[] tableTitles =
-        new String[] {"Nom", "Prénom", "Entreprise", "Mail", "Téléphone"};
+    String[] tableTitles = new String[] {"Nom", "Prénom", "Entreprise", "Mail", "Téléphone"};
     this.tableModel = new DefaultTableModel(tableTitles, 0) {
       @Override
       public boolean isCellEditable(int row, int column) {
@@ -67,6 +67,8 @@ public class ContactSearchView extends JPanel implements ChangeListener {
     companyCol.setCellRenderer(new CompanyCellRenderer());
 
     this.scrollPane = new JScrollPane(table);
+    scrollPane.setBorder(new EmptyBorder(IhmConstants.M_GAP, IhmConstants.M_GAP,
+        IhmConstants.M_GAP, IhmConstants.M_GAP));
     this.add(scrollPane);
     this.model.addChangeListener(this);
     stateChanged(null);
@@ -76,8 +78,7 @@ public class ContactSearchView extends JPanel implements ChangeListener {
   public void stateChanged(ChangeEvent event) {
 
     List<IContactDto> contacts =
-        contactUcc
-            .searchContact(model.getFirstName(), model.getLastName());
+        contactUcc.searchContact(model.getFirstName(), model.getLastName());
 
     if (contacts.size() != 0) {
       if (this.removedWidget) {
@@ -114,8 +115,7 @@ public class ContactSearchView extends JPanel implements ChangeListener {
 
     for (int i = 0; i < contacts.size(); i++) {
       IContactDto contact = contacts.get(i);
-      ICompanyDto company =
-          companyUcc.getCompanyById(contact.getCompany());
+      ICompanyDto company = companyUcc.getCompanyById(contact.getCompany());
 
       tableModel.setValueAt(contact, i, 0);
       tableModel.setValueAt(contact.getFirstName(), i, 1);

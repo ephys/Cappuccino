@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -23,8 +24,7 @@ import paoo.cappuccino.ihm.util.cellrenderers.StateCellRenderer;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
 
-public class ParticipationSearchView extends JPanel implements
-    ChangeListener {
+public class ParticipationSearchView extends JPanel implements ChangeListener {
 
   private static final long serialVersionUID = 1189296753762441036L;
   private final ParticipationSearchModel model;
@@ -43,17 +43,17 @@ public class ParticipationSearchView extends JPanel implements
    * @param companyUcc The app instance of the company ucc.
    * @param businessDayUcc The app instance of the business day ucc.
    */
-  public ParticipationSearchView(ParticipationSearchModel model,
-      ICompanyUcc companyUcc, IBusinessDayUcc businessDayUcc) {
+  public ParticipationSearchView(ParticipationSearchModel model, ICompanyUcc companyUcc,
+      IBusinessDayUcc businessDayUcc) {
     this.businessDayUcc = businessDayUcc;
+
 
     setLayout(new BorderLayout());
     this.model = model;
     this.companyUcc = companyUcc;
 
     String[] tableTitles =
-        new String[] {"Nom entreprise", "Adresse entreprise",
-            "Date d'enregistrement", "État"};
+        new String[] {"Nom entreprise", "Adresse entreprise", "Date d'enregistrement", "État"};
     this.tableModel = new DefaultTableModel(tableTitles, 0) {
       @Override
       public boolean isCellEditable(int row, int column) {
@@ -68,11 +68,15 @@ public class ParticipationSearchView extends JPanel implements
 
     TableColumn dateCol = table.getColumn(tableTitles[2]);
     dateCol.setCellRenderer(new DateCellRenderer());
+    dateCol.setMaxWidth(dateCol.getMaxWidth() / 4);
 
     TableColumn stateCol = table.getColumn(tableTitles[3]);
     stateCol.setCellRenderer(new StateCellRenderer());
+    stateCol.setMaxWidth(stateCol.getMaxWidth() / 4);
 
     this.scrollPane = new JScrollPane(table);
+    scrollPane.setBorder(new EmptyBorder(IhmConstants.M_GAP, IhmConstants.M_GAP,
+        IhmConstants.M_GAP, IhmConstants.M_GAP));
     this.add(scrollPane);
     this.model.addChangeListener(this);
     stateChanged(null);
@@ -81,8 +85,8 @@ public class ParticipationSearchView extends JPanel implements
   @Override
   public void stateChanged(ChangeEvent event) {
     List<IParticipationDto> participations =
-        model.getSelectedDay() == null ? null : businessDayUcc
-            .getParticipations(model.getSelectedDay().getId());
+        model.getSelectedDay() == null ? null : businessDayUcc.getParticipations(model
+            .getSelectedDay().getId());
 
     if (participations != null && participations.size() != 0) {
       if (this.removedWidget) {
@@ -97,8 +101,8 @@ public class ParticipationSearchView extends JPanel implements
     } else {
       if (!this.removedWidget) {
         this.centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        
-        if(participations != null){
+
+        if (participations != null) {
           centerPadding.add(new JLabel(IhmConstants.ERROR_NO_PARTICIPATIONS));
         }
 
@@ -120,12 +124,10 @@ public class ParticipationSearchView extends JPanel implements
 
     for (int i = 0; i < participations.size(); i++) {
       IParticipationDto participation = participations.get(i);
-      ICompanyDto company =
-          companyUcc.getCompanyById(participation.getCompany());
+      ICompanyDto company = companyUcc.getCompanyById(participation.getCompany());
 
       tableModel.setValueAt(company, i, 0);
-      tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i,
-          1);
+      tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i, 1);
       tableModel.setValueAt(company.getRegisterDate(), i, 2);
       tableModel.setValueAt(participation.getState(), i, 3);
     }

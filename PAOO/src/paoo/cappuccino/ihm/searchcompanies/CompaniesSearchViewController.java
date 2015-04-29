@@ -19,18 +19,19 @@ import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.ucc.IUserUcc;
 
-@SuppressWarnings("serial")
 public class CompaniesSearchViewController extends JPanel {
+
+  private static final long serialVersionUID = -7968991356894803138L;
 
   /**
    * Creates a view controller for the participation search view.
    *
-   * @param model      The model of the view.
-   * @param menu       The model of the menu.
+   * @param model The model of the view.
+   * @param menu The model of the menu.
    * @param companyUcc The app instance of the company ucc.
    */
   public CompaniesSearchViewController(CompaniesSearchModel model, MenuModel menu,
-                                       ICompanyUcc companyUcc, IUserUcc userUcc) {
+      ICompanyUcc companyUcc, IUserUcc userUcc) {
     super(new BorderLayout());
 
     // name

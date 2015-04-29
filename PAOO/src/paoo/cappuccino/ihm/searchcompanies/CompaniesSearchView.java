@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -41,8 +42,8 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
    * @param companyUcc The app instance of the company ucc.
    * @param userUcc The app instance of the user ucc.
    */
-  public CompaniesSearchView(CompaniesSearchModel model,
-      ICompanyUcc companyUcc, IUserUcc userUcc) {
+  public CompaniesSearchView(CompaniesSearchModel model, ICompanyUcc companyUcc, IUserUcc userUcc) {
+
 
     setLayout(new BorderLayout());
     this.model = model;
@@ -50,8 +51,8 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
     this.userUcc = userUcc;
 
     String[] tableTitles =
-        new String[] {"Nom entreprise", "Adresse entreprise",
-            "Date d'enregistrement", "Enregistreur"};
+        new String[] {"Nom entreprise", "Adresse entreprise", "Date d'enregistrement",
+            "Enregistreur"};
     this.tableModel = new DefaultTableModel(tableTitles, 0) {
       @Override
       public boolean isCellEditable(int row, int column) {
@@ -66,8 +67,14 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
 
     TableColumn dateCol = table.getColumn(tableTitles[2]);
     dateCol.setCellRenderer(new DateCellRenderer());
+    dateCol.setMaxWidth(dateCol.getMaxWidth() / 3);
+
+    TableColumn enrCol = table.getColumn(tableTitles[3]);
+    enrCol.setMaxWidth(enrCol.getMaxWidth() / 3);
 
     this.scrollPane = new JScrollPane(table);
+    scrollPane.setBorder(new EmptyBorder(IhmConstants.M_GAP, IhmConstants.M_GAP,
+        IhmConstants.M_GAP, IhmConstants.M_GAP));
     this.add(scrollPane);
     this.model.addChangeListener(this);
     stateChanged(null);
@@ -77,8 +84,8 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
   public void stateChanged(ChangeEvent event) {
 
     List<ICompanyDto> companies =
-        companyUcc.searchCompanies(model.getName(), model.getPostCode(),
-            model.getTown(), model.getStreet());
+        companyUcc.searchCompanies(model.getName(), model.getPostCode(), model.getTown(),
+            model.getStreet());
 
     if (companies != null && companies.size() != 0) {
       if (this.removedWidget) {
@@ -124,8 +131,7 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
       }
 
       tableModel.setValueAt(company, i, 0);
-      tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i,
-          1);
+      tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i, 1);
       tableModel.setValueAt(company.getRegisterDate(), i, 2);
       tableModel.setValueAt(creatorName, i, 3);
     }

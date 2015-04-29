@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.PopupMenuEvent;
@@ -75,9 +76,8 @@ public class HomeViewController extends JPanel implements ChangeListener {
    * @param dayUcc The app business day use case controller.
    * @param companyUcc The app company use case controller.
    */
-  public HomeViewController(HomeModel model, MenuModel menu,
-      IGuiManager guiManager, IBusinessDayUcc dayUcc,
-      ICompanyUcc companyUcc) {
+  public HomeViewController(HomeModel model, MenuModel menu, IGuiManager guiManager,
+      IBusinessDayUcc dayUcc, ICompanyUcc companyUcc) {
     super(new BorderLayout());
     this.menu = menu;
     this.dayUcc = dayUcc;
@@ -93,19 +93,16 @@ public class HomeViewController extends JPanel implements ChangeListener {
     JPanel daylistPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
     dayList =
-        new JComboDay(
-            listBusinessDays.toArray(new IBusinessDayDto[listBusinessDays.size()]), menu);
+        new JComboDay(listBusinessDays.toArray(new IBusinessDayDto[listBusinessDays.size()]), menu);
 
     dayList.getCombo().addActionListener(
         e -> {
-          IBusinessDayDto selectedDay =
-              (IBusinessDayDto) dayList.getCombo().getSelectedItem();
+          IBusinessDayDto selectedDay = (IBusinessDayDto) dayList.getCombo().getSelectedItem();
           model.setSelectedDay(selectedDay);
 
           guiManager.getLogger().info(
               "[Home screen] selected day is "
-                  + (selectedDay == null ? null : selectedDay
-                      .getEventDate()));
+                  + (selectedDay == null ? null : selectedDay.getEventDate()));
         });
 
     daylistPanel.add(dayList);
@@ -113,8 +110,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
     this.add(daylistPanel, BorderLayout.NORTH);
 
     // center
-    String[] tableTitles =
-        new String[] {"Nom entreprise", "État", "Annuler participation"};
+    String[] tableTitles = new String[] {"Nom entreprise", "État", "Annuler participation"};
     tableModel = new DefaultTableModel(tableTitles, 0) {
 
       private static final long serialVersionUID = 4116198217266394040L;
@@ -124,10 +120,9 @@ public class HomeViewController extends JPanel implements ChangeListener {
         if (column == 0) {
           return false;
         }
-        
-        IParticipationDto participation =
-            (IParticipationDto) tableModel.getValueAt(row, 2);
-        
+
+        IParticipationDto participation = (IParticipationDto) tableModel.getValueAt(row, 2);
+
         return !participation.isCancelled();
       }
     };
@@ -145,8 +140,8 @@ public class HomeViewController extends JPanel implements ChangeListener {
     stateCol.setMinWidth(stateCol.getWidth() * 2);
     stateCol.setCellRenderer(new StateCellRenderer());
     ComboBoxModel<State> stateModel =
-        new DefaultComboBoxModel<>(new State[] {State.INVITED,
-            State.CONFIRMED, State.DECLINED, State.BILLED, State.PAID});
+        new DefaultComboBoxModel<>(new State[] {State.INVITED, State.CONFIRMED, State.DECLINED,
+            State.BILLED, State.PAID});
     JComboBox<State> stateCombo = new JComboBox<>(stateModel);
     stateCol.setCellEditor(new DefaultCellEditor(stateCombo));
 
@@ -162,34 +157,30 @@ public class HomeViewController extends JPanel implements ChangeListener {
         return;
       }
 
-      IParticipationDto participation =
-          (IParticipationDto) tableModel.getValueAt(row, 2);
+      IParticipationDto participation = (IParticipationDto) tableModel.getValueAt(row, 2);
       State selectedState = (State) stateCombo.getSelectedItem();
       if (selectedState == participation.getState()) {
         return;
       }
 
       if (participation.isCancelled()) {
-        JOptionPane.showMessageDialog(HomeViewController.this,
-            "Participation annulée.", "Action invalide",
-            JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(HomeViewController.this, "Participation annulée.",
+            "Action invalide", JOptionPane.ERROR_MESSAGE);
         stateCombo.setSelectedItem(participation.getState());
         return;
       }
 
       if (!dayUcc.changeState(participation, selectedState)) {
         JOptionPane.showMessageDialog(HomeViewController.this,
-            "Impossible de sélectionner cet état.", "Action invalide",
-            JOptionPane.ERROR_MESSAGE);
+            "Impossible de sélectionner cet état.", "Action invalide", JOptionPane.ERROR_MESSAGE);
 
         stateCombo.setSelectedItem(participation.getState());
       } else {
         guiManager.getLogger().info(
-            "[Home screen] "
-                + ((ICompanyDto) tableModel.getValueAt(row, 0)).getName()
-                + " -> " + participation.getState());
+            "[Home screen] " + ((ICompanyDto) tableModel.getValueAt(row, 0)).getName() + " -> "
+                + participation.getState());
       }
-      
+
       table.repaint();
     });
     stateCombo.addPopupMenuListener(new PopupMenuListener() {
@@ -200,22 +191,19 @@ public class HomeViewController extends JPanel implements ChangeListener {
           return;
         }
 
-        IParticipationDto participation =
-            (IParticipationDto) tableModel.getValueAt(row, 2);
+        IParticipationDto participation = (IParticipationDto) tableModel.getValueAt(row, 2);
         enabledStates.clearSelection();
-        enabledStates.addSelectionInterval(participation.getState()
-            .ordinal(), participation.getState().ordinal());
+        enabledStates.addSelectionInterval(participation.getState().ordinal(), participation
+            .getState().ordinal());
 
-       if (participation.isCancelled()) {
-         return;
-       }
+        if (participation.isCancelled()) {
+          return;
+        }
 
-        State[] states =
-            ParticipationUtils.getFollowingStates(participation.getState());
+        State[] states = ParticipationUtils.getFollowingStates(participation.getState());
 
         for (State state : states) {
-          enabledStates.addSelectionInterval(state.ordinal(),
-              state.ordinal());
+          enabledStates.addSelectionInterval(state.ordinal(), state.ordinal());
         }
       }
 
@@ -234,16 +222,17 @@ public class HomeViewController extends JPanel implements ChangeListener {
     cancelButton.addActionListener(e -> {
       int row = table.getSelectedRow();
 
-      IParticipationDto participation =
-          (IParticipationDto) tableModel.getValueAt(row, 2);
+      IParticipationDto participation = (IParticipationDto) tableModel.getValueAt(row, 2);
       dayUcc.cancelParticipation(participation);
-      guiManager.getLogger().info(
-          "[Home screen] "
-              + ((ICompanyDto) tableModel.getValueAt(row, 0)).getName()
-              + " Cancelled");
+      guiManager.getLogger()
+          .info(
+              "[Home screen] " + ((ICompanyDto) tableModel.getValueAt(row, 0)).getName()
+                  + " Cancelled");
     });
 
     this.scrollTable = new JScrollPane(table);
+    scrollTable.setBorder(new EmptyBorder(IhmConstants.M_GAP, IhmConstants.M_GAP,
+        IhmConstants.M_GAP, IhmConstants.M_GAP));
     this.add(this.scrollTable);
 
     table.addMouseListener(new MouseAdapter() {
@@ -251,8 +240,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
       public void mouseClicked(MouseEvent clickEvent) {
         if (clickEvent.getClickCount() == 2) {
           ICompanyDto company =
-              (ICompanyDto) table.getModel().getValueAt(
-                  table.getSelectedRow(), 0);
+              (ICompanyDto) table.getModel().getValueAt(table.getSelectedRow(), 0);
 
           menu.setCurrentPage(MenuEntry.COMPANY_DETAILS, company);
         }
@@ -272,8 +260,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
     tableModel.setRowCount(participations.size());
     for (int i = 0; i < participations.size(); i++) {
       IParticipationDto participation = participations.get(i);
-      ICompanyDto company =
-          companyUcc.getCompanyById(participation.getCompany());
+      ICompanyDto company = companyUcc.getCompanyById(participation.getCompany());
 
       tableModel.setValueAt(company, i, 0);
 
@@ -304,8 +291,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
   @Override
   public void stateChanged(ChangeEvent event) {
     if (viewModel.getSelectedDay() == null
-        || !viewModel.getSelectedDay().equals(
-            dayList.getCombo().getSelectedItem())) {
+        || !viewModel.getSelectedDay().equals(dayList.getCombo().getSelectedItem())) {
       dayList.getCombo().setSelectedItem(viewModel.getSelectedDay());
     }
 
@@ -331,29 +317,26 @@ public class HomeViewController extends JPanel implements ChangeListener {
     }
 
     @Override
-    public Component getListCellRendererComponent(JList list,
-        Object value, int index, boolean isSelected, boolean cellHasFocus) {
-      super.getListCellRendererComponent(list, value, index, isSelected,
-          cellHasFocus);
+    public Component getListCellRendererComponent(JList list, Object value, int index,
+        boolean isSelected, boolean cellHasFocus) {
+      super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
       setText(LocalizationUtil.localizeState((State) value));
 
       return this;
     }
   }
 
-  private static class ButtonRenderer extends JButton implements
-      TableCellRenderer {
+  private static class ButtonRenderer extends JButton implements TableCellRenderer {
 
     private static final long serialVersionUID = -8966333763971995652L;
 
     @Override
-    public Component getTableCellRendererComponent(JTable table,
-        Object value, boolean isSelected, boolean isFocus, int row, int col) {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+        boolean isFocus, int row, int col) {
       IParticipationDto participation = (IParticipationDto) value;
 
       setEnabled(participation.getState() != State.DECLINED
-          && participation.getState() != State.INVITED
-          && !participation.isCancelled());
+          && participation.getState() != State.INVITED && !participation.isCancelled());
 
       setText(participation.isCancelled() ? "Annulée" : "Annuler");
       return this;
@@ -367,19 +350,16 @@ public class HomeViewController extends JPanel implements ChangeListener {
     public static final int ERROR_NO_PARTICIPATION = 2;
 
     private final JLabel errorMessage = new JLabelFont(null, 16);
-    private final JPanel contents =
-        new JPanel(new GridLayout(2, 1, 0, 10));
+    private final JPanel contents = new JPanel(new GridLayout(2, 1, 0, 10));
 
-   
-    private JButton createParticipationButton = new JButton(
-        "Inviter des entreprises");
+
+    private JButton createParticipationButton = new JButton("Inviter des entreprises");
 
     public ErrorPanel() {
       super(new GridBagLayout());
 
-      createParticipationButton.addActionListener(e -> menu
-          .setCurrentPage(MenuEntry.SELECT_COMPANY,
-              viewModel.getSelectedDay()));
+      createParticipationButton.addActionListener(e -> menu.setCurrentPage(
+          MenuEntry.SELECT_COMPANY, viewModel.getSelectedDay()));
 
       this.add(contents, new GridBagConstraints());
       contents.add(errorMessage);
@@ -394,7 +374,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
       clear();
 
       switch (errno) {
-       
+
         case ERROR_NO_DAY_SELECTED:
           errorMessage.setText(IhmConstants.SELECT_A_DAY);
           break;

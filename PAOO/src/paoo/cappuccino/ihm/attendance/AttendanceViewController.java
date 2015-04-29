@@ -42,10 +42,9 @@ import paoo.cappuccino.ucc.IContactUcc;
  *
  * @author Opsomer Mathias
  */
-@SuppressWarnings("serial")
-public class AttendanceViewController extends JPanel implements
-    ChangeListener {
+public class AttendanceViewController extends JPanel implements ChangeListener {
 
+  private static final long serialVersionUID = 39440942631346034L;
   private boolean companyNeedsUpdate = true;
   private boolean contactNeedsUpdate = true;
 
@@ -68,38 +67,31 @@ public class AttendanceViewController extends JPanel implements
   /**
    * Creates a new ViewController for the attendance selection gui.
    */
-  public AttendanceViewController(AttendanceModel model, MenuModel menu,
-      IGuiManager manager, ICompanyUcc companyUcc,
-      IBusinessDayUcc businessDayUcc, IContactUcc contactUcc) {
+  @SuppressWarnings("serial")
+  public AttendanceViewController(AttendanceModel model, MenuModel menu, IGuiManager manager,
+      ICompanyUcc companyUcc, IBusinessDayUcc businessDayUcc, IContactUcc contactUcc) {
     super(new BorderLayout());
     this.model = model;
     this.businessDayUcc = businessDayUcc;
     this.contactUcc = contactUcc;
     this.companyUcc = companyUcc;
 
-    this.setBorder(new EmptyBorder(IhmConstants.M_GAP, IhmConstants.M_GAP,
-        IhmConstants.M_GAP, IhmConstants.M_GAP));
 
     JPanel top = new JPanel(new GridLayout(1, 1));
     this.add(top, BorderLayout.NORTH);
 
     // Business day combobox
     List<IBusinessDayDto> listDay = businessDayUcc.getBusinessDays();
-    JComboDay dayPanel =
-        new JComboDay(listDay.toArray(new IBusinessDayDto[listDay.size()]), menu);
+    JComboDay dayPanel = new JComboDay(listDay.toArray(new IBusinessDayDto[listDay.size()]), menu);
     this.comboDay = dayPanel.getCombo();
-    this.comboDay
-        .addActionListener(event -> {
-          if (model.getSelectedDay() != comboDay.getSelectedItem()) {
-            companyNeedsUpdate = true;
-            model.setSelectedDay((IBusinessDayDto) comboDay
-                .getSelectedItem());
-          }
-        });
+    this.comboDay.addActionListener(event -> {
+      if (model.getSelectedDay() != comboDay.getSelectedItem()) {
+        companyNeedsUpdate = true;
+        model.setSelectedDay((IBusinessDayDto) comboDay.getSelectedItem());
+      }
+    });
 
-  
-      top.add(dayPanel);
-    
+    top.add(dayPanel);
 
     // company combobox
     JPanel companyPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -108,8 +100,7 @@ public class AttendanceViewController extends JPanel implements
 
     comboCompanies.addActionListener(e -> {
       contactNeedsUpdate = true;
-      model.setSelectedCompany((ICompanyDto) comboCompanies
-          .getSelectedItem());
+      model.setSelectedCompany((ICompanyDto) comboCompanies.getSelectedItem());
     });
     comboCompanies.setRenderer(new CompanyListRenderer());
     top.add(companyPanel);
@@ -123,8 +114,7 @@ public class AttendanceViewController extends JPanel implements
     contactPanel.add(selectAllPanel, BorderLayout.NORTH);
 
     String[] tableTitles =
-        new String[] {"Nom contact", "Prénom contact", "Email contact",
-            "Sélectionner"};
+        new String[] {"Nom contact", "Prénom contact", "Email contact", "Sélectionner"};
     this.contactsTable = new JTable(new DefaultTableModel(tableTitles, 0) {
       @Override
       public boolean isCellEditable(int row, int column) {
@@ -152,8 +142,7 @@ public class AttendanceViewController extends JPanel implements
       public void mouseClicked(MouseEvent clickEvent) {
         if (clickEvent.getClickCount() == 2) {
           IContactDto contact =
-              (IContactDto) contactsTable.getModel().getValueAt(
-                  contactsTable.getSelectedRow(), 0);
+              (IContactDto) contactsTable.getModel().getValueAt(contactsTable.getSelectedRow(), 0);
 
           menu.setCurrentPage(MenuEntry.CONTACT_DETAILS, contact);
         }
@@ -161,42 +150,42 @@ public class AttendanceViewController extends JPanel implements
     });
 
     contactsTable.setRowHeight(35);
-    contactsTable.getColumn(tableTitles[0]).setCellRenderer(
-        new ContactCellRenderer());
+    contactsTable.getColumn(tableTitles[0]).setCellRenderer(new ContactCellRenderer());
     TableColumn columnCheckBox = contactsTable.getColumn(tableTitles[3]);
     columnCheckBox.setMaxWidth(columnCheckBox.getMaxWidth() / 6);
-    contactPanel.add(new JScrollPane(contactsTable));
+
+    JScrollPane scrollPane = new JScrollPane(contactsTable);
+    scrollPane.setBorder(new EmptyBorder(IhmConstants.M_GAP, IhmConstants.M_GAP,
+        IhmConstants.M_GAP, IhmConstants.M_GAP));
+    contactPanel.add(scrollPane);
     selectAllCheckbox.addActionListener(e -> {
       final boolean checked = selectAllCheckbox.isSelected();
 
-      final DefaultTableModel tableModel =
-          (DefaultTableModel) contactsTable.getModel();
+      final DefaultTableModel tableModel = (DefaultTableModel) contactsTable.getModel();
       for (int i = 0; i < contactsTable.getRowCount(); i++) {
         tableModel.setValueAt(checked, i, 3);
       }
     });
-    contactsTable.getModel()
-        .addTableModelListener(e -> {
-          // check table initiated
-            if (contactsTable.getRowCount() == 0
-                || contactsTable.getValueAt(
-                    contactsTable.getRowCount() - 1, 3) == null) {
-              return;
-            }
+    contactsTable.getModel().addTableModelListener(e -> {
+      // check table initiated
+        if (contactsTable.getRowCount() == 0
+            || contactsTable.getValueAt(contactsTable.getRowCount() - 1, 3) == null) {
+          return;
+        }
 
-            if (e.getColumn() != 3) {
-              return;
-            }
+        if (e.getColumn() != 3) {
+          return;
+        }
 
-            for (int i = 0; i < contactsTable.getRowCount(); i++) {
-              if (!(boolean) contactsTable.getValueAt(i, 3)) {
-                selectAllCheckbox.setSelected(false);
-                return;
-              }
+        for (int i = 0; i < contactsTable.getRowCount(); i++) {
+          if (!(boolean) contactsTable.getValueAt(i, 3)) {
+            selectAllCheckbox.setSelected(false);
+            return;
+          }
 
-              selectAllCheckbox.setSelected(true);
-            }
-          });
+          selectAllCheckbox.setSelected(true);
+        }
+      });
 
     JPanel controls = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     this.submitButton = new JButton("Valider");
@@ -206,39 +195,31 @@ public class AttendanceViewController extends JPanel implements
           StringBuilder listContacts = new StringBuilder();
           for (int i = 0; i < contactsTable.getRowCount(); i++) {
             if ((boolean) contactsTable.getValueAt(i, 3)) {
-              IContactDto currentContact =
-                  (IContactDto) contactsTable.getValueAt(i, 0);
+              IContactDto currentContact = (IContactDto) contactsTable.getValueAt(i, 0);
               contacts.add(currentContact);
-              listContacts.append("[" + currentContact.getFirstName()
-                  + " " + currentContact.getLastName() + "]");
+              listContacts.append("[" + currentContact.getFirstName() + " "
+                  + currentContact.getLastName() + "]");
             }
           }
           if (contacts.size() == 0) {
-            if (JOptionPane.showConfirmDialog(this,
-                "Personne n'est selectionné. Valider ?") != JOptionPane.OK_OPTION) {
+            if (JOptionPane.showConfirmDialog(this, "Personne n'est selectionné. Valider ?") != JOptionPane.OK_OPTION) {
               return;
             }
           }
 
-          businessDayUcc.addInvitedContacts(
-              contacts.toArray(new IContactDto[contacts.size()]),
+          businessDayUcc.addInvitedContacts(contacts.toArray(new IContactDto[contacts.size()]),
               model.getSelectedDay());
-          JOptionPane.showMessageDialog(this,
-              "Participations enregistrées");
+          JOptionPane.showMessageDialog(this, "Participations enregistrées");
           if (contacts.size() == 0) {
             manager.getLogger().info(
-                "[Cancel Attendance] "
-                    + model.getSelectedDay().getEventDate() + " / "
+                "[Cancel Attendance] " + model.getSelectedDay().getEventDate() + " / "
                     + model.getSelectedCompany().getName());
           } else {
             manager.getLogger().info(
-                "[New Attendance] "
-                    + model.getSelectedDay().getEventDate() + " / "
-                    + model.getSelectedCompany().getName() + " / "
-                    + listContacts.toString());
+                "[New Attendance] " + model.getSelectedDay().getEventDate() + " / "
+                    + model.getSelectedCompany().getName() + " / " + listContacts.toString());
           }
-          menu.setCurrentPage(MenuEntry.COMPANY_DETAILS,
-              model.getSelectedCompany());
+          menu.setCurrentPage(MenuEntry.COMPANY_DETAILS, model.getSelectedCompany());
         });
     controls.add(submitButton);
 
@@ -273,8 +254,7 @@ public class AttendanceViewController extends JPanel implements
     }
 
     if (model.getSelectedCompany() == null
-        || !model.getSelectedCompany().equals(
-            comboCompanies.getSelectedItem())) {
+        || !model.getSelectedCompany().equals(comboCompanies.getSelectedItem())) {
       comboCompanies.setSelectedItem(model.getSelectedCompany());
     }
 
@@ -287,8 +267,7 @@ public class AttendanceViewController extends JPanel implements
   private void updateCompanyCombo() {
     model.setSelectedCompany(null);
 
-    List<ICompanyDto> companyList =
-        companyUcc.getCompaniesByDay(model.getSelectedDay().getId());
+    List<ICompanyDto> companyList = companyUcc.getCompaniesByDay(model.getSelectedDay().getId());
     if (companyList.isEmpty()) {
       companyComboMessage.setText(IhmConstants.ERROR_NO_COMPANY);
       comboCompanies.setVisible(false);
@@ -313,13 +292,11 @@ public class AttendanceViewController extends JPanel implements
     }
 
     final List<IContactDto> participatingContacts =
-        businessDayUcc.getInvitedContacts(model.getSelectedCompany(),
-            model.getSelectedDay());
+        businessDayUcc.getInvitedContacts(model.getSelectedCompany(), model.getSelectedDay());
     final List<IContactDto> contacts =
         contactUcc.getContactByCompany(model.getSelectedCompany().getId());
 
-    DefaultTableModel tableModel =
-        (DefaultTableModel) contactsTable.getModel();
+    DefaultTableModel tableModel = (DefaultTableModel) contactsTable.getModel();
     tableModel.setRowCount(contacts.size());
 
 
@@ -328,8 +305,7 @@ public class AttendanceViewController extends JPanel implements
 
       tableModel.setValueAt(contact, i, 0);
       tableModel.setValueAt(contact.getFirstName(), i, 1);
-      tableModel.setValueAt(
-          contact.getEmail() == null ? "N/A" : contact.getEmail(), i, 2);
+      tableModel.setValueAt(contact.getEmail() == null ? "N/A" : contact.getEmail(), i, 2);
       tableModel.setValueAt(participatingContacts.contains(contact), i, 3);
     }
   }
