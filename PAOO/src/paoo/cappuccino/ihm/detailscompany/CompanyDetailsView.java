@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.companydetails;
+package paoo.cappuccino.ihm.detailscompany;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

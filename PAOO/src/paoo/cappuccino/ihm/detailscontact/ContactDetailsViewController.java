@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.contactdetails;
+package paoo.cappuccino.ihm.detailscontact;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;

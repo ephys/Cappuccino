@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.companydetails;
+package paoo.cappuccino.ihm.detailscompany;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.ihm.core.Initializable;

@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.contactdetails;
+package paoo.cappuccino.ihm.detailscontact;
 
 import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.ihm.core.Initializable;

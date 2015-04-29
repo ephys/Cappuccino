@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.companydetails;
+package paoo.cappuccino.ihm.detailscompany;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

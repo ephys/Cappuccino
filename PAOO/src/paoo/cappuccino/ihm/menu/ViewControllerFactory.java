@@ -4,13 +4,13 @@ import java.awt.Component;
 
 import paoo.cappuccino.ihm.attendance.AttendanceModel;
 import paoo.cappuccino.ihm.attendance.AttendanceViewController;
-import paoo.cappuccino.ihm.companydetails.CompanyDetailsModel;
-import paoo.cappuccino.ihm.companydetails.CompanyDetailsViewController;
 import paoo.cappuccino.ihm.companyselection.CompanySelectionModel;
 import paoo.cappuccino.ihm.companyselection.CompanySelectionViewController;
-import paoo.cappuccino.ihm.contactdetails.ContactDetailsModel;
-import paoo.cappuccino.ihm.contactdetails.ContactDetailsViewController;
 import paoo.cappuccino.ihm.core.IGuiManager;
+import paoo.cappuccino.ihm.detailscompany.CompanyDetailsModel;
+import paoo.cappuccino.ihm.detailscompany.CompanyDetailsViewController;
+import paoo.cappuccino.ihm.detailscontact.ContactDetailsModel;
+import paoo.cappuccino.ihm.detailscontact.ContactDetailsViewController;
 import paoo.cappuccino.ihm.home.HomeModel;
 import paoo.cappuccino.ihm.home.HomeViewController;
 import paoo.cappuccino.ihm.newbusinessday.NewBusinessDayViewController;

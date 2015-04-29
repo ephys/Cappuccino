@@ -1,4 +1,4 @@
-package paoo.cappuccino.ihm.contactdetails;
+package paoo.cappuccino.ihm.detailscontact;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
