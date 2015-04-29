@@ -94,11 +94,11 @@ public class CompanySelectionViewController extends JPanel {
 
     List<IBusinessDayDto> invitationlessDays =
         businessDayUcc.getInvitationlessDays();
-    JComboDay businessDayPanel =
+    JComboDay jcomboDay =
         new JComboDay(
             invitationlessDays
-                .toArray(new IBusinessDayDto[invitationlessDays.size()]));
-    this.businessDaySelector = businessDayPanel.getCombo();
+                .toArray(new IBusinessDayDto[invitationlessDays.size()]), menu);
+    this.businessDaySelector = jcomboDay.getCombo();
     businessDaySelector
         .addActionListener(event -> {
           if (model.getSelectedDay() != businessDaySelector
@@ -165,7 +165,7 @@ public class CompanySelectionViewController extends JPanel {
     savePanel.add(directorySaveButton);
 
     JPanel validatePanel = new JPanel();
-    validatePanel.add(businessDayPanel);
+    validatePanel.add(jcomboDay);
     validatePanel.add(saveButton);
 
     JPanel southPanel = new JPanel(new GridLayout(2, 1));

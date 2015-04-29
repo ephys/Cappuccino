@@ -17,11 +17,11 @@ import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
 
-@SuppressWarnings("serial")
 public class ParticipationSearchViewController extends JPanel {
 
+  private static final long serialVersionUID = 7264715733673092584L;
   private final ParticipationSearchModel model;
-  private final List<IBusinessDayDto> businessDayDto;
+  private final List<IBusinessDayDto> listBusinessDayDto;
 
   /**
    * Creates a view controller for the participation search view.
@@ -37,20 +37,17 @@ public class ParticipationSearchViewController extends JPanel {
     super(new BorderLayout());
     this.model = model;
 
-    businessDayDto = businessDayUcc.getBusinessDays();
-
+    listBusinessDayDto = businessDayUcc.getBusinessDays();
     JComboDay comboBox = new JComboDay(
-        businessDayDto.toArray(new IBusinessDayDto[businessDayDto.size()]));
+        listBusinessDayDto.toArray(new IBusinessDayDto[listBusinessDayDto.size()]), menu);
 
-    if (businessDayDto.size() == 0) {
-      comboBox.setEnabled(false);
-    } else {
-      this.model.setSelectedDay(businessDayDto.get(0));
+    if (listBusinessDayDto.size() != 0) {
+      this.model.setSelectedDay(listBusinessDayDto.get(0));
     }
 
     comboBox.getCombo().addActionListener(e -> {
       IBusinessDayDto selectedBusinessDay =
-          businessDayDto.get(comboBox.getCombo().getSelectedIndex());
+          listBusinessDayDto.get(comboBox.getCombo().getSelectedIndex());
 
       this.model.setSelectedDay(selectedBusinessDay);
     });

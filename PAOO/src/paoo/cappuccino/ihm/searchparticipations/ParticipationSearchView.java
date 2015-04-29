@@ -23,10 +23,10 @@ import paoo.cappuccino.ihm.util.cellrenderers.StateCellRenderer;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
 
-@SuppressWarnings("serial")
 public class ParticipationSearchView extends JPanel implements
     ChangeListener {
 
+  private static final long serialVersionUID = 1189296753762441036L;
   private final ParticipationSearchModel model;
   private final ICompanyUcc companyUcc;
   private final DefaultTableModel tableModel;
@@ -97,8 +97,10 @@ public class ParticipationSearchView extends JPanel implements
     } else {
       if (!this.removedWidget) {
         this.centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-        centerPadding.add(new JLabel(buildErrorMessage(participations)));
+        
+        if(participations != null){
+          centerPadding.add(new JLabel(IhmConstants.ERROR_NO_PARTICIPATIONS));
+        }
 
         this.remove(this.scrollPane);
         this.add(centerPadding);
@@ -126,14 +128,6 @@ public class ParticipationSearchView extends JPanel implements
           1);
       tableModel.setValueAt(company.getRegisterDate(), i, 2);
       tableModel.setValueAt(participation.getState(), i, 3);
-    }
-  }
-
-  private String buildErrorMessage(List<IParticipationDto> participationDto) {
-    if (participationDto == null) {
-      return IhmConstants.ERROR_NO_BUSINESS_DAY;
-    } else {
-      return IhmConstants.ERROR_NO_PARTICIPATIONS;
     }
   }
 }

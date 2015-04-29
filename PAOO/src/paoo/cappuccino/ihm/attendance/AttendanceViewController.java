@@ -85,8 +85,9 @@ public class AttendanceViewController extends JPanel implements
 
     // Business day combobox
     List<IBusinessDayDto> listDay = businessDayUcc.getBusinessDays();
+    listDay.clear();
     JComboDay dayPanel =
-        new JComboDay(listDay.toArray(new IBusinessDayDto[listDay.size()]));
+        new JComboDay(listDay.toArray(new IBusinessDayDto[listDay.size()]), menu);
     this.comboDay = dayPanel.getCombo();
     this.comboDay
         .addActionListener(event -> {
@@ -97,13 +98,9 @@ public class AttendanceViewController extends JPanel implements
           }
         });
 
-    if (listDay.isEmpty()) {
-      JPanel noDay = new JPanel();
-      noDay.add(new JLabel(IhmConstants.ERROR_NO_BUSINESS_DAY));
-      top.add(noDay);
-    } else {
+  
       top.add(dayPanel);
-    }
+    
 
     // company combobox
     JPanel companyPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));

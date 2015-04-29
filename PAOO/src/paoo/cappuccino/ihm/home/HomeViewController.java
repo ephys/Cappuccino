@@ -85,13 +85,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
     this.viewModel = model;
 
-    List<IBusinessDayDto> businessDays = dayUcc.getBusinessDays();
-    if (businessDays.size() == 0) {
-      viewError.setError(ErrorPanel.ERROR_NO_DAY);
-      this.add(viewError);
-
-      return;
-    }
+    List<IBusinessDayDto> listBusinessDays = dayUcc.getBusinessDays();
 
     model.addChangeListener(this);
 
@@ -100,7 +94,7 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
     dayList =
         new JComboDay(
-            businessDays.toArray(new IBusinessDayDto[businessDays.size()]));
+            listBusinessDays.toArray(new IBusinessDayDto[listBusinessDays.size()]), menu);
 
     dayList.getCombo().addActionListener(
         e -> {
@@ -369,23 +363,20 @@ public class HomeViewController extends JPanel implements ChangeListener {
   private class ErrorPanel extends JPanel {
 
     private static final long serialVersionUID = -4377590597739100439L;
-    public static final int ERROR_NO_DAY = 0;
     public static final int ERROR_NO_DAY_SELECTED = 1;
     public static final int ERROR_NO_PARTICIPATION = 2;
 
-    private final JLabel errorMessage = new JLabelFont(null, 20);
+    private final JLabel errorMessage = new JLabelFont(null, 16);
     private final JPanel contents =
         new JPanel(new GridLayout(2, 1, 0, 10));
 
-    private JButton createDayButton = new JButton("Créer une journée");
+   
     private JButton createParticipationButton = new JButton(
         "Inviter des entreprises");
 
     public ErrorPanel() {
       super(new GridBagLayout());
 
-      createDayButton.addActionListener(e -> menu
-          .setCurrentPage(MenuEntry.CREATE_BDAY));
       createParticipationButton.addActionListener(e -> menu
           .setCurrentPage(MenuEntry.SELECT_COMPANY,
               viewModel.getSelectedDay()));
@@ -403,14 +394,9 @@ public class HomeViewController extends JPanel implements ChangeListener {
       clear();
 
       switch (errno) {
-        case ERROR_NO_DAY:
-          errorMessage.setText(IhmConstants.ERROR_NO_BUSINESS_DAY);
-          contents.add(createDayButton);
-          break;
-
+       
         case ERROR_NO_DAY_SELECTED:
           errorMessage.setText(IhmConstants.SELECT_A_DAY);
-          contents.add(createDayButton);
           break;
 
         case ERROR_NO_PARTICIPATION:
