@@ -47,51 +47,43 @@ public class CompanyDetailsView extends JPanel {
     this.userUcc = userUcc;
 
     // list contacts
-    String[] contactsTableTitles =
-        new String[] {"Nom", "prenom", "Mail", "Téléphone"};
-    this.contactsTable =
-        new JTable(new DefaultTableModel(contactsTableTitles, 0) {
-          @Override
-          public boolean isCellEditable(int row, int column) {
-            return false;
-          }
-        });
+    String[] contactsTableTitles = new String[] {"Nom", "prenom", "Mail", "Téléphone"};
+    this.contactsTable = new JTable(new DefaultTableModel(contactsTableTitles, 0) {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    });
     contactsTable.setRowHeight(35);
-    contactsTable.getColumn(contactsTableTitles[0]).setCellRenderer(
-        new ContactCellRenderer());
+    contactsTable.getColumn(contactsTableTitles[0]).setCellRenderer(new ContactCellRenderer());
 
     // list participation
-    String[] participationsTableTiltes =
-        new String[] {"Date", "Etat", "Personne de contact"};
-    this.participationTable =
-        new JTable(new DefaultTableModel(participationsTableTiltes, 0) {
+    String[] participationsTableTiltes = new String[] {"Date", "Etat", "Personne de contact"};
+    this.participationTable = new JTable(new DefaultTableModel(participationsTableTiltes, 0) {
 
-          @Override
-          public boolean isCellEditable(int arg0, int arg1) {
-            return false;
-          }
-        });
+      @Override
+      public boolean isCellEditable(int arg0, int arg1) {
+        return false;
+      }
+    });
     participationTable.setRowHeight(35);
-    participationTable.getColumn(participationsTableTiltes[0])
-        .setCellRenderer(new DateCellRenderer());
-    participationTable.getColumn(participationsTableTiltes[1])
-        .setCellRenderer(new StateCellRenderer());
-    participationTable.getColumn(participationsTableTiltes[2])
-        .setCellRenderer(new ContactFullCellRenderer());
+    participationTable.getColumn(participationsTableTiltes[0]).setCellRenderer(
+        new DateCellRenderer());
+    participationTable.getColumn(participationsTableTiltes[1]).setCellRenderer(
+        new StateCellRenderer());
+    participationTable.getColumn(participationsTableTiltes[2]).setCellRenderer(
+        new ContactFullCellRenderer());
 
 
     JPanel contactWrapper = new JPanel(new BorderLayout());
     contactWrapper.add(new JLabelFont("Contacts", 17), BorderLayout.NORTH);
     contactWrapper.add(contactList, BorderLayout.CENTER);
-    contactWrapper
-        .setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+    contactWrapper.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
     JPanel participationWrapper = new JPanel(new BorderLayout());
-    participationWrapper.add(new JLabelFont("Participation", 17),
-        BorderLayout.NORTH);
+    participationWrapper.add(new JLabelFont("Participation", 17), BorderLayout.NORTH);
     participationWrapper.add(participationList);
-    participationWrapper.setBorder(BorderFactory.createEmptyBorder(10, 0,
-        10, 0));
+    participationWrapper.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
     JPanel tables = new JPanel(new GridLayout(0, 1));
     tables.add(contactWrapper);
@@ -112,15 +104,12 @@ public class CompanyDetailsView extends JPanel {
 
     final JPanel center = new JPanel(new BorderLayout());
 
-    final IUserDto companyCreator =
-        userUcc.getUserById(company.getCreator());
+    final IUserDto companyCreator = userUcc.getUserById(company.getCreator());
     final String registerText =
         "Enregistré par "
-            + (companyCreator == null ? "<Supprimé>" : companyCreator
-                .getFirstName() + " " + companyCreator.getLastName())
-            + " le "
-            + LocalizationUtil.localizeDate(model.getCompanyDto()
-                .getRegisterDate());
+            + (companyCreator == null ? "<Supprimé>" : companyCreator.getFirstName() + " "
+                + companyCreator.getLastName()) + " le "
+            + LocalizationUtil.localizeDate(model.getCompanyDto().getRegisterDate());
     center.add(new JLabel(registerText), BorderLayout.NORTH);
 
     final JPanel addressPanel = new JPanel(new BorderLayout());
@@ -129,17 +118,12 @@ public class CompanyDetailsView extends JPanel {
     final JPanel addressDataPanel = new JPanel(new GridLayout(3, 2));
     addressPanel.add(addressDataPanel);
 
-    addressDataPanel
-        .add(new JLabel("Rue : " + company.getAddressStreet()));
-    addressDataPanel
-        .add(new JLabel("Ville : " + company.getAddressTown()));
-    addressDataPanel.add(new JLabel("Boite : "
-        + company.getAddressMailbox()));
+    addressDataPanel.add(new JLabel("Rue : " + company.getAddressStreet()));
+    addressDataPanel.add(new JLabel("Ville : " + company.getAddressTown()));
+    addressDataPanel.add(new JLabel("Boite : " + company.getAddressMailbox()));
     addressDataPanel.add(new JLabel("Numero : "
-        + (company.getAddressNum() == null ? "N/A" : company
-            .getAddressNum())));
-    addressDataPanel.add(new JLabel("Code postal : "
-        + company.getAddressPostcode()));
+        + (company.getAddressNum() == null ? "N/A" : company.getAddressNum())));
+    addressDataPanel.add(new JLabel("Code postal : " + company.getAddressPostcode()));
 
     companyPanel.add(addressPanel);
 
@@ -159,8 +143,7 @@ public class CompanyDetailsView extends JPanel {
    * 
    * @param contacts The list of contacts of the company.
    */
-  void stateChanged(List<IContactDto> contacts,
-      List<IParticipationDto> participations) {
+  void stateChanged(List<IContactDto> contacts, List<IParticipationDto> participations) {
     companyPanel.removeAll();
     displayCompanyData();
 
@@ -168,8 +151,7 @@ public class CompanyDetailsView extends JPanel {
     if (contacts != null) {
       if (contacts.size() == 0) {
         JLabel errorLabel = new JLabel(IhmConstants.ERROR_NO_CONTACTS);
-        errorLabel
-            .setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        errorLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         contactList.add(errorLabel);
       } else {
         JScrollPane scrollContact = new JScrollPane(contactsTable);
@@ -178,18 +160,15 @@ public class CompanyDetailsView extends JPanel {
       }
     }
     participationList.removeAll();
-    if (participations != null) {
-      if (participations.size() == 0) {
-        JLabel errorLabel = new JLabel(IhmConstants.ERROR_NO_PARTICIPATIONS);
-        errorLabel
-            .setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        participationList.add(errorLabel);
-      } else {
-        JScrollPane scrollParticipations =
-            new JScrollPane(participationTable);
-        scrollParticipations.setPreferredSize(new Dimension(500, 100));
-        participationList.add(scrollParticipations);
-      }
+    if (participations == null || participations.size() == 0) {
+      JLabel errorLabel = new JLabel(IhmConstants.ERROR_NO_PARTICIPATIONS);
+      errorLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+      participationList.add(errorLabel);
+    } else {
+      JScrollPane scrollParticipations = new JScrollPane(participationTable);
+      scrollParticipations.setPreferredSize(new Dimension(500, 100));
+      participationList.add(scrollParticipations);
     }
+
   }
 }

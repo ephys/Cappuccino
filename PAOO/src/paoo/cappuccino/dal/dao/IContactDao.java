@@ -60,5 +60,13 @@ public interface IContactDao {
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   IContactDto fetchContactById(int contactId);
+
+  /**
+   *  
+   * @param dayId
+   * @param companyId
+   * @return
+   */
+  List<IContactDto> fetchContactByDayAndCompany(int dayId, int companyId);
 }
 

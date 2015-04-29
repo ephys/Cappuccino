@@ -2,7 +2,6 @@ package paoo.cappuccino.ucc.impl;
 
 import java.util.List;
 
-import paoo.cappuccino.business.dto.IAttendanceDto;
 import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.entity.IContact;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
@@ -127,10 +126,10 @@ class ContactUcc implements IContactUcc {
   }
 
   @Override
-  public List<IAttendanceDto> getContactParticipations(int contactId) {
-    if (contactId <= 0) {
+  public List<IContactDto> getContactParticipations(int dayId, int companyId) {
+    if (dayId <= 0 || companyId <= 0) {
       throw new IllegalArgumentException("L'id doit être positif");
     }
-    return atDao.fetchAttendancesByContact(contactId);
+    return dao.fetchContactByDayAndCompany(dayId,companyId);
   }
 }

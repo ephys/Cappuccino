@@ -31,6 +31,7 @@ class ContactDao implements IContactDao {
   private PreparedStatement psFetchContactsByCompany;
   private PreparedStatement psFetchContactsById;
   private PreparedStatement psUpdateContact;
+  private PreparedStatement psFetchContactsByCompanyAndDay;
 
   @Inject
   public ContactDao(IEntityFactory entityFactory, IDalBackend dalBackend) {
@@ -217,6 +218,39 @@ class ContactDao implements IContactDao {
     return null;
   }
 
+  @Override
+  public List<IContactDto> fetchContactByDayAndCompany(int dayId, int companyId) {
+    String query =
+        "SELECT ct.contact_id, ct.company, ct.email, ct.email_valid, ct.first_name, "
+            + " ct.last_name, ct.phone, ct.version FROM business_days.contacts ct, business_days.attendances a "
+            + "WHERE a.business_day = ? "
+            + "AND a.company = ?"
+            + "AND ct.contact_id = a.contact";
+    try {
+      if (psFetchContactsByCompanyAndDay == null) {
+        psFetchContactsByCompanyAndDay = dalBackend.fetchPreparedStatement(query);
+      }
+
+      psFetchContactsByCompanyAndDay.setInt(1, dayId);
+      psFetchContactsByCompanyAndDay.setInt(2, companyId);
+
+      try (ResultSet rs = psFetchContactsByCompanyAndDay.executeQuery()) {
+        List<IContactDto> contactList = new ArrayList<>();
+
+        while (rs.next()) {
+          contactList.add(makeContactFromSet(rs));
+        }
+
+        return contactList;
+      }
+
+    } catch (SQLException e) {
+      rethrowSqlException(e);
+    }
+
+    throw new FatalException("Unreachable statement");
+  }
+
   private IContactDto makeContactFromSet(ResultSet rs) throws SQLException {
     int contactId = rs.getInt(1);
     int companyId = rs.getInt(2);
@@ -238,4 +272,5 @@ class ContactDao implements IContactDao {
     }
     throw new FatalException("Database error", exception);
   }
+
 }

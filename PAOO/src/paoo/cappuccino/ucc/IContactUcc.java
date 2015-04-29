@@ -2,7 +2,6 @@ package paoo.cappuccino.ucc;
 
 import java.util.List;
 
-import paoo.cappuccino.business.dto.IAttendanceDto;
 import paoo.cappuccino.business.dto.IContactDto;
 
 /**
@@ -70,9 +69,10 @@ public interface IContactUcc {
 
 
   /**
-   * Returns the list of business days a contact has attended.
+   * Returns the list of contact for a day and a company
    *
-   * @param contactId The identifier of the contact.
+   * @param dayId The identifier of the day.
+   * @param companyId The identifier of the company
    */
-  List<IAttendanceDto> getContactParticipations(int contactId); // TODO& JUnits
+  List<IContactDto> getContactParticipations(int dayId, int companyId); // TODO& JUnits
 }

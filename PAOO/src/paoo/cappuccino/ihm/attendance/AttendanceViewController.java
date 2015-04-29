@@ -85,7 +85,6 @@ public class AttendanceViewController extends JPanel implements
 
     // Business day combobox
     List<IBusinessDayDto> listDay = businessDayUcc.getBusinessDays();
-    listDay.clear();
     JComboDay dayPanel =
         new JComboDay(listDay.toArray(new IBusinessDayDto[listDay.size()]), menu);
     this.comboDay = dayPanel.getCombo();

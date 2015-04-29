@@ -91,4 +91,9 @@ class MockContactDao implements IContactDao {
 
     return contactList.get(contactId - 1);
   }
+
+  @Override
+  public List<IContactDto> fetchContactByDayAndCompany(int dayId, int companyId) {
+    return null;
+  }
 }
