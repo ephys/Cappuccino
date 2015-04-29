@@ -10,7 +10,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
@@ -27,6 +29,7 @@ import paoo.cappuccino.ucc.IUserUcc;
 
 public class CompanyDetailsView extends JPanel {
 
+  private static final long serialVersionUID = 3192812307456015884L;
   private final JTable participationTable;
   private final JPanel participationList = new JPanel(new BorderLayout());
   private final JTable contactsTable;
@@ -41,6 +44,7 @@ public class CompanyDetailsView extends JPanel {
    * @param model The model of the view.
    * @param userUcc App user use case controller.
    */
+  @SuppressWarnings("serial")
   public CompanyDetailsView(CompanyDetailsModel model, IUserUcc userUcc) {
     super(new BorderLayout());
     this.model = model;
@@ -57,6 +61,8 @@ public class CompanyDetailsView extends JPanel {
     contactsTable.setRowHeight(35);
     contactsTable.getColumn(contactsTableTitles[0]).setCellRenderer(new ContactCellRenderer());
 
+    TableColumn mailCol = contactsTable.getColumn(contactsTableTitles[2]);
+
     // list participation
     String[] participationsTableTiltes = new String[] {"Date", "Etat", "Personne de contact"};
     this.participationTable = new JTable(new DefaultTableModel(participationsTableTiltes, 0) {
@@ -67,10 +73,14 @@ public class CompanyDetailsView extends JPanel {
       }
     });
     participationTable.setRowHeight(35);
-    participationTable.getColumn(participationsTableTiltes[0]).setCellRenderer(
-        new DateCellRenderer());
-    participationTable.getColumn(participationsTableTiltes[1]).setCellRenderer(
-        new StateCellRenderer());
+    TableColumn datCol = participationTable.getColumn(participationsTableTiltes[0]);
+    datCol.setCellRenderer(new DateCellRenderer());
+    datCol.setMaxWidth(datCol.getMaxWidth() / 4);
+
+    TableColumn statCol = participationTable.getColumn(participationsTableTiltes[1]);
+    statCol.setCellRenderer(new StateCellRenderer());
+    statCol.setMaxWidth(statCol.getMaxWidth() / 4);
+
     participationTable.getColumn(participationsTableTiltes[2]).setCellRenderer(
         new ContactFullCellRenderer());
 
@@ -155,7 +165,9 @@ public class CompanyDetailsView extends JPanel {
         contactList.add(errorLabel);
       } else {
         JScrollPane scrollContact = new JScrollPane(contactsTable);
-        scrollContact.setPreferredSize(new Dimension(500, 100));
+        scrollContact.setPreferredSize(new Dimension(650, contactsTable.getRowCount() * 35 + 20));
+        scrollContact.setMaximumSize(new Dimension(650, 150));
+        scrollContact.setBorder(new EmptyBorder(0, 0, 0, 0));
         contactList.add(scrollContact);
       }
     }
@@ -166,7 +178,10 @@ public class CompanyDetailsView extends JPanel {
       participationList.add(errorLabel);
     } else {
       JScrollPane scrollParticipations = new JScrollPane(participationTable);
-      scrollParticipations.setPreferredSize(new Dimension(500, 100));
+      scrollParticipations.setPreferredSize(new Dimension(650,
+          participationTable.getRowCount() * 35 + 20));
+      scrollParticipations.setMaximumSize(new Dimension(650, 150));
+      scrollParticipations.setBorder(new EmptyBorder(0, 0, 0, 0));
       participationList.add(scrollParticipations);
     }
 
