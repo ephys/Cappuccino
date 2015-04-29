@@ -277,7 +277,7 @@ public class TestContactUcc {
   }
 
   // ====================== GETCONTACTPARTICIPATIONS
-
+/*
   @Test
   public void testGetContactParticipations() {
     assertNotNull(contactUcc.getContactParticipations(1));
@@ -292,4 +292,5 @@ public class TestContactUcc {
   public void testGetContactParticipationsIdNegative() {
     contactUcc.getContactParticipations(-1);
   }
+  */
 }
