@@ -6,11 +6,11 @@ import java.awt.GridLayout;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -37,6 +37,7 @@ public class CompanyDetailsView extends JPanel {
   private final CompanyDetailsModel model;
   private final IUserUcc userUcc;
   private final JPanel companyPanel = new JPanel(new BorderLayout());
+  private final static int MAX_SIZE_TABLE = 150;
 
   /**
    * Creates a view for the Company Details screen.
@@ -95,7 +96,8 @@ public class CompanyDetailsView extends JPanel {
     participationWrapper.add(participationList);
     participationWrapper.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-    JPanel tables = new JPanel(new GridLayout(0, 1));
+    JPanel tables = new JPanel();
+    tables.setLayout(new BoxLayout(tables, BoxLayout.Y_AXIS));
     tables.add(contactWrapper);
     tables.add(participationWrapper);
 
@@ -165,9 +167,9 @@ public class CompanyDetailsView extends JPanel {
         contactList.add(errorLabel);
       } else {
         JScrollPane scrollContact = new JScrollPane(contactsTable);
-        scrollContact.setPreferredSize(new Dimension(650, contactsTable.getRowCount() * 35 + 20));
-        scrollContact.setMaximumSize(new Dimension(650, 150));
-        scrollContact.setBorder(new EmptyBorder(0, 0, 0, 0));
+        int preferedSize = contactsTable.getRowCount() * contactsTable.getRowHeight() + 24;
+        scrollContact.setPreferredSize(new Dimension(650,
+            preferedSize > MAX_SIZE_TABLE ? MAX_SIZE_TABLE : preferedSize));
         contactList.add(scrollContact);
       }
     }
@@ -178,10 +180,9 @@ public class CompanyDetailsView extends JPanel {
       participationList.add(errorLabel);
     } else {
       JScrollPane scrollParticipations = new JScrollPane(participationTable);
+      int preferedSize = participationTable.getRowCount() * participationTable.getRowHeight() + 24;
       scrollParticipations.setPreferredSize(new Dimension(650,
-          participationTable.getRowCount() * 35 + 20));
-      scrollParticipations.setMaximumSize(new Dimension(650, 150));
-      scrollParticipations.setBorder(new EmptyBorder(0, 0, 0, 0));
+          preferedSize > MAX_SIZE_TABLE ? MAX_SIZE_TABLE : preferedSize));
       participationList.add(scrollParticipations);
     }
 
