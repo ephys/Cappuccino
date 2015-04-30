@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.ihm.core.IDefaultButtonHandler;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
@@ -25,19 +26,20 @@ import paoo.cappuccino.util.StringUtils;
  * @author Opsomer Mathias
  */
 @SuppressWarnings("serial")
-public class NewCompanyViewController extends JPanel {
+public class NewCompanyViewController extends JPanel implements IDefaultButtonHandler {
+  private final JButton createButton;
 
   /**
    * Creates a new ViewController for the new company gui.
    */
   public NewCompanyViewController(NewCompanyModel model, MenuModel menu, IGuiManager manager,
-                                  ICompanyUcc companyUcc) {
+      ICompanyUcc companyUcc) {
     super(new GridBagLayout());
 
     final JPanel wrapperPanel = new JPanel(new BorderLayout());
     this.add(wrapperPanel, new GridBagConstraints());
-    wrapperPanel.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP,
-                                           0, IhmConstants.M_GAP));
+    wrapperPanel.setBorder(new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0,
+        IhmConstants.M_GAP));
 
     JTextField companyNameField = new JTextField();
     JTextField streetField = new JTextField();
@@ -46,58 +48,60 @@ public class NewCompanyViewController extends JPanel {
     JTextField numField = new JTextField();
     JTextField postCodeField = new JTextField();
     wrapperPanel.add(new NewCompanyView(model, companyNameField, numField, postCodeField,
-                                        streetField, cityField, boxField));
+        streetField, cityField, boxField));
 
-    JPanel controls = new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP,
-                                                IhmConstants.M_GAP));
+    JPanel controls =
+        new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
     wrapperPanel.add(controls, BorderLayout.SOUTH);
 
-    JButton createButton = new JButton("Créer");
+    createButton = new JButton("Créer");
     controls.add(createButton);
     createButton.addActionListener(e -> {
       // test input
-      String nameError = StringUtils.isEmpty(companyNameField.getText())
-                         ? IhmConstants.ERROR_FIELD_EMPTY : null;
+        String nameError =
+            StringUtils.isEmpty(companyNameField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY : null;
 
-      String streetError = StringUtils.isEmpty(streetField.getText())
-                           ? IhmConstants.ERROR_FIELD_EMPTY : null;
+        String streetError =
+            StringUtils.isEmpty(streetField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY : null;
 
-      String cityError = StringUtils.isEmpty(cityField.getText())
-                         ? IhmConstants.ERROR_FIELD_EMPTY : null;
+        String cityError =
+            StringUtils.isEmpty(cityField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY : null;
 
-      String boxError = StringUtils.isEmpty(boxField.getText()) ? null : (
-          StringUtils.isAlphanumeric(boxField.getText())
-          ? null : IhmConstants.ERROR_ALPHANUM_INPUT
-      );
+        String boxError =
+            StringUtils.isEmpty(boxField.getText()) ? null : (StringUtils.isAlphanumeric(boxField
+                .getText()) ? null : IhmConstants.ERROR_ALPHANUM_INPUT);
 
-      String numError = StringUtils.isEmpty(numField.getText())
-                        ? IhmConstants.ERROR_FIELD_EMPTY : null;
+        String numError =
+            StringUtils.isEmpty(numField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY : null;
 
-      String postCodeError = StringUtils.isEmpty(postCodeField.getText())
-                             ? IhmConstants.ERROR_FIELD_EMPTY
-                             : ((!StringUtils.isNumeric(postCodeField.getText()) 
-                                 || postCodeField.getText().length() != 4)
-                                ? "Le code postal doit être composé de 4 chiffres" : null);
+        String postCodeError =
+            StringUtils.isEmpty(postCodeField.getText()) ? IhmConstants.ERROR_FIELD_EMPTY
+                : ((!StringUtils.isNumeric(postCodeField.getText()) || postCodeField.getText()
+                    .length() != 4) ? "Le code postal doit être composé de 4 chiffres" : null);
 
-      model.setErrors(nameError, streetError, cityError, boxError, numError, postCodeError);
-      if (model.hasError()) {
-        return;
-      }
+        model.setErrors(nameError, streetError, cityError, boxError, numError, postCodeError);
+        if (model.hasError()) {
+          return;
+        }
 
-      try {
-        final ICompanyDto company = companyUcc.create(menu.getLoggedUser(),
-                                                      companyNameField.getText(),
-                                                      streetField.getText(), numField.getText(),
-                                                      boxField.getText(), postCodeField.getText(),
-                                                      cityField.getText());
+        try {
+          final ICompanyDto company =
+              companyUcc.create(menu.getLoggedUser(), companyNameField.getText(),
+                  streetField.getText(), numField.getText(), boxField.getText(),
+                  postCodeField.getText(), cityField.getText());
 
-        manager.getLogger().info("new Company created : " + company.getName());
-        JOptionPane.showMessageDialog(this, "Entreprise créée");
+          manager.getLogger().info("new Company created : " + company.getName());
+          JOptionPane.showMessageDialog(this, "Entreprise créée");
 
-        menu.setCurrentPage(MenuEntry.CREATE_CONTACT, company);
-      } catch (IllegalArgumentException ex) {
-        model.setErrors(IhmConstants.NAME_ALREADY_TAKEN, null, null, null, null, null);
-      }
-    });
+          menu.setCurrentPage(MenuEntry.CREATE_CONTACT, company);
+        } catch (IllegalArgumentException ex) {
+          model.setErrors(IhmConstants.NAME_ALREADY_TAKEN, null, null, null, null, null);
+        }
+      });
+  }
+
+  @Override
+  public JButton getSubmitButton() {
+    return createButton;
   }
 }

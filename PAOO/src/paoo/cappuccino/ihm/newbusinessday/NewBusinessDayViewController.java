@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
+import paoo.cappuccino.ihm.core.IDefaultButtonHandler;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
@@ -28,7 +29,8 @@ import paoo.cappuccino.ucc.IBusinessDayUcc;
  * @author Opsomer Mathias
  */
 @SuppressWarnings("serial")
-public class NewBusinessDayViewController extends JPanel {
+public class NewBusinessDayViewController extends JPanel implements IDefaultButtonHandler {
+  private final JButton createButton;
 
   /**
    * Creates a new ViewController for the screen used to create a new business day.
@@ -40,10 +42,9 @@ public class NewBusinessDayViewController extends JPanel {
     errorDay.setForeground(Color.red);
 
     final DatePicker datePicker =
-        new DatePicker(LocalDateTime.now(), LocalDateTime.now().plusYears(
-            20), manager.getLogger());
+        new DatePicker(LocalDateTime.now(), LocalDateTime.now().plusYears(20), manager.getLogger());
 
-    JButton createButton = new JButton("Créer");
+    createButton = new JButton("Créer");
     createButton.addActionListener(e -> {
       LocalDateTime selectedDate = datePicker.getSelection();
 
@@ -55,8 +56,7 @@ public class NewBusinessDayViewController extends JPanel {
       try {
         IBusinessDayDto createdDate = businessDayUcc.create(selectedDate);
         manager.getLogger().info(
-            "Created a new business day : "
-                + LocalizationUtil.localizeDate(selectedDate));
+            "Created a new business day : " + LocalizationUtil.localizeDate(selectedDate));
         menu.setCurrentPage(MenuEntry.SELECT_COMPANY, createdDate);
       } catch (IllegalArgumentException event) {
         errorDay.setText(IhmConstants.ERROR_YEAR_ALREADY_HAVE_A_DAY);
@@ -65,8 +65,7 @@ public class NewBusinessDayViewController extends JPanel {
     });
 
     JPanel mainPanel = new JPanel(new GridLayout(3, 1));
-    JLabel titleLabel =
-        new JLabelFont("Date de la nouvelle journée :", 20);
+    JLabel titleLabel = new JLabelFont("Date de la nouvelle journée :", 20);
     titleLabel.setHorizontalTextPosition(SwingConstants.CENTER);
     mainPanel.add(titleLabel);
 
@@ -78,5 +77,10 @@ public class NewBusinessDayViewController extends JPanel {
     mainPanel.add(errorDay);
 
     this.add(mainPanel, new GridBagConstraints());
+  }
+
+  @Override
+  public JButton getSubmitButton() {
+    return createButton;
   }
 }

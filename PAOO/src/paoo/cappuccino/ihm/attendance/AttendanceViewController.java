@@ -26,6 +26,7 @@ import javax.swing.table.TableColumn;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
+import paoo.cappuccino.ihm.core.IDefaultButtonHandler;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
@@ -42,7 +43,8 @@ import paoo.cappuccino.ucc.IContactUcc;
  *
  * @author Opsomer Mathias
  */
-public class AttendanceViewController extends JPanel implements ChangeListener {
+public class AttendanceViewController extends JPanel implements ChangeListener,
+    IDefaultButtonHandler {
 
   private static final long serialVersionUID = 39440942631346034L;
   private boolean companyNeedsUpdate = true;
@@ -191,35 +193,43 @@ public class AttendanceViewController extends JPanel implements ChangeListener {
     this.submitButton = new JButton("Valider");
     submitButton
         .addActionListener(e -> {
-          List<IContactDto> contacts = new ArrayList<>();
-          StringBuilder listContacts = new StringBuilder();
-          for (int i = 0; i < contactsTable.getRowCount(); i++) {
-            if ((boolean) contactsTable.getValueAt(i, 3)) {
-              IContactDto currentContact = (IContactDto) contactsTable.getValueAt(i, 0);
-              contacts.add(currentContact);
-              listContacts.append("[" + currentContact.getFirstName() + " "
-                  + currentContact.getLastName() + "]");
-            }
-          }
-          if (contacts.size() == 0) {
-            if (JOptionPane.showConfirmDialog(this, "Personne n'est selectionné. Valider ?") != JOptionPane.OK_OPTION) {
-              return;
-            }
-          }
 
-          businessDayUcc.addInvitedContacts(contacts.toArray(new IContactDto[contacts.size()]),
-              model.getSelectedDay());
-          JOptionPane.showMessageDialog(this, "Participations enregistrées");
-          if (contacts.size() == 0) {
-            manager.getLogger().info(
-                "[Cancel Attendance] " + model.getSelectedDay().getEventDate() + " / "
-                    + model.getSelectedCompany().getName());
+          if (model.getSelectedDay() != null && model.getSelectedCompany() != null) {
+
+
+            List<IContactDto> contacts = new ArrayList<>();
+            StringBuilder listContacts = new StringBuilder();
+            for (int i = 0; i < contactsTable.getRowCount(); i++) {
+              if ((boolean) contactsTable.getValueAt(i, 3)) {
+                IContactDto currentContact = (IContactDto) contactsTable.getValueAt(i, 0);
+                contacts.add(currentContact);
+                listContacts.append("[" + currentContact.getFirstName() + " "
+                    + currentContact.getLastName() + "]");
+              }
+            }
+            if (contacts.size() == 0) {
+              if (JOptionPane.showConfirmDialog(this, "Personne n'est selectionné. Valider ?") != JOptionPane.OK_OPTION) {
+                return;
+              }
+            }
+
+            businessDayUcc.addInvitedContacts(contacts.toArray(new IContactDto[contacts.size()]),
+                model.getSelectedDay());
+            JOptionPane.showMessageDialog(this, "Participations enregistrées");
+            if (contacts.size() == 0) {
+              manager.getLogger().info(
+                  "[Cancel Attendance] " + model.getSelectedDay().getEventDate() + " / "
+                      + model.getSelectedCompany().getName());
+            } else {
+              manager.getLogger().info(
+                  "[New Attendance] " + model.getSelectedDay().getEventDate() + " / "
+                      + model.getSelectedCompany().getName() + " / " + listContacts.toString());
+            }
+            menu.setCurrentPage(MenuEntry.COMPANY_DETAILS, model.getSelectedCompany());
           } else {
-            manager.getLogger().info(
-                "[New Attendance] " + model.getSelectedDay().getEventDate() + " / "
-                    + model.getSelectedCompany().getName() + " / " + listContacts.toString());
+            JOptionPane.showMessageDialog(this,
+                "Veuillez sélèctionner une journée et une entreprise.");
           }
-          menu.setCurrentPage(MenuEntry.COMPANY_DETAILS, model.getSelectedCompany());
         });
     controls.add(submitButton);
 
@@ -308,5 +318,10 @@ public class AttendanceViewController extends JPanel implements ChangeListener {
       tableModel.setValueAt(contact.getEmail() == null ? "N/A" : contact.getEmail(), i, 2);
       tableModel.setValueAt(participatingContacts.contains(contact), i, 3);
     }
+  }
+
+  @Override
+  public JButton getSubmitButton() {
+    return submitButton;
   }
 }

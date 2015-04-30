@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import paoo.cappuccino.business.dto.IUserDto;
+import paoo.cappuccino.ihm.core.IDefaultButtonHandler;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.login.LoginFrame;
 import paoo.cappuccino.ihm.menu.MenuFrame;
@@ -28,10 +29,11 @@ import paoo.cappuccino.util.StringUtils;
  * @author Maduka Junior
  */
 @SuppressWarnings("serial")
-public class RegistrationViewController extends JPanel {
+public class RegistrationViewController extends JPanel implements IDefaultButtonHandler {
 
   private final RegistrationModel model;
   private final IUserUcc userUcc;
+  private final JButton validateButton;
 
   /**
    * Creates a new ViewController for the registration gui.
@@ -40,15 +42,14 @@ public class RegistrationViewController extends JPanel {
    * @param manager The manager responsible for the opening/closing this frame.
    * @param userUcc The app instance of the user use case controller.
    */
-  public RegistrationViewController(RegistrationModel model, IGuiManager manager,
-                                    IUserUcc userUcc) {
+  public RegistrationViewController(RegistrationModel model, IGuiManager manager, IUserUcc userUcc) {
     super(new BorderLayout());
     this.model = model;
     this.userUcc = userUcc;
 
     this.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(2, 2, 2, 2,
         new Color(80, 80, 80)), new EmptyBorder(IhmConstants.L_GAP, IhmConstants.M_GAP, 0,
-            IhmConstants.M_GAP)));
+        IhmConstants.M_GAP)));
 
     // log
     manager.getLogger().info("Registration Frame");
@@ -63,7 +64,7 @@ public class RegistrationViewController extends JPanel {
     JPanel controls =
         new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
 
-    JButton validateButton = new JButton("Valider");
+    validateButton = new JButton("Valider");
     validateButton.addActionListener(e -> {
       IUserDto user =
           attemptRegistration(usernameField.getText(), passwordField.getPassword(),
@@ -95,10 +96,11 @@ public class RegistrationViewController extends JPanel {
 
   /**
    * Tries to register a user.
+   * 
    * @return a user or null if registration failed
    */
   private IUserDto attemptRegistration(String username, char[] password, char[] confirmPassword,
-                                      String lastName, String firstName, String email) {
+      String lastName, String firstName, String email) {
 
     String usernameError =
         StringUtils.isEmpty(username) ? IhmConstants.ERROR_FIELD_EMPTY : (!StringUtils
@@ -110,18 +112,17 @@ public class RegistrationViewController extends JPanel {
 
     String emailError =
         StringUtils.isEmpty(email) ? IhmConstants.ERROR_FIELD_EMPTY
-                                   : (!StringUtils.isEmail(email) ? IhmConstants.ERROR_INVALID_EMAIL
-                                                                  : null);
+            : (!StringUtils.isEmail(email) ? IhmConstants.ERROR_INVALID_EMAIL : null);
 
     String passwordError =
         !StringUtils.isValidPassword(password) ? IhmConstants.ERROR_INVALID_PASSWORD : null;
 
     String confirmPasswordError =
         (!Arrays.equals(password, confirmPassword) ? IhmConstants.ERROR_NOT_MATCHING_PASSWORD
-                                                   : null);
+            : null);
 
     model.setErrors(passwordError, usernameError, confirmPasswordError, lastNameError,
-                    firstNameError, emailError);
+        firstNameError, emailError);
 
     if (usernameError != null || lastNameError != null || firstNameError != null
         || emailError != null || passwordError != null || confirmPasswordError != null) {
@@ -134,5 +135,10 @@ public class RegistrationViewController extends JPanel {
     StringUtils.clearString(confirmPassword);
 
     return user;
+  }
+
+  @Override
+  public JButton getSubmitButton() {
+    return validateButton;
   }
 }
