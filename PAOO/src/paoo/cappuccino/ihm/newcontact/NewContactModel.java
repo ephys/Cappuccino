@@ -15,7 +15,7 @@ public class NewContactModel extends BaseModel implements Initializable {
   private String firstNameError;
   private String lastNameError;
   private String mailError;
-  
+
   private IContactDto contact;
   private ICompanyDto company;
 
@@ -53,7 +53,7 @@ public class NewContactModel extends BaseModel implements Initializable {
     if (data == null || data.length == 0) {
       return;
     }
-    
+
     if (data[0] instanceof ICompanyDto) {
       setCompany((ICompanyDto) data[0]);
       return;
@@ -77,5 +77,12 @@ public class NewContactModel extends BaseModel implements Initializable {
 
   public void setCompany(ICompanyDto company) {
     this.company = company;
+  }
+
+  public void clear() {
+    firstNameError = "";
+    lastNameError = "";
+    mailError = "";
+    dispatchChangeEvent();
   }
 }
