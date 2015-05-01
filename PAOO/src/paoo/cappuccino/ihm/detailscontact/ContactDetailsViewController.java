@@ -6,6 +6,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import paoo.cappuccino.business.dto.IContactDto;
+import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ucc.ICompanyUcc;
@@ -25,11 +26,12 @@ public class ContactDetailsViewController extends JPanel implements ChangeListen
    * 
    * @param model The model of the view.
    * @param menu The model of the global gui menu.
+   * @param guiManager
    * @param contactUcc The app instance of the contact ucc.
    * @param companyUcc The app instance of the company ucc.
    */
   public ContactDetailsViewController(ContactDetailsModel model, MenuModel menu,
-      IContactUcc contactUcc, ICompanyUcc companyUcc) {
+      IGuiManager guiManager, IContactUcc contactUcc, ICompanyUcc companyUcc) {
     this.model = model;
     this.menu = menu;
 
@@ -39,6 +41,9 @@ public class ContactDetailsViewController extends JPanel implements ChangeListen
     markInvalidButton.addActionListener(event -> {
       contactUcc.setMailInvalid(model.getContactDto());
       markInvalidButton.setEnabled(false);
+      guiManager.getLogger().info(
+          "[Contact Detail] [" + model.getContactDto().getFirstName() + " "
+              + model.getContactDto().getLastName() + "] -> email invalide");
     });
 
     modify.addActionListener(event -> {

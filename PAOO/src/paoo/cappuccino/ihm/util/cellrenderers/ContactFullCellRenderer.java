@@ -19,7 +19,7 @@ public class ContactFullCellRenderer extends DefaultTableCellRenderer {
     if (value instanceof IContactDto) {
       IContactDto contact = (IContactDto) value;
       this.setText(contact.getLastName() + " " + contact.getFirstName());
-      if (table.getValueAt(row, column - 1) instanceof Boolean) {
+      if (column >= 0 && table.getValueAt(row, column - 1) instanceof Boolean) {
         if ((boolean) table.getValueAt(row, column - 1)) {
           this.setForeground(Color.GRAY);
         } else {

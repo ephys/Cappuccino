@@ -2,7 +2,6 @@ package paoo.cappuccino.ihm.searchcontacts;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,21 +13,13 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import paoo.cappuccino.business.dto.ICompanyDto;
-import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.ihm.util.IhmConstants;
 import paoo.cappuccino.ihm.util.cellrenderers.CompanyCellRenderer;
 import paoo.cappuccino.ihm.util.cellrenderers.ContactCellRenderer;
-import paoo.cappuccino.ucc.ICompanyUcc;
-import paoo.cappuccino.ucc.IContactUcc;
 
-@SuppressWarnings("serial")
 public class ContactSearchView extends JPanel implements ChangeListener {
 
-  private final ContactSearchModel model;
-  private final IContactUcc contactUcc;
-  private final ICompanyUcc companyUcc;
-  private final DefaultTableModel tableModel;
+  private static final long serialVersionUID = -9070612770896247771L;
   private final JScrollPane scrollPane;
   private final JTable table;
   private boolean removedWidget;
@@ -36,22 +27,14 @@ public class ContactSearchView extends JPanel implements ChangeListener {
 
   /**
    * Creates a new View for the contact search screen.
-   * 
-   * @param model The model of the view.
-   * @param contactUcc The app instance of the contact ucc.
-   * @param companyUcc The app instance of the company ucc.
    */
-  public ContactSearchView(ContactSearchModel model, IContactUcc contactUcc, ICompanyUcc companyUcc) {
+  public ContactSearchView() {
 
 
     setLayout(new BorderLayout());
-    this.model = model;
-    this.companyUcc = companyUcc;
-    this.contactUcc = contactUcc;
-
 
     String[] tableTitles = new String[] {"Nom", "Prénom", "Entreprise", "Mail", "Téléphone"};
-    this.tableModel = new DefaultTableModel(tableTitles, 0) {
+    DefaultTableModel tableModel = new DefaultTableModel(tableTitles, 0) {
       @Override
       public boolean isCellEditable(int row, int column) {
         return false;
@@ -70,17 +53,19 @@ public class ContactSearchView extends JPanel implements ChangeListener {
     scrollPane.setBorder(new EmptyBorder(IhmConstants.M_GAP, IhmConstants.M_GAP,
         IhmConstants.M_GAP, IhmConstants.M_GAP));
     this.add(scrollPane);
-    this.model.addChangeListener(this);
-    stateChanged(null);
   }
 
+
+  JTable getTable() {
+    return this.table;
+  }
+
+
   @Override
-  public void stateChanged(ChangeEvent event) {
+  public void stateChanged(ChangeEvent e) {
 
-    List<IContactDto> contacts =
-        contactUcc.searchContact(model.getFirstName(), model.getLastName());
 
-    if (contacts.size() != 0) {
+    if (table.getRowCount() != 0) {
       if (this.removedWidget) {
         this.remove(this.centerPadding);
         this.add(this.scrollPane);
@@ -89,8 +74,6 @@ public class ContactSearchView extends JPanel implements ChangeListener {
         this.revalidate();
         this.repaint();
       }
-
-      buildTable(contacts);
     } else {
       if (!this.removedWidget) {
         this.centerPadding = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -104,24 +87,6 @@ public class ContactSearchView extends JPanel implements ChangeListener {
         this.repaint();
       }
     }
-  }
 
-  JTable getTable() {
-    return this.table;
-  }
-
-  private void buildTable(List<IContactDto> contacts) {
-    tableModel.setRowCount(contacts.size());
-
-    for (int i = 0; i < contacts.size(); i++) {
-      IContactDto contact = contacts.get(i);
-      ICompanyDto company = companyUcc.getCompanyById(contact.getCompany());
-
-      tableModel.setValueAt(contact, i, 0);
-      tableModel.setValueAt(contact.getFirstName(), i, 1);
-      tableModel.setValueAt(company, i, 2);
-      tableModel.setValueAt(contact.getEmail(), i, 3);
-      tableModel.setValueAt(contact.getPhone(), i, 4);
-    }
   }
 }

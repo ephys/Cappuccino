@@ -23,8 +23,7 @@ import paoo.cappuccino.ucc.IContactUcc;
 import paoo.cappuccino.ucc.IUserUcc;
 
 @SuppressWarnings("serial")
-public class CompanyDetailsViewController extends JPanel implements
-    ChangeListener {
+public class CompanyDetailsViewController extends JPanel implements ChangeListener {
   private final JTable contactsTable;
   private final JTable participationsTable;
   private final CompanyDetailsModel model;
@@ -41,9 +40,8 @@ public class CompanyDetailsViewController extends JPanel implements
    * @param contactUcc App contact ucc instance.
    * @param userUcc App user ucc instance.
    */
-  public CompanyDetailsViewController(CompanyDetailsModel model,
-      MenuModel menu, IContactUcc contactUcc, IUserUcc userUcc,
-      IBusinessDayUcc dayUcc, ICompanyUcc companyUcc) {
+  public CompanyDetailsViewController(CompanyDetailsModel model, MenuModel menu,
+      IContactUcc contactUcc, IUserUcc userUcc, IBusinessDayUcc dayUcc, ICompanyUcc companyUcc) {
     this.model = model;
     this.contactUcc = contactUcc;
     this.companyUcc = companyUcc;
@@ -57,8 +55,8 @@ public class CompanyDetailsViewController extends JPanel implements
       @Override
       public void mouseClicked(MouseEvent event) {
         if (event.getClickCount() == 2) {
-          menu.setCurrentPage(MenuEntry.CONTACT_DETAILS, contactsTable
-              .getModel().getValueAt(contactsTable.getSelectedRow(), 0));
+          menu.setCurrentPage(MenuEntry.CONTACT_DETAILS,
+              contactsTable.getModel().getValueAt(contactsTable.getSelectedRow(), 0));
         }
       }
     });
@@ -68,10 +66,8 @@ public class CompanyDetailsViewController extends JPanel implements
       @Override
       public void mouseClicked(MouseEvent event) {
         if (event.getClickCount() == 2) {
-          menu.setCurrentPage(
-              MenuEntry.CONTACT_DETAILS,
-              participationsTable.getModel().getValueAt(
-                  participationsTable.getSelectedRow(), 2));
+          menu.setCurrentPage(MenuEntry.CONTACT_DETAILS,
+              participationsTable.getModel().getValueAt(participationsTable.getSelectedRow(), 2));
         }
       }
     });
@@ -88,54 +84,47 @@ public class CompanyDetailsViewController extends JPanel implements
       return;
     }
 
-    List<IContactDto> contacts =
-        contactUcc.getContactByCompany(company.getId());
-    List<IParticipationDto> participations =
-        companyUcc.getCompanyParticipations(company.getId());
+    List<IContactDto> contacts = contactUcc.getContactByCompany(company.getId());
+    List<IParticipationDto> participations = companyUcc.getCompanyParticipations(company.getId());
 
 
-    DefaultTableModel contactTableModel =
-        (DefaultTableModel) contactsTable.getModel();
+    DefaultTableModel contactTableModel = (DefaultTableModel) contactsTable.getModel();
     contactTableModel.setRowCount(contacts.size());
     for (int i = 0; i < contacts.size(); i++) {
       IContactDto contact = contacts.get(i);
 
       contactTableModel.setValueAt(contact, i, 0);
       contactTableModel.setValueAt(contact.getFirstName(), i, 1);
-      contactTableModel.setValueAt(contact.getEmail(), i, 2);
-      contactTableModel.setValueAt(contact.getPhone(), i, 3);
+      contactTableModel.setValueAt(contact.isEmailValid() ? contact.getEmail() : "invalide", i, 2);
+      contactTableModel.setValueAt(contact.getPhone() == null ? "N/A" : contact.getPhone(), i, 3);
     }
 
-    DefaultTableModel participationTableModel =
-        (DefaultTableModel) participationsTable.getModel();
+    DefaultTableModel participationTableModel = (DefaultTableModel) participationsTable.getModel();
 
     int previousDay = -1; // id impossible
     for (int i = 0; i < participations.size(); i++) {
 
 
       List<IAttendanceDto> attendanceForParticipation =
-          dayUcc.getAttendanceForParticipation(participations.get(i)
-              .getBusinessDay(), participations.get(i).getCompany());
+          dayUcc.getAttendanceForParticipation(participations.get(i).getBusinessDay(),
+              participations.get(i).getCompany());
 
 
       for (IAttendanceDto attendance : attendanceForParticipation) {
         IParticipationDto currentParticipation = participations.get(i);
         int day = currentParticipation.getBusinessDay();
-        IContactDto contact =
-            contactUcc.getContactById(attendance.getContact());
+        IContactDto contact = contactUcc.getContactById(attendance.getContact());
 
         if (day != previousDay) {
           previousDay = day;
           IBusinessDayDto dayDto = dayUcc.getBusinessDay(day);
 
 
-          participationTableModel
-              .addRow(new Object[] {dayDto.getEventDate(),
-                  currentParticipation.getState(), null});
+          participationTableModel.addRow(new Object[] {dayDto.getEventDate(),
+              currentParticipation.getState(), null});
 
         }
-        participationTableModel.addRow(new Object[] {null,
-            attendance.isCancelled(), contact});
+        participationTableModel.addRow(new Object[] {null, attendance.isCancelled(), contact});
       }
     }
 

@@ -7,20 +7,30 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
 
+import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.ucc.IContactUcc;
 
-@SuppressWarnings("serial")
-public class ContactSearchViewController extends JPanel {
+public class ContactSearchViewController extends JPanel implements ChangeListener {
+
+  private static final long serialVersionUID = -3467457383300460357L;
+  private final IContactUcc contactUcc;
+  private final ICompanyUcc companyUcc;
+  private final ContactSearchModel model;
+  private ContactSearchView view;
 
   /**
    * Creates a view controller for the contact search view.
@@ -33,7 +43,9 @@ public class ContactSearchViewController extends JPanel {
       ICompanyUcc companyUcc, IContactUcc contactUcc) {
 
     super(new BorderLayout());
-
+    this.contactUcc = contactUcc;
+    this.companyUcc = companyUcc;
+    this.model = model;
     // first name
     JPanel panelFirstName = new JPanel(new FlowLayout(FlowLayout.CENTER));
     panelFirstName.add(new JLabel("Prénom"));
@@ -64,7 +76,7 @@ public class ContactSearchViewController extends JPanel {
     searchingPanel.add(panelLastName);
     searchingPanel.add(panelFirstName);
 
-    ContactSearchView view = new ContactSearchView(model, contactUcc, companyUcc);
+    this.view = new ContactSearchView();
     JTable table = view.getTable();
     table.setRowHeight(35);
     table.addMouseListener(new MouseAdapter() {
@@ -83,5 +95,32 @@ public class ContactSearchViewController extends JPanel {
     panelWrapper.add(view);
     panelWrapper.add(searchingPanel, BorderLayout.NORTH);
     this.add(panelWrapper);
+    model.addChangeListener(this);
+    stateChanged(null);
+  }
+
+  @Override
+  public void stateChanged(ChangeEvent arg0) {
+
+    List<IContactDto> contacts =
+        contactUcc.searchContact(model.getFirstName(), model.getLastName());
+    buildTable(contacts);
+  }
+
+  private void buildTable(List<IContactDto> contacts) {
+    DefaultTableModel tableModel = (DefaultTableModel) view.getTable().getModel();
+    tableModel.setRowCount(contacts.size());
+
+    for (int i = 0; i < contacts.size(); i++) {
+      IContactDto contact = contacts.get(i);
+      ICompanyDto company = companyUcc.getCompanyById(contact.getCompany());
+
+      tableModel.setValueAt(contact, i, 0);
+      tableModel.setValueAt(contact.getFirstName(), i, 1);
+      tableModel.setValueAt(company, i, 2);
+      tableModel.setValueAt(contact.isEmailValid() ? contact.getEmail() : "invalide", i, 3);
+      tableModel.setValueAt(contact.getPhone(), i, 4);
+    }
+    view.stateChanged(null);
   }
 }
