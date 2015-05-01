@@ -80,8 +80,11 @@ public class LoginViewController extends JPanel implements IDefaultButtonHandler
     JTextField usernameField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
     this.loginButton = new JButton("Se connecter");
-    loginButton.addActionListener(e -> attemptLogin(usernameField.getText(),
-        passwordField.getPassword()));
+    loginButton.addActionListener(e -> {
+      attemptLogin(usernameField.getText(), passwordField.getPassword(), guiManager);
+
+
+    });
 
     controls.add(registerButton);
     controls.add(loginButton);
@@ -98,8 +101,9 @@ public class LoginViewController extends JPanel implements IDefaultButtonHandler
    *
    * @param username The user's username.
    * @param password The user's password.
+   * @param guiManager2
    */
-  private void attemptLogin(String username, char[] password) {
+  private void attemptLogin(String username, char[] password, IGuiManager guiManager) {
     model.resetErrors();
 
     boolean isValid = true;
@@ -132,7 +136,7 @@ public class LoginViewController extends JPanel implements IDefaultButtonHandler
 
       // avoid password release in case of memory dump.
         StringUtils.clearString(password);
-
+        guiManager.getLogger().info("[Login Frame] " + user.getUsername() + " -> connexion");
         SwingUtilities.invokeLater(() -> guiManager.openFrame(MenuFrame.class).setLoggedUser(user));
       });
   }
