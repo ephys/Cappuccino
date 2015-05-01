@@ -20,7 +20,7 @@ public interface IAttendanceDto extends IBaseEntity {
   int getContact();
 
   /**
-   * Return if attendance is cancelled
+   * Return if attendance is cancelled.
    */
   boolean isCancelled();
 

@@ -79,10 +79,4 @@ public class NewContactModel extends BaseModel implements Initializable {
     this.company = company;
   }
 
-  public void clear() {
-    firstNameError = "";
-    lastNameError = "";
-    mailError = "";
-    dispatchChangeEvent();
-  }
 }

@@ -2,6 +2,8 @@ package paoo.cappuccino.ihm.util;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -16,6 +18,7 @@ import javax.swing.table.TableColumn;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IUserDto;
+import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.searchcompanies.CompaniesSearchModel;
 import paoo.cappuccino.ihm.searchparticipations.ParticipationSearchModel;
@@ -65,7 +68,17 @@ public class JTableCompaniesViewController extends JPanel implements ChangeListe
       }
     };
 
-    this.table = new JTableMouseCompany(tableModel, menu);
+    this.table = new JTable(tableModel);
+    this.table.setRowHeight(35);
+    this.table.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent clickEvent) {
+        if (clickEvent.getClickCount() == 2) {
+          ICompanyDto company = (ICompanyDto) tableModel.getValueAt(table.getSelectedRow(), 0);
+          menu.setCurrentPage(MenuEntry.COMPANY_DETAILS, company);
+        }
+      }
+    });
 
     TableColumn companyCol = table.getColumn(tableTitles[0]);
     companyCol.setCellRenderer(new CompanyCellRenderer());

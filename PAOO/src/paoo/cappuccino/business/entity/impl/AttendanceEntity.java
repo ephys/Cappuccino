@@ -20,10 +20,11 @@ public class AttendanceEntity implements IAttendance {
   }
 
   /**
-   * Creates a new attendance entity
+   * Creates a new attendance entity.
    * 
    */
-  public AttendanceEntity(int businessDay, int company, int contact, boolean cancelled, int version) {
+  public AttendanceEntity(int businessDay,
+      int company, int contact, boolean cancelled, int version) {
     this.businessDay = businessDay;
     this.company = company;
     this.contact = contact;

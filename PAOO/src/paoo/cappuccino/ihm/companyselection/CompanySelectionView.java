@@ -28,9 +28,6 @@ import paoo.cappuccino.ucc.ICompanyUcc;
  */
 public class CompanySelectionView extends JPanel {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = -5537446066860286864L;
   private final JTable companiesTable;
 

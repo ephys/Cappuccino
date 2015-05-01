@@ -69,9 +69,10 @@ public interface IContactUcc {
       String firstName, String lastName, String phone);
 
   /**
+   * Get a contact by his id
    *
-   * @param contact
-   * @return
+   * @param the id of the contact
+   * @return the contact corresponding
    */
   IContactDto getContactById(int contact);
 

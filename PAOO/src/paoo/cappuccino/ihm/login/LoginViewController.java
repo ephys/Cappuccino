@@ -34,7 +34,6 @@ public class LoginViewController extends JPanel implements IDefaultButtonHandler
 
   private static final long serialVersionUID = 3071496812344175953L;
   private final LoginModel model;
-  private final IGuiManager guiManager;
   private final IUserUcc userUcc;
   private final JButton loginButton;
 
@@ -47,7 +46,6 @@ public class LoginViewController extends JPanel implements IDefaultButtonHandler
   public LoginViewController(LoginModel model, IGuiManager guiManager, IUserUcc userUcc) {
     super(new BorderLayout());
     this.model = model;
-    this.guiManager = guiManager;
     this.userUcc = userUcc;
 
     this.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(2, 2, 2, 2,
@@ -101,7 +99,7 @@ public class LoginViewController extends JPanel implements IDefaultButtonHandler
    *
    * @param username The user's username.
    * @param password The user's password.
-   * @param guiManager2
+   * @param guiManager The guiManager(for logs)
    */
   private void attemptLogin(String username, char[] password, IGuiManager guiManager) {
     model.resetErrors();

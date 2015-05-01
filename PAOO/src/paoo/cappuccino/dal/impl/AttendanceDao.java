@@ -24,7 +24,6 @@ public class AttendanceDao implements IAttendanceDao {
   private PreparedStatement psFetchParticipation;
   private PreparedStatement psFetchContactParticipation;
   private PreparedStatement psUpdateAttendance;
-  private PreparedStatement psFetchContactCompanyDay;
 
   @Inject
   public AttendanceDao(IEntityFactory entityFactory, IDalBackend dalBackend) {

@@ -62,7 +62,7 @@ public class ContactSearchView extends JPanel implements ChangeListener {
 
 
   @Override
-  public void stateChanged(ChangeEvent e) {
+  public void stateChanged(ChangeEvent event) {
 
 
     if (table.getRowCount() != 0) {

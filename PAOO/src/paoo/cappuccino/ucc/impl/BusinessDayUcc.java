@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import paoo.cappuccino.business.dto.IAttendanceDto;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
-import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.business.dto.IParticipationDto.State;
 import paoo.cappuccino.business.entity.IAttendance;
@@ -121,19 +120,6 @@ class BusinessDayUcc implements IBusinessDayUcc {
     dalService.commit();
   }
 
-
-  @Override
-  public List<IContactDto> getInvitedContacts(ICompanyDto company, IBusinessDayDto businessDay) {
-    List<IAttendanceDto> attendances =
-        attendanceDao.fetchAttendances(company.getId(), businessDay.getId());
-
-    List<IContactDto> contacts = new ArrayList<>(attendances.size());
-    for (IAttendanceDto attendance : attendances) {
-      contacts.add(contactDao.fetchContactById(attendance.getContact()));
-    }
-
-    return contacts;
-  }
 
   @Override
   public boolean changeState(IParticipationDto participation, State state) {

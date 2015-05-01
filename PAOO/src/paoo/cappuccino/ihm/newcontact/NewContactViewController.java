@@ -65,7 +65,7 @@ public class NewContactViewController extends JPanel implements IDefaultButtonHa
       contactMailField.setText(contactToModify.getEmail());
       contactPhoneField.setText(contactToModify.getPhone());
       companiesCombo.setSelectedItem(companyUcc.getCompanyById(contactToModify.getCompany()));
-      model.clear();
+      model.setErrors("", "", "");
     }
 
     if (model.getCompany() != null) {
@@ -106,7 +106,7 @@ public class NewContactViewController extends JPanel implements IDefaultButtonHa
                 contactFirstNameField.getText(), contactLastNameField.getText(),
                 contactPhoneField.getText());
       }
-      model.clear();
+      model.setErrors("", "", "");;
       contactFirstNameField.setText("");
       contactLastNameField.setText("");
       contactMailField.setText("");

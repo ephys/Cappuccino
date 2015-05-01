@@ -46,13 +46,6 @@ public class MockAttendanceDao implements IAttendanceDao {
         .collect(Collectors.toList());
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see
-   * paoo.cappuccino.dal.dao.IAttendanceDao#updateAttendance(paoo.cappuccino.business.entity.IAttendance
-   * )
-   */
   @Override
   public void updateAttendance(IAttendance attendance) {
     // TODO Auto-generated method stub

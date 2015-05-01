@@ -6,7 +6,6 @@ import java.util.List;
 import paoo.cappuccino.business.dto.IAttendanceDto;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
-import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
 
 /**
@@ -44,15 +43,6 @@ public interface IBusinessDayUcc {
    */
   void addInvitedContacts(List<Integer> contacts,
       IBusinessDayDto businessDay, ICompanyDto companyDto);
-
-  /**
-   * Returns the list of contact of a company attending a given business day.
-   *
-   * @param company The company the contacts are working for.
-   * @param businessDay The business day the contacts are attending.
-   */
-  List<IContactDto> getInvitedContacts(ICompanyDto company,
-      IBusinessDayDto businessDay);
 
   /**
    * Changes the state of a participation.
@@ -97,10 +87,10 @@ public interface IBusinessDayUcc {
   List<IParticipationDto> getParticipations(int businessDayId);
 
   /**
+   * Returns the list of attendances of a company attending a given business day.
    *
-   * @param businessDay
-   * @param company
-   * @return
+   * @param company The company the contacts are working for.
+   * @param businessDay The business day the contacts are attending.
    */
   List<IAttendanceDto> getAttendanceForParticipation(int businessDay,
       int company);
