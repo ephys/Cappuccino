@@ -3,6 +3,7 @@ package paoo.cappuccino.dal.dao;
 import java.util.List;
 
 import paoo.cappuccino.business.dto.IAttendanceDto;
+import paoo.cappuccino.business.entity.IAttendance;
 
 public interface IAttendanceDao {
   /**
@@ -10,8 +11,8 @@ public interface IAttendanceDao {
    *
    * @param attendance The attendance to insert.
    * @return The attendance entity with its information updated from the database.
-   * @throws java.lang.IllegalArgumentException            One of the fields failed to insert due to
-   *                                                       constraint violations.
+   * @throws java.lang.IllegalArgumentException One of the fields failed to insert due to constraint
+   *         violations.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   IAttendanceDto createAttendance(IAttendanceDto attendance);
@@ -34,4 +35,19 @@ public interface IAttendanceDao {
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   List<IAttendanceDto> fetchAttendancesByContact(int contactId);
+
+  /**
+   *
+   * @param createAttendance
+   */
+  void updateAttendance(IAttendance attendance);
+
+  /**
+   *
+   * @param company
+   * @param businessDay
+   * @return
+   */
+  List<IAttendanceDto> fetchAttendancesByCompanyAndDay(int company,
+      int businessDay);
 }

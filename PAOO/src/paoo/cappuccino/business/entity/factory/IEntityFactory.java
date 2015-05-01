@@ -29,8 +29,8 @@ public interface IEntityFactory {
    * @param email The user's email, must be a valid email.
    * @param role The user's role.
    */
-  IUser createUser(String username, char[] password, String lastName, String firstName,
-      String email, IUserDto.Role role);
+  IUser createUser(String username, char[] password, String lastName,
+      String firstName, String email, IUserDto.Role role);
 
   /**
    * Creates an already existing user entity, for the DAL.
@@ -47,8 +47,9 @@ public interface IEntityFactory {
    * @param role The user's role.
    * @param registerDate The date and time at which the entity was registered.
    */
-  IUser createUser(int id, int version, String username, IHashHolderDto password, String lastName,
-      String firstName, String email, IUserDto.Role role, LocalDateTime registerDate);
+  IUser createUser(int id, int version, String username,
+      IHashHolderDto password, String lastName, String firstName,
+      String email, IUserDto.Role role, LocalDateTime registerDate);
 
   /**
    * Creates a new contact entity (as in not yet stored), for the UCC.
@@ -59,8 +60,8 @@ public interface IEntityFactory {
    * @param email The contact's email, nullable.
    * @param phone The contact's phone, nullable.
    */
-  IContact createContact(int companyId, String email, String firstName, String lastName,
-      String phone);
+  IContact createContact(int companyId, String email, String firstName,
+      String lastName, String phone);
 
   /**
    * Creates an already existing contact entity, for the DAL.
@@ -74,8 +75,8 @@ public interface IEntityFactory {
    * @param emailValid Whether or not the email of the contact is valid.
    * @param phone The contact's phone, nullable.
    */
-  IContact createContact(int id, int version, int companyId, String email, boolean emailValid,
-      String firstName, String lastName, String phone);
+  IContact createContact(int id, int version, int companyId, String email,
+      boolean emailValid, String firstName, String lastName, String phone);
 
   /**
    * Creates a new company entity (as in not yet stored), for the UCC.
@@ -88,8 +89,9 @@ public interface IEntityFactory {
    * @param addressPostcode The address post code of the company.
    * @param addressTown The address town of the company.
    */
-  ICompany createCompany(int creatorId, String name, String addressStreet, String addressNum,
-      String addressMailbox, String addressPostcode, String addressTown);
+  ICompany createCompany(int creatorId, String name, String addressStreet,
+      String addressNum, String addressMailbox, String addressPostcode,
+      String addressTown);
 
   /**
    * Creates an already existing company entity, for the DAL.
@@ -105,8 +107,9 @@ public interface IEntityFactory {
    * @param addressTown The address town of the company.
    * @param registerDate The date and time at which the entity was registered.
    */
-  ICompany createCompany(int id, int version, int creatorId, String name, String addressStreet,
-      String addressNum, String addressMailbox, String addressPostcode, String addressTown,
+  ICompany createCompany(int id, int version, int creatorId, String name,
+      String addressStreet, String addressNum, String addressMailbox,
+      String addressPostcode, String addressTown,
       LocalDateTime registerDate);
 
   /**
@@ -125,8 +128,8 @@ public interface IEntityFactory {
    * @param eventDate The date of the businessDay will take place.
    * @param creationDate The creation date of the businessDay
    */
-  IBusinessDay createBusinessDay(int id, int version, LocalDateTime eventDate,
-      LocalDateTime creationDate);
+  IBusinessDay createBusinessDay(int id, int version,
+      LocalDateTime eventDate, LocalDateTime creationDate);
 
   /**
    * Creates a new participation entity (as in not yet stored), for the UCC.
@@ -145,8 +148,8 @@ public interface IEntityFactory {
    * @param state The state of the participation.
    * @param cancelled The participation has been cancelled.
    */
-  IParticipation createParticipation(int companyId, int businessDayId, boolean cancelled,
-                                     int version, IParticipationDto.State state);
+  IParticipation createParticipation(int companyId, int businessDayId,
+      boolean cancelled, int version, IParticipationDto.State state);
 
   /**
    * Creates a new attendance.
@@ -155,5 +158,18 @@ public interface IEntityFactory {
    * @param businessDayId the identifier of the business day the company is attending.
    * @param contactId the identifier of the contact attending the business day.
    */
-  IAttendance createAttendance(int companyId, int businessDayId, int contactId);
+  IAttendance createAttendance(int companyId, int businessDayId,
+      int contactId);
+
+  /**
+   * Creates a new attendance.
+   *
+   * @param companyId the identifier of the company attending the business day.
+   * @param businessDayId the identifier of the business day the company is attending.
+   * @param contactId the identifier of the contact attending the business day.
+   * @param cancelled The participation has been cancelled.
+   * @param version The version of attendance in the database.
+   */
+  IAttendance createAttendance(int companyId, int businessDayId,
+      int contactId, boolean cancelled, int version);
 }

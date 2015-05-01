@@ -22,9 +22,9 @@ public class MockAttendanceDao implements IAttendanceDao {
 
   @Override
   public IAttendanceDto createAttendance(IAttendanceDto attendance) {
-    IAttendance attendanceEntity = factory.createAttendance(attendance.getCompany(),
-                                                            attendance.getBusinessDay(),
-                                                            attendance.getContact());
+    IAttendance attendanceEntity =
+        factory.createAttendance(attendance.getCompany(),
+            attendance.getBusinessDay(), attendance.getContact());
 
     attendances.add(attendanceEntity);
 
@@ -32,10 +32,13 @@ public class MockAttendanceDao implements IAttendanceDao {
   }
 
   @Override
-  public List<IAttendanceDto> fetchAttendances(int companyId, int businessDayId) {
-    return attendances.stream()
-        .filter(attendance -> attendance.getCompany() == companyId
-                              && attendance.getBusinessDay() == businessDayId)
+  public List<IAttendanceDto> fetchAttendances(int companyId,
+      int businessDayId) {
+    return attendances
+        .stream()
+        .filter(
+            attendance -> attendance.getCompany() == companyId
+                && attendance.getBusinessDay() == businessDayId)
         .collect(Collectors.toList());
   }
 
@@ -44,5 +47,30 @@ public class MockAttendanceDao implements IAttendanceDao {
     return attendances.stream()
         .filter(attendance -> attendance.getContact() == contactId)
         .collect(Collectors.toList());
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * paoo.cappuccino.dal.dao.IAttendanceDao#updateAttendance(paoo.cappuccino.business.entity.IAttendance
+   * )
+   */
+  @Override
+  public void updateAttendance(IAttendance attendance) {
+    // TODO Auto-generated method stub
+
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see paoo.cappuccino.dal.dao.IAttendanceDao#fetchAttendancesByCompanyAndDay(int, int)
+   */
+  @Override
+  public List<IAttendanceDto> fetchAttendancesByCompanyAndDay(int company,
+      int businessDay) {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

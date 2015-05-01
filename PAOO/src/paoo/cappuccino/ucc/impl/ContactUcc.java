@@ -19,15 +19,16 @@ class ContactUcc implements IContactUcc {
   private final IAttendanceDao atDao;
 
   @Inject
-  public ContactUcc(IEntityFactory entityFactory, IContactDao contactDao, IAttendanceDao attDao) {
+  public ContactUcc(IEntityFactory entityFactory, IContactDao contactDao,
+      IAttendanceDao attDao) {
     this.factory = entityFactory;
     this.dao = contactDao;
     this.atDao = attDao;
   }
 
   @Override
-  public IContactDto create(int companyId, String email, String firstName, String lastName,
-      String phone) {
+  public IContactDto create(int companyId, String email, String firstName,
+      String lastName, String phone) {
     ValidationUtil.ensureFilled(lastName, "lastName");
     ValidationUtil.ensureFilled(firstName, "firstName");
 
@@ -38,16 +39,19 @@ class ContactUcc implements IContactUcc {
     if (StringUtils.isEmpty(email)) {
       email = null;
     } else if (!StringUtils.isEmail(email)) {
-      throw new IllegalArgumentException("Invalid email format for " + email);
+      throw new IllegalArgumentException("Invalid email format for "
+          + email);
     }
 
-    return dao.createContact(factory.createContact(companyId, email, firstName, lastName, phone));
+    return dao.createContact(factory.createContact(companyId, email,
+        firstName, lastName, phone));
   }
 
   @Override
   public boolean setMailInvalid(IContactDto contactDto) {
     ValidationUtil.ensureNotNull(contactDto, "contactDto");
-    if (StringUtils.isEmpty(contactDto.getEmail()) || !contactDto.isEmailValid()) {
+    if (StringUtils.isEmpty(contactDto.getEmail())
+        || !contactDto.isEmailValid()) {
       return false;
     }
 
@@ -71,6 +75,19 @@ class ContactUcc implements IContactUcc {
     return dao.fetchContactByName(firstName, lastName);
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see paoo.cappuccino.ucc.IContactUcc#getContactById(int)
+   */
+  @Override
+  public IContactDto getContactById(int contact) {
+    if (contact <= 0) {
+      throw new IllegalArgumentException("l'id doitêtre positif");
+    }
+    return dao.fetchContactById(contact);
+  }
+
   @Override
   public List<IContactDto> getContactByCompany(int id) {
     if (id <= 0) {
@@ -83,14 +100,15 @@ class ContactUcc implements IContactUcc {
     if (dto instanceof IContact) {
       return (IContact) dto;
     } else {
-      return factory.createContact(dto.getId(), dto.getVersion(), dto.getCompany(), dto.getEmail(),
-          dto.isEmailValid(), dto.getFirstName(), dto.getLastName(), dto.getPhone());
+      return factory.createContact(dto.getId(), dto.getVersion(),
+          dto.getCompany(), dto.getEmail(), dto.isEmailValid(),
+          dto.getFirstName(), dto.getLastName(), dto.getPhone());
     }
   }
 
   @Override
-  public IContactDto update(int contact, int company, String email, String firstName,
-      String lastName, String phone) {
+  public IContactDto update(int contact, int company, String email,
+      String firstName, String lastName, String phone) {
     if (contact <= 0) {
       throw new IllegalArgumentException("The id must be positive");
     }
@@ -109,7 +127,8 @@ class ContactUcc implements IContactUcc {
 
     IContact toUpdate = (IContact) dao.fetchContactById(contact);
     if (toUpdate == null) {
-      throw new IllegalArgumentException("There isn't any contact matching the id " + contact);
+      throw new IllegalArgumentException(
+          "There isn't any contact matching the id " + contact);
     }
 
     if (company > 0) {
@@ -125,11 +144,5 @@ class ContactUcc implements IContactUcc {
     return toUpdate;
   }
 
-  @Override
-  public List<IContactDto> getContactParticipations(int dayId, int companyId) {
-    if (dayId <= 0 || companyId <= 0) {
-      throw new IllegalArgumentException("L'id doit être positif");
-    }
-    return dao.fetchContactByDayAndCompany(dayId,companyId);
-  }
+
 }

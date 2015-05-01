@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import javax.swing.plaf.FontUIResource;
 
@@ -34,9 +33,9 @@ public abstract class BaseFrame extends JFrame {
   public BaseFrame(String title, int width, int height,
       IGuiManager guiManager) {
     super(title);
-    
+
     this.logger = guiManager.getLogger();
-    
+
     setIconImage(guiManager.getResourceManager().fetchImage(
         IhmConstants.PATH_LOGO));
 
@@ -55,12 +54,14 @@ public abstract class BaseFrame extends JFrame {
   protected void setupDefaultLookAndFeel() {
     setDefaultFont(new Font("Arial", Font.PLAIN, 16));
     try {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-        | UnsupportedLookAndFeelException e) {
-      logger.log(Level.WARNING, "Failled to setup default look and feel", e);
+      UIManager
+          .setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+    } catch (Exception e) {
+      logger.log(Level.WARNING, "Failled to setup default look and feel",
+          e);
     }
   }
+
 
   /**
    * Replaces the default font of the swing components.

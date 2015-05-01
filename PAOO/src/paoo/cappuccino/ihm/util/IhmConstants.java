@@ -49,8 +49,9 @@ public interface IhmConstants {
    */
   String ERROR_ALPHA_INPUT = "Ce champ ne peut contenir que des lettres.";
 
-  String ERROR_ALPHANUM_INPUT = "Ce champ ne peut contenir que des charactères alphanumériques.";
-  
+  String ERROR_ALPHANUM_INPUT =
+      "Ce champ ne peut contenir que des charactères alphanumériques.";
+
   String ERROR_NUMERICAL_INPUT =
       "Ce champ ne peut contenir que des chiffres";
 
@@ -75,6 +76,8 @@ public interface IhmConstants {
 
   String ERROR_YEAR_ALREADY_HAVE_A_DAY =
       "Une journée des entreprise existe déjà pour cette année.";
+
+  String ERROR_TOO_LONG = "Nom trop long.";
 
 
 

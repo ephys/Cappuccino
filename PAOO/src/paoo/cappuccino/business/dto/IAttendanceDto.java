@@ -1,6 +1,8 @@
 package paoo.cappuccino.business.dto;
 
-public interface IAttendanceDto {
+import paoo.cappuccino.business.entity.IBaseEntity;
+
+public interface IAttendanceDto extends IBaseEntity {
 
   /**
    * Returns the id of the business day of the attendance.
@@ -16,4 +18,10 @@ public interface IAttendanceDto {
    * Gets id of the contact attending the business day.
    */
   int getContact();
+
+  /**
+   * Return if attendance is cancelled
+   */
+  boolean isCancelled();
+
 }

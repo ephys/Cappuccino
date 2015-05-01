@@ -23,7 +23,8 @@ public interface IContactUcc {
    * @throws java.lang.IllegalArgumentException The email does not follow a valid email format or
    *         one of the non-nullable fields is empty.
    */
-  IContactDto create(int company, String email, String firstName, String lastName, String phone);
+  IContactDto create(int company, String email, String firstName,
+      String lastName, String phone);
 
   /**
    * Set a contact's email as being invalid.
@@ -64,15 +65,14 @@ public interface IContactUcc {
    * @throws java.lang.IllegalArgumentException The email does not follow a valid email format or an
    *         id is not a positive or one of the non-nullable fields is empty .
    */
-  IContactDto update(int contact, int company, String email, String firstName, String lastName,
-      String phone);
-
+  IContactDto update(int contact, int company, String email,
+      String firstName, String lastName, String phone);
 
   /**
-   * Returns the list of contact for a day and a company
    *
-   * @param dayId The identifier of the day.
-   * @param companyId The identifier of the company
+   * @param contact
+   * @return
    */
-  List<IContactDto> getContactParticipations(int dayId, int companyId); // TODO& JUnits
+  IContactDto getContactById(int contact);
+
 }

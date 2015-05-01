@@ -8,14 +8,24 @@ public class AttendanceEntity implements IAttendance {
   private final int businessDay;
   private final int company;
   private final int contact;
+  private int version;
+  private boolean cancelled;
 
   /**
    * Creates a new attendance entity.
+   * 
    */
   public AttendanceEntity(int businessDay, int company, int contact) {
+    this(businessDay, company, contact, false, 0);
+  }
+
+  public AttendanceEntity(int businessDay, int company, int contact,
+      boolean cancelled, int version) {
     this.businessDay = businessDay;
     this.company = company;
     this.contact = contact;
+    this.version = version;
+    this.cancelled = cancelled;
   }
 
   @Override
@@ -44,7 +54,8 @@ public class AttendanceEntity implements IAttendance {
     }
 
     AttendanceEntity that = (AttendanceEntity) obj;
-    return businessDay == that.businessDay && company == that.company && contact == that.contact;
+    return businessDay == that.businessDay && company == that.company
+        && contact == that.contact;
   }
 
   @Override
@@ -57,10 +68,58 @@ public class AttendanceEntity implements IAttendance {
 
   @Override
   public String toString() {
-    return "AttendanceEntity{"
-           + "businessDay=" + businessDay
-           + ", company=" + company
-           + ", contact=" + contact
-           + '}';
+    return "AttendanceEntity{" + "businessDay=" + businessDay
+        + ", company=" + company + ", contact=" + contact + '}';
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see paoo.cappuccino.business.dto.IAttendanceDto#isCancelled()
+   */
+  @Override
+  public boolean isCancelled() {
+    return this.cancelled;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see paoo.cappuccino.business.entity.IBaseEntity#incrementVersion()
+   */
+  @Override
+  public int incrementVersion() {
+    return ++this.version;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see paoo.cappuccino.business.dto.IBaseDto#getId()
+   */
+  @Override
+  public int getId() {
+    return -1;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see paoo.cappuccino.business.dto.IBaseDto#getVersion()
+   */
+  @Override
+  public int getVersion() {
+    return this.version;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see paoo.cappuccino.business.entity.IAttendance#setCancelled(java.lang.Boolean)
+   */
+  @Override
+  public void setCancelled(Boolean b) {
+    this.cancelled = b;
+
   }
 }

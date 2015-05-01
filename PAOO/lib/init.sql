@@ -1,4 +1,4 @@
--- @author Kevin Bavay
+﻿-- @author Kevin Bavay
 DROP SCHEMA IF EXISTS business_days CASCADE;
 
 CREATE SCHEMA business_days;
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS business_days.companies (
                                                                               DEFAULT NEXTVAL(
                                                                                   'business_days.companies_id_seq'),
   creator          INTEGER REFERENCES business_days.users (user_id)  NOT NULL,
-  name             VARCHAR(50)                                       NOT NULL UNIQUE,
+  name             VARCHAR(30)                                       NOT NULL UNIQUE,
   register_date    TIMESTAMP WITHOUT TIME ZONE                       NOT NULL DEFAULT now(),
   address_street   VARCHAR(50)                                       NOT NULL,
   address_num      VARCHAR(10)                                       NOT NULL,
@@ -74,7 +74,9 @@ CREATE TABLE IF NOT EXISTS business_days.attendances (
   company      INTEGER REFERENCES business_days.companies (company_id)          NOT NULL,
   business_day INTEGER REFERENCES business_days.business_days (business_day_id) NOT NULL,
   contact      INTEGER REFERENCES business_days.contacts (contact_id)           NOT NULL,
-
+  cancelled    BOOLEAN 								NOT NULL DEFAULT FALSE,
+  version      INTEGER    					                NOT NULL DEFAULT 1,
+  
   PRIMARY KEY (company, business_day, contact)
 );
 
@@ -103,10 +105,10 @@ VALUES (DEFAULT, 1, 'marijke.vandyck@accenture.com', DEFAULT, 'Marijke', 'Van Dy
 INSERT INTO business_days.contacts
 VALUES (DEFAULT, 1, 'aimee.marecaux@accenture.com', DEFAULT, 'Aimée', 'Marecaux', NULL, DEFAULT);
 -- Attendances
-INSERT INTO business_days.attendances VALUES (1, 3, 1);
-INSERT INTO business_days.attendances VALUES (1, 4, 2);
-INSERT INTO business_days.attendances VALUES (1, 4, 3);
-INSERT INTO business_days.attendances VALUES (1, 5, 3);
+INSERT INTO business_days.attendances VALUES (1, 3, 1,DEFAULT);
+INSERT INTO business_days.attendances VALUES (1, 4, 2,DEFAULT);
+INSERT INTO business_days.attendances VALUES (1, 4, 3,DEFAULT);
+INSERT INTO business_days.attendances VALUES (1, 5, 3,DEFAULT);
 
 
 INSERT INTO business_days.companies
@@ -118,7 +120,7 @@ INSERT INTO business_days.participations VALUES (2, 2, 'DECLINED', DEFAULT, DEFA
 INSERT INTO business_days.contacts
 VALUES (DEFAULT, 2, 'Vincent.lepape@CodeItBlue.com', DEFAULT, 'Vincent', 'Lepape', '0479/97.95.05', DEFAULT);
 -- Attendances
-INSERT INTO business_days.attendances VALUES (2, 2, 4);
+INSERT INTO business_days.attendances VALUES (2, 2, 4,DEFAULT);
 
 
 INSERT INTO business_days.companies
@@ -133,11 +135,11 @@ INSERT INTO business_days.participations VALUES (3, 5, 'PAID', DEFAULT, DEFAULT)
 INSERT INTO business_days.contacts
 VALUES (DEFAULT, 3, 'roberto.alvarez@steria.be', DEFAULT, 'Roberto', 'Alvarez', NULL, DEFAULT);
 -- Attendances
-INSERT INTO business_days.attendances VALUES (3, 1, 5);
-INSERT INTO business_days.attendances VALUES (3, 2, 5);
-INSERT INTO business_days.attendances VALUES (3, 3, 5);
-INSERT INTO business_days.attendances VALUES (3, 4, 5);
-INSERT INTO business_days.attendances VALUES (3, 5, 5);
+INSERT INTO business_days.attendances VALUES (3, 1, 5,DEFAULT);
+INSERT INTO business_days.attendances VALUES (3, 2, 5,DEFAULT);
+INSERT INTO business_days.attendances VALUES (3, 3, 5,DEFAULT);
+INSERT INTO business_days.attendances VALUES (3, 4, 5,DEFAULT);
+INSERT INTO business_days.attendances VALUES (3, 5, 5,DEFAULT);
 
 
 INSERT INTO business_days.companies
@@ -149,7 +151,7 @@ INSERT INTO business_days.participations VALUES (4, 5, 'DECLINED', DEFAULT, DEFA
 INSERT INTO business_days.contacts
 VALUES (DEFAULT, 4, 'nicolas.rigo@eezee-it.com', DEFAULT, 'Nicolas', 'Rigo', '+32 478 88 02 55', DEFAULT);
 -- Attendances
-INSERT INTO business_days.attendances VALUES (4, 4, 6);
+INSERT INTO business_days.attendances VALUES (4, 4, 6,DEFAULT);
 
 
 INSERT INTO business_days.companies
@@ -167,9 +169,9 @@ VALUES (DEFAULT, 5, 'isabelle.croiset@bewan.be', DEFAULT, 'Isabelle', 'Croiset',
 INSERT INTO business_days.contacts 
 VALUES (DEFAULT, 5, 'Dedecker drh@bewan.b', DEFAULT, 'Bénédicte', 'Dedecker', NULL, DEFAULT);
 -- Attendances
-INSERT INTO business_days.attendances VALUES (5, 2, 7);
-INSERT INTO business_days.attendances VALUES (5, 2, 8);
-INSERT INTO business_days.attendances VALUES (5, 5, 9);
+INSERT INTO business_days.attendances VALUES (5, 2, 7,DEFAULT);
+INSERT INTO business_days.attendances VALUES (5, 2, 8,DEFAULT);
+INSERT INTO business_days.attendances VALUES (5, 5, 9,DEFAULT);
 
 
 INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN', 'pbkdf2:81a2626cd1753863c79b61ddcec76a01200417296d3180652385111c051f67edbe25045b8ce1c6efc9596b0b7cec2cedc751110b9ee0f5521249872d0ed13714:49f148ee80fd772c7e63d2e784ff757c:1000', 'Ades@enfer.be', 'admin', 'Ades', 'Mars', DEFAULT, DEFAULT);
