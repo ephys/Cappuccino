@@ -13,18 +13,19 @@ import paoo.cappuccino.business.dto.IContactDto;
  */
 public class ContactFullCellRenderer extends DefaultTableCellRenderer {
   @Override
-  public Component getTableCellRendererComponent(JTable table,
-      Object value, boolean isSelected, boolean hasFocus, int row,
-      int column) {
-    super.getTableCellRendererComponent(table, value, isSelected,
-        hasFocus, row, column);
+  public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+      boolean hasFocus, int row, int column) {
+    super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
     if (value instanceof IContactDto) {
       IContactDto contact = (IContactDto) value;
       this.setText(contact.getLastName() + " " + contact.getFirstName());
-      if (table.getValueAt(row, column - 1) instanceof Boolean)
+      if (table.getValueAt(row, column - 1) instanceof Boolean) {
         if ((boolean) table.getValueAt(row, column - 1)) {
           this.setForeground(Color.GRAY);
+        } else {
+          this.setForeground(Color.BLACK);
         }
+      }
     } else {
       setText(null);
     }
