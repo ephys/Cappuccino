@@ -13,7 +13,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.IhmConstants;
+import paoo.cappuccino.ihm.util.JTableMouseCompany;
 import paoo.cappuccino.ihm.util.cellrenderers.CompanyCellRenderer;
 import paoo.cappuccino.ihm.util.cellrenderers.DateCellRenderer;
 
@@ -28,12 +30,14 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
 
   /**
    * Creates a view for the company search screen.
+   * 
+   * @param menu
    *
    * @param model The model of the view.
    * @param companyUcc The app instance of the company ucc.
    * @param userUcc The app instance of the user ucc.
    */
-  public CompaniesSearchView() {
+  public CompaniesSearchView(MenuModel menu) {
 
 
     setLayout(new BorderLayout());
@@ -47,7 +51,7 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
       }
     };
 
-    this.table = new JTable(tableModel);
+    this.table = new JTableMouseCompany(tableModel, menu);
 
     TableColumn companyCol = table.getColumn(tableTitles[0]);
     companyCol.setCellRenderer(new CompanyCellRenderer());

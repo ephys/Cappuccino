@@ -22,25 +22,26 @@ public class JComboDay extends JPanel {
 
   /**
    * Creates a JComboBox rendering a list of business days.
+   * 
    * @param businessDays The list of business days to render in the combo box.
    */
-  public JComboDay(IBusinessDayDto[] businessDays,MenuModel menu) {
+  public JComboDay(IBusinessDayDto[] businessDays, MenuModel menu) {
     super(new FlowLayout(FlowLayout.CENTER));
     combo = new JComboBox<>(businessDays);
     combo.setRenderer(new DayRenderer());
-    if(businessDays.length==0){
+    if (businessDays.length == 0) {
       this.add(new JLabel(IhmConstants.ERROR_NO_BUSINESS_DAY));
       JButton newDay = new JButton("Créer journée");
-      newDay.addActionListener(e->{
+      newDay.addActionListener(e -> {
         menu.setCurrentPage(MenuEntry.CREATE_BDAY);
       });
       this.add(newDay);
-    }else{
-    this.add(new JLabel("Journée du"));
-    this.add(combo);
+    } else {
+      this.add(new JLabel("Journée du"));
+      this.add(combo);
     }
   }
-  
+
 
   public JComboBox<IBusinessDayDto> getCombo() {
     return combo;
@@ -52,11 +53,11 @@ public class JComboDay extends JPanel {
 
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index,
-                                                  boolean isSelected, boolean cellHasFocus) {
+        boolean isSelected, boolean cellHasFocus) {
       super.getListCellRendererComponent(list, null, index, isSelected, cellHasFocus);
 
-      setText(value == null ? null
-                            : LocalizationUtil.localizeDate(((IBusinessDay) value).getEventDate()));
+      setText(value == null ? null : LocalizationUtil.localizeDate(((IBusinessDay) value)
+          .getEventDate()));
 
       return this;
     }

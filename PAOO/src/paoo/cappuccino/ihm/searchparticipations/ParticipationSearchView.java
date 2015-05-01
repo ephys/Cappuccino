@@ -13,7 +13,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.IhmConstants;
+import paoo.cappuccino.ihm.util.JTableMouseCompany;
 import paoo.cappuccino.ihm.util.cellrenderers.CompanyCellRenderer;
 import paoo.cappuccino.ihm.util.cellrenderers.DateCellRenderer;
 import paoo.cappuccino.ihm.util.cellrenderers.StateCellRenderer;
@@ -34,7 +36,7 @@ public class ParticipationSearchView extends JPanel implements ChangeListener {
    * @param companyUcc The app instance of the company ucc.
    * @param businessDayUcc The app instance of the business day ucc.
    */
-  public ParticipationSearchView() {
+  public ParticipationSearchView(MenuModel menu) {
 
 
     setLayout(new BorderLayout());
@@ -49,7 +51,7 @@ public class ParticipationSearchView extends JPanel implements ChangeListener {
       }
     };
 
-    this.table = new JTable(tableModel);
+    this.table = new JTableMouseCompany(tableModel, menu);
 
     TableColumn companyCol = table.getColumn(tableTitles[0]);
     companyCol.setCellRenderer(new CompanyCellRenderer());

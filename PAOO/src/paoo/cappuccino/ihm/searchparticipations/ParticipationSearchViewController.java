@@ -2,12 +2,9 @@ package paoo.cappuccino.ihm.searchparticipations;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -15,7 +12,6 @@ import javax.swing.table.DefaultTableModel;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IParticipationDto;
-import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.JComboDay;
 import paoo.cappuccino.ihm.util.LocalizationUtil;
@@ -66,20 +62,8 @@ public class ParticipationSearchViewController extends JPanel implements ChangeL
     JPanel searchingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     searchingPanel.add(comboBox);
 
-    view = new ParticipationSearchView();
-    JTable table = view.getTable();
-    table.setRowHeight(35);
-    table.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent clickEvent) {
-        if (clickEvent.getClickCount() == 2) {
-          ICompanyDto company =
-              (ICompanyDto) table.getModel().getValueAt(table.getSelectedRow(), 0);
+    view = new ParticipationSearchView(menu);
 
-          menu.setCurrentPage(MenuEntry.COMPANY_DETAILS, company);
-        }
-      }
-    });
 
     JPanel panelWrapper = new JPanel(new BorderLayout());
     panelWrapper.add(view);

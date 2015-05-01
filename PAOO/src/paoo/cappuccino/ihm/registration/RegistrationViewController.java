@@ -42,7 +42,8 @@ public class RegistrationViewController extends JPanel implements IDefaultButton
    * @param manager The manager responsible for the opening/closing this frame.
    * @param userUcc The app instance of the user use case controller.
    */
-  public RegistrationViewController(RegistrationModel model, IGuiManager manager, IUserUcc userUcc) {
+  public RegistrationViewController(RegistrationModel model,
+      IGuiManager manager, IUserUcc userUcc) {
     super(new BorderLayout());
     this.model = model;
     this.userUcc = userUcc;
@@ -61,8 +62,7 @@ public class RegistrationViewController extends JPanel implements IDefaultButton
     JTextField firstNameField = new JTextField();
     JTextField emailField = new JTextField();
 
-    JPanel controls =
-        new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
+
 
     validateButton = new JButton("Valider");
     validateButton.addActionListener(e -> {
@@ -78,6 +78,8 @@ public class RegistrationViewController extends JPanel implements IDefaultButton
     JButton cancelButton = new JButton("Annuler");
     cancelButton.addActionListener(e -> manager.openFrame(LoginFrame.class));
 
+    JPanel controls =
+        new JPanel(new FlowLayout(FlowLayout.RIGHT, IhmConstants.M_GAP, IhmConstants.M_GAP));
 
     controls.add(cancelButton);
     controls.add(validateButton);

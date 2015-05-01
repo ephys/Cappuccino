@@ -37,7 +37,7 @@ public class CompanyDetailsView extends JPanel {
   private final CompanyDetailsModel model;
   private final IUserUcc userUcc;
   private final JPanel companyPanel = new JPanel(new BorderLayout());
-  private final static int MAX_SIZE_TABLE = 150;
+  private static final int MAX_SIZE_TABLE = 150;
 
   /**
    * Creates a view for the Company Details screen.
@@ -62,7 +62,6 @@ public class CompanyDetailsView extends JPanel {
     contactsTable.setRowHeight(35);
     contactsTable.getColumn(contactsTableTitles[0]).setCellRenderer(new ContactCellRenderer());
 
-    TableColumn mailCol = contactsTable.getColumn(contactsTableTitles[2]);
 
     // list participation
     String[] participationsTableTiltes = new String[] {"Date", "Etat", "Personne de contact"};

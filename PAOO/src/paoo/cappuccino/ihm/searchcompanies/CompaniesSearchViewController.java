@@ -5,13 +5,10 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -19,7 +16,6 @@ import javax.swing.table.DefaultTableModel;
 
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IUserDto;
-import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.LocalizationUtil;
 import paoo.cappuccino.ucc.ICompanyUcc;
@@ -104,20 +100,8 @@ public class CompaniesSearchViewController extends JPanel implements ChangeListe
     searchingPanel.add(panelTown);
     searchingPanel.add(panelStreet);
 
-    view = new CompaniesSearchView();
-    JTable table = view.getTable();
-    table.setRowHeight(35);
-    table.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent clickEvent) {
-        if (clickEvent.getClickCount() == 2) {
-          ICompanyDto company =
-              (ICompanyDto) table.getModel().getValueAt(table.getSelectedRow(), 0);
+    view = new CompaniesSearchView(menu);
 
-          menu.setCurrentPage(MenuEntry.COMPANY_DETAILS, company);
-        }
-      }
-    });
 
     JPanel panelWrapper = new JPanel(new BorderLayout());
     panelWrapper.add(view);
