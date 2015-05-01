@@ -69,7 +69,7 @@ public interface IContactUcc {
       String firstName, String lastName, String phone);
 
   /**
-   * Get a contact by his id
+   * Get a contact by his id.
    *
    * @param the id of the contact
    * @return the contact corresponding
