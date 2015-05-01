@@ -5,27 +5,20 @@ import java.awt.FlowLayout;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.table.DefaultTableModel;
 
 import paoo.cappuccino.business.dto.IBusinessDayDto;
-import paoo.cappuccino.business.dto.ICompanyDto;
-import paoo.cappuccino.business.dto.IParticipationDto;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.JComboDay;
-import paoo.cappuccino.ihm.util.LocalizationUtil;
+import paoo.cappuccino.ihm.util.JTableCompaniesViewController;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
+import paoo.cappuccino.ucc.IUserUcc;
 
-public class ParticipationSearchViewController extends JPanel implements ChangeListener {
+public class ParticipationSearchViewController extends JPanel {
 
   private static final long serialVersionUID = 7264715733673092584L;
   private final ParticipationSearchModel model;
   private final List<IBusinessDayDto> listBusinessDayDto;
-  private final IBusinessDayUcc businessDayUcc;
-  private final ICompanyUcc companyUcc;
-  private ParticipationSearchView view;
 
   /**
    * Creates a view controller for the participation search view.
@@ -36,11 +29,9 @@ public class ParticipationSearchViewController extends JPanel implements ChangeL
    * @param companyUcc The app instance of the company ucc.
    */
   public ParticipationSearchViewController(ParticipationSearchModel model, MenuModel menu,
-      IBusinessDayUcc businessDayUcc, ICompanyUcc companyUcc) {
+      IBusinessDayUcc businessDayUcc, ICompanyUcc companyUcc, IUserUcc userUcc) {
     super(new BorderLayout());
     this.model = model;
-    this.companyUcc = companyUcc;
-    this.businessDayUcc = businessDayUcc;
 
     listBusinessDayDto = businessDayUcc.getBusinessDays();
     JComboDay comboBox =
@@ -62,38 +53,13 @@ public class ParticipationSearchViewController extends JPanel implements ChangeL
     JPanel searchingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     searchingPanel.add(comboBox);
 
-    view = new ParticipationSearchView(menu);
+    JTableCompaniesViewController viewController =
+        new JTableCompaniesViewController(menu, model, companyUcc, userUcc);
 
 
     JPanel panelWrapper = new JPanel(new BorderLayout());
-    panelWrapper.add(view);
+    panelWrapper.add(viewController);
     panelWrapper.add(searchingPanel, BorderLayout.NORTH);
     this.add(panelWrapper);
-    model.addChangeListener(this);
-    stateChanged(null);
-  }
-
-  @Override
-  public void stateChanged(ChangeEvent e) {
-    List<IParticipationDto> participations =
-        model.getSelectedDay() == null ? null : businessDayUcc.getParticipations(model
-            .getSelectedDay().getId());
-    buildTable(participations);
-    view.stateChanged(null);
-  }
-
-  private void buildTable(List<IParticipationDto> participations) {
-    DefaultTableModel tableModel = (DefaultTableModel) view.getTable().getModel();
-    tableModel.setRowCount(participations.size());
-
-    for (int i = 0; i < participations.size(); i++) {
-      IParticipationDto participation = participations.get(i);
-      ICompanyDto company = companyUcc.getCompanyById(participation.getCompany());
-
-      tableModel.setValueAt(company, i, 0);
-      tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i, 1);
-      tableModel.setValueAt(company.getRegisterDate(), i, 2);
-      tableModel.setValueAt(participation.getState(), i, 3);
-    }
   }
 }

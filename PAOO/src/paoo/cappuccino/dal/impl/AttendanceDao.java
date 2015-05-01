@@ -36,8 +36,7 @@ public class AttendanceDao implements IAttendanceDao {
   public IAttendanceDto createAttendance(IAttendanceDto attendance) {
     String query =
         "INSERT INTO business_days.attendances (company, business_day, contact) "
-            + "VALUES (?, ?, ?) "
-            + "RETURNING company, business_day, contact,cancelled,version";
+            + "VALUES (?, ?, ?) " + "RETURNING company, business_day, contact,cancelled,version";
 
     try {
       if (psCreateParticipation == null) {
@@ -60,11 +59,11 @@ public class AttendanceDao implements IAttendanceDao {
     return null;
   }
 
+
+  @Override
   public void updateAttendance(IAttendance attendance) {
     String query =
-        "UPDATE business_days.attendances "
-            + "SET cancelled = ?,"
-            + " version = version + 1 "
+        "UPDATE business_days.attendances " + "SET cancelled = ?," + " version = version + 1 "
             + "WHERE company = ? AND business_day = ? AND contact = ? AND version = ?";
 
     try {
@@ -81,18 +80,13 @@ public class AttendanceDao implements IAttendanceDao {
 
       int affectedRows = psUpdateAttendance.executeUpdate();
       if (affectedRows == 0) {
-        throw new ConcurrentModificationException(
-            "The attendance with id " + attendance.getBusinessDay() + ":"
-                + attendance.getCompany() + ":" + attendance.getContact()
-                + " (businessday,company,contact) and version "
-                + attendance.getVersion()
-                + " was not found in the database. "
-                + "It either was deleted or modified by another thread.");
+        throw new ConcurrentModificationException("The attendance with id "
+            + attendance.getBusinessDay() + ":" + attendance.getCompany() + ":"
+            + attendance.getContact() + " (businessday,company,contact) and version "
+            + attendance.getVersion() + " was not found in the database. "
+            + "It either was deleted or modified by another thread.");
       }
 
-      if (attendance instanceof IAttendance) {
-        ((IAttendance) attendance).incrementVersion();
-      }
     } catch (SQLException e) {
       rethrowSqlException(e);
     }
@@ -100,11 +94,10 @@ public class AttendanceDao implements IAttendanceDao {
 
 
   @Override
-  public List<IAttendanceDto> fetchAttendances(int companyId,
-      int businessDayId) {
+  public List<IAttendanceDto> fetchAttendances(int companyId, int businessDayId) {
     String query =
-        "SELECT a.company, a.business_day, a.contact, a.cancelled, a.version FROM business_days.attendances a "
-            + "WHERE a.company = ? AND a.business_day = ?";
+        "SELECT a.company, a.business_day, a.contact, a.cancelled, a.version "
+            + "FROM business_days.attendances a " + "WHERE a.company = ? AND a.business_day = ?";
 
     try {
       if (psFetchParticipation == null) {
@@ -132,13 +125,13 @@ public class AttendanceDao implements IAttendanceDao {
   @Override
   public List<IAttendanceDto> fetchAttendancesByContact(int contactId) {
     String query =
-        "SELECT a.company, a.business_day, a.contact, a.cancelled, a.version FROM business_days.attendances a "
+        "SELECT a.company, a.business_day, a.contact, a.cancelled, a.version "
+            + "FROM business_days.attendances a " 
             + "WHERE a.contact =  ?";
 
     try {
       if (psFetchContactParticipation == null) {
-        psFetchContactParticipation =
-            dalBackend.fetchPreparedStatement(query);
+        psFetchContactParticipation = dalBackend.fetchPreparedStatement(query);
       }
 
       psFetchContactParticipation.setInt(1, contactId);
@@ -158,40 +151,7 @@ public class AttendanceDao implements IAttendanceDao {
     throw new FatalException("unreachable statement");
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see paoo.cappuccino.dal.dao.IAttendanceDao#fetchAttendancesByCompanyAndDay(int, int)
-   */
-  @Override
-  public List<IAttendanceDto> fetchAttendancesByCompanyAndDay(int company,
-      int businessDay) {
-    String query =
-        "SELECT a.company, a.business_day, a.contact, a.cancelled, a.version FROM business_days.attendances a "
-            + "WHERE company = ? AND business_day = ?";
-    try {
-      if (psFetchContactCompanyDay == null) {
-        psFetchContactCompanyDay =
-            dalBackend.fetchPreparedStatement(query);
-      }
 
-      psFetchContactCompanyDay.setInt(1, company);
-      psFetchContactCompanyDay.setInt(2, businessDay);
-
-      try (ResultSet rs = psFetchContactCompanyDay.executeQuery()) {
-        List<IAttendanceDto> attendances = new ArrayList<>();
-        while (rs.next()) {
-          attendances.add(makeEntityFromSet(rs));
-        }
-
-        return attendances;
-      }
-    } catch (SQLException e) {
-      rethrowSqlException(e);
-    }
-
-    throw new FatalException("unreachable statement");
-  }
 
   private IAttendance makeEntityFromSet(ResultSet rs) throws SQLException {
     int company = rs.getInt(1);
@@ -200,8 +160,7 @@ public class AttendanceDao implements IAttendanceDao {
     boolean cancelled = rs.getBoolean(4);
     int version = rs.getInt(5);
 
-    return entityFactory.createAttendance(company, businessDay, contact,
-        cancelled, version);
+    return entityFactory.createAttendance(company, businessDay, contact, cancelled, version);
   }
 
   private void rethrowSqlException(SQLException exception) {

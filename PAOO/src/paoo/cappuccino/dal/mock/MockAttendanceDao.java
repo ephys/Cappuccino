@@ -23,8 +23,8 @@ public class MockAttendanceDao implements IAttendanceDao {
   @Override
   public IAttendanceDto createAttendance(IAttendanceDto attendance) {
     IAttendance attendanceEntity =
-        factory.createAttendance(attendance.getCompany(),
-            attendance.getBusinessDay(), attendance.getContact());
+        factory.createAttendance(attendance.getCompany(), attendance.getBusinessDay(),
+            attendance.getContact());
 
     attendances.add(attendanceEntity);
 
@@ -32,20 +32,17 @@ public class MockAttendanceDao implements IAttendanceDao {
   }
 
   @Override
-  public List<IAttendanceDto> fetchAttendances(int companyId,
-      int businessDayId) {
+  public List<IAttendanceDto> fetchAttendances(int companyId, int businessDayId) {
     return attendances
         .stream()
         .filter(
             attendance -> attendance.getCompany() == companyId
-                && attendance.getBusinessDay() == businessDayId)
-        .collect(Collectors.toList());
+                && attendance.getBusinessDay() == businessDayId).collect(Collectors.toList());
   }
 
   @Override
   public List<IAttendanceDto> fetchAttendancesByContact(int contactId) {
-    return attendances.stream()
-        .filter(attendance -> attendance.getContact() == contactId)
+    return attendances.stream().filter(attendance -> attendance.getContact() == contactId)
         .collect(Collectors.toList());
   }
 
@@ -62,15 +59,5 @@ public class MockAttendanceDao implements IAttendanceDao {
 
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see paoo.cappuccino.dal.dao.IAttendanceDao#fetchAttendancesByCompanyAndDay(int, int)
-   */
-  @Override
-  public List<IAttendanceDto> fetchAttendancesByCompanyAndDay(int company,
-      int businessDay) {
-    // TODO Auto-generated method stub
-    return null;
-  }
+
 }

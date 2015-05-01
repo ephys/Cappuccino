@@ -37,10 +37,9 @@ class BusinessDayUcc implements IBusinessDayUcc {
   private final Logger logger;
 
   @Inject
-  public BusinessDayUcc(IEntityFactory entityFactory,
-      IDalService dalService, IBusinessDayDao businessDayDao,
-      IParticipationDao participationDao, IAttendanceDao attendanceDao,
-      AppContext app, IContactDao contactDao) {
+  public BusinessDayUcc(IEntityFactory entityFactory, IDalService dalService,
+      IBusinessDayDao businessDayDao, IParticipationDao participationDao,
+      IAttendanceDao attendanceDao, AppContext app, IContactDao contactDao) {
     this.factory = entityFactory;
     this.dalService = dalService;
     this.businessDayDao = businessDayDao;
@@ -58,14 +57,12 @@ class BusinessDayUcc implements IBusinessDayUcc {
     try {
       return businessDayDao.createBusinessDay(dto);
     } catch (NonUniqueFieldException e) {
-      throw new IllegalArgumentException(
-          "A business day already exists for that academic year", e);
+      throw new IllegalArgumentException("A business day already exists for that academic year", e);
     }
   }
 
   @Override
-  public void addInvitedCompanies(ICompanyDto[] companies,
-      IBusinessDayDto businessDay) {
+  public void addInvitedCompanies(ICompanyDto[] companies, IBusinessDayDto businessDay) {
     ValidationUtil.ensureNotNull(businessDay, "businessDay");
     ValidationUtil.ensureNotNull(companies, "companies");
 
@@ -73,8 +70,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
     for (ICompanyDto company : companies) {
       IParticipationDto participation =
-          factory
-              .createParticipation(company.getId(), businessDay.getId());
+          factory.createParticipation(company.getId(), businessDay.getId());
 
       participationDao.createParticipation(participation);
     }
@@ -83,16 +79,15 @@ class BusinessDayUcc implements IBusinessDayUcc {
   }
 
   @Override
-  public void addInvitedContacts(List<Integer> contacts,
-      IBusinessDayDto businessDay, ICompanyDto company) {
+  public void addInvitedContacts(List<Integer> contacts, IBusinessDayDto businessDay,
+      ICompanyDto company) {
     ValidationUtil.ensureNotNull(businessDay, "businessDay");
     ValidationUtil.ensureNotNull(contacts, "contacts");
 
     List<IAttendanceDto> toUpdate = new ArrayList<IAttendanceDto>();
     List<IAttendanceDto> toCancel = new ArrayList<IAttendanceDto>();
     List<IAttendanceDto> attendanceRegistred =
-        attendanceDao.fetchAttendances(company.getId(),
-            businessDay.getId());
+        attendanceDao.fetchAttendances(company.getId(), businessDay.getId());
     for (IAttendanceDto attendance : attendanceRegistred) {
       if (contacts.contains(attendance.getContact())) {
         if (attendance.isCancelled()) {
@@ -113,8 +108,8 @@ class BusinessDayUcc implements IBusinessDayUcc {
     }
 
     for (int contact : contacts) {
-      attendanceDao.createAttendance(factory.createAttendance(
-          company.getId(), businessDay.getId(), contact));
+      attendanceDao.createAttendance(factory.createAttendance(company.getId(), businessDay.getId(),
+          contact));
     }
     for (IAttendanceDto att : toUpdate) {
       IAttendance attendance = convertAttendanceDto(att);
@@ -128,11 +123,9 @@ class BusinessDayUcc implements IBusinessDayUcc {
 
 
   @Override
-  public List<IContactDto> getInvitedContacts(ICompanyDto company,
-      IBusinessDayDto businessDay) {
+  public List<IContactDto> getInvitedContacts(ICompanyDto company, IBusinessDayDto businessDay) {
     List<IAttendanceDto> attendances =
-        attendanceDao.fetchAttendances(company.getId(),
-            businessDay.getId());
+        attendanceDao.fetchAttendances(company.getId(), businessDay.getId());
 
     List<IContactDto> contacts = new ArrayList<>(attendances.size());
     for (IAttendanceDto attendance : attendances) {
@@ -146,8 +139,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
   public boolean changeState(IParticipationDto participation, State state) {
     ValidationUtil.ensureNotNull(participation, "participation");
     ValidationUtil.ensureNotNull(state, "state");
-    IParticipation participationEntity =
-        convertParticipationDto(participation);
+    IParticipation participationEntity = convertParticipationDto(participation);
 
     try {
       participationEntity.setState(state);
@@ -167,8 +159,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
       return false;
     }
 
-    IParticipation participation =
-        convertParticipationDto(participationDto);
+    IParticipation participation = convertParticipationDto(participationDto);
     participation.setCancelled(true);
     participationDao.updateParticipation(participation);
 
@@ -197,9 +188,8 @@ class BusinessDayUcc implements IBusinessDayUcc {
     if (dto instanceof IParticipation) {
       return (IParticipation) dto;
     } else {
-      return factory.createParticipation(dto.getCompany(),
-          dto.getBusinessDay(), dto.isCancelled(), dto.getVersion(),
-          dto.getState());
+      return factory.createParticipation(dto.getCompany(), dto.getBusinessDay(), dto.isCancelled(),
+          dto.getVersion(), dto.getState());
     }
   }
 
@@ -207,9 +197,8 @@ class BusinessDayUcc implements IBusinessDayUcc {
     if (att instanceof IAttendance) {
       return (IAttendance) att;
     } else {
-      return factory.createAttendance(att.getCompany(),
-          att.getBusinessDay(), att.getContact(), att.isCancelled(),
-          att.getVersion());
+      return factory.createAttendance(att.getCompany(), att.getBusinessDay(), att.getContact(),
+          att.isCancelled(), att.getVersion());
     }
 
 
@@ -229,12 +218,10 @@ class BusinessDayUcc implements IBusinessDayUcc {
    * @see paoo.cappuccino.ucc.IBusinessDayUcc#getAttendanceForParticipation(int, int)
    */
   @Override
-  public List<IAttendanceDto> getAttendanceForParticipation(
-      int businessDay, int company) {
+  public List<IAttendanceDto> getAttendanceForParticipation(int businessDay, int company) {
     if (businessDay <= 0 || company <= 0) {
       throw new IllegalArgumentException("l'id doit être positif");
     }
-    return attendanceDao.fetchAttendancesByCompanyAndDay(company,
-        businessDay);
+    return attendanceDao.fetchAttendances(company, businessDay);
   }
 }

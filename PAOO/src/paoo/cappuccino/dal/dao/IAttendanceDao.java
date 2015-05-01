@@ -37,17 +37,10 @@ public interface IAttendanceDao {
   List<IAttendanceDto> fetchAttendancesByContact(int contactId);
 
   /**
+   * Update an attendance in the database.
    *
-   * @param createAttendance
+   * @param createAttendance the new attendance
    */
   void updateAttendance(IAttendance attendance);
 
-  /**
-   *
-   * @param company
-   * @param businessDay
-   * @return
-   */
-  List<IAttendanceDto> fetchAttendancesByCompanyAndDay(int company,
-      int businessDay);
 }

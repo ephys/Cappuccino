@@ -206,12 +206,11 @@ public class AttendanceViewController extends JPanel implements ChangeListener,
                 contactsToAdd.add(currentContact.getId());
                 listContacts.append("[" + currentContact.getFirstName() + " "
                     + currentContact.getLastName() + "]");
-              } else {
-
               }
             }
-            if (contactsToAdd.size() == 0) {
-              if (JOptionPane.showConfirmDialog(this, "Personne n'est selectionné. Valider ?") != JOptionPane.OK_OPTION) {
+            if (contactsToAdd.size() == 0) { 
+              if (JOptionPane
+                  .showConfirmDialog(this, "Personne n'est selectionné. Valider ?") != JOptionPane.OK_OPTION) {
                 return;
               }
             }

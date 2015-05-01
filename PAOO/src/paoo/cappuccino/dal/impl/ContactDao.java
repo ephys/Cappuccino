@@ -31,7 +31,6 @@ class ContactDao implements IContactDao {
   private PreparedStatement psFetchContactsByCompany;
   private PreparedStatement psFetchContactsById;
   private PreparedStatement psUpdateContact;
-  private PreparedStatement psFetchContactsByCompanyAndDay;
 
   @Inject
   public ContactDao(IEntityFactory entityFactory, IDalBackend dalBackend) {
@@ -43,8 +42,7 @@ class ContactDao implements IContactDao {
   public IContactDto createContact(IContactDto contact) {
     String query =
         "INSERT INTO business_days.contacts (company, email, email_valid, "
-            + "first_name, last_name, phone) "
-            + "VALUES (?, ?, ?, ?, ?, ?) "
+            + "first_name, last_name, phone) " + "VALUES (?, ?, ?, ?, ?, ?) "
             + "RETURNING contact_id, company, email, email_valid, first_name, last_name, "
             + "phone, version";
 
@@ -82,8 +80,7 @@ class ContactDao implements IContactDao {
     String query =
         "UPDATE business_days.contacts SET "
             + " company = ?, email = ?, email_valid = ?, first_name = ?, last_name = ?, "
-            + " phone = ?, version = version + 1 "
-            + "WHERE contact_id = ? AND version = ?";
+            + " phone = ?, version = version + 1 " + "WHERE contact_id = ? AND version = ?";
 
     try {
       if (psUpdateContact == null) {
@@ -107,9 +104,8 @@ class ContactDao implements IContactDao {
 
       int affectedRows = psUpdateContact.executeUpdate();
       if (affectedRows == 0) {
-        throw new ConcurrentModificationException("The user with id "
-            + contact.getId() + " and version " + contact.getVersion()
-            + " was not found in the database. "
+        throw new ConcurrentModificationException("The user with id " + contact.getId()
+            + " and version " + contact.getVersion() + " was not found in the database. "
             + "It either was deleted or modified by another thread.");
       }
 
@@ -122,12 +118,10 @@ class ContactDao implements IContactDao {
   }
 
   @Override
-  public List<IContactDto> fetchContactByName(String firstName,
-      String lastName) {
+  public List<IContactDto> fetchContactByName(String firstName, String lastName) {
     String query =
         "SELECT c.contact_id, c.company, c.email, c.email_valid, c.first_name, "
-            + " c.last_name, c.phone, c.version "
-            + "FROM business_days.contacts c "
+            + " c.last_name, c.phone, c.version " + "FROM business_days.contacts c "
             + "WHERE (? IS NULL OR LOWER(first_name) LIKE ?) "
             + " AND (? IS NULL OR LOWER(last_name) LIKE ?)";
 
@@ -175,8 +169,7 @@ class ContactDao implements IContactDao {
 
     try {
       if (psFetchContactsByCompany == null) {
-        psFetchContactsByCompany =
-            dalBackend.fetchPreparedStatement(query);
+        psFetchContactsByCompany = dalBackend.fetchPreparedStatement(query);
       }
 
       psFetchContactsByCompany.setInt(1, companyId);
@@ -234,8 +227,8 @@ class ContactDao implements IContactDao {
     String phone = rs.getString(7);
     int version = rs.getInt(8);
 
-    return entityFactory.createContact(contactId, version, companyId,
-        email, emailValid, firstName, lastName, phone);
+    return entityFactory.createContact(contactId, version, companyId, email, emailValid, firstName,
+        lastName, phone);
   }
 
   private void rethrowSqlException(SQLException exception) {

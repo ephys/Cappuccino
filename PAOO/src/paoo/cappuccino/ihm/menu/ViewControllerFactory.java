@@ -101,7 +101,7 @@ public class ViewControllerFactory {
 
       case SEARCH_PARTICIPATION:
         return new ParticipationSearchViewController(modelParticipationSearching, menuModel,
-            businessDayUcc, companyUcc);
+            businessDayUcc, companyUcc, userUcc);
 
       case COMPANY_DETAILS:
         modelCompanyDetails.init(menuModel.getTransitionObjects());

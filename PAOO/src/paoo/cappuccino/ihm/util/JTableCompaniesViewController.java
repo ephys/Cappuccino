@@ -1,7 +1,8 @@
-package paoo.cappuccino.ihm.searchcompanies;
+package paoo.cappuccino.ihm.util;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,13 +14,17 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import paoo.cappuccino.business.dto.ICompanyDto;
+import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.ihm.menu.MenuModel;
-import paoo.cappuccino.ihm.util.IhmConstants;
-import paoo.cappuccino.ihm.util.JTableMouseCompany;
+import paoo.cappuccino.ihm.searchcompanies.CompaniesSearchModel;
+import paoo.cappuccino.ihm.searchparticipations.ParticipationSearchModel;
 import paoo.cappuccino.ihm.util.cellrenderers.CompanyCellRenderer;
 import paoo.cappuccino.ihm.util.cellrenderers.DateCellRenderer;
+import paoo.cappuccino.ucc.ICompanyUcc;
+import paoo.cappuccino.ucc.IUserUcc;
 
-public class CompaniesSearchView extends JPanel implements ChangeListener {
+public class JTableCompaniesViewController extends JPanel implements ChangeListener {
 
   private static final long serialVersionUID = -6261431833676612196L;
   private final DefaultTableModel tableModel;
@@ -28,17 +33,26 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
   private boolean removedWidget;
   private JPanel centerPadding;
 
+  private final ICompanyUcc companyUcc;
+  private final IUserUcc userUcc;
+
+  private final BaseModel model;
+
   /**
    * Creates a view for the company search screen.
    * 
-   * @param menu
-   *
+   * @param menu the model of the main menu to change page.
    * @param model The model of the view.
    * @param companyUcc The app instance of the company ucc.
    * @param userUcc The app instance of the user ucc.
    */
-  public CompaniesSearchView(MenuModel menu) {
+  public JTableCompaniesViewController(MenuModel menu, BaseModel model, ICompanyUcc companyUcc,
+      IUserUcc userUcc) {
 
+    this.companyUcc = companyUcc;
+    this.userUcc = userUcc;
+
+    this.model = model;
 
     setLayout(new BorderLayout());
     String[] tableTitles =
@@ -67,11 +81,25 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
     scrollPane.setBorder(new EmptyBorder(IhmConstants.M_GAP, IhmConstants.M_GAP,
         IhmConstants.M_GAP, IhmConstants.M_GAP));
     this.add(scrollPane);
+    model.addChangeListener(this);
+    stateChanged(null);
   }
 
   @Override
   public void stateChanged(ChangeEvent event) {
+    List<ICompanyDto> companies = null;
 
+    if (model instanceof CompaniesSearchModel) {
+      CompaniesSearchModel modelC = (CompaniesSearchModel) model;
+      companies =
+          companyUcc.searchCompanies(modelC.getName(), modelC.getPostCode(), modelC.getTown(),
+              modelC.getStreet());
+    } else if (model instanceof ParticipationSearchModel) {
+      companies =
+          companyUcc.getCompaniesByDay(((ParticipationSearchModel) model).getSelectedDay().getId());
+    }
+
+    buildTable(companies);
     if (table.getRowCount() > 0) {
       if (this.removedWidget) {
         this.remove(this.centerPadding);
@@ -99,7 +127,24 @@ public class CompaniesSearchView extends JPanel implements ChangeListener {
     }
   }
 
-  JTable getTable() {
-    return this.table;
+  private void buildTable(List<ICompanyDto> companies) {
+    if (companies == null) {
+      return;
+    }
+    tableModel.setRowCount(companies.size());
+
+    for (int i = 0; i < companies.size(); i++) {
+      ICompanyDto company = companies.get(i);
+      IUserDto creator = userUcc.getUserById(company.getCreator());
+      String creatorName = "inconnu";
+      if (creator != null) {
+        creatorName = creator.getUsername();
+      }
+
+      tableModel.setValueAt(company, i, 0);
+      tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i, 1);
+      tableModel.setValueAt(company.getRegisterDate(), i, 2);
+      tableModel.setValueAt(creatorName, i, 3);
+    }
   }
 }

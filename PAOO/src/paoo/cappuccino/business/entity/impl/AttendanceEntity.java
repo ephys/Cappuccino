@@ -19,8 +19,11 @@ public class AttendanceEntity implements IAttendance {
     this(businessDay, company, contact, false, 0);
   }
 
-  public AttendanceEntity(int businessDay, int company, int contact,
-      boolean cancelled, int version) {
+  /**
+   * Creates a new attendance entity
+   * 
+   */
+  public AttendanceEntity(int businessDay, int company, int contact, boolean cancelled, int version) {
     this.businessDay = businessDay;
     this.company = company;
     this.contact = contact;
@@ -54,8 +57,7 @@ public class AttendanceEntity implements IAttendance {
     }
 
     AttendanceEntity that = (AttendanceEntity) obj;
-    return businessDay == that.businessDay && company == that.company
-        && contact == that.contact;
+    return businessDay == that.businessDay && company == that.company && contact == that.contact;
   }
 
   @Override
@@ -68,8 +70,8 @@ public class AttendanceEntity implements IAttendance {
 
   @Override
   public String toString() {
-    return "AttendanceEntity{" + "businessDay=" + businessDay
-        + ", company=" + company + ", contact=" + contact + '}';
+    return "AttendanceEntity{" + "businessDay=" + businessDay + ", company=" + company
+        + ", contact=" + contact + '}';
   }
 
   /*
@@ -118,8 +120,8 @@ public class AttendanceEntity implements IAttendance {
    * @see paoo.cappuccino.business.entity.IAttendance#setCancelled(java.lang.Boolean)
    */
   @Override
-  public void setCancelled(Boolean b) {
-    this.cancelled = b;
+  public void setCancelled(Boolean bool) {
+    this.cancelled = bool;
 
   }
 }
