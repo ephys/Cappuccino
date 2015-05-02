@@ -120,7 +120,7 @@ class CompanyDao implements ICompanyDao {
   }
 
   @Override
-  public List<ICompanyDto> searchCompanies(String name, String postcode, 
+  public List<ICompanyDto> searchCompanies(String name, String postcode,
                                            String street, String town) {
     String query =
         "SELECT * FROM business_days.companies WHERE " + " (? IS NULL OR LOWER(name) LIKE ?) AND "
@@ -264,7 +264,7 @@ class CompanyDao implements ICompanyDao {
       if (psFetchInvitableCompanies == null) {
         psFetchInvitableCompanies = dalBackend.fetchPreparedStatement(query);
       }
-      
+
       psFetchInvitableCompanies
         .setInt(1, DateUtils.getAcademicYear(LocalDateTime.now()));
 
@@ -287,8 +287,12 @@ class CompanyDao implements ICompanyDao {
     String query =
         "SELECT c.company_id, c.creator, c.name, c.register_date, c.address_street, "
             + " c.address_num, c.address_mailbox, c.address_postcode, c.address_town, "
-            + " c.version " + "FROM business_days.participations p, business_days.companies c"
-            + " WHERE p.business_day = ?" + " AND p.company = c.company_id";
+            + " c.version "
+        + "FROM business_days.participations p, business_days.companies c "
+        + "WHERE p.company = c.company_id"
+        + " AND p.cancelled = FALSE"
+        + " AND p.state <> DECLINED"
+        + " AND p.business_day = ?";
 
     try {
       if (psFetchCompaniesByDay == null) {

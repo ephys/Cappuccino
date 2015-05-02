@@ -86,25 +86,25 @@ class CompanyUcc implements ICompanyUcc {
   @Override
   public ICompanyDto getCompanyById(int company) {
     if (company <= 0) {
-      throw new IllegalArgumentException("invalid id");
+      throw new IllegalArgumentException("Invalid company id " + company);
     }
 
     return companyDao.fetchCompanyById(company);
   }
 
   @Override
-  public List<ICompanyDto> getCompaniesByDay(int dayid) {
-    if (dayid <= 0) {
-      throw new IllegalArgumentException("invalid id");
+  public List<ICompanyDto> getCompaniesByDay(int dayId) {
+    if (dayId <= 0) {
+      throw new IllegalArgumentException("Invalid day id " + dayId);
     }
 
-    return companyDao.fetchCompaniesByDay(dayid);
+    return companyDao.fetchCompaniesByDay(dayId);
   }
 
   @Override
   public List<IParticipationDto> getCompanyParticipations(int companyId) {
     if (companyId <= 0) {
-      throw new IllegalArgumentException("L'id doit être positif");
+      throw new IllegalArgumentException("Invalid company id " + companyId);
     }
     return participationDao.fetchParticipationsByCompany(companyId);
   }

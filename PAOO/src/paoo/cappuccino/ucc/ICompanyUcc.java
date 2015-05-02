@@ -59,16 +59,22 @@ public interface ICompanyUcc {
   ICompanyDto getCompanyById(int company);
 
   /**
-   * Returns the list of companies participating at a given business day.
+   * <p>Returns the list of companies attending a given business day.
+   * This return every company that have been registered for a business day and have not cancelled
+   * nor declined their invitation (yet).</p>
    *
-   * @param dayid The identifier of the business day.
+   * <p>You can use {@link IBusinessDayUcc#getParticipations(int)} to fetch every registered
+   * participation for a given business day, even cancelled/denied ones.</p>
+   *
+   * @param dayId The identifier of the business day.
    */
-  List<ICompanyDto> getCompaniesByDay(int dayid);
+  List<ICompanyDto> getCompaniesByDay(int dayId);
 
   /**
-   * Returns the list of business days a company has attended.
+   * Returns the list of business days a company has attended (as in did not cancel nor decline
+   * the invitation to the event).
    *
    * @param companyId The identifier of the company.
    */
-  List<IParticipationDto> getCompanyParticipations(int companyId); // TODO& JUnits
+  List<IParticipationDto> getCompanyParticipations(int companyId);
 }

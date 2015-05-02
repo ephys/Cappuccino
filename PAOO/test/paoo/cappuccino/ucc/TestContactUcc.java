@@ -1,11 +1,5 @@
 package paoo.cappuccino.ucc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,7 +10,11 @@ import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
 import paoo.cappuccino.core.injector.Inject;
 
-// TODO: contactUcc.update()
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Contact UCC Unit Test.
@@ -42,7 +40,7 @@ public class TestContactUcc {
 
   @BeforeClass
   public static void systemInit() {
-    BaseMain main = new BaseMain(new AppContext("ContactUccTest", "0.1.1", "test"));
+    BaseMain main = new BaseMain(new AppContext("ContactUccTest", "0.2.0", "test"));
     injector = main.getInjector();
   }
 
@@ -162,9 +160,17 @@ public class TestContactUcc {
     contactUcc.getContactByCompany(-1);
   }
 
+  @Test
+  public void testGetContactById() {
+    assertNotNull(contactUcc.getContactById(1));
+  }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void testGetContactByIdNegative() {
+    assertNotNull(contactUcc.getContactById(-1));
+  }
 
-  // ====================== UPDATE --Check from here?
+  // ====================== UPDATE
 
   @Test
   public void testUpdateContactFine() {
@@ -172,22 +178,9 @@ public class TestContactUcc {
     IContactDto modifiedContact =
         contactUcc
             .update(contact.getId(), companyId2, emailCorrect2, firstName2, lastName2, phone2);
-    assertNotNull("contactUcc.update not return null", modifiedContact);
+    assertNotNull("contactUcc.update should not return null", modifiedContact);
 
     assertEquals("Company match failed", modifiedContact.getCompany(), companyId2);
-    assertEquals("Email match failed", modifiedContact.getEmail(), emailCorrect2);
-    assertEquals("First Name match failed", modifiedContact.getFirstName(), firstName2);
-    assertEquals("Last Name match failed", modifiedContact.getLastName(), lastName2);
-    assertEquals("Phone match failed", modifiedContact.getPhone(), phone2);
-  }
-
-  public void testUpdateContactFineCompanyNull() {
-    IContactDto contact = contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
-    IContactDto modifiedContact =
-        contactUcc.update(contact.getId(), 0, emailCorrect2, firstName2, lastName2, phone2);
-    assertNotNull("contactUcc.update not return null", modifiedContact);
-
-    assertEquals("Company match failed", modifiedContact.getCompany(), companyId);
     assertEquals("Email match failed", modifiedContact.getEmail(), emailCorrect2);
     assertEquals("First Name match failed", modifiedContact.getFirstName(), firstName2);
     assertEquals("Last Name match failed", modifiedContact.getLastName(), lastName2);
@@ -275,22 +268,4 @@ public class TestContactUcc {
     contactUcc.create(companyId, emailCorrect, firstName, lastName, phone);
     contactUcc.update(999, companyId, emailCorrect, firstName, lastName, phone);
   }
-
-  // ====================== GETCONTACTPARTICIPATIONS
-/*
-  @Test
-  public void testGetContactParticipations() {
-    assertNotNull(contactUcc.getContactParticipations(1));
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testGetContactParticipationsIdNull() {
-    contactUcc.getContactParticipations(0);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testGetContactParticipationsIdNegative() {
-    contactUcc.getContactParticipations(-1);
-  }
-  */
 }

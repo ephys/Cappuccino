@@ -5,15 +5,10 @@ package paoo.cappuccino.business.dto;
  *
  * @author Nicolas Fischer
  */
-public interface IBaseDto {
+public interface IBaseDto extends IVersionnedDto {
 
   /**
    * Gets the entity identifier.
    */
   int getId();
-
-  /**
-   * Gets the entity version.
-   */
-  int getVersion();
 }

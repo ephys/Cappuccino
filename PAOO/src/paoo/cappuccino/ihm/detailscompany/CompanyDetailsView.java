@@ -41,7 +41,7 @@ public class CompanyDetailsView extends JPanel {
 
   /**
    * Creates a view for the Company Details screen.
-   * 
+   *
    * @param model The model of the view.
    * @param userUcc App user use case controller.
    */
@@ -62,10 +62,9 @@ public class CompanyDetailsView extends JPanel {
     contactsTable.setRowHeight(35);
     contactsTable.getColumn(contactsTableTitles[0]).setCellRenderer(new ContactCellRenderer());
 
-
     // list participation
-    String[] participationsTableTiltes = new String[] {"Date", "Etat", "Personne de contact"};
-    this.participationTable = new JTable(new DefaultTableModel(participationsTableTiltes, 0) {
+    String[] participationTableTitles = new String[] {"Date", "Etat", "Personne de contact"};
+    this.participationTable = new JTable(new DefaultTableModel(participationTableTitles, 0) {
 
       @Override
       public boolean isCellEditable(int arg0, int arg1) {
@@ -73,15 +72,15 @@ public class CompanyDetailsView extends JPanel {
       }
     });
     participationTable.setRowHeight(35);
-    TableColumn datCol = participationTable.getColumn(participationsTableTiltes[0]);
+    TableColumn datCol = participationTable.getColumn(participationTableTitles[0]);
     datCol.setCellRenderer(new DateCellRenderer());
     datCol.setMaxWidth(datCol.getMaxWidth() / 4);
 
-    TableColumn statCol = participationTable.getColumn(participationsTableTiltes[1]);
+    TableColumn statCol = participationTable.getColumn(participationTableTitles[1]);
     statCol.setCellRenderer(new StateCellRenderer());
     statCol.setMaxWidth(statCol.getMaxWidth() / 4);
 
-    participationTable.getColumn(participationsTableTiltes[2]).setCellRenderer(
+    participationTable.getColumn(participationTableTitles[2]).setCellRenderer(
         new ContactFullCellRenderer());
 
 
@@ -151,7 +150,7 @@ public class CompanyDetailsView extends JPanel {
 
   /**
    * Called when the data to display changes.
-   * 
+   *
    * @param contacts The list of contacts of the company.
    */
   void stateChanged(List<IContactDto> contacts, List<IParticipationDto> participations) {

@@ -13,10 +13,9 @@ public interface IhmConstants {
    * gaps.
    */
   int M_GAP = 15;
-
   int L_GAP = 30;
-
   int XL_GAP = 100;
+
   /**
    * error if empty textarea.
    */
@@ -55,7 +54,7 @@ public interface IhmConstants {
   String ERROR_NUMERICAL_INPUT =
       "Ce champ ne peut contenir que des chiffres";
 
-  Color Font_Title = new Color(212, 82, 82);
+  Color MAIN_COLOR = new Color(212, 82, 82);
 
   String PATH_LOGO = "lib/logo.png";
   String ERROR_NO_COMPANY = "Aucune entreprise disponible";
@@ -78,7 +77,4 @@ public interface IhmConstants {
       "Une journée des entreprise existe déjà pour cette année.";
 
   String ERROR_TOO_LONG = "Nom trop long.";
-
-
-
 }

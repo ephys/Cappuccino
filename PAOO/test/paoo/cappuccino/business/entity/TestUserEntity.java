@@ -81,6 +81,12 @@ public class TestUserEntity {
   }
 
   @Test
+  public void testIsPassword() {
+    assertTrue(user.isPassword(password));
+    assertFalse(user.isPassword("chocolat".toCharArray()));
+  }
+
+  @Test
   public void testPasswordSetter() {
     IHashHolderDto newPassword = hasher.hash("chocolatine".toCharArray());
     user.setPassword(newPassword);

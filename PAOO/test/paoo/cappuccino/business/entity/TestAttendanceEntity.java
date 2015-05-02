@@ -5,7 +5,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import paoo.cappuccino.BaseMain;
-import paoo.cappuccino.business.dto.IAttendanceDto;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.DependencyInjector;
@@ -21,7 +20,7 @@ public class TestAttendanceEntity {
 
   @Inject
   private IEntityFactory entityFactory;
-  private IAttendanceDto attendance;
+  private IAttendance attendance;
 
   private static final int BUSINESS_DAY = 5;
   private static final int CONTACT = 12;
@@ -88,5 +87,14 @@ public class TestAttendanceEntity {
     IAttendance attendance2 = entityFactory.createAttendance(COMPANY, BUSINESS_DAY, CONTACT + 1);
 
     assertFalse(attendance2.equals(attendance));
+  }
+
+  @Test
+  public void testSetCancelled() {
+    attendance.setCancelled(true);
+    assertTrue(attendance.isCancelled());
+
+    attendance.setCancelled(false);
+    assertFalse(attendance.isCancelled());
   }
 }

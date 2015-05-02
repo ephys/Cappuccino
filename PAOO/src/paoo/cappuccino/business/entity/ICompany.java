@@ -1,5 +1,6 @@
 package paoo.cappuccino.business.entity;
 
+import paoo.cappuccino.business.dto.IBaseDto;
 import paoo.cappuccino.business.dto.ICompanyDto;
 
 /**
@@ -7,6 +8,6 @@ import paoo.cappuccino.business.dto.ICompanyDto;
  *
  * @author Nicolas Fischer
  */
-public interface ICompany extends ICompanyDto, IBaseEntity {
-  
+public interface ICompany extends ICompanyDto, IBaseDto, IVersionedEntity {
+
 }

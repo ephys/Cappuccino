@@ -1,5 +1,6 @@
 package paoo.cappuccino.business.entity;
 
+import paoo.cappuccino.business.dto.IBaseDto;
 import paoo.cappuccino.business.dto.IContactDto;
 
 /**
@@ -7,7 +8,7 @@ import paoo.cappuccino.business.dto.IContactDto;
  *
  * @author Nicolas Fischer
  */
-public interface IContact extends IContactDto, IBaseEntity {
+public interface IContact extends IContactDto, IBaseDto, IVersionedEntity {
   /**
    * Sets the contact mail. If the given email is not null, it will be considered valid and
    * {@link IContactDto#isEmailValid()} will return true again.

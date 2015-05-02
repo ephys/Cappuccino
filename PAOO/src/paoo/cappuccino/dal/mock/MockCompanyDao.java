@@ -136,7 +136,6 @@ class MockCompanyDao implements ICompanyDao {
     return toReturn;
   }
 
-
   @Override
   public List<ICompanyDto> fetchAll() {
     return Collections.unmodifiableList(companyList);
@@ -177,11 +176,13 @@ class MockCompanyDao implements ICompanyDao {
     List<ICompanyDto> toReturn = new ArrayList<>();
 
     for (ICompany company : companyList) {
-      List<IParticipationDto> companyParticipations =
+      List<IParticipationDto> companyParticipation =
           participationDao.fetchParticipationsByCompany(company.getId());
 
-      for (IParticipationDto participation : companyParticipations) {
-        if (participation.getBusinessDay() == businessDayId) {
+      for (IParticipationDto participation : companyParticipation) {
+        if (participation.getBusinessDay() == businessDayId
+            && !participation.isCancelled()
+            && participation.getState() != State.DECLINED) {
           toReturn.add(company);
           break;
         }

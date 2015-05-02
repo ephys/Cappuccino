@@ -34,7 +34,7 @@ public class CompanyDetailsViewController extends JPanel implements ChangeListen
 
   /**
    * Creates a view controller for the company details screen.
-   * 
+   *
    * @param model The model of the view.
    * @param menu The GUI menu model.
    * @param contactUcc App contact ucc instance.
@@ -106,8 +106,8 @@ public class CompanyDetailsViewController extends JPanel implements ChangeListen
 
 
       List<IAttendanceDto> attendanceForParticipation =
-          dayUcc.getAttendanceForParticipation(participations.get(i).getBusinessDay(),
-              participations.get(i).getCompany());
+          dayUcc.getAttendancesForParticipation(participations.get(i).getBusinessDay(),
+                                                participations.get(i).getCompany());
 
 
       for (IAttendanceDto attendance : attendanceForParticipation) {

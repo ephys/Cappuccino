@@ -86,6 +86,23 @@ final class ContactEntity extends BaseEntity implements IContact {
   }
 
   @Override
+  public void setLastName(String lastName) {
+    ValidationUtil.ensureNotNull(lastName, "lastName");
+    this.lastName = lastName;
+  }
+
+  @Override
+  public void setFirsName(String firstName) {
+    ValidationUtil.ensureNotNull(firstName, "firstName");
+    this.firstName = firstName;
+  }
+
+  @Override
+  public void setCompany(int company) {
+    this.companyId = company;
+  }
+
+  @Override
   public boolean equals(Object obj) {
     return obj == this
         || (obj instanceof IContactDto && ((IContactDto) obj).getId() == this.getId());
@@ -101,22 +118,5 @@ final class ContactEntity extends BaseEntity implements IContact {
     return "ContactEntity{" + "companyId=" + companyId + ", firstName='" + firstName + '\''
         + ", lastName='" + lastName + '\'' + ", phone='" + phone + '\'' + ", email='" + email
         + '\'' + ", emailValid=" + emailValid + '}';
-  }
-
-  @Override
-  public void setLastName(String lastName) {
-    ValidationUtil.ensureNotNull(lastName, "lastName");
-    this.lastName = lastName;
-  }
-
-  @Override
-  public void setFirsName(String firstName) {
-    ValidationUtil.ensureNotNull(firstName, "firstName");
-    this.firstName = firstName;
-  }
-
-  @Override
-  public void setCompany(int company) {
-    this.companyId = company;
   }
 }

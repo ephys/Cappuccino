@@ -2,13 +2,12 @@ package paoo.cappuccino.business.entity;
 
 import paoo.cappuccino.business.dto.IAttendanceDto;
 
-public interface IAttendance extends IAttendanceDto {
+public interface IAttendance extends IAttendanceDto, IVersionedEntity {
 
   /**
-   * Set the boolean cancelled of the attendance.
-   * 
-   * @param b the boolean
+   * (un)cancels the participation of a contact to a business day.
+   *
+   * @param cancelled the contact cancelled his participation.
    */
-  void setCancelled(Boolean bool);
-
+  void setCancelled(boolean cancelled);
 }

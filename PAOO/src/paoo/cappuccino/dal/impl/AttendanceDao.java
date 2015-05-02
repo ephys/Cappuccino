@@ -58,12 +58,12 @@ public class AttendanceDao implements IAttendanceDao {
     return null;
   }
 
-
   @Override
-  public void updateAttendance(IAttendance attendance) {
+  public void updateAttendance(IAttendanceDto attendance) {
     String query =
-        "UPDATE business_days.attendances " + "SET cancelled = ?," + " version = version + 1 "
-            + "WHERE company = ? AND business_day = ? AND contact = ? AND version = ?";
+        "UPDATE business_days.attendances "
+        + "SET cancelled = ?, version = version + 1 "
+        + "WHERE company = ? AND business_day = ? AND contact = ? AND version = ?";
 
     try {
       if (psUpdateAttendance == null) {
@@ -76,14 +76,13 @@ public class AttendanceDao implements IAttendanceDao {
       psUpdateAttendance.setInt(4, attendance.getContact());
       psUpdateAttendance.setInt(5, attendance.getVersion());
 
-
       int affectedRows = psUpdateAttendance.executeUpdate();
       if (affectedRows == 0) {
         throw new ConcurrentModificationException("The attendance with id "
             + attendance.getBusinessDay() + ":" + attendance.getCompany() + ":"
             + attendance.getContact() + " (businessday,company,contact) and version "
             + attendance.getVersion() + " was not found in the database. "
-            + "It either was deleted or modified by another thread.");
+            + "It was either deleted or modified by another thread.");
       }
 
     } catch (SQLException e) {
@@ -125,7 +124,7 @@ public class AttendanceDao implements IAttendanceDao {
   public List<IAttendanceDto> fetchAttendancesByContact(int contactId) {
     String query =
         "SELECT a.company, a.business_day, a.contact, a.cancelled, a.version "
-            + "FROM business_days.attendances a " 
+            + "FROM business_days.attendances a "
             + "WHERE a.contact =  ?";
 
     try {
@@ -150,8 +149,6 @@ public class AttendanceDao implements IAttendanceDao {
     throw new FatalException("unreachable statement");
   }
 
-
-
   private IAttendance makeEntityFromSet(ResultSet rs) throws SQLException {
     int company = rs.getInt(1);
     int businessDay = rs.getInt(2);
@@ -170,7 +167,4 @@ public class AttendanceDao implements IAttendanceDao {
 
     throw new FatalException("Database error", exception);
   }
-
-
-
 }

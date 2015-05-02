@@ -43,7 +43,7 @@ public class JTableCompaniesViewController extends JPanel implements ChangeListe
 
   /**
    * Creates a view for the company search screen.
-   * 
+   *
    * @param menu the model of the main menu to change page.
    * @param model The model of the view.
    * @param companyUcc The app instance of the company ucc.
@@ -149,10 +149,7 @@ public class JTableCompaniesViewController extends JPanel implements ChangeListe
     for (int i = 0; i < companies.size(); i++) {
       ICompanyDto company = companies.get(i);
       IUserDto creator = userUcc.getUserById(company.getCreator());
-      String creatorName = "inconnu";
-      if (creator != null) {
-        creatorName = creator.getUsername();
-      }
+      String creatorName = creator == null ? "inconnu" : creator.getUsername();
 
       tableModel.setValueAt(company, i, 0);
       tableModel.setValueAt(LocalizationUtil.localizeAddress(company), i, 1);

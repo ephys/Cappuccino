@@ -1,7 +1,6 @@
 package paoo.cappuccino;
 
 import paoo.cappuccino.core.AppContext;
-import paoo.cappuccino.core.AppContext.Profile;
 import paoo.cappuccino.ihm.core.IGuiManager;
 import paoo.cappuccino.ihm.login.LoginFrame;
 
@@ -27,45 +26,8 @@ public class Main extends BaseMain {
   }
 
   private void createGui() {
-    IGuiManager guiManager =
-        getInjector().buildDependency(IGuiManager.class);
+    IGuiManager guiManager = getInjector().buildDependency(IGuiManager.class);
 
-    if (getContext().getProfileType() != Profile.DEV) {
-      guiManager.openFrame(LoginFrame.class);
-      return;
-    }
-
-    // guiManager.getLogger().warning("[LoginFrame] Skipping login.");
-    guiManager.openFrame(LoginFrame.class);/*
-                                            * .setLoggedUser(new IUserDto() {
-                                            * 
-                                            * @Override public String getUsername() { return
-                                            * "john_"; }
-                                            * 
-                                            * @Override public IHashHolderDto getPassword() { return
-                                            * null; }
-                                            * 
-                                            * @Override public String getFirstName() { return
-                                            * "Nicolas"; }
-                                            * 
-                                            * @Override public String getLastName() { return
-                                            * "Fisher"; }
-                                            * 
-                                            * @Override public String getEmail() { return
-                                            * "smith@something.net"; }
-                                            * 
-                                            * @Override public LocalDateTime getRegisterDate() {
-                                            * return LocalDateTime.now(); }
-                                            * 
-                                            * @Override public Role getRole() { return Role.ADMIN; }
-                                            * 
-                                            * @Override public boolean isPassword(char[] password) {
-                                            * return Arrays.equals(password, "pomme".toCharArray());
-                                            * }
-                                            * 
-                                            * @Override public int getId() { return 1; }
-                                            * 
-                                            * @Override public int getVersion() { return 1; } });
-                                            */
+    guiManager.openFrame(LoginFrame.class);
   }
 }

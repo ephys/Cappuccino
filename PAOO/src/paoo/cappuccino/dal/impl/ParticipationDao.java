@@ -99,9 +99,9 @@ class ParticipationDao implements IParticipationDao {
 
   @Override
   public List<IParticipationDto> fetchParticipationsByDate(int businessDayId) {
-    String query =
-        "SELECT company, business_day, state, cancelled, version "
-            + "FROM business_days.participations " + "WHERE business_day = ?";
+    String query = "SELECT p.company, p.business_day, p.state, p.cancelled, p.version "
+                   + "FROM business_days.participations p "
+                   + "WHERE p.business_day = ?";
 
     try {
       if (psFetchParticipationsByDate == null) {
@@ -128,9 +128,11 @@ class ParticipationDao implements IParticipationDao {
 
   @Override
   public List<IParticipationDto> fetchParticipationsByCompany(int companyId) {
-    String query =
-        "SELECT company, business_day, state, cancelled, version "
-            + "FROM business_days.participations " + "WHERE company = ?";
+    String query = "SELECT p.company, p.business_day, p.state, p.cancelled, p.version "
+                   + "FROM business_days.participations p "
+                   + "WHERE p.company = ?"
+                   + " AND p.cancelled = FALSE"
+                   + " AND p.state <> DECLINED";
 
     try {
       if (psFetchParticipationsByCompany == null) {

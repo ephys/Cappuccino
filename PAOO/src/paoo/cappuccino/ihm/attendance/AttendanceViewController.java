@@ -208,7 +208,7 @@ public class AttendanceViewController extends JPanel implements ChangeListener,
                     + currentContact.getLastName() + "]");
               }
             }
-            if (contactsToAdd.size() == 0) { 
+            if (contactsToAdd.size() == 0) {
               if (JOptionPane
                   .showConfirmDialog(this,
                       "Personne n'est selectionné. Valider ?") != JOptionPane.OK_OPTION) {
@@ -216,8 +216,8 @@ public class AttendanceViewController extends JPanel implements ChangeListener,
               }
             }
 
-            businessDayUcc.addInvitedContacts(contactsToAdd, model.getSelectedDay(),
-                model.getSelectedCompany());
+            businessDayUcc.setInvitedContacts(contactsToAdd, model.getSelectedDay(),
+                                              model.getSelectedCompany());
 
             JOptionPane.showMessageDialog(this, "Participations enregistrées");
             if (contactsToAdd.size() == 0) {
@@ -306,7 +306,7 @@ public class AttendanceViewController extends JPanel implements ChangeListener,
     }
 
     final List<IAttendanceDto> attendances =
-        businessDayUcc.getAttendanceForParticipation(model.getSelectedDay().getId(), model
+        businessDayUcc.getAttendancesForParticipation(model.getSelectedDay().getId(), model
             .getSelectedCompany().getId());
 
     final List<IContactDto> contacts =

@@ -40,7 +40,8 @@ public interface IParticipationDao {
   List<IParticipationDto> fetchParticipationsByDate(int businessDayId);
 
   /**
-   * Fetches the list of participations of a company.
+   * Fetches the list of participations of a company. This will not return participations that
+   * have been declined/cancelled
    *
    * @param companyId The id of the company.
    * @return The list of participations.

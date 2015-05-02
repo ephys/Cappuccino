@@ -14,8 +14,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-// TODO: test contact entity
-
 public class TestContactEntity {
 
   private final static int idCompany = 1;
@@ -101,6 +99,24 @@ public class TestContactEntity {
   public void testSetPhone() {
     contact.setPhone("0499999999");
     assertEquals("0499999999", contact.getPhone());
+  }
+
+  @Test
+  public void testSetCompany() {
+    contact.setCompany(5);
+    assertEquals(5, contact.getCompany());
+  }
+
+  @Test
+  public void testSetFirstName() {
+    contact.setFirsName("john");
+    assertEquals("john", contact.getFirstName());
+  }
+
+  @Test
+  public void testSetLastName() {
+    contact.setLastName("doe");
+    assertEquals("doe", contact.getLastName());
   }
 
   @Test

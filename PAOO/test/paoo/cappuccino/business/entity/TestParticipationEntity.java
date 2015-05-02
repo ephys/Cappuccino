@@ -53,8 +53,6 @@ public class TestParticipationEntity {
     assertEquals(companyId, participation.getCompany());
   }
 
-  // TODO demander a leconte
-  // TODO rename test
   @Test
   public void testSetStateConfirmed() {
     participation.setState(State.CONFIRMED);
@@ -108,25 +106,16 @@ public class TestParticipationEntity {
   }
 
   @Test(expected = IllegalStateException.class)
+  public void testSetState11() {
+    participation.setState(State.CONFIRMED);
+    participation.setState(State.BILLED);
+    participation.setCancelled(true);
+    participation.setCancelled(true);
+  }
+
+  @Test(expected = IllegalStateException.class)
   public void testSetState10() {
     participation.setState(State.PAID);
-  }
-
-  @Test
-  public void testGetVersion() {
-    assertEquals(0, participation.getVersion());
-  }
-
-  @Test
-  public void testIncrementVersion() {
-    int version = participation.getVersion();
-    int incrementedVersion = participation.incrementVersion();
-
-    assertEquals("user.incrementVersion() (" + incrementedVersion
-                 + ") dit not match the older version (" + version + ") + 1", version + 1,
-                 incrementedVersion);
-    assertEquals("user.getVersion() did not match the value returned by user.incrementVersion()",
-                 participation.getVersion(), incrementedVersion);
   }
 
   @Test

@@ -37,6 +37,7 @@ public interface IUserUcc {
 
   /**
    * Fetches the user matching a given id.
+   *
    * @param id The user identifier.
    * @return The user or null if none matched.
    */

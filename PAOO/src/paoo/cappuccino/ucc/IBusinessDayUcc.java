@@ -41,8 +41,7 @@ public interface IBusinessDayUcc {
    * @param businessDay The business day the list must be added to.
    * @param company The company of the contacts
    */
-  void addInvitedContacts(List<Integer> contacts,
-      IBusinessDayDto businessDay, ICompanyDto companyDto);
+  void setInvitedContacts(List<Integer> contacts, IBusinessDayDto businessDay, ICompanyDto company);
 
   /**
    * Changes the state of a participation.
@@ -77,22 +76,22 @@ public interface IBusinessDayUcc {
    *
    * @param id the business day id.
    */
-  IBusinessDayDto getBusinessDay(int id); // TODO:Junits
+  IBusinessDayDto getBusinessDay(int id);
 
   /**
-   * Returns the list of companies attending the business day matching a given identifier.
+   * Returns the list of companies invited to a given business day,
+   * no matter what the state of the participation if.
    *
    * @param businessDayId The identifier of the business day.
    */
   List<IParticipationDto> getParticipations(int businessDayId);
 
   /**
-   * Returns the list of attendances of a company attending a given business day.
+   * Returns the list of invited contacts for a given company and business day.
    *
    * @param company The company the contacts are working for.
    * @param businessDay The business day the contacts are attending.
    */
-  List<IAttendanceDto> getAttendanceForParticipation(int businessDay,
-      int company);
-
+  List<IAttendanceDto> getAttendancesForParticipation(int businessDay,
+                                                      int company);
 }

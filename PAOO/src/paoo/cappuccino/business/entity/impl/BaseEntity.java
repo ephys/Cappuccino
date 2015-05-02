@@ -1,39 +1,25 @@
 package paoo.cappuccino.business.entity.impl;
 
-import paoo.cappuccino.business.entity.IBaseEntity;
+import paoo.cappuccino.business.dto.IBaseDto;
+import paoo.cappuccino.business.entity.IVersionedEntity;
 
 /**
  * Class implementing methods shared by every other entity.
  *
  * @author Nicolas Fischer
  */
-abstract class BaseEntity implements IBaseEntity {
+abstract class BaseEntity extends VersionedEntity implements IBaseDto, IVersionedEntity {
 
   private final int id;
-  private int version;
-
-  public BaseEntity(int id) {
-    this.id = id;
-  }
 
   public BaseEntity(int id, int version) {
-    this(id);
-    this.version = version;
+    super(version);
+    this.id = id;
   }
 
   @Override
   public int getId() {
     return id;
-  }
-
-  @Override
-  public int getVersion() {
-    return version;
-  }
-
-  @Override
-  public int incrementVersion() {
-    return ++this.version;
   }
 
   @Override

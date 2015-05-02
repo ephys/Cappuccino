@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import paoo.cappuccino.business.dto.IParticipationDto;
+import paoo.cappuccino.business.dto.IParticipationDto.State;
 import paoo.cappuccino.business.entity.IParticipation;
 import paoo.cappuccino.business.entity.factory.IEntityFactory;
 import paoo.cappuccino.core.injector.Inject;
@@ -23,13 +24,13 @@ class MockParticipationDao implements IParticipationDao {
   public MockParticipationDao(IEntityFactory factory) {
     this.factory = factory;
     createParticipation(factory.createParticipation(1, 1, false, 2,
-                                                    IParticipationDto.State.INVITED));
+                                                    State.INVITED));
     createParticipation(factory.createParticipation(2, 1, false, 2,
-                                                    IParticipationDto.State.BILLED));
+                                                    State.BILLED));
     createParticipation(factory.createParticipation(3, 2, false, 2,
-                                                    IParticipationDto.State.BILLED));
+                                                    State.BILLED));
     createParticipation(factory.createParticipation(4, 1, false, 2,
-                                                    IParticipationDto.State.DECLINED));
+                                                    State.DECLINED));
   }
 
   @Override
@@ -82,7 +83,9 @@ class MockParticipationDao implements IParticipationDao {
   @Override
   public List<IParticipationDto> fetchParticipationsByCompany(int companyId) {
     return participationList.stream()
-        .filter(participation -> participation.getCompany() == companyId)
+        .filter(participation -> participation.getCompany() == companyId
+                                 && !participation.isCancelled()
+                                 && participation.getState() != State.DECLINED)
         .collect(Collectors.toList());
   }
 }

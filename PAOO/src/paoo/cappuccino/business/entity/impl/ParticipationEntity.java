@@ -9,13 +9,12 @@ import paoo.cappuccino.util.ParticipationUtils;
  *
  * @author Nicolas Fischer
  */
-final class ParticipationEntity implements IParticipation {
-  private State state;
-  private int businessDay;
-  private int company;
-  private int version;
-  private boolean cancelled;
+final class ParticipationEntity extends VersionedEntity implements IParticipation {
 
+  private final int businessDay;
+  private final int company;
+  private State state;
+  private boolean cancelled;
 
   public ParticipationEntity(int businessDayId, int companyId) {
     this(0, State.INVITED, false, businessDayId, companyId);
@@ -23,11 +22,11 @@ final class ParticipationEntity implements IParticipation {
 
   public ParticipationEntity(int version, State state, boolean cancelled, int businessDayId,
                              int companyId) {
+    super(version);
     this.state = state;
     this.cancelled = cancelled;
     this.businessDay = businessDayId;
     this.company = companyId;
-    this.version = version;
   }
 
   @Override
@@ -56,7 +55,7 @@ final class ParticipationEntity implements IParticipation {
     }
 
     throw new IllegalStateException("Invalid state " + newState.name()
-        + " cannot be transitioned directly from " + state.name());
+                                    + " cannot be transitioned directly from " + state.name());
   }
 
   @Override
@@ -65,16 +64,11 @@ final class ParticipationEntity implements IParticipation {
       throw new IllegalStateException("Cannot cancel this participation, it hasn't been accepted.");
     }
 
-    if (cancelled && this.cancelled) {
+    if (cancelled == this.cancelled) {
       throw new IllegalStateException("This participation is already cancelled.");
     }
 
     this.cancelled = cancelled;
-  }
-
-  @Override
-  public int getVersion() {
-    return this.version;
   }
 
   @Override
@@ -83,15 +77,10 @@ final class ParticipationEntity implements IParticipation {
   }
 
   @Override
-  public int incrementVersion() {
-    return ++this.version;
-  }
-
-  @Override
   public boolean equals(Object obj) {
     return obj == this || (obj instanceof IParticipationDto
-           && ((IParticipationDto) obj).getCompany() == this.getCompany()
-           && ((IParticipationDto) obj).getBusinessDay() == this.getBusinessDay());
+                           && ((IParticipationDto) obj).getCompany() == this.getCompany()
+                           && ((IParticipationDto) obj).getBusinessDay() == this.getBusinessDay());
   }
 
   @Override
@@ -107,7 +96,6 @@ final class ParticipationEntity implements IParticipation {
            + "state=" + state
            + ", businessDay=" + businessDay
            + ", company=" + company
-           + ", version=" + version
            + ", cancelled=" + cancelled
            + '}';
   }

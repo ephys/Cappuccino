@@ -67,12 +67,11 @@ public interface ICompanyDao {
    */
   List<ICompanyDto> fetchInvitableCompanies();
 
-
   /**
    * Fetches the company matching a given id.
    *
-   * @param id The id of the company
-   * @return The id's company or null if none was found
+   * @param id The id of the company.
+   * @return The id's company or null if none was found.
    * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   ICompanyDto fetchCompanyById(int id);
@@ -80,9 +79,10 @@ public interface ICompanyDao {
   /**
    * Fetches the list of companies participating at a business day.
    *
-   * @param businessDayId The id of the business day
-   * @return Every companies who was present or null if none was found
-   * @throws paoo.cappuccino.util.exception.FatalException Database connection error
+   * @param businessDayId The id of the business day.
+   * @return The list of companies which did not decline nor cancel their invitation
+   *         to the business day.
+   * @throws paoo.cappuccino.util.exception.FatalException Database connection error.
    */
   List<ICompanyDto> fetchCompaniesByDay(int businessDayId);
 }

@@ -1,5 +1,6 @@
 package paoo.cappuccino.business.entity;
 
+import paoo.cappuccino.business.dto.IBaseDto;
 import paoo.cappuccino.business.dto.IUserDto;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
 
@@ -8,7 +9,7 @@ import paoo.cappuccino.util.hasher.IHashHolderDto;
  *
  * @author Nicolas Fischer
  */
-public interface IUser extends IUserDto, IBaseEntity {
+public interface IUser extends IUserDto, IBaseDto, IVersionedEntity {
   /**
    * Sets the user password.
    *

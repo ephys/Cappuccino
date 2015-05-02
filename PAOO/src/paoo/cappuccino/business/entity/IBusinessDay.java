@@ -1,5 +1,6 @@
 package paoo.cappuccino.business.entity;
 
+import paoo.cappuccino.business.dto.IBaseDto;
 import paoo.cappuccino.business.dto.IBusinessDayDto;
 
 /**
@@ -7,6 +8,6 @@ import paoo.cappuccino.business.dto.IBusinessDayDto;
  *
  * @author Nicolas Fischer
  */
-public interface IBusinessDay extends IBusinessDayDto, IBaseEntity {
+public interface IBusinessDay extends IBusinessDayDto, IBaseDto, IVersionedEntity {
 
 }
