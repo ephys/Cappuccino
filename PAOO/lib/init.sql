@@ -176,7 +176,7 @@ VALUES (DEFAULT, 5, 'Virginie.BRASSINNE@bewan.be', DEFAULT, 'Virginie', 'Brassin
 INSERT INTO business_days.contacts
 VALUES (DEFAULT, 5, 'isabelle.croiset@bewan.be', DEFAULT, 'Isabelle', 'Croiset', NULL, DEFAULT);
 INSERT INTO business_days.contacts
-VALUES (DEFAULT, 5, 'Dedecker drh@bewan.b', DEFAULT, 'Bénédicte', 'Dedecker', NULL, DEFAULT);
+VALUES (DEFAULT, 5, 'drh@bewan.be', DEFAULT, 'Bénédicte', 'Dedecker', NULL, DEFAULT);
 -- Attendances
 INSERT INTO business_days.attendances VALUES (5, 2, 7, DEFAULT);
 INSERT INTO business_days.attendances VALUES (5, 2, 8, DEFAULT);
