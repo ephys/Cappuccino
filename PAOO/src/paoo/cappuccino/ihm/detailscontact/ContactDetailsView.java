@@ -33,7 +33,7 @@ public class ContactDetailsView extends JPanel implements ChangeListener {
    *
    * @param model The model of the view.
    * @param markEmailInvalidButton The button used to mark an email as invalid.
-   * @param modify
+   * @param modify The button used to save changes to the contact
    * @param companyUcc The app instance of the company use case controller.
    * @param menu The model of the gui menu.
    */

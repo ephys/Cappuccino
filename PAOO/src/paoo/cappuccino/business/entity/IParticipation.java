@@ -11,7 +11,8 @@ import paoo.cappuccino.util.ParticipationUtils;
 public interface IParticipation extends IParticipationDto, IVersionedEntity {
 
   /**
-   * Changes the state of the participation. See {@link ParticipationUtils#getFollowingStates(IParticipationDto.State)}
+   * Changes the state of the participation. See
+   * {@link ParticipationUtils#getFollowingStates(IParticipationDto.State)}
    * to know which states are valid.
    *
    * @param state The new state.
