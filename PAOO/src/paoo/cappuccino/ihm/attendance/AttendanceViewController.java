@@ -197,15 +197,15 @@ public class AttendanceViewController extends JPanel implements ChangeListener,
 
           if (model.getSelectedDay() != null && model.getSelectedCompany() != null) {
 
-
             List<Integer> contactsToAdd = new ArrayList<>();
             StringBuilder listContacts = new StringBuilder();
             for (int i = 0; i < contactsTable.getRowCount(); i++) {
               if ((boolean) contactsTable.getValueAt(i, 3)) {
                 IContactDto currentContact = (IContactDto) contactsTable.getValueAt(i, 0);
                 contactsToAdd.add(currentContact.getId());
-                listContacts.append("[" + currentContact.getFirstName() + " "
-                    + currentContact.getLastName() + "]");
+                listContacts
+                    .append("[").append(currentContact.getFirstName())
+                    .append(" ").append(currentContact.getLastName()).append("]");
               }
             }
             if (contactsToAdd.size() == 0) {
@@ -229,7 +229,6 @@ public class AttendanceViewController extends JPanel implements ChangeListener,
                   "[New Attendance] " + model.getSelectedDay().getEventDate() + " / "
                       + model.getSelectedCompany().getName() + " / " + listContacts.toString());
             }
-            menu.setCurrentPage(MenuEntry.COMPANY_DETAILS, model.getSelectedCompany());
           } else {
             JOptionPane.showMessageDialog(this,
                 "Veuillez sélèctionner une journée et une entreprise.");

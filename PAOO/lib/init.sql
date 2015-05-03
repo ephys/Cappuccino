@@ -81,11 +81,11 @@ CREATE TABLE IF NOT EXISTS business_days.attendances (
 );
 
 INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN',
-                                        'pbkdf2:06aced1c74516813441f1bb160301619f0e6290c8c080a53c3d769d7f04372194994cbf16c930925d32d1514206ff8c2d1fb0f5828d63f6909ab7ea758d2c172:8214f59f6939c1e14dd30324790c4592:1000',
+                                        'pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000',
                                         'dgrolaux@ipl.be', 'dgrolaux', 'Donatien', 'Grolaux',
                                         DEFAULT, DEFAULT);
 INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN',
-                                        'pbkdf2:06aced1c74516813441f1bb160301619f0e6290c8c080a53c3d769d7f04372194994cbf16c930925d32d1514206ff8c2d1fb0f5828d63f6909ab7ea758d2c172:8214f59f6939c1e14dd30324790c4592:1000',
+                                        'pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000',
                                         'blehmann@ipl.be', 'blehmann', 'Brigitte', 'Lehmann',
                                         DEFAULT, DEFAULT);
 
@@ -185,3 +185,7 @@ INSERT INTO business_days.attendances VALUES (5, 5, 9, DEFAULT);
 INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN',
                                         'pbkdf2:81a2626cd1753863c79b61ddcec76a01200417296d3180652385111c051f67edbe25045b8ce1c6efc9596b0b7cec2cedc751110b9ee0f5521249872d0ed13714:49f148ee80fd772c7e63d2e784ff757c:1000',
                                         'Ades@enfer.be', 'admin', 'Ades', 'Mars', DEFAULT, DEFAULT);
+
+INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN',
+                                        'pbkdf2:06aced1c74516813441f1bb160301619f0e6290c8c080a53c3d769d7f04372194994cbf16c930925d32d1514206ff8c2d1fb0f5828d63f6909ab7ea758d2c172:8214f59f6939c1e14dd30324790c4592:1000',
+                                        'Ades@enfer.be', 'linux', 'Ades', 'Mars', DEFAULT, DEFAULT);
