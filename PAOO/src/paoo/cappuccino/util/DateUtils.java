@@ -26,4 +26,8 @@ public class DateUtils {
 
     return year;
   }
+
+  public static int getAcademicYear() {
+    return getAcademicYear(LocalDateTime.now());
+  }
 }

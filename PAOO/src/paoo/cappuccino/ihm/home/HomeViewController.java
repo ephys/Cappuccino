@@ -9,7 +9,6 @@ import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.swing.ComboBoxModel;
@@ -50,6 +49,7 @@ import paoo.cappuccino.ihm.util.cellrenderers.StateCellRenderer;
 import paoo.cappuccino.ihm.util.disableablecombo.DisableableComboRenderer;
 import paoo.cappuccino.ucc.IBusinessDayUcc;
 import paoo.cappuccino.ucc.ICompanyUcc;
+import paoo.cappuccino.util.DateUtils;
 import paoo.cappuccino.util.ParticipationUtils;
 
 /**
@@ -120,7 +120,8 @@ public class HomeViewController extends JPanel implements ChangeListener {
       public boolean isCellEditable(int row, int column) {
         IBusinessDayDto day = model.getSelectedDay();
 
-        if (day == null || day.getEventDate().isBefore(LocalDateTime.now())) {
+        if (day == null
+            || DateUtils.getAcademicYear(day.getEventDate()) < DateUtils.getAcademicYear()) {
           return false;
         }
 

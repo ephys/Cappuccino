@@ -66,8 +66,13 @@ public class CompanyDetailsViewController extends JPanel implements ChangeListen
       @Override
       public void mouseClicked(MouseEvent event) {
         if (event.getClickCount() == 2) {
-          menu.setCurrentPage(MenuEntry.CONTACT_DETAILS,
-              participationsTable.getModel().getValueAt(participationsTable.getSelectedRow(), 2));
+          IContactDto contact = (IContactDto) participationsTable.getModel()
+              .getValueAt(participationsTable.getSelectedRow(), 2);
+          if (contact == null) {
+            return;
+          }
+
+          menu.setCurrentPage(MenuEntry.CONTACT_DETAILS, contact);
         }
       }
     });
@@ -87,7 +92,6 @@ public class CompanyDetailsViewController extends JPanel implements ChangeListen
     List<IContactDto> contacts = contactUcc.getContactByCompany(company.getId());
     List<IParticipationDto> participations = companyUcc.getCompanyParticipations(company.getId());
 
-
     DefaultTableModel contactTableModel = (DefaultTableModel) contactsTable.getModel();
     contactTableModel.setRowCount(contacts.size());
     for (int i = 0; i < contacts.size(); i++) {
@@ -102,29 +106,25 @@ public class CompanyDetailsViewController extends JPanel implements ChangeListen
     DefaultTableModel participationTableModel = (DefaultTableModel) participationsTable.getModel();
 
     int previousDay = -1; // id impossible
-    for (int i = 0; i < participations.size(); i++) {
-
+    for (IParticipationDto participation : participations) {
 
       List<IAttendanceDto> attendanceForParticipation =
-          dayUcc.getAttendancesForParticipation(participations.get(i).getBusinessDay(),
-                                                participations.get(i).getCompany());
-
+          dayUcc.getAttendancesForParticipation(participation.getBusinessDay(),
+                                                participation.getCompany());
 
       for (IAttendanceDto attendance : attendanceForParticipation) {
-        IParticipationDto currentParticipation = participations.get(i);
-        int day = currentParticipation.getBusinessDay();
+        int day = participation.getBusinessDay();
         IContactDto contact = contactUcc.getContactById(attendance.getContact());
 
         if (day != previousDay) {
           previousDay = day;
           IBusinessDayDto dayDto = dayUcc.getBusinessDay(day);
 
-
-          participationTableModel.addRow(new Object[] {dayDto.getEventDate(),
-              currentParticipation.getState(), null});
+          participationTableModel.addRow(new Object[]{dayDto.getEventDate(),
+                                                      participation.getState(), null});
 
         }
-        participationTableModel.addRow(new Object[] {null, attendance.isCancelled(), contact});
+        participationTableModel.addRow(new Object[]{null, attendance.isCancelled(), contact});
       }
     }
 
