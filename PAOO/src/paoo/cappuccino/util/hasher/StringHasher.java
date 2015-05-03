@@ -41,10 +41,6 @@ class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash
 
   @Override
   public boolean matchHash(final char[] toHash, final IHashHolderDto currentHashData) {
-    System.out.println("password: " + Arrays.toString(toHash));
-    System.out.println("password hash: " + serialize(hash(toHash, (IHashHolder) currentHashData)));
-    System.out.println("stored hash  : " + serialize(currentHashData));
-
     byte[] newHash = hash(toHash, (IHashHolder) currentHashData).getHash();
     byte[] currentHash = currentHashData.getHash();
 

@@ -33,8 +33,13 @@ public class RegistrationFrame extends BaseFrame {
     this.getContentPane().setBackground(new Color(212, 82, 82));
 
     this.setLayout(new GridBagLayout());
-    this.add(new RegistrationViewController(new RegistrationModel(), guiManager, userUcc),
-             new GridBagConstraints());
+
+    RegistrationViewController viewController = new RegistrationViewController(
+        new RegistrationModel(), guiManager, userUcc);
+
+    this.add(viewController, new GridBagConstraints());
+
+    getRootPane().setDefaultButton(viewController.getSubmitButton());
 
     this.setVisible(true);
   }

@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.swing.ComboBoxModel;
@@ -117,13 +118,20 @@ public class HomeViewController extends JPanel implements ChangeListener {
 
       @Override
       public boolean isCellEditable(int row, int column) {
+        IBusinessDayDto day = model.getSelectedDay();
+
+        if (day == null || day.getEventDate().isBefore(LocalDateTime.now())) {
+          return false;
+        }
+
         if (column == 0) {
           return false;
         }
 
         IParticipationDto participation = (IParticipationDto) tableModel.getValueAt(row, 2);
 
-        return !participation.isCancelled();
+        return !participation.isCancelled()
+               && participation.getState() != State.DECLINED;
       }
     };
 

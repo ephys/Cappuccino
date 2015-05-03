@@ -62,8 +62,6 @@ public class RegistrationViewController extends JPanel implements IDefaultButton
     JTextField firstNameField = new JTextField();
     JTextField emailField = new JTextField();
 
-
-
     validateButton = new JButton("Valider");
     validateButton.addActionListener(e -> {
       IUserDto user =
@@ -98,7 +96,7 @@ public class RegistrationViewController extends JPanel implements IDefaultButton
 
   /**
    * Tries to register a user.
-   * 
+   *
    * @return a user or null if registration failed
    */
   private IUserDto attemptRegistration(String username, char[] password, char[] confirmPassword,

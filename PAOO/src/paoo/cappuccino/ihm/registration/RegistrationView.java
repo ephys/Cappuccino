@@ -19,14 +19,13 @@ import paoo.cappuccino.ihm.util.IhmConstants;
 @SuppressWarnings("serial")
 public class RegistrationView extends JPanel implements ChangeListener {
 
-  private RegistrationModel model;
-  private ErrorableTextField usernamePanel;
-  private ErrorableTextField passwordPanel;
-  private ErrorableTextField confirmPasswordPanel;
-  private ErrorableTextField lastNamePanel;
-  private ErrorableTextField firstNamePanel;
-  private ErrorableTextField emailPanel;
-
+  private final RegistrationModel model;
+  private final ErrorableTextField usernamePanel;
+  private final ErrorableTextField passwordPanel;
+  private final ErrorableTextField confirmPasswordPanel;
+  private final ErrorableTextField lastNamePanel;
+  private final ErrorableTextField firstNamePanel;
+  private final ErrorableTextField emailPanel;
 
   /**
    * Creates a new registration view.

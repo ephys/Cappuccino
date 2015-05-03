@@ -15,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 import paoo.cappuccino.business.dto.ICompanyDto;
 import paoo.cappuccino.business.dto.IContactDto;
 import paoo.cappuccino.ihm.core.IDefaultButtonHandler;
+import paoo.cappuccino.ihm.menu.MenuEntry;
 import paoo.cappuccino.ihm.menu.MenuModel;
 import paoo.cappuccino.ihm.util.CompanyListRenderer;
 import paoo.cappuccino.ihm.util.IhmConstants;
@@ -65,7 +66,7 @@ public class NewContactViewController extends JPanel implements IDefaultButtonHa
       contactMailField.setText(contactToModify.getEmail());
       contactPhoneField.setText(contactToModify.getPhone());
       companiesCombo.setSelectedItem(companyUcc.getCompanyById(contactToModify.getCompany()));
-      model.setErrors("", "", "");
+      model.setErrors(null, null, null);
     }
 
     if (model.getCompany() != null) {
@@ -106,12 +107,10 @@ public class NewContactViewController extends JPanel implements IDefaultButtonHa
                 contactFirstNameField.getText(), contactLastNameField.getText(),
                 contactPhoneField.getText());
       }
-      model.setErrors("", "", "");;
-      contactFirstNameField.setText("");
-      contactLastNameField.setText("");
-      contactMailField.setText("");
-      contactPhoneField.setText("");
+
       JOptionPane.showMessageDialog(this, editionMode ? "Contact modifié" : "Contact créé");
+
+      menu.setCurrentPage(MenuEntry.CONTACT_DETAILS, contact);
     });
   }
 

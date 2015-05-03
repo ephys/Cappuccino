@@ -39,7 +39,7 @@ public interface IhmConstants {
   /**
    * error invalid password.
    */
-  String ERROR_INVALID_PASSWORD = "Le mot de passe spécifié est invalide.";
+  String ERROR_INVALID_PASSWORD = "Le mot de passe spécifié est invalide (min 6 chars).";
 
   String NAME_ALREADY_TAKEN = "Nom déjà pris";
 

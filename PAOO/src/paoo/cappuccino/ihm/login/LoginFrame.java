@@ -41,9 +41,7 @@ public class LoginFrame extends BaseFrame {
     LoginViewController viewController = new LoginViewController(new LoginModel(),
                                                                  guiManager,
                                                                  userUcc);
-    this.add(
-        viewController,
-        new GridBagConstraints());
+    this.add(viewController, new GridBagConstraints());
 
     getRootPane().setDefaultButton(viewController.getSubmitButton());
 
