@@ -291,7 +291,7 @@ class CompanyDao implements ICompanyDao {
         + "FROM business_days.participations p, business_days.companies c "
         + "WHERE p.company = c.company_id"
         + " AND p.cancelled = FALSE"
-        + " AND p.state <> DECLINED"
+        + " AND p.state <> 'DECLINED'"
         + " AND p.business_day = ?";
 
     try {

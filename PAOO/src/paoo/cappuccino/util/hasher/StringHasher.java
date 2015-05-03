@@ -76,7 +76,7 @@ class StringHasher implements IStringHasher { // a.k.a. The Mighty Abstract Hash
     }
 
     IHashHolder hashHolder = preferedAlgorithm.hash(toHash, hashData);
-    hashHolder.setAlgorithmVersion(preferedAlgorithmName);
+    hashHolder.setAlgorithmVersion(hashData.getAlgorithmVersion());
     return hashHolder;
   }
 

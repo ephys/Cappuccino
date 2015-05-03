@@ -1,5 +1,7 @@
 package paoo.cappuccino;
 
+import java.util.logging.Logger;
+
 import paoo.cappuccino.core.AppContext;
 import paoo.cappuccino.core.injector.Inject;
 import paoo.cappuccino.util.hasher.IHashHolderDto;
@@ -21,9 +23,11 @@ public class Hasher extends BaseMain {
 
     getInjector().populate(this);
 
+    final Logger logger = getContext().getAppLogger();
+
     for (String param : toHash) {
       IHashHolderDto hash = hasher.hash(param.toCharArray());
-      getContext().getAppLogger().info(param + " -> " + hasher.serialize(hash));
+      logger.info(param + " -> " + hasher.serialize(hash));
     }
   }
 
