@@ -132,7 +132,7 @@ class ParticipationDao implements IParticipationDao {
                    + "FROM business_days.participations p "
                    + "WHERE p.company = ?"
                    + " AND p.cancelled = FALSE"
-                   + " AND p.state <> DECLINED";
+                   + " AND p.state <> 'DECLINED'";
 
     try {
       if (psFetchParticipationsByCompany == null) {

@@ -2,7 +2,6 @@ package paoo.cappuccino.ucc.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -96,14 +95,15 @@ class BusinessDayUcc implements IBusinessDayUcc {
          * - Remove the cancellation if he cancelled
          * - Don't create a new participation for him
          */
-        if (newAttendances.contains(currentAttendance.getContact())) {
+        int index = newAttendances.indexOf(currentAttendance.getContact());
+        if (index != -1) {
+          newAttendances.remove(index);
+
           if (currentAttendance.isCancelled()) {
             IAttendance attendanceToUncancel = convertAttendanceDto(currentAttendance);
             attendanceToUncancel.setCancelled(false);
             attendanceDao.updateAttendance(attendanceToUncancel);
           }
-
-          newAttendances.remove(currentAttendance.getContact());
         } else { // An attending contact is not in the updated list ? Cancel.
           IAttendance attendanceToCancel = convertAttendanceDto(currentAttendance);
           attendanceToCancel.setCancelled(true);
@@ -117,7 +117,7 @@ class BusinessDayUcc implements IBusinessDayUcc {
                                                                 businessDay.getId(),
                                                                 contact));
       }
-    } catch (ConcurrentModificationException e) {
+    } catch (Exception e) {
       dalService.rollback();
 
       throw e;
