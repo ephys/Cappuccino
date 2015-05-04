@@ -22,8 +22,9 @@ import paoo.cappuccino.ucc.ICompanyUcc;
 import paoo.cappuccino.ucc.IContactUcc;
 import paoo.cappuccino.ucc.IUserUcc;
 
-@SuppressWarnings("serial")
 public class CompanyDetailsViewController extends JPanel implements ChangeListener {
+
+  private static final long serialVersionUID = -8984108072558274949L;
   private final JTable contactsTable;
   private final JTable participationsTable;
   private final CompanyDetailsModel model;
@@ -66,8 +67,9 @@ public class CompanyDetailsViewController extends JPanel implements ChangeListen
       @Override
       public void mouseClicked(MouseEvent event) {
         if (event.getClickCount() == 2) {
-          IContactDto contact = (IContactDto) participationsTable.getModel()
-              .getValueAt(participationsTable.getSelectedRow(), 2);
+          IContactDto contact =
+              (IContactDto) participationsTable.getModel().getValueAt(
+                  participationsTable.getSelectedRow(), 2);
           if (contact == null) {
             return;
           }
@@ -105,31 +107,23 @@ public class CompanyDetailsViewController extends JPanel implements ChangeListen
 
     DefaultTableModel participationTableModel = (DefaultTableModel) participationsTable.getModel();
 
-    int previousDay = -1; // id impossible
     for (IParticipationDto participation : participations) {
 
       List<IAttendanceDto> attendanceForParticipation =
           dayUcc.getAttendancesForParticipation(participation.getBusinessDay(),
-                                                participation.getCompany());
+              participation.getCompany());
+
+      int day = participation.getBusinessDay();
+      IBusinessDayDto dayDto = dayUcc.getBusinessDay(day);
+      participationTableModel.addRow(new Object[] {dayDto.getEventDate(), participation.getState(),
+          null});
 
       for (IAttendanceDto attendance : attendanceForParticipation) {
-        int day = participation.getBusinessDay();
         IContactDto contact = contactUcc.getContactById(attendance.getContact());
-
-        if (day != previousDay) {
-          previousDay = day;
-          IBusinessDayDto dayDto = dayUcc.getBusinessDay(day);
-
-          participationTableModel.addRow(new Object[]{dayDto.getEventDate(),
-                                                      participation.getState(), null});
-
-        }
-        participationTableModel.addRow(new Object[]{null, attendance.isCancelled(), contact});
+        participationTableModel.addRow(new Object[] {null, attendance.isCancelled(), contact});
       }
     }
 
     view.stateChanged(contacts, participations);
-
-
   }
 }

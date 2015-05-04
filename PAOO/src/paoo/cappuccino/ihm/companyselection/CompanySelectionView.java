@@ -36,7 +36,6 @@ public class CompanySelectionView extends JPanel {
    *
    * @param model The model of the view.
    */
-  @SuppressWarnings("serial")
   public CompanySelectionView(CompanySelectionModel model, ICompanyUcc companyUcc) {
     setLayout(new BorderLayout());
 
@@ -45,6 +44,9 @@ public class CompanySelectionView extends JPanel {
 
     List<ICompanyDto> invitableCompanies = companyUcc.getInvitableCompanies();
     DefaultTableModel tableModel = new DefaultTableModel(tableNames, invitableCompanies.size()) {
+
+      private static final long serialVersionUID = 1685657526829855455L;
+
       @Override
       public boolean isCellEditable(int row, int column) {
         return column == 3;
@@ -52,8 +54,11 @@ public class CompanySelectionView extends JPanel {
     };
 
     companiesTable = new JTable(tableModel) {
+
+      private static final long serialVersionUID = -4145923072480414175L;
+
       @Override
-      public Class getColumnClass(int column) {
+      public Class<?> getColumnClass(int column) {
         switch (column) {
           case 0:
             return ICompanyDto.class;

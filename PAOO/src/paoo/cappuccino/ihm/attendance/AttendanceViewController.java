@@ -70,7 +70,6 @@ public class AttendanceViewController extends JPanel implements ChangeListener,
   /**
    * Creates a new ViewController for the attendance selection gui.
    */
-  @SuppressWarnings("serial")
   public AttendanceViewController(AttendanceModel model, MenuModel menu, IGuiManager manager,
       ICompanyUcc companyUcc, IBusinessDayUcc businessDayUcc, IContactUcc contactUcc) {
     super(new BorderLayout());
@@ -119,13 +118,18 @@ public class AttendanceViewController extends JPanel implements ChangeListener,
     String[] tableTitles =
         new String[] {"Nom contact", "Prénom contact", "Email contact", "Sélectionner"};
     this.contactsTable = new JTable(new DefaultTableModel(tableTitles, 0) {
+
+      private static final long serialVersionUID = -2399022296738251280L;
+
       @Override
       public boolean isCellEditable(int row, int column) {
         return column == 3;
       }
     }) {
+      private static final long serialVersionUID = -6735089089951568356L;
+
       @Override
-      public Class getColumnClass(int column) {
+      public Class<?> getColumnClass(int column) {
         switch (column) {
           case 0:
             return IContactDto.class;
@@ -203,21 +207,18 @@ public class AttendanceViewController extends JPanel implements ChangeListener,
               if ((boolean) contactsTable.getValueAt(i, 3)) {
                 IContactDto currentContact = (IContactDto) contactsTable.getValueAt(i, 0);
                 contactsToAdd.add(currentContact.getId());
-                listContacts
-                    .append("[").append(currentContact.getFirstName())
-                    .append(" ").append(currentContact.getLastName()).append("]");
+                listContacts.append("[").append(currentContact.getFirstName()).append(" ")
+                    .append(currentContact.getLastName()).append("]");
               }
             }
             if (contactsToAdd.size() == 0) {
-              if (JOptionPane
-                  .showConfirmDialog(this,
-                      "Personne n'est selectionné. Valider ?") != JOptionPane.OK_OPTION) {
+              if (JOptionPane.showConfirmDialog(this, "Personne n'est selectionné. Valider ?") != JOptionPane.OK_OPTION) {
                 return;
               }
             }
 
             businessDayUcc.setInvitedContacts(contactsToAdd, model.getSelectedDay(),
-                                              model.getSelectedCompany());
+                model.getSelectedCompany());
 
             JOptionPane.showMessageDialog(this, "Participations enregistrées");
             if (contactsToAdd.size() == 0) {

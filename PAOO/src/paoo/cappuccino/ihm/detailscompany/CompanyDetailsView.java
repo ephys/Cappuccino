@@ -37,7 +37,7 @@ public class CompanyDetailsView extends JPanel {
   private final CompanyDetailsModel model;
   private final IUserUcc userUcc;
   private final JPanel companyPanel = new JPanel(new BorderLayout());
-  private static final int MAX_SIZE_TABLE = 150;
+  private static final int MAX_SIZE_TABLE = 250;
 
   /**
    * Creates a view for the Company Details screen.
@@ -45,7 +45,6 @@ public class CompanyDetailsView extends JPanel {
    * @param model The model of the view.
    * @param userUcc App user use case controller.
    */
-  @SuppressWarnings("serial")
   public CompanyDetailsView(CompanyDetailsModel model, IUserUcc userUcc) {
     super(new BorderLayout());
     this.model = model;
@@ -54,6 +53,9 @@ public class CompanyDetailsView extends JPanel {
     // list contacts
     String[] contactsTableTitles = new String[] {"Nom", "prenom", "Mail", "Téléphone"};
     this.contactsTable = new JTable(new DefaultTableModel(contactsTableTitles, 0) {
+
+      private static final long serialVersionUID = -5838006548715376023L;
+
       @Override
       public boolean isCellEditable(int row, int column) {
         return false;
@@ -65,6 +67,8 @@ public class CompanyDetailsView extends JPanel {
     // list participation
     String[] participationTableTitles = new String[] {"Date", "Etat", "Personne de contact"};
     this.participationTable = new JTable(new DefaultTableModel(participationTableTitles, 0) {
+
+      private static final long serialVersionUID = -2233091768558833412L;
 
       @Override
       public boolean isCellEditable(int arg0, int arg1) {
@@ -165,12 +169,13 @@ public class CompanyDetailsView extends JPanel {
         contactList.add(errorLabel);
       } else {
         JScrollPane scrollContact = new JScrollPane(contactsTable);
-        int preferedSize = contactsTable.getRowCount() * contactsTable.getRowHeight() + 24;
+        int preferedSize = contacts.size() * contactsTable.getRowHeight() + 28;
         scrollContact.setPreferredSize(new Dimension(650,
             preferedSize > MAX_SIZE_TABLE ? MAX_SIZE_TABLE : preferedSize));
         contactList.add(scrollContact);
       }
     }
+
     participationList.removeAll();
     if (participations == null || participations.size() == 0) {
       JLabel errorLabel = new JLabel(IhmConstants.ERROR_NO_PARTICIPATIONS);
@@ -178,11 +183,11 @@ public class CompanyDetailsView extends JPanel {
       participationList.add(errorLabel);
     } else {
       JScrollPane scrollParticipations = new JScrollPane(participationTable);
-      int preferedSize = participationTable.getRowCount() * participationTable.getRowHeight() + 24;
+      int preferedSize =
+          (participationTable.getRowCount() * participationTable.getRowHeight()) + 28;
       scrollParticipations.setPreferredSize(new Dimension(650,
           preferedSize > MAX_SIZE_TABLE ? MAX_SIZE_TABLE : preferedSize));
       participationList.add(scrollParticipations);
     }
-
   }
 }

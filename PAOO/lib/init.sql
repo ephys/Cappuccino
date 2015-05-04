@@ -81,11 +81,11 @@ CREATE TABLE IF NOT EXISTS business_days.attendances (
 );
 
 INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN',
-                                        'pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000',
+                                        'pbkdf2:b8bc53853ac52abcc80228dd8ae63b634fc0be17334bfa60f645a7a44b9cf820edfb71d71c1b818d419dfdf4d45280304e6d28438d81912cbba759db9d65c90b:e3022fb9861af83c608974dc637af52e:1000',
                                         'dgrolaux@ipl.be', 'dgrolaux', 'Donatien', 'Grolaux',
                                         DEFAULT, DEFAULT);
 INSERT INTO business_days.users VALUES (DEFAULT, 'ADMIN',
-                                        'pbkdf2:7dbca107d1bc0416ae813ecaa44e443d0068b08c37ed4b4aa5d6d74c2d9dd33587a1d35504c8bbbc714920b4818b483d654efad4debb14ff34fd85464fe91d93:8214f59f6939c1e14dd30324790c4592:1000',
+                                        'pbkdf2:b8bc53853ac52abcc80228dd8ae63b634fc0be17334bfa60f645a7a44b9cf820edfb71d71c1b818d419dfdf4d45280304e6d28438d81912cbba759db9d65c90b:e3022fb9861af83c608974dc637af52e:1000',
                                         'blehmann@ipl.be', 'blehmann', 'Brigitte', 'Lehmann',
                                         DEFAULT, DEFAULT);
 
@@ -117,7 +117,7 @@ INSERT INTO business_days.attendances VALUES (1, 4, 3, DEFAULT);
 INSERT INTO business_days.attendances VALUES (1, 5, 3, DEFAULT);
 
 INSERT INTO business_days.companies
-VALUES (DEFAULT, 1, 'CodeltBlue', '2009-01-01', 'Avenue de l’espérance', '40', 'b', '1348',
+VALUES (DEFAULT, 1, 'CodeltBlue', '2009-01-01', 'Avenue de l’espérance', '40b', NULL, '1348',
         'Louvain-La-Neuve', DEFAULT);
 -- Participations
 INSERT INTO business_days.participations VALUES (2, 1, 'PAID', DEFAULT, DEFAULT);

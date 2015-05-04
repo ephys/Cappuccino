@@ -112,7 +112,7 @@ public class CompanySelectionViewController extends JPanel implements IDefaultBu
 
       if (selectedCompanies.isEmpty()) {
         JOptionPane.showMessageDialog(CompanySelectionViewController.this,
-            "Vous devez au moins selectionner une entreprise !", "SÃ©lection invalide",
+            "Vous devez au moins selectionner une entreprise !", "Sélection invalide",
             JOptionPane.INFORMATION_MESSAGE);
 
         return;
@@ -164,23 +164,26 @@ public class CompanySelectionViewController extends JPanel implements IDefaultBu
     leftPadding.add(selectAllButton);
     this.add(leftPadding, BorderLayout.NORTH);
 
-    companiesTable.getModel().addTableModelListener(e -> {
-      if (e.getColumn() != 3) {
-        return;
-      }
-
-      if (!(boolean) companiesTable.getValueAt(e.getFirstRow(), 3)) {
-        selectAllButton.setSelected(false);
-      } else {
-        for (int i = 0; i < companiesTable.getRowCount(); i++) {
-          if (!(boolean) companiesTable.getValueAt(i, 3)) {
+    companiesTable.getModel().addTableModelListener(
+        e -> {
+          if (companiesTable.getRowCount() == 0
+              || companiesTable.getValueAt(companiesTable.getRowCount() - 1, 3) == null) {
             return;
           }
 
-          selectAllButton.setSelected(true);
-        }
-      }
-    });
+          if (e.getColumn() != 3) {
+            return;
+          }
+
+          for (int i = 0; i < companiesTable.getRowCount(); i++) {
+            if (!(boolean) companiesTable.getValueAt(i, 3)) {
+              selectAllButton.setSelected(false);
+              return;
+            }
+
+            selectAllButton.setSelected(true);
+          }
+        });
     companiesTable.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent clickEvent) {
