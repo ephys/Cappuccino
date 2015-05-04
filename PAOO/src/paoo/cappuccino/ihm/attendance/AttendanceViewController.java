@@ -212,7 +212,8 @@ public class AttendanceViewController extends JPanel implements ChangeListener,
               }
             }
             if (contactsToAdd.size() == 0) {
-              if (JOptionPane.showConfirmDialog(this, "Personne n'est selectionné. Valider ?") != JOptionPane.OK_OPTION) {
+              if (JOptionPane.showConfirmDialog(this, 
+            		  "Personne n'est selectionné. Valider ?") != JOptionPane.OK_OPTION) {
                 return;
               }
             }
