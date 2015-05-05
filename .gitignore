@@ -1,0 +1,13 @@
+# IDE Stuff
+/.settings
+/.idea
+/.project
+/.classpath
+/bin
+
+# Project stuff
+/*.log.*
+/crash-reports
+
+# custom properties files
+/lib/*_*.properties
