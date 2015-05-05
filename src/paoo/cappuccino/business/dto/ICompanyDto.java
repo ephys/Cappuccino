@@ -3,7 +3,7 @@ package paoo.cappuccino.business.dto;
 import java.time.LocalDateTime;
 
 /**
- * Data transfer object for the Compagny entity.
+ * Data transfer object for the Company entity.
  *
  * @author Nicolas Fischer
  */

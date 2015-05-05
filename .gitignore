@@ -6,6 +6,7 @@
 /bin
 
 # Project stuff
+/*.log
 /*.log.*
 /crash-reports
 
